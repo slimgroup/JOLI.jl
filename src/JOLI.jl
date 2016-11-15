@@ -1,4 +1,6 @@
-## JOLI module ##
+############################################################
+# JOLI module ##############################################
+############################################################
 
 module JOLI
 
@@ -27,7 +29,7 @@ export double
 
 # package for each operator code goes here
 include("Utils.jl")
-include("joOp.jl")
+include("joOperator.jl")
 include("joMatrix.jl")
 include("joFunction.jl")
 include("joKron.jl")

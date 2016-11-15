@@ -1,4 +1,6 @@
-## joFunction ##
+############################################################
+# joFunction ###############################################
+############################################################
 
 ##################
 ## type definition
@@ -6,7 +8,7 @@
 export joFunction, joFunctionAll, joFunctionT, joFunctionCT,
        joFunctionFwdT, joFunctionFwdCT, joFunctionException
 
-immutable joFunction{T} <: joOp{T}
+immutable joFunction{T} <: joOperator{T}
     name::String
     m::Integer
     n::Integer
@@ -80,10 +82,10 @@ function *(A::joFunction,v::AbstractVector)
     size(A, 2) == size(v, 1) || throw(joFunctionException("shape mismatch"))
     return A.fop(v)
 end
-function *(A::joFunction,mv::AbstractMatrix)
-    size(A, 2) == size(mv, 1) || throw(joFunctionException("shape mismatch"))
-    return A.fop(mv)
-end
+#function *(A::joFunction,mv::AbstractMatrix)
+#    size(A, 2) == size(mv, 1) || throw(joFunctionException("shape mismatch"))
+#    return A.fop(mv)
+#end
 function *(a::Number,A::joFunction)
     S=promote_type(eltype(a),eltype(A))
     return joFunction{S}("(N*"*A.name*")",A.m,A.n,
@@ -96,10 +98,10 @@ function \(A::joFunction,v::AbstractVector)
     size(A, 1) == size(v, 1) || throw(joFunctionException("shape mismatch"))
     return !isnull(A.iop) ? get(A.iop)(v) : throw(joFunctionException("inverse not defined"))
 end
-function \(A::joFunction,mv::AbstractMatrix)
-    size(A, 1) == size(mv, 1) || throw(joFunctionException("shape mismatch"))
-    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joFunctionException("inverse not defined"))
-end
+#function \(A::joFunction,mv::AbstractMatrix)
+#    size(A, 1) == size(mv, 1) || throw(joFunctionException("shape mismatch"))
+#    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joFunctionException("inverse not defined"))
+#end
 
 function +(A::joFunction,B::joFunction)
     size(A) == size(B) || throw(joFunctionException("shape mismatch"))

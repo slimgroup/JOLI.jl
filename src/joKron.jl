@@ -1,11 +1,13 @@
-## joKron ##
+############################################################
+# joKron ###################################################
+############################################################
 
 ##################
 ## type definition
 
 export joKron, joKronException
 
-immutable joKron <: joOp
+immutable joKron <: joOperator
     name::String
     e::DataType
     m::Integer
@@ -13,18 +15,18 @@ immutable joKron <: joOp
     l::Integer
     ms::Array{Integer,1}
     ns::Array{Integer,1}
-    linop::Array{joOp,1}
+    linop::Array{joOperator,1}
     #linop
 end
 function joKron(ops...)
-    isa(ops,Tuple{Vararg{joOp}}) || throw(joKronException("non-jo operator in argument list"))
+    isa(ops,Tuple{Vararg{joOperator}}) || throw(joKronException("non-jo operator in argument list"))
     e=eltype(ops[1])
     m=1
     n=1
     l=length(ops)
     ms=Array{Integer}(0)
     ns=Array{Integer}(0)
-    kops=Array{joOp}(0)
+    kops=Array{joOperator}(0)
     for i=1:l
         e=promote_type(e,eltype(ops[i]))
         m*=ops[i].m
@@ -43,6 +45,8 @@ end
 ##########################
 ## overloaded Base methods
 
+eltype(A::joKron) = A.e
+
 function transpose(A::joKron)
     e=A.e
     m=A.n
@@ -50,7 +54,7 @@ function transpose(A::joKron)
     l=A.l
     ms=A.ns
     ns=A.ms
-    kops=Array{joOp}(0)
+    kops=Array{joOperator}(0)
     for i=1:l
         push!(kops,A.linop[i].')
     end
@@ -63,7 +67,7 @@ function ctranspose(A::joKron)
     l=A.l
     ms=A.ns
     ns=A.ms
-    kops=Array{joOp}(0)
+    kops=Array{joOperator}(0)
     for i=1:l
         push!(kops,A.linop[i]')
     end
@@ -76,7 +80,7 @@ function conj(A::joKron)
     l=A.l
     ms=A.ms
     ns=A.ns
-    kops=Array{joOp}(0)
+    kops=Array{joOperator}(0)
     for i=1:l
         push!(kops,conj(A.linop[i]))
     end
@@ -99,12 +103,12 @@ function *(A::joKron,v::AbstractVector)
     end
     return vec(V)
 end
-function *(A::joKron,mv::AbstractMatrix)
-    size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
-    for i=1:size(mv,2)
-        MV[:,i]=A*mv[:,i]
-    end
-    return MV
-end
+#function *(A::joKron,mv::AbstractMatrix)
+#    size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
+#    MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
+#    for i=1:size(mv,2)
+#        MV[:,i]=A*mv[:,i]
+#    end
+#    return MV
+#end
 
