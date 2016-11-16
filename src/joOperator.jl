@@ -18,7 +18,6 @@ end
 
 eltype{T}(A::joOperator{T}) = T
 
-#show(A::joOperator) = println((typeof(A),A.name,A.m,A.n,typeof(A.linop)))
 show(A::joOperator) = println((typeof(A),A.name,A.m,A.n))
 showall(A::joOperator) = println((typeof(A),A.name,A.m,A.n))
 display(A::joOperator) = show(A)

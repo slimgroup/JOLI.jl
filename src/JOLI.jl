@@ -24,8 +24,12 @@ import Base.\
 import Base.+
 import Base.-
 
-# what's exported
+# exported methods
 export double
+
+# constants
+export joTol
+joTol = 10e-12
 
 # package for each operator code goes here
 include("Utils.jl")

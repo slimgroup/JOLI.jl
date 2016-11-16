@@ -56,10 +56,10 @@ function *(A::joMatrix,v::AbstractVector)
     size(A, 2) == size(v, 1) || throw(joMatrixException("shape mismatch"))
     return A.fop(v)
 end
-#function *(A::joMatrix,mv::AbstractMatrix)
-#    size(A, 2) == size(mv, 1) || throw(joMatrixException("shape mismatch"))
-#    return A.fop(mv)
-#end
+function *(A::joMatrix,mv::AbstractMatrix)
+    size(A, 2) == size(mv, 1) || throw(joMatrixException("shape mismatch"))
+    return A.fop(mv)
+end
 function *(a::Number,A::joMatrix)
     S=promote_type(eltype(a),eltype(A))
     return joMatrix{S}("(N*"*A.name*")",A.m,A.n,

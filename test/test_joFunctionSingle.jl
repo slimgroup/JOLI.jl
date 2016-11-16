@@ -1,5 +1,4 @@
 T=6
-tol=10e-12
 tsname="joFunction - Single"
 @testset "$tsname" begin
 for t=1:T # start test loop
@@ -58,36 +57,36 @@ println("$tsname $tname")
         @test double(conj(A))==conj(a)
         @test double(+A)==+a
         @test double(-A)==-a
-        @test norm(A*vn-a*vn)<tol
-        @test norm(A*mvn-a*mvn)<tol
-        @test norm(A'*vm-a'*vm)<tol
-        @test norm(A'*mvm-a'*mvm)<tol
-        @test norm(A.'*vm-a.'*vm)<tol
-        @test norm(A.'*mvm-a.'*mvm)<tol
-        @test norm((A.')'*vn-(a.')'*vn)<tol
-        @test norm((A.')'*mvn-(a.')'*mvn)<tol
-        @test norm((A').'*vn-(a').'*vn)<tol
-        @test norm((A').'*mvn-(a').'*mvn)<tol
-        @test norm(double(A.'*A)-(a.'*a))<tol
-        @test norm(double(A*A.')-(a*a.'))<tol
-        @test norm(double(A'*A)-(a'*a))<tol
-        @test norm(double(A*A')-(a*a'))<tol
-        @test norm(A\vm-a\vm)<tol
-        @test norm(A\mvm-a\mvm)<tol
-        @test norm(A'\vn-a'\vn)<tol
-        @test norm(A'\mvn-a'\mvn)<tol
-        @test norm(A.'\vn-a.'\vn)<tol
-        @test norm(A.'\mvn-a.'\mvn)<tol
-        @test norm(double(A+B)-(a+b))<tol
-        @test norm(double(A-B)-(a-b))<tol
-        @test norm(double(mfac*A)-(mfac*a))<tol
-        @test norm(double(mfac*A.')-(mfac*a.'))<tol
-        @test norm(double(mfac*A')-(mfac*a'))<tol
-        @test norm(double(mfac*conj(A))-(mfac*conj(a)))<tol
-        @test norm(double(A*mfac)-(a*mfac))<tol
-        @test norm(double(A.'*mfac)-(a.'*mfac))<tol
-        @test norm(double(A'*mfac)-(a'*mfac))<tol
-        @test norm(double(conj(A)*mfac)-(conj(a)*mfac))<tol
+        @test norm(A*vn-a*vn)<joTol
+        @test norm(A*mvn-a*mvn)<joTol
+        @test norm(A'*vm-a'*vm)<joTol
+        @test norm(A'*mvm-a'*mvm)<joTol
+        @test norm(A.'*vm-a.'*vm)<joTol
+        @test norm(A.'*mvm-a.'*mvm)<joTol
+        @test norm((A.')'*vn-(a.')'*vn)<joTol
+        @test norm((A.')'*mvn-(a.')'*mvn)<joTol
+        @test norm((A').'*vn-(a').'*vn)<joTol
+        @test norm((A').'*mvn-(a').'*mvn)<joTol
+        @test norm(double(A.'*A)-(a.'*a))<joTol
+        @test norm(double(A*A.')-(a*a.'))<joTol
+        @test norm(double(A'*A)-(a'*a))<joTol
+        @test norm(double(A*A')-(a*a'))<joTol
+        @test norm(A\vm-a\vm)<joTol
+        @test norm(A\mvm-a\mvm)<joTol
+        @test norm(A'\vn-a'\vn)<joTol
+        @test norm(A'\mvn-a'\mvn)<joTol
+        @test norm(A.'\vn-a.'\vn)<joTol
+        @test norm(A.'\mvn-a.'\mvn)<joTol
+        @test norm(double(A+B)-(a+b))<joTol
+        @test norm(double(A-B)-(a-b))<joTol
+        @test norm(double(mfac*A)-(mfac*a))<joTol
+        @test norm(double(mfac*A.')-(mfac*a.'))<joTol
+        @test norm(double(mfac*A')-(mfac*a'))<joTol
+        @test norm(double(mfac*conj(A))-(mfac*conj(a)))<joTol
+        @test norm(double(A*mfac)-(a*mfac))<joTol
+        @test norm(double(A.'*mfac)-(a.'*mfac))<joTol
+        @test norm(double(A'*mfac)-(a'*mfac))<joTol
+        @test norm(double(conj(A)*mfac)-(conj(a)*mfac))<joTol
     end
 
     end # end test loop

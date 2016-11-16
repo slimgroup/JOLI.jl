@@ -1,5 +1,4 @@
 T=6
-tol=10e-12
 tsname="joMatrix - Product"
 @testset "$tsname" begin
 for t=1:T # start test loop
@@ -39,42 +38,42 @@ println("$tsname $tname")
         @test eltype(C)==eltype(c)
         @test size(C)==size(c)
         @test length(C)==length(c)
-        @test norm(full(C)-c)<tol
-        @test norm(double(C)-c)<tol
-        @test norm(C)-norm(c)<tol
+        @test norm(full(C)-c)<joTol
+        @test norm(double(C)-c)<joTol
+        @test norm(C)-norm(c)<joTol
         for i=1:2
-            @test norm(C,i)-norm(c,i)<tol
+            @test norm(C,i)-norm(c,i)<joTol
         end
-        @test norm(C,Inf)-norm(c,Inf)<tol
-        @test vecnorm(C)-vecnorm(c)<tol
+        @test norm(C,Inf)-norm(c,Inf)<joTol
+        @test vecnorm(C)-vecnorm(c)<joTol
         for i=1:2
-            @test vecnorm(C,i)-vecnorm(c,i)<tol
+            @test vecnorm(C,i)-vecnorm(c,i)<joTol
         end
-        @test vecnorm(C,Inf)-vecnorm(c,Inf)<tol
-        @test norm(double(C')-c')<tol
-        @test norm(double(C.')-c.')<tol
-        @test norm(double(+C)-(+c))<tol
-        @test norm(double(-C)-(-c))<tol
-        @test norm(C*vm-c*vm)<tol
-        @test norm(C*mvm-c*mvm)<tol
-        @test norm(C'*vm-c'*vm)<tol
-        @test norm(C'*mvm-c'*mvm)<tol
-        @test norm(C.'*vm-c.'*vm)<tol
-        @test norm(C.'*mvm-c.'*mvm)<tol
-        @test norm((C.')'*vm-(c.')'*vm)<tol
-        @test norm((C.')'*mvm-(c.')'*mvm)<tol
-        @test norm((C').'*vm-(c').'*vm)<tol
-        @test norm((C').'*mvm-(c').'*mvm)<tol
-        @test norm(double(C.'*C)-(c.'*c))<tol
-        @test norm(double(C*C.')-(c*c.'))<tol
-        @test norm(double(C'*C)-(c'*c))<tol
-        @test norm(double(C*C')-(c*c'))<tol
-        #@test norm(C\vm-c\vm)<tol
-        #@test norm(C\mvm-c\mvm)<tol
-        #@test norm(C'\vm-c'\vm)<tol
-        #@test norm(C'\mvm-c'\mvm)<tol
-        #@test norm(C.'\vn-c.'\vn)<tol
-        #@test norm(C.'\mvn-c.'\mvn)<tol
+        @test vecnorm(C,Inf)-vecnorm(c,Inf)<joTol
+        @test norm(double(C')-c')<joTol
+        @test norm(double(C.')-c.')<joTol
+        @test norm(double(+C)-(+c))<joTol
+        @test norm(double(-C)-(-c))<joTol
+        @test norm(C*vm-c*vm)<joTol
+        @test norm(C*mvm-c*mvm)<joTol
+        @test norm(C'*vm-c'*vm)<joTol
+        @test norm(C'*mvm-c'*mvm)<joTol
+        @test norm(C.'*vm-c.'*vm)<joTol
+        @test norm(C.'*mvm-c.'*mvm)<joTol
+        @test norm((C.')'*vm-(c.')'*vm)<joTol
+        @test norm((C.')'*mvm-(c.')'*mvm)<joTol
+        @test norm((C').'*vm-(c').'*vm)<joTol
+        @test norm((C').'*mvm-(c').'*mvm)<joTol
+        @test norm(double(C.'*C)-(c.'*c))<joTol
+        @test norm(double(C*C.')-(c*c.'))<joTol
+        @test norm(double(C'*C)-(c'*c))<joTol
+        @test norm(double(C*C')-(c*c'))<joTol
+        #@test norm(C\vm-c\vm)<joTol
+        #@test norm(C\mvm-c\mvm)<joTol
+        #@test norm(C'\vm-c'\vm)<joTol
+        #@test norm(C'\mvm-c'\mvm)<joTol
+        #@test norm(C.'\vn-c.'\vn)<joTol
+        #@test norm(C.'\mvn-c.'\mvn)<joTol
     end
 
     end # end test loop
