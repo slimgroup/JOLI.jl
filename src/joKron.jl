@@ -15,10 +15,10 @@ immutable joKron <: joOperator
     l::Integer
     ms::Array{Integer,1}
     ns::Array{Integer,1}
-    linop::Array{joOperator,1}
-    #linop
+    fop::Array{joOperator,1}
 end
 function joKron(ops...)
+    isempty(ops) && throw(joKronException("empty argument list"))
     isa(ops,Tuple{Vararg{joOperator}}) || throw(joKronException("non-jo operator in argument list"))
     e=eltype(ops[1])
     m=1
@@ -56,7 +56,7 @@ function transpose(A::joKron)
     ns=A.ms
     kops=Array{joOperator}(0)
     for i=1:l
-        push!(kops,A.linop[i].')
+        push!(kops,A.fop[i].')
     end
     return joKron("("*A.name*".')",e,m,n,l,ms,ns,kops)
 end
@@ -69,7 +69,7 @@ function ctranspose(A::joKron)
     ns=A.ms
     kops=Array{joOperator}(0)
     for i=1:l
-        push!(kops,A.linop[i]')
+        push!(kops,A.fop[i]')
     end
     return joKron("("*A.name*"')",e,m,n,l,ms,ns,kops)
 end
@@ -82,7 +82,7 @@ function conj(A::joKron)
     ns=A.ns
     kops=Array{joOperator}(0)
     for i=1:l
-        push!(kops,conj(A.linop[i]))
+        push!(kops,conj(A.fop[i]))
     end
     return joKron("(conj("*A.name*"))",e,m,n,l,ms,ns,kops)
 end
@@ -95,20 +95,20 @@ function *(A::joKron,v::AbstractVector)
     p=circshift(p,-1)
     for i=A.l:-1:1
         V=reshape(V,[ksz[1],prod(ksz[2:length(ksz)])]...)
-        V=A.linop[i]*V
-        ksz[1]=A.linop[i].m
+        V=A.fop[i]*V
+        ksz[1]=A.fop[i].m
         V=reshape(V,ksz...)
         V=permutedims(V,p)
         ksz=circshift(ksz,-1)
     end
     return vec(V)
 end
-#function *(A::joKron,mv::AbstractMatrix)
-#    size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-#    MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
-#    for i=1:size(mv,2)
-#        MV[:,i]=A*mv[:,i]
-#    end
-#    return MV
-#end
+function *(A::joKron,mv::AbstractMatrix)
+    size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
+    MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
+    for i=1:size(mv,2)
+        MV[:,i]=A*mv[:,i]
+    end
+    return MV
+end
 

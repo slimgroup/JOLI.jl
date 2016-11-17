@@ -2,7 +2,7 @@
 # joOperator ###############################################
 ############################################################
 
-##################
+############################################################
 ## type definition
 
 export joOperator, joOperatorException
@@ -13,16 +13,18 @@ type joOperatorException <: Exception
     msg :: String
 end
 
-##########################
-## overloaded Base methods
+############################################################
+## overloaded Base functions
 
 eltype{T}(A::joOperator{T}) = T
 
 show(A::joOperator) = println((typeof(A),A.name,A.m,A.n))
-showall(A::joOperator) = println((typeof(A),A.name,A.m,A.n))
-display(A::joOperator) = show(A)
-full(A::joOperator) = A*eye(A.n)
 
+showall(A::joOperator) = println((typeof(A),A.name,A.m,A.n))
+
+display(A::joOperator) = show(A)
+
+full(A::joOperator) = A*eye(A.n)
 
 size(A::joOperator) = A.m,A.n
 
@@ -46,11 +48,17 @@ transpose(A::joOperator) = throw(joOperatorException("(jo).' not implemented"))
 
 ctranspose(A::joOperator) = throw(joOperatorException("(jo)' not implemented"))
 
+conj(A::joOperator) = throw(joOperatorException("conj(jo) not implemented"))
+
+############################################################
+## overloaded Base *(...joOPerator...)
+
 *(A::joOperator,B::joOperator) = throw(joOperatorException("*(jo,jo) not implemented"))
 function *(A::joOperator,v::AbstractVector)
     size(A, 2) == size(v, 1) || throw(joOperatorException("shape mismatch"))
     return A*v
 end
+
 function *(A::joOperator,mv::AbstractMatrix)
     size(A, 2) == size(mv, 1) || throw(joOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,1),size(mv,2))
@@ -59,14 +67,22 @@ function *(A::joOperator,mv::AbstractMatrix)
     end
     return MV
 end
+
 *(a::Number,A::joOperator) = throw(joOperatorException("*(jo,Number) not implemented"))
+
 *(A::joOperator,a::Number) = a*A
 
+############################################################
+## overloaded Base \(...joOPerator...)
+
 function \(A::joOperator,v::AbstractVector)
+    isnull(A.iop) && throw(joOperatorException("\(jo,Vector) not implemented"))
     size(A, 1) == size(v, 1) || throw(joOperatorException("shape mismatch"))
     return A\v
 end
+
 function \(A::joOperator,mv::AbstractMatrix)
+    isnull(A.iop) && throw(joOperatorException("\(jo,MultiVector) not implemented"))
     size(A, 1) == size(mv, 1) || throw(joOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,2),size(mv,2))
     for i=1:size(mv,2)
@@ -75,18 +91,29 @@ function \(A::joOperator,mv::AbstractMatrix)
     return MV
 end
 
+############################################################
+## overloaded Base +(...joOPerator...)
 
 +(A::joOperator) = A
+
 +(A::joOperator,B::joOperator) = throw(joOperatorException("+(jo,jo) not implemented"))
+
 +(A::joOperator,b::Number) = throw(joOperatorException("+(jo,Number) not implemented"))
+
 +(b::Number,A::joOperator) = A+b
 
+############################################################
+## overloaded Base -(...joOPerator...)
+
 -(A::joOperator) = throw(joOperatorException("-(jo) not implemented"))
+
 -(A::joOperator,B::joOperator) = A+(-B)
+
 -(A::joOperator,b::Number) = A+(-b)
+
 -(b::Number,A::joOperator) = -A+b
 
-################
+############################################################
 ## extra methods
 
 double(A::joOperator) = A*speye(A.n)
