@@ -7,7 +7,7 @@
 
 export joMatrix, joMatrixException
 
-immutable joMatrix{T} <: joOperator{T}
+immutable joMatrix{T} <: joLinearOperator{T}
     name::String
     m::Integer
     n::Integer

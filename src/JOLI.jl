@@ -33,9 +33,10 @@ joTol = 10e-12
 
 # package for each operator code goes here
 include("Utils.jl")
-include("joOperator.jl")
+include("joAbstractOperator.jl")
+include("joLinearOperator.jl")
 include("joMatrix.jl")
-include("joFunction.jl")
+include("joLinearFunction.jl")
 include("joKron.jl")
 
 end # module

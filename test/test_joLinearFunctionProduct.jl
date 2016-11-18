@@ -1,5 +1,5 @@
 T=6
-tsname="joFunction - Product"
+tsname="joLinearFunction - Product"
 @testset "$tsname" begin
 for t=1:T # start test loop
 
@@ -30,8 +30,8 @@ else
     vm=rand(m)
     mvm=rand(m,2)+im*rand(m,2)
 end
-A=joFunctionAll(at,m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v)
-B=joFunctionAll(bt,m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v)
+A=joLinearFunctionAll(at,m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v)
+B=joLinearFunctionAll(bt,m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v)
 c=a*b'
 C=A*B'
 afac=rand()+rand()*im
