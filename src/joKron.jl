@@ -17,9 +17,8 @@ immutable joKron <: joLinearOperator
     ns::Array{Integer,1}
     fop::Array{joLinearOperator,1}
 end
-function joKron(ops...)
+function joKron(ops::joLinearOperator...)
     isempty(ops) && throw(joKronException("empty argument list"))
-    isa(ops,Tuple{Vararg{joLinearOperator}}) || throw(joKronException("non-jo operator in argument list"))
     e=eltype(ops[1])
     m=1
     n=1

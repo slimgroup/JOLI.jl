@@ -7,22 +7,15 @@ module JOLI
 # what's being used
 
 # what's imported
-import Base.show
-import Base.showall
-import Base.display
 import Base.eltype
-import Base.size
-import Base.length
+import Base.show, Base.showall, Base.display
+import Base.size, Base.length
 import Base.full
-import Base.norm
-import Base.vecnorm
-import Base.transpose
-import Base.ctranspose
-import Base.conj
-import Base.*
-import Base.\
-import Base.+
-import Base.-
+import Base.norm, Base.vecnorm
+import Base.transpose, Base.ctranspose, Base.conj
+import Base.hcat, Base.vcat
+import Base.*, Base.\, Base.+, Base.-
+import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 
 # exported methods
 export double
