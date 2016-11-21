@@ -2,16 +2,19 @@
 # joAbstractOperator #######################################
 ############################################################
 
+export joAbstractOperator, joAbstractOperatorException
+
 ############################################################
 ## type definition
-
-export joAbstractOperator, joAbstractOperatorException
 
 abstract joAbstractOperator{T}
 
 type joAbstractOperatorException <: Exception
     msg :: String
 end
+
+############################################################
+## outer constructors
 
 ############################################################
 ## overloaded Base functions

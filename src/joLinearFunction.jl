@@ -2,11 +2,11 @@
 # joLinearFunction #########################################
 ############################################################
 
-##################
-## type definition
-
 export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctionCT,
        joLinearFunctionFwdT, joLinearFunctionFwdCT, joLinearFunctionException
+
+############################################################
+## type definition
 
 immutable joLinearFunction{T} <: joLinearOperator{T}
     name::String
@@ -21,6 +21,14 @@ immutable joLinearFunction{T} <: joLinearOperator{T}
     iop_CT::Nullable{Function}
     iop_C::Nullable{Function}
 end
+
+type joLinearFunctionException <: Exception
+    msg :: String
+end
+
+############################################################
+## outer constructors
+
 joLinearFunctionAll(T::DataType,m::Integer,n::Integer,
     fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
     iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
@@ -51,25 +59,28 @@ joLinearFunctionFwdCT(T::DataType,m::Integer,n::Integer,
         fop,v2->conj(fop_CT(conj(v2))),fop_CT,v4->conj(fop(conj(v4))),
         @NF, @NF, @NF, @NF)
 
-type joLinearFunctionException <: Exception
-    msg :: String
-end
+############################################################
+## overloaded Base functions
 
-##########################
-## overloaded Base methods
-
+# transpose(jo)
 transpose{T}(A::joLinearFunction{T}) = joLinearFunction{T}(""*A.name*".'",A.n,A.m,
-    get(A.fop_T),A.fop,A.fop_C,A.fop_CT,
+    get(A.fop_T),@NF(A.fop),A.fop_C,A.fop_CT,
     A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
+# ctranspose(jo)
 ctranspose{T}(A::joLinearFunction{T}) = joLinearFunction{T}(""*A.name*"'",A.n,A.m,
-    get(A.fop_CT),A.fop_C,A.fop,A.fop_T,
+    get(A.fop_CT),A.fop_C,@NF(A.fop),A.fop_T,
     A.iop_CT,A.iop_C,A.iop,A.iop_T)
 
+# conj(jo)
 conj{T}(A::joLinearFunction{T}) = joLinearFunction{T}("conj("*A.name*")",A.m,A.n,
-    get(A.fop_C),A.fop_CT,A.fop_T,A.fop,
+    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
     A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
+############################################################
+## overloaded Base *(...jo...)
+
+# *(jo,jo)
 function *(A::joLinearFunction,B::joLinearFunction)
     size(A,2) == size(B,1) || throw(joLinearFunctionException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
@@ -78,14 +89,20 @@ function *(A::joLinearFunction,B::joLinearFunction)
     v3->get(B.fop_CT)(get(A.fop_CT)(v3)),v4->get(A.fop_C)(get(B.fop_C)(v4)),
     @NF, @NF, @NF, @NF)
 end
-function *(A::joLinearFunction,v::AbstractVector)
-    size(A, 2) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
-    return A.fop(v)
-end
+
+# *(jo,mvec)
 #function *(A::joLinearFunction,mv::AbstractMatrix)
 #    size(A, 2) == size(mv, 1) || throw(joLinearFunctionException("shape mismatch"))
 #    return A.fop(mv)
 #end
+
+# *(jo,vec)
+function *(A::joLinearFunction,v::AbstractVector)
+    size(A, 2) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
+    return A.fop(v)
+end
+
+# *(num,jo)
 function *(a::Number,A::joLinearFunction)
     S=promote_type(eltype(a),eltype(A))
     return joLinearFunction{S}("(N*"*A.name*")",A.m,A.n,
@@ -94,15 +111,25 @@ function *(a::Number,A::joLinearFunction)
     @NF, @NF, @NF, @NF)
 end
 
-function \(A::joLinearFunction,v::AbstractVector)
-    size(A, 1) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
-    return !isnull(A.iop) ? get(A.iop)(v) : throw(joLinearFunctionException("inverse not defined"))
-end
+############################################################
+## overloaded Base \(...jo...)
+
+# \(jo,mvec)
 #function \(A::joLinearFunction,mv::AbstractMatrix)
 #    size(A, 1) == size(mv, 1) || throw(joLinearFunctionException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joLinearFunctionException("inverse not defined"))
 #end
 
+# \(jo,vec)
+function \(A::joLinearFunction,v::AbstractVector)
+    size(A, 1) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
+    return !isnull(A.iop) ? get(A.iop)(v) : throw(joLinearFunctionException("inverse not defined"))
+end
+
+############################################################
+## overloaded Base +(...jo...)
+
+# +(jo,jo)
 function +(A::joLinearFunction,B::joLinearFunction)
     size(A) == size(B) || throw(joLinearFunctionException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
@@ -112,10 +139,32 @@ function +(A::joLinearFunction,B::joLinearFunction)
     @NF, @NF, @NF, @NF)
 end
 
+############################################################
+## overloaded Base -(...jo...)
+
+# -(jo)
 -{T}(A::joLinearFunction{T}) = joLinearFunction{T}("(-"*A.name*")",A.m,A.n,
     v1->-A.fop(v1),     v2->-A.fop_T(v2),     v3->-A.fop_CT(v3),     v4->-A.fop_C(v4),
     v5->-get(A.iop)(v5),v6->-get(A.iop_T)(v6),v7->-get(A.iop_CT)(v7),v8->-get(A.iop_C)(v8))
 
-################
+############################################################
+## overloaded Base .*(...jo...)
+
+############################################################
+## overloaded Base .\(...jo...)
+
+############################################################
+## overloaded Base .+(...jo...)
+
+############################################################
+## overloaded Base .-(...jo...)
+
+############################################################
+## overloaded Base hcat(...jo...)
+
+############################################################
+## overloaded Base vcat(...jo...)
+
+############################################################
 ## extra methods
 

@@ -2,10 +2,10 @@
 # joMatrix #################################################
 ############################################################
 
-##################
-## type definition
-
 export joMatrix, joMatrixException
+
+############################################################
+## type definition
 
 immutable joMatrix{T} <: joLinearOperator{T}
     name::String
@@ -20,30 +20,41 @@ immutable joMatrix{T} <: joLinearOperator{T}
     iop_CT::Nullable{Function}
     iop_C::Nullable{Function}
 end
-joMatrix{T}(array::AbstractMatrix{T},name::String="joMatrix")=
-    joMatrix{T}(name,size(array,1),size(array,2),
-    v1->array*v1,v2->array.'*v2,v3->array'*v3,v4->conj(array)*v4,
-    v5->array\v5,v6->array.'\v6,v7->array'\v7,v8->conj(array)\v8)
 
 type joMatrixException <: Exception
     msg :: String
 end
 
-##########################
-## overloaded Base methods
+############################################################
+## outer constructors
 
+joMatrix{T}(array::AbstractMatrix{T},name::String="joMatrix")=
+    joMatrix{T}(name,size(array,1),size(array,2),
+    v1->array*v1,v2->array.'*v2,v3->array'*v3,v4->conj(array)*v4,
+    v5->array\v5,v6->array.'\v6,v7->array'\v7,v8->conj(array)\v8)
+
+############################################################
+## overloaded Base functions
+
+# transpose(jo)
 transpose{T}(A::joMatrix{T}) = joMatrix{T}(""*A.name*".'",A.n,A.m,
     A.fop_T,A.fop,A.fop_C,A.fop_CT,
     A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
+# ctranspose(jo)
 ctranspose{T}(A::joMatrix{T}) = joMatrix{T}(""*A.name*"'",A.n,A.m,
     A.fop_CT,A.fop_C,A.fop,A.fop_T,
     A.iop_CT,A.iop_C,A.iop,A.iop_T)
 
+# conj(jo)
 conj{T}(A::joMatrix{T}) = joMatrix{T}("conj("*A.name*")",A.m,A.n,
     A.fop_C,A.fop_CT,A.fop_T,A.fop,
     A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
+############################################################
+## overloaded Base *(...jo...)
+
+# *(jo,jo)
 function *(A::joMatrix,B::joMatrix)
     size(A,2) == size(B,1) || throw(joMatrixException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
@@ -52,14 +63,20 @@ function *(A::joMatrix,B::joMatrix)
     v3->B.fop_CT(A.fop_CT(v3)),v4->A.fop_C(B.fop_C(v4)),
     @NF, @NF, @NF, @NF)
 end
-function *(A::joMatrix,v::AbstractVector)
-    size(A, 2) == size(v, 1) || throw(joMatrixException("shape mismatch"))
-    return A.fop(v)
-end
+
+# *(jo,mvec)
 function *(A::joMatrix,mv::AbstractMatrix)
     size(A, 2) == size(mv, 1) || throw(joMatrixException("shape mismatch"))
     return A.fop(mv)
 end
+
+# *(jo,vec)
+function *(A::joMatrix,v::AbstractVector)
+    size(A, 2) == size(v, 1) || throw(joMatrixException("shape mismatch"))
+    return A.fop(v)
+end
+
+# *(num,jo)
 function *(a::Number,A::joMatrix)
     S=promote_type(eltype(a),eltype(A))
     return joMatrix{S}("(N*"*A.name*")",A.m,A.n,
@@ -68,15 +85,25 @@ function *(a::Number,A::joMatrix)
     @NF, @NF, @NF, @NF)
 end
 
-function \(A::joMatrix,v::AbstractVector)
-    size(A, 1) == size(v, 1) || throw(joMatrixException("shape mismatch"))
-    return !isnull(A.iop) ? get(A.iop)(v) : throw(joMatrixException("inverse not defined"))
-end
+############################################################
+## overloaded Base \(...jo...)
+
+# \(jo,mvec)
 #function \(A::joMatrix,mv::AbstractMatrix)
 #    size(A, 1) == size(mv, 1) || throw(joMatrixException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joMatrixException("inverse not defined"))
 #end
 
+# \(jo,vec)
+function \(A::joMatrix,v::AbstractVector)
+    size(A, 1) == size(v, 1) || throw(joMatrixException("shape mismatch"))
+    return !isnull(A.iop) ? get(A.iop)(v) : throw(joMatrixException("inverse not defined"))
+end
+
+############################################################
+## overloaded Base +(...jo...)
+
+# +(jo,jo)
 function +(A::joMatrix,B::joMatrix)
     size(A) == size(B) || throw(joMatrixException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
@@ -86,10 +113,32 @@ function +(A::joMatrix,B::joMatrix)
     @NF, @NF, @NF, @NF)
 end
 
+############################################################
+## overloaded Base -(...jo...)
+
+# -(jo)
 -{T}(A::joMatrix{T}) = joMatrix{T}("(-"*A.name*")",A.m,A.n,
     v1->-A.fop(v1),     v2->-A.fop_T(v2),     v3->-A.fop_CT(v3),     v4->-A.fop_C(v4),
     v5->-get(A.iop)(v5),v6->-get(A.iop_T)(v6),v7->-get(A.iop_CT)(v7),v8->-get(A.iop_C)(v8))
 
-################
+############################################################
+## overloaded Base .*(...jo...)
+
+############################################################
+## overloaded Base .\(...jo...)
+
+############################################################
+## overloaded Base .+(...jo...)
+
+############################################################
+## overloaded Base .-(...jo...)
+
+############################################################
+## overloaded Base hcat(...jo...)
+
+############################################################
+## overloaded Base vcat(...jo...)
+
+############################################################
 ## extra methods
 

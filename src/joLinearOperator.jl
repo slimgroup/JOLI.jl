@@ -2,16 +2,19 @@
 # joLinearOperator #########################################
 ############################################################
 
+export joLinearOperator, joLinearOperatorException
+
 ############################################################
 ## type definition
-
-export joLinearOperator, joLinearOperatorException
 
 abstract joLinearOperator{T} <: joAbstractOperator{T}
 
 type joLinearOperatorException <: Exception
     msg :: String
 end
+
+############################################################
+## outer constructors
 
 ############################################################
 ## overloaded Base functions
@@ -71,7 +74,7 @@ conj(A::joLinearOperator) = throw(joLinearOperatorException("conj(jo) not implem
 
 # *(jo,mvec)
 function *(A::joLinearOperator,mv::AbstractMatrix)
-    #isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
+    ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
     size(A, 2) == size(mv, 1) || throw(joLinearOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,1),size(mv,2))
     for i=1:size(mv,2)
@@ -84,7 +87,7 @@ end
 
 # *(jo,vec)
 function *(A::joLinearOperator,v::AbstractVector)
-    #isnull(A.fop) && throw(joLinearOperatorException("*(jo,Vector) not supplied"))
+    ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,Vector) not supplied"))
     size(A, 2) == size(v, 1) || throw(joLinearOperatorException("shape mismatch"))
     return A*v
 end
