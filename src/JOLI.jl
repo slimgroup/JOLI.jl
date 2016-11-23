@@ -29,7 +29,9 @@ include("Utils.jl")
 include("joAbstractOperator.jl")
 include("joLinearOperator.jl")
 include("joMatrix.jl")
+include("joMatrixMisc.jl")
 include("joLinearFunction.jl")
+include("joLinearFunctionMisc.jl")
 include("joKron.jl")
 
 end # module

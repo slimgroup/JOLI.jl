@@ -2,12 +2,13 @@
 # joAbstractOperator #######################################
 ############################################################
 
-export joAbstractOperator, joAbstractOperatorException
+export joAbstractOperator, joAbstractLinearOperator, joAbstractOperatorException
 
 ############################################################
 ## type definition
 
 abstract joAbstractOperator{T}
+abstract joAbstractLinearOperator{T} <: joAbstractOperator{T}
 
 type joAbstractOperatorException <: Exception
     msg :: String

@@ -7,14 +7,14 @@ export joMatrix, joMatrixException
 ############################################################
 ## type definition
 
-immutable joMatrix{T} <: joLinearOperator{T}
+immutable joMatrix{T} <: joAbstractLinearOperator{T}
     name::String
     m::Integer
     n::Integer
-    fop::Function       # forward
-    fop_T::Function     # transpose
-    fop_CT::Function    # conj transpose
-    fop_C::Function     # conj
+    fop::Function    # forward
+    fop_T::Function  # transpose
+    fop_CT::Function # conj transpose
+    fop_C::Function  # conj
     iop::Nullable{Function}
     iop_T::Nullable{Function}
     iop_CT::Nullable{Function}
@@ -96,8 +96,9 @@ end
 
 # \(jo,vec)
 function \(A::joMatrix,v::AbstractVector)
+    isnull(A.iop) && throw(joMatrixException("\(jo,Vector) not supplied"))
     size(A, 1) == size(v, 1) || throw(joMatrixException("shape mismatch"))
-    return !isnull(A.iop) ? get(A.iop)(v) : throw(joMatrixException("inverse not defined"))
+    return get(A.iop)(v)
 end
 
 ############################################################

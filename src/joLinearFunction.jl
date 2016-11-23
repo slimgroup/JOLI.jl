@@ -8,14 +8,14 @@ export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctio
 ############################################################
 ## type definition
 
-immutable joLinearFunction{T} <: joLinearOperator{T}
+immutable joLinearFunction{T} <: joAbstractLinearOperator{T}
     name::String
     m::Integer
     n::Integer
-    fop::Function                 # forward
-    fop_T::Nullable{Function}     # transpose
-    fop_CT::Nullable{Function}    # conj transpose
-    fop_C::Nullable{Function}     # conj
+    fop::Function              # forward
+    fop_T::Nullable{Function}  # transpose
+    fop_CT::Nullable{Function} # conj transpose
+    fop_C::Nullable{Function}  # conj
     iop::Nullable{Function}
     iop_T::Nullable{Function}
     iop_CT::Nullable{Function}
@@ -122,8 +122,9 @@ end
 
 # \(jo,vec)
 function \(A::joLinearFunction,v::AbstractVector)
+    isnull(A.iop) && throw(joLinearFunctionException("\(jo,Vector) not supplied"))
     size(A, 1) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
-    return !isnull(A.iop) ? get(A.iop)(v) : throw(joLinearFunctionException("inverse not defined"))
+    return get(A.iop)(v)
 end
 
 ############################################################

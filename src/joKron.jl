@@ -7,7 +7,7 @@
 
 export joKron, joKronException
 
-immutable joKron <: joLinearOperator
+immutable joKron <: joAbstractLinearOperator
     name::String
     e::DataType
     m::Integer
@@ -15,9 +15,9 @@ immutable joKron <: joLinearOperator
     l::Integer
     ms::Array{Integer,1}
     ns::Array{Integer,1}
-    fop::Array{joLinearOperator,1}
+    fop::Array{joAbstractLinearOperator,1}
 end
-function joKron(ops::joLinearOperator...)
+function joKron(ops::joAbstractLinearOperator...)
     isempty(ops) && throw(joKronException("empty argument list"))
     e=eltype(ops[1])
     m=1
@@ -25,7 +25,7 @@ function joKron(ops::joLinearOperator...)
     l=length(ops)
     ms=Array{Integer}(0)
     ns=Array{Integer}(0)
-    kops=Array{joLinearOperator}(0)
+    kops=Array{joAbstractLinearOperator}(0)
     for i=1:l
         e=promote_type(e,eltype(ops[i]))
         m*=ops[i].m
@@ -53,7 +53,7 @@ function transpose(A::joKron)
     l=A.l
     ms=A.ns
     ns=A.ms
-    kops=Array{joLinearOperator}(0)
+    kops=Array{joAbstractLinearOperator}(0)
     for i=1:l
         push!(kops,A.fop[i].')
     end
@@ -66,7 +66,7 @@ function ctranspose(A::joKron)
     l=A.l
     ms=A.ns
     ns=A.ms
-    kops=Array{joLinearOperator}(0)
+    kops=Array{joAbstractLinearOperator}(0)
     for i=1:l
         push!(kops,A.fop[i]')
     end
@@ -79,7 +79,7 @@ function conj(A::joKron)
     l=A.l
     ms=A.ms
     ns=A.ns
-    kops=Array{joLinearOperator}(0)
+    kops=Array{joAbstractLinearOperator}(0)
     for i=1:l
         push!(kops,conj(A.fop[i]))
     end

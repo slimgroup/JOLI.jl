@@ -7,7 +7,19 @@ export joLinearOperator, joLinearOperatorException
 ############################################################
 ## type definition
 
-abstract joLinearOperator{T} <: joAbstractOperator{T}
+immutable joLinearOperator{T} <: joAbstractLinearOperator{T}
+    name::String
+    m::Integer
+    n::Integer
+    fop::Function              # forward
+    fop_T::Nullable{Function}  # transpose
+    fop_CT::Nullable{Function} # conj transpose
+    fop_C::Nullable{Function}  # conj
+    iop::Nullable{Function}
+    iop_T::Nullable{Function}
+    iop_CT::Nullable{Function}
+    iop_C::Nullable{Function}
+end
 
 type joLinearOperatorException <: Exception
     msg :: String
@@ -20,60 +32,73 @@ end
 ## overloaded Base functions
 
 # eltype(jo)
-eltype{T}(A::joLinearOperator{T}) = T
+eltype{T}(A::joAbstractLinearOperator{T}) = T
 
 # show(jo)
-show(A::joLinearOperator) = println((typeof(A),A.name,A.m,A.n))
+show(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # showall(jo)
-showall(A::joLinearOperator) = println((typeof(A),A.name,A.m,A.n))
+showall(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # display(jo)
-display(A::joLinearOperator) = show(A)
+display(A::joAbstractLinearOperator) = show(A)
 
 # size(jo)
-size(A::joLinearOperator) = A.m,A.n
+size(A::joAbstractLinearOperator) = A.m,A.n
 
 # size(jo,1/2)
-function size(A::joLinearOperator,ind::Int64)
+function size(A::joAbstractLinearOperator,ind::Int64)
     if ind==1
 		return A.m
 	elseif ind==2
 		return A.n
 	else
-		throw(joLinearOperatorException("invalid index"))
+		throw(joAbstractLinearOperatorException("invalid index"))
 	end
 end
 
 # length(jo)
-length(A::joLinearOperator) = A.m*A.n
+length(A::joAbstractLinearOperator) = A.m*A.n
 
 # full(jo)
-full(A::joLinearOperator) = A*eye(A.n)
+full(A::joAbstractLinearOperator) = A*eye(A.n)
 
 # norm(jo)
-norm(A::joLinearOperator,p::Real=2) = norm(double(A),p)
+norm(A::joAbstractLinearOperator,p::Real=2) = norm(double(A),p)
 
 # vecnorm(jo)
-vecnorm(A::joLinearOperator,p::Real=2) = vecnorm(double(A),p)
+vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(double(A),p)
 
 # transpose(jo)
-transpose(A::joLinearOperator) = throw(joLinearOperatorException("(jo).' not implemented"))
+transpose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*".'",A.n,A.m,
+    get(A.fop_T),@NF(A.fop),A.fop_C,A.fop_CT,
+    A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # ctranspose(jo)
-ctranspose(A::joLinearOperator) = throw(joLinearOperatorException("(jo)' not implemented"))
+ctranspose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*"'",A.n,A.m,
+    get(A.fop_CT),A.fop_C,@NF(A.fop),A.fop_T,
+    A.iop_CT,A.iop_C,A.iop,A.iop_T)
 
 # conj(jo)
-conj(A::joLinearOperator) = throw(joLinearOperatorException("conj(jo) not implemented"))
+conj{T}(A::joLinearOperator{T}) = joLinearOperator{T}("conj("*A.name*")",A.m,A.n,
+    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
+    A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 ############################################################
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-*(A::joLinearOperator,B::joLinearOperator) = throw(joLinearOperatorException("*(jo,jo) not implemented"))
+function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
+    size(A,2) == size(B,1) || throw(joLinearOperatorException("shape mismatch"))
+    S=promote_type(eltype(A),eltype(B))
+    return joLinearOperator{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
+    v1->A*(B*v1),v2->B.'*(A.'*v2),
+    @NF(v3->B'*(A'*v3)),@NF(v4->conj(A)*(conj(B)*v4)),
+    @NF, @NF, @NF, @NF)
+end
 
 # *(jo,mvec)
-function *(A::joLinearOperator,mv::AbstractMatrix)
+function *(A::joAbstractLinearOperator,mv::AbstractMatrix)
     ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
     size(A, 2) == size(mv, 1) || throw(joLinearOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,1),size(mv,2))
@@ -87,18 +112,17 @@ end
 
 # *(jo,vec)
 function *(A::joLinearOperator,v::AbstractVector)
-    ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,Vector) not supplied"))
     size(A, 2) == size(v, 1) || throw(joLinearOperatorException("shape mismatch"))
-    return A*v
+    return A.fop(v)
 end
 
 # *(vec,jo)
 
 # *(num,jo)
-*(a::Number,A::joLinearOperator) = throw(joLinearOperatorException("*(jo,num) not implemented"))
+*(a::Number,A::joAbstractLinearOperator) = throw(joLinearOperatorException("*(jo,num) not implemented"))
 
 # *(jo,num)
-*(A::joLinearOperator,a::Number) = a*A
+*(A::joAbstractLinearOperator,a::Number) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)
@@ -106,7 +130,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \(A::joLinearOperator,mv::AbstractMatrix)
+function \(A::joAbstractLinearOperator,mv::AbstractMatrix)
     isnull(A.iop) && throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
     size(A, 1) == size(mv, 1) || throw(joLinearOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,2),size(mv,2))
@@ -119,10 +143,10 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \(A::joLinearOperator,v::AbstractVector)
+function \(A::joAbstractLinearOperator,v::AbstractVector)
     isnull(A.iop) && throw(joLinearOperatorException("\(jo,Vector) not supplied"))
     size(A, 1) == size(v, 1) || throw(joLinearOperatorException("shape mismatch"))
-    return A\v
+    return get(A.iop)(v)
 end
 
 # \(vec,jo)
@@ -135,10 +159,17 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo)
-+(A::joLinearOperator) = A
++(A::joAbstractLinearOperator) = A
 
 # +(jo,jo)
-+(A::joLinearOperator,B::joLinearOperator) = throw(joLinearOperatorException("+(jo,jo) not implemented"))
+function +(A::joLinearOperator,B::joLinearOperator)
+    size(A) == size(B) || throw(joLinearOperatorException("shape mismatch"))
+    S=promote_type(eltype(A),eltype(B))
+    return joLinearOperator{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    v1->A.fop(v1)+B.fop(v1),v2->B.fop_T(v2)+A.fop_T(v2),
+    v3->B.fop_CT(v3)+A.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
+    @NF, @NF, @NF, @NF)
+end
 
 # +(jo,mvec)
 
@@ -149,19 +180,21 @@ end
 # +(vec,jo)
 
 # +(jo,num)
-+(A::joLinearOperator,b::Number) = throw(joLinearOperatorException("+(jo,num) not implemented"))
++(A::joAbstractLinearOperator,b::Number) = throw(joLinearOperatorException("+(jo,num) not implemented"))
 
 # +(num,jo)
-+(b::Number,A::joLinearOperator) = A+b
++(b::Number,A::joAbstractLinearOperator) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)
 
 # -(jo)
--(A::joLinearOperator) = throw(joLinearOperatorException("-(jo) not implemented"))
+-{T}(A::joLinearOperator{T}) = joLinearOperator{T}("(-"*A.name*")",A.m,A.n,
+    v1->-A.fop(v1),     v2->-A.fop_T(v2),     v3->-A.fop_CT(v3),     v4->-A.fop_C(v4),
+    v5->-get(A.iop)(v5),v6->-get(A.iop_T)(v6),v7->-get(A.iop_CT)(v7),v8->-get(A.iop_C)(v8))
 
 # -(jo,jo)
--(A::joLinearOperator,B::joLinearOperator) = A+(-B)
+-(A::joAbstractLinearOperator,B::joAbstractLinearOperator) = A+(-B)
 
 # -(jo,mvec)
 
@@ -172,10 +205,10 @@ end
 # -(vec,jo)
 
 # -(jo,num)
--(A::joLinearOperator,b::Number) = A+(-b)
+-(A::joAbstractLinearOperator,b::Number) = A+(-b)
 
 # -(num,jo)
--(b::Number,A::joLinearOperator) = -A+b
+-(b::Number,A::joAbstractLinearOperator) = -A+b
 
 ############################################################
 ## overloaded Base .*(...jo...)
@@ -254,5 +287,5 @@ end
 ############################################################
 ## extra methods
 
-double(A::joLinearOperator) = A*speye(A.n)
+double(A::joAbstractLinearOperator) = A*speye(A.n)
 
