@@ -11,8 +11,6 @@ end
 
 if t%2==1
     tname="loop $t for real($m,$n)"
-    at=Float64
-    bt=Float64
     a=rand(m,n)
     b=rand(m,n)
     vn=rand(n)
@@ -20,18 +18,16 @@ if t%2==1
     vm=rand(m)+im*rand(m)
     mvm=rand(m,2)
     A=joMatrix(a)
-    B=joLinearFunctionAll(bt,m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v)
+    B=joLinearFunctionAll(eltype(b),m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v)
 else
     tname="loop $t for complex($m,$n)"
-    at=Complex{Float64}
-    bt=Complex{Float64}
     a=rand(m,n)+im*rand(m,n)
     b=rand(m,n)+im*rand(m,n)
     vn=rand(n)+im*rand(n)
     mvn=rand(n,2)
     vm=rand(m)
     mvm=rand(m,2)+im*rand(m,2)
-    A=joLinearFunctionAll(at,m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v)
+    A=joLinearFunctionAll(eltype(a),m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v)
     B=joMatrix(b)
 end
 c=a*b'
