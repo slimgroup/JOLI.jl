@@ -13,12 +13,13 @@ import Base.size, Base.length
 import Base.full
 import Base.norm, Base.vecnorm
 import Base.transpose, Base.ctranspose, Base.conj
-import Base.hcat, Base.vcat
+import Base.isreal, Base.issymmetric, Base.ishermitian
 import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
+import Base.hcat, Base.vcat
 
-# exported methods
-export double
+# extra exported methods
+export double, iscomplex, isinvertible, islinear, isadjoint
 
 # constants
 export joTol
@@ -29,9 +30,9 @@ include("Utils.jl")
 include("joAbstractOperator.jl")
 include("joLinearOperator.jl")
 include("joMatrix.jl")
-include("joMatrixMisc.jl")
+include("joMatrixMiscConstructors.jl")
 include("joLinearFunction.jl")
-include("joLinearFunctionMisc.jl")
+include("joLinearFunctionMiscConstructors.jl")
 include("joKron.jl")
 
 end # module

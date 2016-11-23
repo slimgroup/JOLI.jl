@@ -84,6 +84,15 @@ conj{T}(A::joLinearOperator{T}) = joLinearOperator{T}("conj("*A.name*")",A.m,A.n
     get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
     A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
+# isreal(jo)
+isreal{T}(A :: joAbstractLinearOperator{T}) = T <: Real
+
+# issymmetric(jo)
+issymmetric(A::joAbstractLinearOperator) = (A.m == A.n && (vecnorm(double(A)-double(A.')) < joTol))
+
+# ishermitian(jo)
+ishermitian(A::joAbstractLinearOperator) = (A.m == A.n && (vecnorm(double(A)-double(A')) < joTol))
+
 ############################################################
 ## overloaded Base *(...jo...)
 
@@ -287,5 +296,35 @@ end
 ############################################################
 ## extra methods
 
+# double(jo)
 double(A::joAbstractLinearOperator) = A*speye(A.n)
 
+# iscomplex(jo)
+iscomplex{T}(A :: joAbstractLinearOperator{T}) = !(T <: Real)
+
+# isinvertible(jo)
+isinvertible(A::joAbstractLinearOperator) = !isnull(A.iop)
+
+# islinear(jo)
+function islinear{T}(A::joAbstractLinearOperator{T},v::Bool=false)
+    x::Array{T,1}=rand(T,A.n)
+    y::Array{T,1}=rand(T,A.n)
+    Axy=A*(x+y)
+    AxAy=(A*x+A*y)
+    res=vecnorm(Axy-AxAy)
+    test=(res < joTol)
+    v ? println("Linear test passed with tol=$joTol: ",test) : test
+    return test
+end
+
+# isadjoint(jo)
+function isadjoint{T}(A::joAbstractLinearOperator{T},v::Bool=false)
+    x::Array{T,1}=rand(T,A.n)
+    y::Array{T,1}=rand(T,A.m)
+    Axy=dot(A*x,y)
+    xAty=dot(x,A'*y)
+    res=Axy-xAty
+    test=(res < joTol)
+    v ? println("Adjoint test passed with tol=$joTol: ",test) : test
+    return test
+end
