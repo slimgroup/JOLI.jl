@@ -30,8 +30,8 @@ end
 
 joMatrix{T}(array::AbstractMatrix{T},name::String="joMatrix")=
     joMatrix{T}(name,size(array,1),size(array,2),
-    v1->array*v1,v2->array.'*v2,v3->array'*v3,v4->conj(array)*v4,
-    v5->array\v5,v6->array.'\v6,v7->array'\v7,v8->conj(array)\v8)
+        v1->array*v1,v2->array.'*v2,v3->array'*v3,v4->conj(array)*v4,
+        v5->array\v5,v6->array.'\v6,v7->array'\v7,v8->conj(array)\v8)
 
 ############################################################
 ## overloaded Base functions
