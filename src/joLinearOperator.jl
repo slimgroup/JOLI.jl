@@ -175,8 +175,8 @@ function +(A::joLinearOperator,B::joLinearOperator)
     size(A) == size(B) || throw(joLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joLinearOperator{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
-    v1->A.fop(v1)+B.fop(v1),v2->B.fop_T(v2)+A.fop_T(v2),
-    v3->B.fop_CT(v3)+A.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
+    v1->A.fop(v1)+B.fop(v1),v2->A.fop_T(v2)+B.fop_T(v2),
+    v3->A.fop_CT(v3)+B.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
     @NF, @NF, @NF, @NF)
 end
 
@@ -297,7 +297,7 @@ end
 ## extra methods
 
 # double(jo)
-double(A::joAbstractLinearOperator) = A*speye(A.n)
+double(A::joAbstractLinearOperator) = A*eye(A.n)
 
 # iscomplex(jo)
 iscomplex{T}(A :: joAbstractLinearOperator{T}) = !(T <: Real)

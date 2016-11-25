@@ -81,7 +81,7 @@ function *(a::Number,A::joMatrix)
     S=promote_type(eltype(a),eltype(A))
     return joMatrix{S}("(N*"*A.name*")",A.m,A.n,
     v1->a*A.fop(v1),v2->a*A.fop_T(v2),
-    v3->conj(a)*A.fop_CT(v3),v4->conj(a)*B.fop_C(v4),
+    v3->conj(a)*A.fop_CT(v3),v4->conj(a)*A.fop_C(v4),
     @NF, @NF, @NF, @NF)
 end
 
@@ -109,8 +109,8 @@ function +(A::joMatrix,B::joMatrix)
     size(A) == size(B) || throw(joMatrixException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joMatrix{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
-    v1->A.fop(v1)+B.fop(v1),v2->B.fop_T(v2)+A.fop_T(v2),
-    v3->B.fop_CT(v3)+A.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
+    v1->A.fop(v1)+B.fop(v1),v2->A.fop_T(v2)+B.fop_T(v2),
+    v3->A.fop_CT(v3)+B.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
     @NF, @NF, @NF, @NF)
 end
 
@@ -142,4 +142,7 @@ end
 
 ############################################################
 ## extra methods
+
+# double(jo)
+double(A::joMatrix) = A*speye(A.n)
 
