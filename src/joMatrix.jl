@@ -56,9 +56,9 @@ conj{T}(A::joMatrix{T}) = joMatrix{T}("conj("*A.name*")",A.m,A.n,
 
 # *(jo,jo)
 function *(A::joMatrix,B::joMatrix)
-    size(A,2) == size(B,1) || throw(joMatrixException("shape mismatch"))
+    A.n == B.m || throw(joMatrixException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
-    return joMatrix{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
+    return joMatrix{S}("("*A.name*"*"*B.name*")",A.m,B.n,
     v1->A.fop(B.fop(v1)),v2->B.fop_T(A.fop_T(v2)),
     v3->B.fop_CT(A.fop_CT(v3)),v4->A.fop_C(B.fop_C(v4)),
     @NF, @NF, @NF, @NF)
@@ -66,13 +66,13 @@ end
 
 # *(jo,mvec)
 function *(A::joMatrix,mv::AbstractMatrix)
-    size(A, 2) == size(mv, 1) || throw(joMatrixException("shape mismatch"))
+    A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
     return A.fop(mv)
 end
 
 # *(jo,vec)
 function *(A::joMatrix,v::AbstractVector)
-    size(A, 2) == size(v, 1) || throw(joMatrixException("shape mismatch"))
+    A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
     return A.fop(v)
 end
 
@@ -90,14 +90,14 @@ end
 
 # \(jo,mvec)
 #function \(A::joMatrix,mv::AbstractMatrix)
-#    size(A, 1) == size(mv, 1) || throw(joMatrixException("shape mismatch"))
+#    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joMatrixException("inverse not defined"))
 #end
 
 # \(jo,vec)
 function \(A::joMatrix,v::AbstractVector)
     isnull(A.iop) && throw(joMatrixException("\(jo,Vector) not supplied"))
-    size(A, 1) == size(v, 1) || throw(joMatrixException("shape mismatch"))
+    A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
     return get(A.iop)(v)
 end
 
@@ -108,7 +108,7 @@ end
 function +(A::joMatrix,B::joMatrix)
     size(A) == size(B) || throw(joMatrixException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
-    return joMatrix{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    return joMatrix{S}("("*A.name*"+"*B.name*")",A.m,B.n,
     v1->A.fop(v1)+B.fop(v1),v2->A.fop_T(v2)+B.fop_T(v2),
     v3->A.fop_CT(v3)+B.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
     @NF, @NF, @NF, @NF)

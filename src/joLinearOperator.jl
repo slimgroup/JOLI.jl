@@ -97,8 +97,16 @@ ishermitian(A::joAbstractLinearOperator) = (A.m == A.n && (vecnorm(double(A)-dou
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
+function *(A::joLinearOperator,B::joLinearOperator)
+    A.n == B.m || throw(joLinearOperatorException("shape mismatch"))
+    S=promote_type(eltype(A),eltype(B))
+    return joLinearOperator{S}("("*A.name*"*"*B.name*")",A.m,B.n,
+    v1->A.fop(B.fop(v1)),v2->get(B.fop_T)(get(A.fop_T)(v2)),
+    v3->get(B.fop_CT)(get(A.fop_CT)(v3)),v4->get(A.fop_C)(get(B.fop_C)(v4)),
+    @NF, @NF, @NF, @NF)
+end
 function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
-    size(A,2) == size(B,1) || throw(joLinearOperatorException("shape mismatch"))
+    size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joLinearOperator{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
     v1->A*(B*v1),v2->B.'*(A.'*v2),
@@ -107,9 +115,18 @@ function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
 end
 
 # *(jo,mvec)
-function *(A::joAbstractLinearOperator,mv::AbstractMatrix)
+function *(A::joLinearOperator,mv::AbstractMatrix)
     ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
-    size(A, 2) == size(mv, 1) || throw(joLinearOperatorException("shape mismatch"))
+    A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    MV=zeros(promote_type(eltype(A),eltype(mv)),A.m,size(mv,2))
+    for i=1:size(mv,2)
+        MV[:,i]=A.fop(mv[:,i])
+    end
+    return MV
+end
+function *(A::joAbstractLinearOperator,mv::AbstractMatrix)
+    ##isnull(A.fop) && throw(joAbstractLinearOperatorException("*(jo,MultiVector) not supplied"))
+    size(A,2) == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,1),size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A*mv[:,i]
@@ -121,14 +138,27 @@ end
 
 # *(jo,vec)
 function *(A::joLinearOperator,v::AbstractVector)
-    size(A, 2) == size(v, 1) || throw(joLinearOperatorException("shape mismatch"))
+    A.n == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return A.fop(v)
 end
 
 # *(vec,jo)
 
 # *(num,jo)
-*(a::Number,A::joAbstractLinearOperator) = throw(joLinearOperatorException("*(jo,num) not implemented"))
+function *(a::Number,A::joLinearOperator)
+    S=promote_type(eltype(a),eltype(A))
+    return joLinearOperator{S}("(N*"*A.name*")",A.m,A.n,
+    v1->a*A.fop(v1),v2->a*A.fop_T(v2),
+    v3->conj(a)*A.fop_CT(v3),v4->conj(a)*A.fop_C(v4),
+    @NF, @NF, @NF, @NF)
+end
+function *(a::Number,A::joAbstractLinearOperator)
+    S=promote_type(eltype(a),eltype(A))
+    return joLinearOperator{S}("(N*"*A.name*")",A.m,A.n,
+    v1->a*A*v1,v2->a*A.'*v2,
+    v3->conj(a)*A'*v3,v4->conj(a)*conj(A)*v4,
+    @NF, @NF, @NF, @NF)
+end
 
 # *(jo,num)
 *(A::joAbstractLinearOperator,a::Number) = a*A
@@ -139,9 +169,18 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \(A::joAbstractLinearOperator,mv::AbstractMatrix)
+function \(A::joLinearOperator,mv::AbstractMatrix)
     isnull(A.iop) && throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
-    size(A, 1) == size(mv, 1) || throw(joLinearOperatorException("shape mismatch"))
+    A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    MV=zeros(promote_type(eltype(A),eltype(mv)),A.n,size(mv,2))
+    for i=1:size(mv,2)
+        MV[:,i]=A.iop(mv[:,i])
+    end
+    return MV
+end
+function \(A::joAbstractLinearOperator,mv::AbstractMatrix)
+    isinvertible(A) || throw(joAbstractLinearOperatorException("\(jo,MultiVector) not supplied"))
+    size(A,1) == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,2),size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A\mv[:,i]
@@ -152,9 +191,9 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \(A::joAbstractLinearOperator,v::AbstractVector)
+function \(A::joLinearOperator,v::AbstractVector)
     isnull(A.iop) && throw(joLinearOperatorException("\(jo,Vector) not supplied"))
-    size(A, 1) == size(v, 1) || throw(joLinearOperatorException("shape mismatch"))
+    A.m == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return get(A.iop)(v)
 end
 
@@ -174,9 +213,17 @@ end
 function +(A::joLinearOperator,B::joLinearOperator)
     size(A) == size(B) || throw(joLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
-    return joLinearOperator{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    return joLinearOperator{S}("("*A.name*"+"*B.name*")",A.m,B.n,
     v1->A.fop(v1)+B.fop(v1),v2->A.fop_T(v2)+B.fop_T(v2),
     v3->A.fop_CT(v3)+B.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
+    @NF, @NF, @NF, @NF)
+end
+function +(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
+    size(A) == size(B) || throw(joAbstractLinearOperatorException("shape mismatch"))
+    S=promote_type(eltype(A),eltype(B))
+    return joLinearOperator{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    v1->A*v1+B*v1,v2->A.'*v2+B.'*v2,
+    v3->A'*v3+B'*v3,v4->conj(A)*v4+conj(B)*v4,
     @NF, @NF, @NF, @NF)
 end
 
@@ -189,7 +236,20 @@ end
 # +(vec,jo)
 
 # +(jo,num)
-+(A::joAbstractLinearOperator,b::Number) = throw(joLinearOperatorException("+(jo,num) not implemented"))
+function +(A::joLinearOperator,b::Number)
+    S=promote_type(eltype(A),eltype(b))
+    return joLinearOperator{S}("("*A.name*"+N)",A.m,A.n,
+    v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
+    v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n)*v4,
+    @NF, @NF, @NF, @NF)
+end
+function +(A::joAbstractLinearOperator,b::Number)
+    S=promote_type(eltype(A),eltype(b))
+    return joLinearOperator{S}("("*A.name*"+N)",size(A,1),size(A,2),
+    v1->A*v1+b*joOnes(A.m,A.n)*v1,v2->A.'*v2+b*joOnes(A.m,A.n)*v2,
+    v3->A'*v3+conj(b)*joOnes(A.m,A.n)*v3,v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n)*v4,
+    @NF, @NF, @NF, @NF)
+end
 
 # +(num,jo)
 +(b::Number,A::joAbstractLinearOperator) = A+b

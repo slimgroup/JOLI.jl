@@ -83,9 +83,9 @@ conj{T}(A::joLinearFunction{T}) = joLinearFunction{T}("conj("*A.name*")",A.m,A.n
 
 # *(jo,jo)
 function *(A::joLinearFunction,B::joLinearFunction)
-    size(A,2) == size(B,1) || throw(joLinearFunctionException("shape mismatch"))
+    A.n == B.m || throw(joLinearFunctionException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
-    return joLinearFunction{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
+    return joLinearFunction{S}("("*A.name*"*"*B.name*")",A.m,B.n,
     v1->A.fop(B.fop(v1)),v2->get(B.fop_T)(get(A.fop_T)(v2)),
     v3->get(B.fop_CT)(get(A.fop_CT)(v3)),v4->get(A.fop_C)(get(B.fop_C)(v4)),
     @NF, @NF, @NF, @NF)
@@ -93,13 +93,13 @@ end
 
 # *(jo,mvec)
 #function *(A::joLinearFunction,mv::AbstractMatrix)
-#    size(A, 2) == size(mv, 1) || throw(joLinearFunctionException("shape mismatch"))
+#    A.n == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
 #    return A.fop(mv)
 #end
 
 # *(jo,vec)
 function *(A::joLinearFunction,v::AbstractVector)
-    size(A, 2) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
+    A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return A.fop(v)
 end
 
@@ -117,14 +117,14 @@ end
 
 # \(jo,mvec)
 #function \(A::joLinearFunction,mv::AbstractMatrix)
-#    size(A, 1) == size(mv, 1) || throw(joLinearFunctionException("shape mismatch"))
+#    A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joLinearFunctionException("inverse not defined"))
 #end
 
 # \(jo,vec)
 function \(A::joLinearFunction,v::AbstractVector)
     isnull(A.iop) && throw(joLinearFunctionException("\(jo,Vector) not supplied"))
-    size(A, 1) == size(v, 1) || throw(joLinearFunctionException("shape mismatch"))
+    A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return get(A.iop)(v)
 end
 
@@ -135,7 +135,7 @@ end
 function +(A::joLinearFunction,B::joLinearFunction)
     size(A) == size(B) || throw(joLinearFunctionException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
-    return joLinearFunction{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    return joLinearFunction{S}("("*A.name*"+"*B.name*")",A.m,B.n,
     v1->A.fop(v1)+B.fop(v1),v2->A.fop_T(v2)+B.fop_T(v2),
     v3->A.fop_CT(v3)+B.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
     @NF, @NF, @NF, @NF)

@@ -1,5 +1,5 @@
 T=6
-tsname="joLinearOperator - Product"
+tsname="joLinearOperator - Sum"
 @testset "$tsname" begin
 for t=1:T # start test loop
 
@@ -30,8 +30,8 @@ else
     A=joLinearFunctionAll(eltype(a),m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v)
     B=joMatrix(b)
 end
-c=a*b'
-C=A*B'
+c=a+b
+C=A+B
 afac=rand()+rand()*im
 mfac=rand()+rand()*im
 
@@ -56,26 +56,26 @@ println("$tsname $tname")
         @test norm(double(C.')-c.')<joTol
         @test norm(double(+C)-(+c))<joTol
         @test norm(double(-C)-(-c))<joTol
-        @test norm(C*vm-c*vm)<joTol
-        @test norm(C*mvm-c*mvm)<joTol
+        @test norm(C*vn-c*vn)<joTol
+        @test norm(C*mvn-c*mvn)<joTol
         @test norm(C'*vm-c'*vm)<joTol
         @test norm(C'*mvm-c'*mvm)<joTol
         @test norm(C.'*vm-c.'*vm)<joTol
         @test norm(C.'*mvm-c.'*mvm)<joTol
-        @test norm((C.')'*vm-(c.')'*vm)<joTol
-        @test norm((C.')'*mvm-(c.')'*mvm)<joTol
-        @test norm((C').'*vm-(c').'*vm)<joTol
-        @test norm((C').'*mvm-(c').'*mvm)<joTol
+        @test norm((C.')'*vn-(c.')'*vn)<joTol
+        @test norm((C.')'*mvn-(c.')'*mvn)<joTol
+        @test norm((C').'*vn-(c').'*vn)<joTol
+        @test norm((C').'*mvn-(c').'*mvn)<joTol
         @test norm(double(C.'*C)-(c.'*c))<joTol
         @test norm(double(C*C.')-(c*c.'))<joTol
         @test norm(double(C'*C)-(c'*c))<joTol
         @test norm(double(C*C')-(c*c'))<joTol
-        #@test norm(C\vm-c\vm)<joTol
-        #@test norm(C\mvm-c\mvm)<joTol
-        #@test norm(C'\vn-c'\vn)<joTol
-        #@test norm(C'\mvn-c'\mvn)<joTol
-        #@test norm(C.'\vn-c.'\vn)<joTol
-        #@test norm(C.'\mvn-c.'\mvn)<joTol
+        #@test norm(C\vn-c\vn)<joTol
+        #@test norm(C\mvn-c\mvn)<joTol
+        #@test norm(C'\vm-c'\vm)<joTol
+        #@test norm(C'\mvm-c'\mvm)<joTol
+        #@test norm(C.'\vm-c.'\vm)<joTol
+        #@test norm(C.'\mvm-c.'\mvm)<joTol
     end
 
     end # end test loop

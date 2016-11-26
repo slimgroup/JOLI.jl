@@ -13,6 +13,10 @@ abstract joAbstractLinearOperator{T} <: joAbstractOperator{T}
 type joAbstractOperatorException <: Exception
     msg :: String
 end
+type joAbstractLinearOperatorException <: Exception
+    msg :: String
+end
+
 
 ############################################################
 ## outer constructors

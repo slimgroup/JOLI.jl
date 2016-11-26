@@ -83,6 +83,14 @@ println("$tsname $tname")
         @test norm(double(A.'*mfac)-(a.'*mfac))<joTol
         @test norm(double(A'*mfac)-(a'*mfac))<joTol
         @test norm(double(conj(A)*mfac)-(conj(a)*mfac))<joTol
+        @test norm(double(A+afac)-(a+afac))<joTol
+        @test norm(double(A.'+afac)-(a.'+afac))<joTol
+        @test norm(double(A'+afac)-(a'+afac))<joTol
+        @test norm(double(conj(A)+afac)-(conj(a)+afac))<joTol
+        @test norm(double(afac+A)-(afac+a))<joTol
+        @test norm(double(afac+A.')-(afac+a.'))<joTol
+        @test norm(double(afac+A')-(afac+a'))<joTol
+        @test norm(double(afac+conj(A))-(afac+conj(a)))<joTol
     end
 
     end # end test loop

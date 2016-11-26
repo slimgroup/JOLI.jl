@@ -102,12 +102,12 @@ function *(A::joKron,v::AbstractVector)
     end
     return vec(V)
 end
-function *(A::joKron,mv::AbstractMatrix)
-    size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
-    for i=1:size(mv,2)
-        MV[:,i]=A*mv[:,i]
-    end
-    return MV
-end
+#function *(A::joKron,mv::AbstractMatrix)
+    #size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
+    #MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
+    #for i=1:size(mv,2)
+        #MV[:,i]=A*mv[:,i]
+    #end
+    #return MV
+#end
 
