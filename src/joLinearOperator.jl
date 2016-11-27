@@ -259,7 +259,7 @@ end
 
 # -(jo)
 -{T}(A::joLinearOperator{T}) = joLinearOperator{T}("(-"*A.name*")",A.m,A.n,
-    v1->-A.fop(v1),     v2->-A.fop_T(v2),     v3->-A.fop_CT(v3),     v4->-A.fop_C(v4),
+    v1->-A.fop(v1),     v2->-get(A.fop_T)(v2),v3->-get(A.fop_CT)(v3),v4->-get(A.fop_C)(v4),
     v5->-get(A.iop)(v5),v6->-get(A.iop_T)(v6),v7->-get(A.iop_CT)(v7),v8->-get(A.iop_C)(v8))
 
 # -(jo,jo)
