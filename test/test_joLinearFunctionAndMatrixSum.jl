@@ -78,5 +78,5 @@ println("$tsname $tname")
         #@test norm(C.'\mvm-c.'\mvm)<joTol
     end
 
-    end # end test loop
+end # end test loop
 end

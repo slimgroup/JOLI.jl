@@ -93,5 +93,5 @@ println("$tsname $tname")
         @test norm(double(afac+conj(A))-(afac+conj(a)))<joTol
     end
 
-    end # end test loop
+end # end test loop
 end
