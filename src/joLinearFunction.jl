@@ -141,6 +141,15 @@ function +(A::joLinearFunction,B::joLinearFunction)
     @NF, @NF, @NF, @NF)
 end
 
+# +(jo,num)
+function +(A::joLinearFunction,b::Number)
+    S=promote_type(eltype(A),eltype(b))
+    return joLinearFunction{S}("("*A.name*"+N)",A.m,A.n,
+    v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
+    v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n)*v4,
+    @NF, @NF, @NF, @NF)
+end
+
 ############################################################
 ## overloaded Base -(...jo...)
 
