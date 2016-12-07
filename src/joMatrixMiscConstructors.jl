@@ -47,8 +47,8 @@ joZeros(m::Integer,n::Integer,e::DataType=Int8)=
         v4->(size(v4,2)>1 ? zeros(promote_type(e,eltype(v4)),m,size(v4,2)) : zeros(promote_type(e,eltype(v4)),m)),
         @NF, @NF, @NF, @NF)
 
-# conversion operators: joReal joImag
-export joReal, joImag
+# conversion operators: joReal joImag joConj
+export joReal, joImag, joConj
 joReal(m::Integer=1,e::DataType=Int8)=
     joMatrix{e}("joReal",m,m,
         v1->real(v1),v2->real(v2),v3->real(v3),v4->real(v4),
@@ -56,5 +56,9 @@ joReal(m::Integer=1,e::DataType=Int8)=
 joImag(m::Integer=1,e::DataType=Int8)=
     joMatrix{e}("joImag",m,m,
         v1->imag(v1),v2->imag(v2),v3->imag(v3),v4->imag(v4),
+        @NF, @NF, @NF, @NF)
+joConj(m::Integer=1,e::DataType=Int8)=
+    joMatrix{e}("joConj",m,m,
+        v1->conj(v1),v2->conj(v2),v3->conj(v3),v4->conj(v4),
         @NF, @NF, @NF, @NF)
 
