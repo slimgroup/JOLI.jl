@@ -36,6 +36,11 @@ joMatrix{T}(array::AbstractMatrix{T},name::String="joMatrix")=
 ############################################################
 ## overloaded Base functions
 
+# conj(jo)
+conj{T}(A::joMatrix{T}) = joMatrix{T}("conj("*A.name*")",A.m,A.n,
+    A.fop_C,A.fop_CT,A.fop_T,A.fop,
+    A.iop_C,A.iop_CT,A.iop_T,A.iop)
+
 # transpose(jo)
 transpose{T}(A::joMatrix{T}) = joMatrix{T}(""*A.name*".'",A.n,A.m,
     A.fop_T,A.fop,A.fop_C,A.fop_CT,
@@ -45,11 +50,6 @@ transpose{T}(A::joMatrix{T}) = joMatrix{T}(""*A.name*".'",A.n,A.m,
 ctranspose{T}(A::joMatrix{T}) = joMatrix{T}(""*A.name*"'",A.n,A.m,
     A.fop_CT,A.fop_C,A.fop,A.fop_T,
     A.iop_CT,A.iop_C,A.iop,A.iop_T)
-
-# conj(jo)
-conj{T}(A::joMatrix{T}) = joMatrix{T}("conj("*A.name*")",A.m,A.n,
-    A.fop_C,A.fop_CT,A.fop_T,A.fop,
-    A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 ############################################################
 ## overloaded Base *(...jo...)

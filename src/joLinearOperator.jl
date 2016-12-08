@@ -28,6 +28,9 @@ end
 ############################################################
 ## outer constructors
 
+joReal(A::joAbstractLinearOperator)=real(A)
+joImag(A::joAbstractLinearOperator)=imag(A)
+joConj(A::joAbstractLinearOperator)=conj(A)
 ############################################################
 ## overloaded Base functions
 
@@ -69,6 +72,17 @@ norm(A::joAbstractLinearOperator,p::Real=2) = norm(double(A),p)
 # vecnorm(jo)
 vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(double(A),p)
 
+# real(jo)
+real(A::joAbstractLinearOperator) = throw(joLinearOperatorException("real(jo) not implemented"))
+
+# imag(jo)
+imag(A::joAbstractLinearOperator) = throw(joLinearOperatorException("imag(jo) not implemented"))
+
+# conj(jo)
+conj{T}(A::joLinearOperator{T}) = joLinearOperator{T}("conj("*A.name*")",A.m,A.n,
+    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
+    A.iop_C,A.iop_CT,A.iop_T,A.iop)
+
 # transpose(jo)
 transpose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*".'",A.n,A.m,
     get(A.fop_T),@NF(A.fop),A.fop_C,A.fop_CT,
@@ -78,11 +92,6 @@ transpose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*".'",A.n,A.
 ctranspose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*"'",A.n,A.m,
     get(A.fop_CT),A.fop_C,@NF(A.fop),A.fop_T,
     A.iop_CT,A.iop_C,A.iop,A.iop_T)
-
-# conj(jo)
-conj{T}(A::joLinearOperator{T}) = joLinearOperator{T}("conj("*A.name*")",A.m,A.n,
-    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
-    A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 # isreal(jo)
 isreal{T}(A :: joAbstractLinearOperator{T}) = T <: Real

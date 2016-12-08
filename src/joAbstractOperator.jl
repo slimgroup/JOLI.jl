@@ -54,14 +54,20 @@ norm(A::joAbstractOperator,p::Real=2) = throw(joAbstractOperatorException("norm(
 # vecnorm(jo)
 vecnorm(A::joAbstractOperator,p::Real=2) = throw(joAbstractOperatorException("vecnorm(jo) not implemented"))
 
+# real(jo)
+real(A::joAbstractOperator) = throw(joAbstractOperatorException("real(jo) not implemented"))
+
+# imag(jo)
+imag(A::joAbstractOperator) = throw(joAbstractOperatorException("imag(jo) not implemented"))
+
+# conj(jo)
+conj(A::joAbstractOperator) = throw(joAbstractOperatorException("conj(jo) not implemented"))
+
 # transpose(jo)
 transpose(A::joAbstractOperator) = throw(joAbstractOperatorException("jo.' not implemented"))
 
 # ctranspose(jo)
 ctranspose(A::joAbstractOperator) = throw(joAbstractOperatorException("jo' not implemented"))
-
-# conj(jo)
-conj(A::joAbstractOperator) = throw(joAbstractOperatorException("conj(jo) not implemented"))
 
 # isreal(jo)
 isreal(A :: joAbstractOperator) = throw(joAbstractOperatorException("isreal(jo) not implemented"))

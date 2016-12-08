@@ -63,6 +63,11 @@ joLinearFunctionFwdCT(T::DataType,m::Integer,n::Integer,
 ############################################################
 ## overloaded Base functions
 
+# conj(jo)
+conj{T}(A::joLinearFunction{T}) = joLinearFunction{T}("conj("*A.name*")",A.m,A.n,
+    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
+    A.iop_C,A.iop_CT,A.iop_T,A.iop)
+
 # transpose(jo)
 transpose{T}(A::joLinearFunction{T}) = joLinearFunction{T}(""*A.name*".'",A.n,A.m,
     get(A.fop_T),@NF(A.fop),A.fop_C,A.fop_CT,
@@ -72,11 +77,6 @@ transpose{T}(A::joLinearFunction{T}) = joLinearFunction{T}(""*A.name*".'",A.n,A.
 ctranspose{T}(A::joLinearFunction{T}) = joLinearFunction{T}(""*A.name*"'",A.n,A.m,
     get(A.fop_CT),A.fop_C,@NF(A.fop),A.fop_T,
     A.iop_CT,A.iop_C,A.iop,A.iop_T)
-
-# conj(jo)
-conj{T}(A::joLinearFunction{T}) = joLinearFunction{T}("conj("*A.name*")",A.m,A.n,
-    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
-    A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 ############################################################
 ## overloaded Base *(...jo...)

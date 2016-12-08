@@ -12,7 +12,8 @@ import Base.show, Base.showall, Base.display
 import Base.size, Base.length
 import Base.full
 import Base.norm, Base.vecnorm
-import Base.transpose, Base.ctranspose, Base.conj
+import Base.real, Base.imag, Base.conj
+import Base.transpose, Base.ctranspose
 import Base.isreal, Base.issymmetric, Base.ishermitian
 import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
