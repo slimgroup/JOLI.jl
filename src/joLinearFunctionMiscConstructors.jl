@@ -73,10 +73,20 @@ Multi-dimensional FFT transform over fast dimension(s)
 function joDFT(ms::Integer...;centered::Bool=false,elmtype=Float64)
     if centered
         return joLinearFunctionCT(Complex{elmtype},prod(ms),prod(ms),
-            v1->apply_fft_centered(v1,ms),v2->apply_ifft_centered(v2,ms),v3->apply_ifft_centered(v3,ms),v4->apply_fft_centered(v4,ms),"joDFT")
+            v1->apply_fft_centered(v1,ms),
+            v2->apply_ifft_centered(v2,ms),
+            v3->apply_ifft_centered(v3,ms),
+            v4->apply_fft_centered(v4,ms),
+            "joDFTc"
+            )
     else
         return joLinearFunctionCT(Complex{elmtype},prod(ms),prod(ms),
-            v1->apply_fft(v1,ms),v2->apply_ifft(v2,ms),v3->apply_ifft(v3,ms),v4->apply_fft(v4,ms),"joDFT")
+            v1->apply_fft(v1,ms),
+            v2->apply_ifft(v2,ms),
+            v3->apply_ifft(v3,ms),
+            v4->apply_fft(v4,ms),
+            "joDFT"
+            )
     end
 end
 
@@ -121,6 +131,11 @@ Multi-dimensional DCT transform over fast dimension(s)
 
 """
 joDCT(ms::Integer...;elmtype=Float64) =
-        joLinearFunctionCT(elmtype,prod(ms),prod(ms),
-            v1->apply_dct(v1,ms),v2->apply_idct(v2,ms),v3->apply_idct(v3,ms),v4->apply_dct(v4,ms),"joDCT")
+    joLinearFunctionCT(elmtype,prod(ms),prod(ms),
+        v1->apply_dct(v1,ms),
+        v2->apply_idct(v2,ms),
+        v3->apply_idct(v3,ms),
+        v4->apply_dct(v4,ms),
+        "joDCT"
+        )
 
