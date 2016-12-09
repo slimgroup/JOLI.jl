@@ -71,11 +71,11 @@ vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(double(A),p)
 
 # real(jo)
 real(A::joAbstractLinearOperator) = throw(joLinearOperatorException("real(jo) not implemented"))
-joReal(A::joAbstractLinearOperator)=real(A)
+joReal(A::joAbstractLinearOperator) = real(A)
 
 # imag(jo)
 imag(A::joAbstractLinearOperator) = throw(joLinearOperatorException("imag(jo) not implemented"))
-joImag(A::joAbstractLinearOperator)=imag(A)
+joImag(A::joAbstractLinearOperator) = imag(A)
 
 # conj(jo)
 conj{T}(A::joLinearOperator{T}) =
@@ -89,7 +89,7 @@ conj{T}(A::joLinearOperator{T}) =
         A.iop_T,
         A.iop
         )
-joConj(A::joAbstractLinearOperator)=conj(A)
+joConj(A::joAbstractLinearOperator) = conj(A)
 
 # transpose(jo)
 transpose{T}(A::joLinearOperator{T}) =
