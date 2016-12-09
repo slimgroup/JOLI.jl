@@ -28,9 +28,6 @@ end
 ############################################################
 ## outer constructors
 
-joReal(A::joAbstractLinearOperator)=real(A)
-joImag(A::joAbstractLinearOperator)=imag(A)
-joConj(A::joAbstractLinearOperator)=conj(A)
 ############################################################
 ## overloaded Base functions
 
@@ -74,33 +71,62 @@ vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(double(A),p)
 
 # real(jo)
 real(A::joAbstractLinearOperator) = throw(joLinearOperatorException("real(jo) not implemented"))
+joReal(A::joAbstractLinearOperator)=real(A)
 
 # imag(jo)
 imag(A::joAbstractLinearOperator) = throw(joLinearOperatorException("imag(jo) not implemented"))
+joImag(A::joAbstractLinearOperator)=imag(A)
 
 # conj(jo)
-conj{T}(A::joLinearOperator{T}) = joLinearOperator{T}("conj("*A.name*")",A.m,A.n,
-    get(A.fop_C),A.fop_CT,A.fop_T,@NF(A.fop),
-    A.iop_C,A.iop_CT,A.iop_T,A.iop)
+conj{T}(A::joLinearOperator{T}) =
+    joLinearOperator{T}("conj("*A.name*")",A.m,A.n,
+        get(A.fop_C),
+        A.fop_CT,
+        A.fop_T,
+        @NF(A.fop),
+        A.iop_C,
+        A.iop_CT,
+        A.iop_T,
+        A.iop
+        )
+joConj(A::joAbstractLinearOperator)=conj(A)
 
 # transpose(jo)
-transpose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*".'",A.n,A.m,
-    get(A.fop_T),@NF(A.fop),A.fop_C,A.fop_CT,
-    A.iop_T,A.iop,A.iop_C,A.iop_CT)
+transpose{T}(A::joLinearOperator{T}) =
+    joLinearOperator{T}(""*A.name*".'",A.n,A.m,
+        get(A.fop_T),
+        @NF(A.fop),
+        A.fop_C,
+        A.fop_CT,
+        A.iop_T,
+        A.iop,
+        A.iop_C,
+        A.iop_CT
+        )
 
 # ctranspose(jo)
-ctranspose{T}(A::joLinearOperator{T}) = joLinearOperator{T}(""*A.name*"'",A.n,A.m,
-    get(A.fop_CT),A.fop_C,@NF(A.fop),A.fop_T,
-    A.iop_CT,A.iop_C,A.iop,A.iop_T)
+ctranspose{T}(A::joLinearOperator{T}) =
+    joLinearOperator{T}(""*A.name*"'",A.n,A.m,
+        get(A.fop_CT),
+        A.fop_C,
+        @NF(A.fop),
+        A.fop_T,
+        A.iop_CT,
+        A.iop_C,
+        A.iop,
+        A.iop_T
+        )
 
 # isreal(jo)
 isreal{T}(A :: joAbstractLinearOperator{T}) = T <: Real
 
 # issymmetric(jo)
-issymmetric(A::joAbstractLinearOperator) = (A.m == A.n && (vecnorm(double(A)-double(A.')) < joTol))
+issymmetric(A::joAbstractLinearOperator) =
+    (A.m == A.n && (vecnorm(double(A)-double(A.')) < joTol))
 
 # ishermitian(jo)
-ishermitian(A::joAbstractLinearOperator) = (A.m == A.n && (vecnorm(double(A)-double(A')) < joTol))
+ishermitian(A::joAbstractLinearOperator) =
+    (A.m == A.n && (vecnorm(double(A)-double(A')) < joTol))
 
 ############################################################
 ## overloaded Base *(...jo...)
@@ -110,17 +136,23 @@ function *(A::joLinearOperator,B::joLinearOperator)
     A.n == B.m || throw(joLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joLinearOperator{S}("("*A.name*"*"*B.name*")",A.m,B.n,
-    v1->A.fop(B.fop(v1)),v2->get(B.fop_T)(get(A.fop_T)(v2)),
-    v3->get(B.fop_CT)(get(A.fop_CT)(v3)),v4->get(A.fop_C)(get(B.fop_C)(v4)),
-    @NF, @NF, @NF, @NF)
+        v1->A.fop(B.fop(v1)),
+        v2->get(B.fop_T)(get(A.fop_T)(v2)),
+        v3->get(B.fop_CT)(get(A.fop_CT)(v3)),
+        v4->get(A.fop_C)(get(B.fop_C)(v4)),
+        @NF, @NF, @NF, @NF
+        )
 end
 function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
     size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joLinearOperator{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
-    v1->A*(B*v1),v2->B.'*(A.'*v2),
-    @NF(v3->B'*(A'*v3)),@NF(v4->conj(A)*(conj(B)*v4)),
-    @NF, @NF, @NF, @NF)
+        v1->A*(B*v1),
+        v2->B.'*(A.'*v2),
+        @NF(v3->B'*(A'*v3)),
+        @NF(v4->conj(A)*(conj(B)*v4)),
+        @NF, @NF, @NF, @NF
+        )
 end
 
 # *(jo,mvec)
@@ -157,16 +189,22 @@ end
 function *(a::Number,A::joLinearOperator)
     S=promote_type(eltype(a),eltype(A))
     return joLinearOperator{S}("(N*"*A.name*")",A.m,A.n,
-    v1->a*A.fop(v1),v2->a*A.fop_T(v2),
-    v3->conj(a)*A.fop_CT(v3),v4->conj(a)*A.fop_C(v4),
-    @NF, @NF, @NF, @NF)
+        v1->a*A.fop(v1),
+        v2->a*A.fop_T(v2),
+        v3->conj(a)*A.fop_CT(v3),
+        v4->conj(a)*A.fop_C(v4),
+        @NF, @NF, @NF, @NF
+        )
 end
 function *(a::Number,A::joAbstractLinearOperator)
     S=promote_type(eltype(a),eltype(A))
     return joLinearOperator{S}("(N*"*A.name*")",A.m,A.n,
-    v1->a*A*v1,v2->a*A.'*v2,
-    v3->conj(a)*A'*v3,v4->conj(a)*conj(A)*v4,
-    @NF, @NF, @NF, @NF)
+        v1->a*A*v1,
+        v2->a*A.'*v2,
+        v3->conj(a)*A'*v3,
+        v4->conj(a)*conj(A)*v4,
+        @NF, @NF, @NF, @NF
+        )
 end
 
 # *(jo,num)
@@ -223,17 +261,23 @@ function +(A::joLinearOperator,B::joLinearOperator)
     size(A) == size(B) || throw(joLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joLinearOperator{S}("("*A.name*"+"*B.name*")",A.m,B.n,
-    v1->A.fop(v1)+B.fop(v1),v2->A.fop_T(v2)+B.fop_T(v2),
-    v3->A.fop_CT(v3)+B.fop_CT(v3),v4->A.fop_C(v4)+B.fop_C(v4),
-    @NF, @NF, @NF, @NF)
+        v1->A.fop(v1)+B.fop(v1),
+        v2->A.fop_T(v2)+B.fop_T(v2),
+        v3->A.fop_CT(v3)+B.fop_CT(v3),
+        v4->A.fop_C(v4)+B.fop_C(v4),
+        @NF, @NF, @NF, @NF
+        )
 end
 function +(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
     size(A) == size(B) || throw(joAbstractLinearOperatorException("shape mismatch"))
     S=promote_type(eltype(A),eltype(B))
     return joLinearOperator{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
-    v1->A*v1+B*v1,v2->A.'*v2+B.'*v2,
-    v3->A'*v3+B'*v3,v4->conj(A)*v4+conj(B)*v4,
-    @NF, @NF, @NF, @NF)
+        v1->A*v1+B*v1,
+        v2->A.'*v2+B.'*v2,
+        v3->A'*v3+B'*v3,
+        v4->conj(A)*v4+conj(B)*v4,
+        @NF, @NF, @NF, @NF
+        )
 end
 
 # +(jo,mvec)
@@ -248,16 +292,22 @@ end
 function +(A::joLinearOperator,b::Number)
     S=promote_type(eltype(A),eltype(b))
     return joLinearOperator{S}("("*A.name*"+N)",A.m,A.n,
-    v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
-    v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n)*v4,
-    @NF, @NF, @NF, @NF)
+        v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,
+        v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
+        v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,
+        v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n)*v4,
+        @NF, @NF, @NF, @NF
+        )
 end
 function +(A::joAbstractLinearOperator,b::Number)
     S=promote_type(eltype(A),eltype(b))
     return joLinearOperator{S}("("*A.name*"+N)",size(A,1),size(A,2),
-    v1->A*v1+b*joOnes(A.m,A.n)*v1,v2->A.'*v2+b*joOnes(A.m,A.n)*v2,
-    v3->A'*v3+conj(b)*joOnes(A.m,A.n)*v3,v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n)*v4,
-    @NF, @NF, @NF, @NF)
+        v1->A*v1+b*joOnes(A.m,A.n)*v1,
+        v2->A.'*v2+b*joOnes(A.m,A.n)*v2,
+        v3->A'*v3+conj(b)*joOnes(A.m,A.n)*v3,
+        v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n)*v4,
+        @NF, @NF, @NF, @NF
+        )
 end
 
 # +(num,jo)
@@ -268,8 +318,15 @@ end
 
 # -(jo)
 -{T}(A::joLinearOperator{T}) = joLinearOperator{T}("(-"*A.name*")",A.m,A.n,
-    v1->-A.fop(v1),     v2->-get(A.fop_T)(v2),v3->-get(A.fop_CT)(v3),v4->-get(A.fop_C)(v4),
-    v5->-get(A.iop)(v5),v6->-get(A.iop_T)(v6),v7->-get(A.iop_CT)(v7),v8->-get(A.iop_C)(v8))
+    v1->-A.fop(v1),
+    v2->-get(A.fop_T)(v2),
+    v3->-get(A.fop_CT)(v3),
+    v4->-get(A.fop_C)(v4),
+    v5->-get(A.iop)(v5),
+    v6->-get(A.iop_T)(v6),
+    v7->-get(A.iop_CT)(v7),
+    v8->-get(A.iop_C)(v8)
+    )
 
 # -(jo,jo)
 -(A::joAbstractLinearOperator,B::joAbstractLinearOperator) = A+(-B)
