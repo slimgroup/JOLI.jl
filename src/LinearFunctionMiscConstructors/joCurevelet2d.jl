@@ -4,13 +4,13 @@ function apply_fdct2D(v,n1,n2,m,nbs,nbac,actl,rctl,zfin)
     if rctl==1
         C=zeros(Float64,m)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
-        if eltype(v)!=Float64 X=convert(Array{Float64,1},v) else X=v end
+        X= eltype(v)==Float64 ? v : convert(Array{Float64,1},v)
         ccall((:jl_fdct_wrapping_real,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Float64}},Ptr{Array{Float64}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
     else
         C=zeros(Complex{Float64},m)
-        if eltype(v)!=Complex{Float64} X=convert(Array{Complex{Float64},1},v) else X=v end
+        X= eltype(v)==Complex{Float64} ? v : convert(Array{Complex{Float64},1},v)
         ccall((:jl_fdct_wrapping_cpx,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Float64}}},Ptr{Array{Complex{Float64}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
@@ -22,13 +22,13 @@ function apply_ifdct2D(v,n1,n2,m,nbs,nbac,actl,rctl,zfin)
     if rctl==1
         X=zeros(Float64,n1*n2)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
-        if eltype(v)!=Float64 C=convert(Array{Float64,1},v) else C=v end
+        C= eltype(v)==Float64 ? v : convert(Array{Float64,1},v)
         ccall((:jl_ifdct_wrapping_real,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Float64}},Ptr{Array{Float64}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
     else
         X=zeros(Complex{Float64},n1*n2)
-        if eltype(v)!=Complex{Float64} C=convert(Array{Complex{Float64},1},v) else C=v end
+        C= eltype(v)==Complex{Float64}? v : convert(Array{Complex{Float64},1},v)
         ccall((:jl_ifdct_wrapping_cpx,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Float64}}},Ptr{Array{Complex{Float64}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
@@ -38,9 +38,29 @@ end
 
 export joCurvelet2D
 """
-    joCurvelet2D
+    joCurvelet2D(n1,n2[;nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
 2D Curvelet transform over fast dimensions
+
+# Arguments
+- n1,n2 - image sizes
+- nbscales - # of scales (defaults to max(1,ceil(log2(min(n1,n2))-3)))
+- nbangles_coarse - # of angles at coarse scale (defaults to 16)
+- all_crvlts - curvelets at finnest scales (defaults to false)
+- real_crvlts - real transform (defaults to true) and resquires real input
+- zero_finest - zero out finnest scales (defaults to false)
+
+# Examples
+
+- joCurvelet2D(32,32) - real transform
+
+- joCurvelet2D(32,32;real_crvlts=false) - complex transform
+
+- joCurvelet2D(32,32;all_crvlts=true) - real transform with curevelts at the finnest scales
+
+- joCurvelet2D(32,32;zero_finest=true) - real transform with zeros at the finnest scales
+
+Note: isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 """
 function joCurvelet2D(n1::Integer,n2::Integer;
