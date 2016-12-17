@@ -433,25 +433,25 @@ iscomplex{T}(A :: joAbstractLinearOperator{T}) = !(T <: Real)
 isinvertible(A::joAbstractLinearOperator) = !isnull(A.iop)
 
 # islinear(jo)
-function islinear{T}(A::joAbstractLinearOperator{T},v::Bool=false)
+function islinear{T}(A::joAbstractLinearOperator{T};tol::Number=joTol,verb::Bool=false)
     x::Array{T,1}=rand(T,A.n)
     y::Array{T,1}=rand(T,A.n)
     Axy=A*(x+y)
     AxAy=(A*x+A*y)
     res=vecnorm(Axy-AxAy)
-    test=(res < joTol)
-    v ? println("Linear test passed with tol=$joTol: ",test," / diffrence ",res) : test
+    test=(res < tol)
+    verb ? println("Linear test passed with tol=$tol: ",test," / diffrence ",res) : test
     return test
 end
 
 # isadjoint(jo)
-function isadjoint{T}(A::joAbstractLinearOperator{T},ctmult::Number=1,v::Bool=false)
+function isadjoint{T}(A::joAbstractLinearOperator{T};tol::Number=joTol,ctmult::Number=1,verb::Bool=false)
     x::Array{T,1}=rand(T,A.n)
     y::Array{T,1}=rand(T,A.m)
     Axy=dot(A*x,y)
     xAty=dot(x,ctmult*A'*y)
     res=abs(Axy-xAty)
-    test=(res < joTol)
-    v ? println("Adjoint test passed with tol=$joTol: ",test," / diffrence ",res) : test
+    test=(res < tol)
+    verb ? println("Adjoint test passed with tol=$tol ",test," / diffrence ",res) : test
     return test
 end
