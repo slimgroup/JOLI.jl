@@ -1,6 +1,6 @@
 # DCT operators: joDCT
 
-function apply_dct(v,ms)
+function apply_dct(v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -13,7 +13,7 @@ function apply_dct(v,ms)
     return rv
 end
 
-function apply_idct(v,ms)
+function apply_idct(v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)

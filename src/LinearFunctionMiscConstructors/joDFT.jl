@@ -1,6 +1,6 @@
 # FFT operators: joDFT
 
-function apply_fft_centered(v,ms)
+function apply_fft_centered(v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -14,7 +14,7 @@ function apply_fft_centered(v,ms)
     return rv
 end
 
-function apply_ifft_centered(v,ms)
+function apply_ifft_centered(v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -28,7 +28,7 @@ function apply_ifft_centered(v,ms)
     return rv
 end
 
-function apply_fft(v,ms)
+function apply_fft(v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -41,7 +41,7 @@ function apply_fft(v,ms)
     return rv
 end
 
-function apply_ifft(v,ms)
+function apply_ifft(v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)

@@ -1,36 +1,36 @@
 # 2D Curevelt operators: joCurvelet2D
 
-function apply_fdct2D(v,n1,n2,m,nbs,nbac,actl,rctl,zfin)
+function apply_fdct2D(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     if rctl==1
-        C=zeros(Float64,m)
+        C=zeros(Cdouble,m)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
-        X= eltype(v)==Float64 ? v : convert(Array{Float64,1},v)
+        X= eltype(v)==Cdouble ? v : convert(Array{Cdouble,1},v)
         ccall((:jl_fdct_wrapping_real,:libdfdct_wrapping),Void,
-            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Float64}},Ptr{Array{Float64}}),
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
     else
-        C=zeros(Complex{Float64},m)
-        X= eltype(v)==Complex{Float64} ? v : convert(Array{Complex{Float64},1},v)
+        C=zeros(Complex{Cdouble},m)
+        X= eltype(v)==Complex{Cdouble} ? v : convert(Array{Complex{Cdouble},1},v)
         ccall((:jl_fdct_wrapping_cpx,:libdfdct_wrapping),Void,
-            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Float64}}},Ptr{Array{Complex{Float64}}}),
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
     end
     return C
 end
 
-function apply_ifdct2D(v,n1,n2,m,nbs,nbac,actl,rctl,zfin)
+function apply_ifdct2D(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     if rctl==1
-        X=zeros(Float64,n1*n2)
+        X=zeros(Cdouble,n1*n2)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
-        C= eltype(v)==Float64 ? v : convert(Array{Float64,1},v)
+        C= eltype(v)==Cdouble ? v : convert(Array{Cdouble,1},v)
         ccall((:jl_ifdct_wrapping_real,:libdfdct_wrapping),Void,
-            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Float64}},Ptr{Array{Float64}}),
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
     else
-        X=zeros(Complex{Float64},n1*n2)
-        C= eltype(v)==Complex{Float64}? v : convert(Array{Complex{Float64},1},v)
+        X=zeros(Complex{Cdouble},n1*n2)
+        C= eltype(v)==Complex{Cdouble}? v : convert(Array{Complex{Cdouble},1},v)
         ccall((:jl_ifdct_wrapping_cpx,:libdfdct_wrapping),Void,
-            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Float64}}},Ptr{Array{Complex{Float64}}}),
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
     end
     return X
@@ -84,13 +84,13 @@ function joCurvelet2D(n1::Integer,n2::Integer;
     rctl=convert(Cint,real_crvlts)
     zfin=convert(Cint,zero_finest)
     if real_crvlts
-        eltp=Float64
+        eltp=Cdouble
     else
-        eltp=Complex{Float64}
+        eltp=Complex{Cdouble}
     end
-    cfmap_size=ccall((:jl_fdct_sizes_map_size,:libdfdct_wrapping),Int32,
+    cfmap_size=ccall((:jl_fdct_sizes_map_size,:libdfdct_wrapping),Cint,
         (Cint,Cint,Cint),nbs,nbac,all_crvlts)
-    cfmap=zeros(Int32,cfmap_size)
+    cfmap=zeros(Cint,cfmap_size)
     m=Ref{Csize_t}(0)
     ccall((:jl_fdct_sizes,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Ptr{Array{Cint}},Ref{Csize_t}),
