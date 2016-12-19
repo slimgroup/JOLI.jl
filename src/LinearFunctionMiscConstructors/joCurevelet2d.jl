@@ -1,6 +1,6 @@
 # 2D Curevelt operators: joCurvelet2D
 
-function apply_fdct2D(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+function apply_fdct2Dwrap(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     if rctl==1
         C=zeros(Cdouble,m)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
@@ -18,7 +18,7 @@ function apply_fdct2D(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::
     return C
 end
 
-function apply_ifdct2D(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+function apply_ifdct2Dwrap(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     if rctl==1
         X=zeros(Cdouble,n1*n2)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
@@ -40,7 +40,7 @@ export joCurvelet2D
 """
     joCurvelet2D(n1,n2[;nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
-2D Curvelet transform over fast dimensions
+2D Curvelet transform (wrapping) over fast dimensions
 
 # Arguments
 - n1,n2 - image sizes
@@ -98,10 +98,10 @@ function joCurvelet2D(n1::Integer,n2::Integer;
     m=convert(Int128,m[])
 
     return joLinearFunctionCT(eltp,m,n1*n2,
-        v1->apply_fdct2D(v1,n1,n2,m,nbs,nbac,actl,rctl,zfin),
-        v2->apply_ifdct2D(v2,n1,n2,m,nbs,nbac,actl,rctl,zfin),
-        v3->apply_ifdct2D(v3,n1,n2,m,nbs,nbac,actl,rctl,zfin),
-        v4->apply_fdct2D(v4,n1,n2,m,nbs,nbac,actl,rctl,zfin),
-        "joCurvelt2D"
+        v1->apply_fdct2Dwrap(v1,n1,n2,m,nbs,nbac,actl,rctl,zfin),
+        v2->apply_ifdct2Dwrap(v2,n1,n2,m,nbs,nbac,actl,rctl,zfin),
+        v3->apply_ifdct2Dwrap(v3,n1,n2,m,nbs,nbac,actl,rctl,zfin),
+        v4->apply_fdct2Dwrap(v4,n1,n2,m,nbs,nbac,actl,rctl,zfin),
+        "joCurvelt2Dwrap"
         )
 end
