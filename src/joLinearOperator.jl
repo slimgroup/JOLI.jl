@@ -83,7 +83,7 @@ conj{T}(A::joLinearOperator{T}) =
         get(A.fop_C),
         A.fop_CT,
         A.fop_T,
-        @NF(A.fop),
+        A.fop,
         A.iop_C,
         A.iop_CT,
         A.iop_T,
@@ -95,7 +95,7 @@ joConj(A::joAbstractLinearOperator) = conj(A)
 transpose{T}(A::joLinearOperator{T}) =
     joLinearOperator{T}(""*A.name*".'",A.n,A.m,
         get(A.fop_T),
-        @NF(A.fop),
+        A.fop,
         A.fop_C,
         A.fop_CT,
         A.iop_T,
@@ -109,7 +109,7 @@ ctranspose{T}(A::joLinearOperator{T}) =
     joLinearOperator{T}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
-        @NF(A.fop),
+        A.fop,
         A.fop_T,
         A.iop_CT,
         A.iop_C,
@@ -149,8 +149,8 @@ function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
     return joLinearOperator{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
         v1->A*(B*v1),
         v2->B.'*(A.'*v2),
-        @NF(v3->B'*(A'*v3)),
-        @NF(v4->conj(A)*(conj(B)*v4)),
+        v3->B'*(A'*v3),
+        v4->conj(A)*(conj(B)*v4),
         @NF, @NF, @NF, @NF
         )
 end
