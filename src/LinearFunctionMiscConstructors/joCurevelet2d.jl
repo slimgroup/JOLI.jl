@@ -44,10 +44,10 @@ export joCurvelet2D
 
 # Arguments
 - n1,n2 - image sizes
-- nbscales - # of scales (defaults to max(1,ceil(log2(min(n1,n2))-3)))
-- nbangles_coarse - # of angles at coarse scale (defaults to 16)
+- nbscales - # of scales (requires #>=default; defaults to max(1,ceil(log2(min(n1,n2))-3)))
+- nbangles_coarse - # of angles at coarse scale (requires #%4==0, #>=8; defaults to 16)
 - all_crvlts - curvelets at finnest scales (defaults to false)
-- real_crvlts - real transform (defaults to true) and resquires real input
+- real_crvlts - real transform (defaults to true) and requires real input
 - zero_finest - zero out finnest scales (defaults to false)
 
 # Examples
@@ -70,13 +70,14 @@ function joCurvelet2D(n1::Integer,n2::Integer;
             real_crvlts::Bool=true,
             zero_finest::Bool=false)
 
-    nbs=convert(Cint,max(1,ceil(log2(min(n1,n2)) - 3)))
+    nbs=convert(Cint,max(1,ceil(log2(min(n1,n2))-3)))
     nbs=convert(Cint,max(nbs,nbscales))
     nbs > 1 || throw(joLinearFunctionException("joCurvelt2D: not enough elements in one of dimensions"))
     if nbscales!=0 && nbs>nbscales
         warn("Adjusted number of scales to required $nbs")
     end
     nbac=convert(Cint,max(8,nbangles_coarse))
+    nbac%4==0 || throw(joLinearFunctionException("joCurvelt2D: nbangles_coarse must be multiple of 4"))
     if nbangles_coarse < 8
         warn("Adjusted number of coarse angles to required $nbac")
     end
