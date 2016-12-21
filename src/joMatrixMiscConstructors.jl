@@ -40,6 +40,17 @@ joEye(m::Integer,n::Integer,e::DataType=Int8) =
         #v5->speye(e,m,n)\v5, v6->speye(e,n,m)\v6, v7->speye(e,n,m)\v7, v8->speye(e,m,n)\v8
         #v5->speye(e,n,m)*v5, v6->speye(e,m,n)*v6, v7->speye(e,m,n)*v7, v8->speye(e,n,m)*v8
 
+# diagonal operators: joDiag
+export joDiag
+joDiag{MT}(v::AbstractVector{MT}) =
+    joMatrix{MT}("joDiag",length(v),length(v),
+        v1->spdiagm(v)*v1,
+        v2->spdiagm(v)*v2,
+        v3->spdiagm(conj(v))*v3,
+        v4->spdiagm(conj(v))*v4,
+        @NF, @NF, @NF, @NF
+        )
+
 # matrix of ones
 export joOnes
 joOnes(m::Integer,e::DataType=Int8) = joOnes(m,m,e)
