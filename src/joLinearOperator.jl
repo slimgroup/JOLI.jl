@@ -47,7 +47,7 @@ display(A::joAbstractLinearOperator) = show(A)
 size(A::joAbstractLinearOperator) = A.m,A.n
 
 # size(jo,1/2)
-function size(A::joAbstractLinearOperator,ind::Int64)
+function size(A::joAbstractLinearOperator,ind::Integer)
     if ind==1
 		return A.m
 	elseif ind==2

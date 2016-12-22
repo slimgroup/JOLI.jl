@@ -40,7 +40,7 @@ display(A::joAbstractOperator) = throw(joAbstractOperatorException("display(jo) 
 size(A::joAbstractOperator) = throw(joAbstractOperatorException("size(jo) not implemented"))
 
 # size(jo,1/2)
-size(A::joAbstractOperator,ind::Int64) = throw(joAbstractOperatorException("size(jo,1/2) not implemented"))
+size(A::joAbstractOperator,ind::Integer) = throw(joAbstractOperatorException("size(jo,1/2) not implemented"))
 
 # length(jo)
 length(A::joAbstractOperator) = throw(joAbstractOperatorException("length(jo) not implemented"))
