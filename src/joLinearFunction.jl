@@ -8,7 +8,7 @@ export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctio
 ############################################################
 ## type definition
 
-immutable joLinearFunction{T} <: joAbstractLinearOperator{T}
+immutable joLinearFunction{ODT<:Number} <: joAbstractLinearOperator{ODT}
     name::String
     m::Integer
     n::Integer
@@ -29,18 +29,18 @@ end
 ############################################################
 ## outer constructors
 
-joLinearFunctionAll(T::DataType,m::Integer,n::Integer,
+joLinearFunctionAll(ODT::DataType,m::Integer,n::Integer,
     fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
     iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
     name::String="joLinearFunctionAll") =
-        joLinearFunction{T}(name,m,n,
+        joLinearFunction{ODT}(name,m,n,
             fop,fop_T,fop_CT,fop_C,
             iop,iop_T,iop_CT,iop_C
             )
-joLinearFunctionT(T::DataType,m::Integer,n::Integer,
+joLinearFunctionT(ODT::DataType,m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
     name::String="joLinearFunctionT") =
-        joLinearFunction{T}(name,m,n,
+        joLinearFunction{ODT}(name,m,n,
             fop,
             fop_T,
             v3->conj(fop_T(conj(v3))),
@@ -50,10 +50,10 @@ joLinearFunctionT(T::DataType,m::Integer,n::Integer,
             v7->conj(iop_T(conj(v7))),
             v8->conj(iop(conj(v8)))
             )
-joLinearFunctionCT(T::DataType,m::Integer,n::Integer,
+joLinearFunctionCT(ODT::DataType,m::Integer,n::Integer,
     fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
     name::String="joLinearFunctionCT") =
-        joLinearFunction{T}(name,m,n,
+        joLinearFunction{ODT}(name,m,n,
             fop,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,
@@ -63,20 +63,20 @@ joLinearFunctionCT(T::DataType,m::Integer,n::Integer,
             iop_CT,
             v8->conj(iop(conj(v8)))
             )
-joLinearFunctionFwdT(T::DataType,m::Integer,n::Integer,
+joLinearFunctionFwdT(ODT::DataType,m::Integer,n::Integer,
     fop::Function,fop_T::Function,
     name::String="joLinearFunctionFwdT") =
-        joLinearFunction{T}(name,m,n,
+        joLinearFunction{ODT}(name,m,n,
             fop,
             fop_T,
             v3->conj(fop_T(conj(v3))),
             v4->conj(fop(conj(v4))),
             @NF, @NF, @NF, @NF
             )
-joLinearFunctionFwdCT(T::DataType,m::Integer,n::Integer,
+joLinearFunctionFwdCT(ODT::DataType,m::Integer,n::Integer,
     fop::Function,fop_CT::Function,
     name::String="joLinearFunctionFwdCT") =
-        joLinearFunction{T}(name,m,n,
+        joLinearFunction{ODT}(name,m,n,
             fop,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,
@@ -88,8 +88,8 @@ joLinearFunctionFwdCT(T::DataType,m::Integer,n::Integer,
 ## overloaded Base functions
 
 # conj(jo)
-conj{T}(A::joLinearFunction{T}) =
-    joLinearFunction{T}("conj("*A.name*")",A.m,A.n,
+conj{ODT}(A::joLinearFunction{ODT}) =
+    joLinearFunction{ODT}("conj("*A.name*")",A.m,A.n,
         get(A.fop_C),
         A.fop_CT,
         A.fop_T,
@@ -101,8 +101,8 @@ conj{T}(A::joLinearFunction{T}) =
         )
 
 # transpose(jo)
-transpose{T}(A::joLinearFunction{T}) =
-    joLinearFunction{T}(""*A.name*".'",A.n,A.m,
+transpose{ODT}(A::joLinearFunction{ODT}) =
+    joLinearFunction{ODT}(""*A.name*".'",A.n,A.m,
         get(A.fop_T),
         A.fop,
         A.fop_C,
@@ -114,8 +114,8 @@ transpose{T}(A::joLinearFunction{T}) =
         )
 
 # ctranspose(jo)
-ctranspose{T}(A::joLinearFunction{T}) =
-    joLinearFunction{T}(""*A.name*"'",A.n,A.m,
+ctranspose{ODT}(A::joLinearFunction{ODT}) =
+    joLinearFunction{ODT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
         A.fop,
@@ -130,10 +130,10 @@ ctranspose{T}(A::joLinearFunction{T}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *(A::joLinearFunction,B::joLinearFunction)
+function *{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
     A.n == B.m || throw(joLinearFunctionException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joLinearFunction{S}("("*A.name*"*"*B.name*")",A.m,B.n,
+    nODT=promote_type(AODT,BODT)
+    return joLinearFunction{nODT}("("*A.name*"*"*B.name*")",A.m,B.n,
         v1->A.fop(B.fop(v1)),
         v2->get(B.fop_T)(get(A.fop_T)(v2)),
         v3->get(B.fop_CT)(get(A.fop_CT)(v3)),
@@ -155,9 +155,9 @@ function *(A::joLinearFunction,v::AbstractVector)
 end
 
 # *(num,jo)
-function *(a::Number,A::joLinearFunction)
-    S=promote_type(eltype(a),eltype(A))
-    return joLinearFunction{S}("(N*"*A.name*")",A.m,A.n,
+function *{aDT<:Number,AODT}(a::aDT,A::joLinearFunction{AODT})
+    nODT=promote_type(aDT,AODT)
+    return joLinearFunction{nODT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A.fop(v1),
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
@@ -186,10 +186,10 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo,jo)
-function +(A::joLinearFunction,B::joLinearFunction)
+function +{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
     size(A) == size(B) || throw(joLinearFunctionException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joLinearFunction{S}("("*A.name*"+"*B.name*")",A.m,B.n,
+    nODT=promote_type(AODT,BODT)
+    return joLinearFunction{nODT}("("*A.name*"+"*B.name*")",A.m,B.n,
         v1->A.fop(v1)+B.fop(v1),
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
@@ -199,9 +199,9 @@ function +(A::joLinearFunction,B::joLinearFunction)
 end
 
 # +(jo,num)
-function +(A::joLinearFunction,b::Number)
-    S=promote_type(eltype(A),eltype(b))
-    return joLinearFunction{S}("("*A.name*"+N)",A.m,A.n,
+function +{AODT,bDT<:Number}(A::joLinearFunction{AODT},b::bDT)
+    nODT=promote_type(AODT,bDT)
+    return joLinearFunction{nODT}("("*A.name*"+N)",A.m,A.n,
         v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,
         v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
         v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,
@@ -214,8 +214,8 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{T}(A::joLinearFunction{T}) =
-    joLinearFunction{T}("(-"*A.name*")",A.m,A.n,
+-{ODT}(A::joLinearFunction{ODT}) =
+    joLinearFunction{ODT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-get(A.fop_T)(v2),
         v3->-get(A.fop_CT)(v3),

@@ -7,7 +7,7 @@ export joLinearOperator, joLinearOperatorException
 ############################################################
 ## type definition
 
-immutable joLinearOperator{T} <: joAbstractLinearOperator{T}
+immutable joLinearOperator{ODT<:Number} <: joAbstractLinearOperator{ODT}
     name::String
     m::Integer
     n::Integer
@@ -32,7 +32,7 @@ end
 ## overloaded Base functions
 
 # eltype(jo)
-eltype{T}(A::joAbstractLinearOperator{T}) = T
+eltype{ODT}(A::joAbstractLinearOperator{ODT}) = ODT
 
 # show(jo)
 show(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
@@ -78,8 +78,8 @@ imag(A::joAbstractLinearOperator) = throw(joLinearOperatorException("imag(jo) no
 joImag(A::joAbstractLinearOperator) = imag(A)
 
 # conj(jo)
-conj{T}(A::joLinearOperator{T}) =
-    joLinearOperator{T}("conj("*A.name*")",A.m,A.n,
+conj{ODT}(A::joLinearOperator{ODT}) =
+    joLinearOperator{ODT}("conj("*A.name*")",A.m,A.n,
         get(A.fop_C),
         A.fop_CT,
         A.fop_T,
@@ -92,8 +92,8 @@ conj{T}(A::joLinearOperator{T}) =
 joConj(A::joAbstractLinearOperator) = conj(A)
 
 # transpose(jo)
-transpose{T}(A::joLinearOperator{T}) =
-    joLinearOperator{T}(""*A.name*".'",A.n,A.m,
+transpose{ODT}(A::joLinearOperator{ODT}) =
+    joLinearOperator{ODT}(""*A.name*".'",A.n,A.m,
         get(A.fop_T),
         A.fop,
         A.fop_C,
@@ -105,8 +105,8 @@ transpose{T}(A::joLinearOperator{T}) =
         )
 
 # ctranspose(jo)
-ctranspose{T}(A::joLinearOperator{T}) =
-    joLinearOperator{T}(""*A.name*"'",A.n,A.m,
+ctranspose{ODT}(A::joLinearOperator{ODT}) =
+    joLinearOperator{ODT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
         A.fop,
@@ -118,7 +118,7 @@ ctranspose{T}(A::joLinearOperator{T}) =
         )
 
 # isreal(jo)
-isreal{T}(A :: joAbstractLinearOperator{T}) = T <: Real
+isreal{ODT}(A :: joAbstractLinearOperator{ODT}) = ODT <: Real
 
 # issymmetric(jo)
 issymmetric(A::joAbstractLinearOperator) =
@@ -132,10 +132,10 @@ ishermitian(A::joAbstractLinearOperator) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *(A::joLinearOperator,B::joLinearOperator)
+function *{AODT,BODT}(A::joLinearOperator{AODT},B::joLinearOperator{BODT})
     A.n == B.m || throw(joLinearOperatorException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joLinearOperator{S}("("*A.name*"*"*B.name*")",A.m,B.n,
+    nODT=promote_type(AODT,BODT)
+    return joLinearOperator{nODT}("("*A.name*"*"*B.name*")",A.m,B.n,
         v1->A.fop(B.fop(v1)),
         v2->get(B.fop_T)(get(A.fop_T)(v2)),
         v3->get(B.fop_CT)(get(A.fop_CT)(v3)),
@@ -143,10 +143,10 @@ function *(A::joLinearOperator,B::joLinearOperator)
         @NF, @NF, @NF, @NF
         )
 end
-function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
+function *{AODT,BODT}(A::joAbstractLinearOperator{AODT},B::joAbstractLinearOperator{BODT})
     size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joLinearOperator{S}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
+    nODT=promote_type(AODT,BODT)
+    return joLinearOperator{nODT}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
         v1->A*(B*v1),
         v2->B.'*(A.'*v2),
         v3->B'*(A'*v3),
@@ -156,19 +156,21 @@ function *(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
 end
 
 # *(jo,mvec)
-function *(A::joLinearOperator,mv::AbstractMatrix)
+function *{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
     A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
-    MV=zeros(promote_type(eltype(A),eltype(mv)),A.m,size(mv,2))
+    nmvDT=promote_type(AODT,mvDT)
+    MV=zeros(nmvDT,A.m,size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A.fop(mv[:,i])
     end
     return MV
 end
-function *(A::joAbstractLinearOperator,mv::AbstractMatrix)
+function *{AODT,mvDT}(A::joAbstractLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     ##isnull(A.fop) && throw(joAbstractLinearOperatorException("*(jo,MultiVector) not supplied"))
     size(A,2) == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
-    MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,1),size(mv,2))
+    nmvDT=promote_type(AODT,mvDT)
+    MV=zeros(nmvDT,size(A,1),size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A*mv[:,i]
     end
@@ -186,9 +188,9 @@ end
 # *(vec,jo)
 
 # *(num,jo)
-function *(a::Number,A::joLinearOperator)
-    S=promote_type(eltype(a),eltype(A))
-    return joLinearOperator{S}("(N*"*A.name*")",A.m,A.n,
+function *{aDT<:Number,AODT}(a::aDT,A::joLinearOperator{AODT})
+    nODT=promote_type(aDT,AODT)
+    return joLinearOperator{nODT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A.fop(v1),
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
@@ -196,9 +198,9 @@ function *(a::Number,A::joLinearOperator)
         @NF, @NF, @NF, @NF
         )
 end
-function *(a::Number,A::joAbstractLinearOperator)
-    S=promote_type(eltype(a),eltype(A))
-    return joLinearOperator{S}("(N*"*A.name*")",A.m,A.n,
+function *{aDT<:Number,AODT}(a::aDT,A::joAbstractLinearOperator{AODT})
+    nODT=promote_type(aDT,AODT)
+    return joLinearOperator{nODT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A*v1,
         v2->a*A.'*v2,
         v3->conj(a)*A'*v3,
@@ -216,19 +218,21 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \(A::joLinearOperator,mv::AbstractMatrix)
+function \{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     isnull(A.iop) && throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
-    MV=zeros(promote_type(eltype(A),eltype(mv)),A.n,size(mv,2))
+    nmvDT=promote_type(AODT,mvDT)
+    MV=zeros(nmvDT,A.n,size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A.iop(mv[:,i])
     end
     return MV
 end
-function \(A::joAbstractLinearOperator,mv::AbstractMatrix)
+function \{AODT,mvDT}(A::joAbstractLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joAbstractLinearOperatorException("\(jo,MultiVector) not supplied"))
     size(A,1) == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
-    MV=zeros(promote_type(eltype(A),eltype(mv)),size(A,2),size(mv,2))
+    nmvDT=promote_type(AODT,mvDT)
+    MV=zeros(nmvDT,size(A,2),size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A\mv[:,i]
     end
@@ -257,10 +261,10 @@ end
 +(A::joAbstractLinearOperator) = A
 
 # +(jo,jo)
-function +(A::joLinearOperator,B::joLinearOperator)
+function +{AODT,BODT}(A::joLinearOperator{AODT},B::joLinearOperator{BODT})
     size(A) == size(B) || throw(joLinearOperatorException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joLinearOperator{S}("("*A.name*"+"*B.name*")",A.m,B.n,
+    nODT=promote_type(AODT,BODT)
+    return joLinearOperator{nODT}("("*A.name*"+"*B.name*")",A.m,B.n,
         v1->A.fop(v1)+B.fop(v1),
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
@@ -268,10 +272,10 @@ function +(A::joLinearOperator,B::joLinearOperator)
         @NF, @NF, @NF, @NF
         )
 end
-function +(A::joAbstractLinearOperator,B::joAbstractLinearOperator)
+function +{AODT,BODT}(A::joAbstractLinearOperator{AODT},B::joAbstractLinearOperator{BODT})
     size(A) == size(B) || throw(joAbstractLinearOperatorException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joLinearOperator{S}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    nODT=promote_type(AODT,BODT)
+    return joLinearOperator{nODT}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
         v1->A*v1+B*v1,
         v2->A.'*v2+B.'*v2,
         v3->A'*v3+B'*v3,
@@ -289,9 +293,9 @@ end
 # +(vec,jo)
 
 # +(jo,num)
-function +(A::joLinearOperator,b::Number)
-    S=promote_type(eltype(A),eltype(b))
-    return joLinearOperator{S}("("*A.name*"+N)",A.m,A.n,
+function +{AODT,bDT<:Number}(A::joLinearOperator{AODT},b::bDT)
+    nODT=promote_type(AODT,bDT)
+    return joLinearOperator{nODT}("("*A.name*"+N)",A.m,A.n,
         v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,
         v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
         v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,
@@ -299,9 +303,9 @@ function +(A::joLinearOperator,b::Number)
         @NF, @NF, @NF, @NF
         )
 end
-function +(A::joAbstractLinearOperator,b::Number)
-    S=promote_type(eltype(A),eltype(b))
-    return joLinearOperator{S}("("*A.name*"+N)",size(A,1),size(A,2),
+function +{AODT,bDT<:Number}(A::joAbstractLinearOperator{AODT},b::bDT)
+    nODT=promote_type(AODT,bDT)
+    return joLinearOperator{nODT}("("*A.name*"+N)",size(A,1),size(A,2),
         v1->A*v1+b*joOnes(A.m,A.n)*v1,
         v2->A.'*v2+b*joOnes(A.m,A.n)*v2,
         v3->A'*v3+conj(b)*joOnes(A.m,A.n)*v3,
@@ -317,8 +321,8 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{T}(A::joLinearOperator{T}) =
-    joLinearOperator{T}("(-"*A.name*")",A.m,A.n,
+-{ODT}(A::joLinearOperator{ODT}) =
+    joLinearOperator{ODT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-get(A.fop_T)(v2),
         v3->-get(A.fop_CT)(v3),
@@ -427,15 +431,15 @@ end
 double(A::joAbstractLinearOperator) = A*eye(A.n)
 
 # iscomplex(jo)
-iscomplex{T}(A :: joAbstractLinearOperator{T}) = !(T <: Real)
+iscomplex{ODT}(A :: joAbstractLinearOperator{ODT}) = !(ODT <: Real)
 
 # isinvertible(jo)
 isinvertible(A::joAbstractLinearOperator) = !isnull(A.iop)
 
 # islinear(jo)
-function islinear{T}(A::joAbstractLinearOperator{T};tol::Number=joTol,verb::Bool=false)
-    x::Array{T,1}=rand(T,A.n)
-    y::Array{T,1}=rand(T,A.n)
+function islinear{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,verb::Bool=false)
+    x::Array{ODT,1}=rand(ODT,A.n)
+    y::Array{ODT,1}=rand(ODT,A.n)
     Axy=A*(x+y)
     AxAy=(A*x+A*y)
     res=vecnorm(Axy-AxAy)
@@ -445,9 +449,9 @@ function islinear{T}(A::joAbstractLinearOperator{T};tol::Number=joTol,verb::Bool
 end
 
 # isadjoint(jo)
-function isadjoint{T}(A::joAbstractLinearOperator{T};tol::Number=joTol,ctmult::Number=1,verb::Bool=false)
-    x::Array{T,1}=rand(T,A.n)
-    y::Array{T,1}=rand(T,A.m)
+function isadjoint{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,ctmult::Number=1,verb::Bool=false)
+    x::Array{ODT,1}=rand(ODT,A.n)
+    y::Array{ODT,1}=rand(ODT,A.m)
     Axy=dot(A*x,y)
     xAty=dot(x,ctmult*A'*y)
     res=abs(Axy-xAty)

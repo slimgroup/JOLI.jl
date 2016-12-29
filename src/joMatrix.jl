@@ -7,7 +7,7 @@ export joMatrix, joMatrixException
 ############################################################
 ## type definition
 
-immutable joMatrix{T} <: joAbstractLinearOperator{T}
+immutable joMatrix{ODT<:Number} <: joAbstractLinearOperator{ODT}
     name::String
     m::Integer
     n::Integer
@@ -28,8 +28,8 @@ end
 ############################################################
 ## outer constructors
 
-joMatrix{T}(array::AbstractMatrix{T},name::String="joMatrix") =
-    joMatrix{T}(name,size(array,1),size(array,2),
+joMatrix{ODT}(array::AbstractMatrix{ODT},name::String="joMatrix") =
+    joMatrix{ODT}(name,size(array,1),size(array,2),
         v1->array*v1,
         v2->array.'*v2,
         v3->array'*v3,
@@ -44,8 +44,8 @@ joMatrix{T}(array::AbstractMatrix{T},name::String="joMatrix") =
 ## overloaded Base functions
 
 # conj(jo)
-conj{T}(A::joMatrix{T}) =
-    joMatrix{T}("conj("*A.name*")",A.m,A.n,
+conj{ODT}(A::joMatrix{ODT}) =
+    joMatrix{ODT}("conj("*A.name*")",A.m,A.n,
         A.fop_C,
         A.fop_CT,
         A.fop_T,
@@ -57,8 +57,8 @@ conj{T}(A::joMatrix{T}) =
         )
 
 # transpose(jo)
-transpose{T}(A::joMatrix{T}) =
-    joMatrix{T}(""*A.name*".'",A.n,A.m,
+transpose{ODT}(A::joMatrix{ODT}) =
+    joMatrix{ODT}(""*A.name*".'",A.n,A.m,
         A.fop_T,
         A.fop,
         A.fop_C,
@@ -70,8 +70,8 @@ transpose{T}(A::joMatrix{T}) =
         )
 
 # ctranspose(jo)
-ctranspose{T}(A::joMatrix{T}) =
-    joMatrix{T}(""*A.name*"'",A.n,A.m,
+ctranspose{ODT}(A::joMatrix{ODT}) =
+    joMatrix{ODT}(""*A.name*"'",A.n,A.m,
         A.fop_CT,
         A.fop_C,
         A.fop,
@@ -86,10 +86,10 @@ ctranspose{T}(A::joMatrix{T}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *(A::joMatrix,B::joMatrix)
+function *{AODT,BODT}(A::joMatrix{AODT},B::joMatrix{BODT})
     A.n == B.m || throw(joMatrixException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joMatrix{S}("("*A.name*"*"*B.name*")",A.m,B.n,
+    nODT=promote_type(AODT,BODT)
+    return joMatrix{nODT}("("*A.name*"*"*B.name*")",A.m,B.n,
         v1->A.fop(B.fop(v1)),
         v2->B.fop_T(A.fop_T(v2)),
         v3->B.fop_CT(A.fop_CT(v3)),
@@ -111,9 +111,9 @@ function *(A::joMatrix,v::AbstractVector)
 end
 
 # *(num,jo)
-function *(a::Number,A::joMatrix)
-    S=promote_type(eltype(a),eltype(A))
-    return joMatrix{S}("(N*"*A.name*")",A.m,A.n,
+function *{aDT<:Number,AODT}(a::aDT,A::joMatrix{AODT})
+    nODT=promote_type(aDT,AODT)
+    return joMatrix{nODT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A.fop(v1),
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
@@ -142,10 +142,10 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo,jo)
-function +(A::joMatrix,B::joMatrix)
+function +{AODT,BODT}(A::joMatrix{AODT},B::joMatrix{BODT})
     size(A) == size(B) || throw(joMatrixException("shape mismatch"))
-    S=promote_type(eltype(A),eltype(B))
-    return joMatrix{S}("("*A.name*"+"*B.name*")",A.m,B.n,
+    nODT=promote_type(AODT,BODT)
+    return joMatrix{nODT}("("*A.name*"+"*B.name*")",A.m,B.n,
         v1->A.fop(v1)+B.fop(v1),
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
@@ -155,9 +155,9 @@ function +(A::joMatrix,B::joMatrix)
 end
 
 # +(jo,num)
-function +(A::joMatrix,b::Number)
-    S=promote_type(eltype(A),eltype(b))
-    return joMatrix{S}("("*A.name*"+N)",A.m,A.n,
+function +{AODT,bDT<:Number}(A::joMatrix{AODT},b::bDT)
+    nODT=promote_type(AODT,bDT)
+    return joMatrix{nODT}("("*A.name*"+N)",A.m,A.n,
         v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,
         v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
         v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,
@@ -170,8 +170,8 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{T}(A::joMatrix{T}) =
-    joMatrix{T}("(-"*A.name*")",A.m,A.n,
+-{ODT}(A::joMatrix{ODT}) =
+    joMatrix{ODT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-A.fop_T(v2),
         v3->-A.fop_CT(v3),

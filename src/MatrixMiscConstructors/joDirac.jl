@@ -1,8 +1,8 @@
 # identity operators: joDirac
 
 export joDirac
-joDirac(m::Integer=1,e::DataType=Int8) =
-    joMatrix{e}("joDirac",m,m,
+joDirac(m::Integer=1,ODT::DataType=Int8) =
+    joMatrix{ODT}("joDirac",m,m,
         v1->v1,
         v2->v2,
         v3->v3,
