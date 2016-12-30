@@ -70,12 +70,18 @@ norm(A::joAbstractLinearOperator,p::Real=2) = norm(double(A),p)
 vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(double(A),p)
 
 # real(jo)
-real(A::joAbstractLinearOperator) = throw(joLinearOperatorException("real(jo) not implemented"))
-joReal(A::joAbstractLinearOperator) = real(A)
+real{ODT<:Real}(A::joAbstractLinearOperator{ODT}) = A
+function real{ODT<:Complex}(A::joAbstractLinearOperator{ODT})
+    throw(joLinearOperatorException("real(jo) not implemented"))
+end
+joReal{ODT}(A::joAbstractLinearOperator{ODT}) = real(A)
 
 # imag(jo)
-imag(A::joAbstractLinearOperator) = throw(joLinearOperatorException("imag(jo) not implemented"))
-joImag(A::joAbstractLinearOperator) = imag(A)
+imag{ODT<:Real}(A::joAbstractLinearOperator{ODT}) = joZeros(A.m,A.n,ODT)
+function imag{ODT<:Complex}(A::joAbstractLinearOperator{ODT})
+    throw(joLinearOperatorException("imag(jo) not implemented"))
+end
+joImag{ODT}(A::joAbstractLinearOperator{ODT}) = imag(A)
 
 # conj(jo)
 conj{ODT}(A::joLinearOperator{ODT}) =
