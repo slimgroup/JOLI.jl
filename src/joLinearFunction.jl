@@ -143,13 +143,13 @@ function *{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
 end
 
 # *(jo,mvec)
-#function *(A::joLinearFunction,mv::AbstractMatrix)
+#function *{AODT,mvDT}(A::joLinearFunction{AODT},mv::AbstractMatrix{mvDT})
 #    A.n == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
 #    return A.fop(mv)
 #end
 
 # *(jo,vec)
-function *{AODT,vDT}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
+function *{AODT,vDT<:Number}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return A.fop(v)
 end
@@ -170,13 +170,13 @@ end
 ## overloaded Base \(...jo...)
 
 # \(jo,mvec)
-#function \(A::joLinearFunction,mv::AbstractMatrix)
+#function \{AODT,mvDT<:Number}(A::joLinearFunction{AODT},mv::AbstractMatrix{mvDT})
 #    A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joLinearFunctionException("inverse not defined"))
 #end
 
 # \(jo,vec)
-function \{AODT,vDT}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
+function \{AODT,vDT<:Number}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearFunctionException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return get(A.iop)(v)

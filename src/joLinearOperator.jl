@@ -156,7 +156,7 @@ function *{AODT,BODT}(A::joAbstractLinearOperator{AODT},B::joAbstractLinearOpera
 end
 
 # *(jo,mvec)
-function *{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
+function *{AODT,mvDT<:Number}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
     A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AODT,mvDT)
@@ -166,7 +166,7 @@ function *{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     end
     return MV
 end
-function *{AODT,mvDT}(A::joAbstractLinearOperator{AODT},mv::AbstractMatrix{mvDT})
+function *{AODT,mvDT<:Number}(A::joAbstractLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     ##isnull(A.fop) && throw(joAbstractLinearOperatorException("*(jo,MultiVector) not supplied"))
     size(A,2) == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AODT,mvDT)
@@ -180,7 +180,7 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *{AODT,vDT}(A::joLinearOperator{AODT},v::AbstractVector{vDT})
+function *{AODT,vDT<:Number}(A::joLinearOperator{AODT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return A.fop(v)
 end
@@ -218,7 +218,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
+function \{AODT,mvDT<:Number}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AODT,mvDT)
@@ -228,7 +228,7 @@ function \{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     end
     return MV
 end
-function \{AODT,mvDT}(A::joAbstractLinearOperator{AODT},mv::AbstractMatrix{mvDT})
+function \{AODT,mvDT<:Number}(A::joAbstractLinearOperator{AODT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joAbstractLinearOperatorException("\(jo,MultiVector) not supplied"))
     size(A,1) == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AODT,mvDT)
@@ -242,7 +242,7 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \{AODT,vDT}(A::joLinearOperator{AODT},v::AbstractVector{vDT})
+function \{AODT,vDT<:Number}(A::joLinearOperator{AODT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return get(A.iop)(v)

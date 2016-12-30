@@ -99,13 +99,13 @@ function *{AODT,BODT}(A::joMatrix{AODT},B::joMatrix{BODT})
 end
 
 # *(jo,mvec)
-function *(A::joMatrix,mv::AbstractMatrix)
+function *{AODT,mvDT<:Number}(A::joMatrix{AODT},mv::AbstractMatrix{mvDT})
     A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
     return A.fop(mv)
 end
 
 # *(jo,vec)
-function *{AODT,vDT}(A::joMatrix{AODT},v::AbstractVector{vDT})
+function *{AODT,vDT<:Number}(A::joMatrix{AODT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
     return A.fop(v)
 end
@@ -126,13 +126,13 @@ end
 ## overloaded Base \(...jo...)
 
 # \(jo,mvec)
-#function \(A::joMatrix,mv::AbstractMatrix)
+#function \{AODT,mvDT<:Number}(A::joMatrix{AODT},mv::AbstractMatrix{mvDT})
 #    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joMatrixException("inverse not defined"))
 #end
 
 # \(jo,vec)
-function \{AODT,vDT}(A::joMatrix{AODT},v::AbstractVector{vDT})
+function \{AODT,vDT<:Number}(A::joMatrix{AODT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
     return get(A.iop)(v)
@@ -204,5 +204,5 @@ end
 ## extra methods
 
 # double(jo)
-double(A::joMatrix) = A*speye(A.n)
+double{ODT}(A::joMatrix{ODT}) = A*speye(ODT,A.n)
 
