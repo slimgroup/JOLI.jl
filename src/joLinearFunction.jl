@@ -149,7 +149,7 @@ end
 #end
 
 # *(jo,vec)
-function *(A::joLinearFunction,v::AbstractVector)
+function *{AODT,vDT}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return A.fop(v)
 end
@@ -176,8 +176,8 @@ end
 #end
 
 # \(jo,vec)
-function \(A::joLinearFunction,v::AbstractVector)
-    isnull(A.iop) && throw(joLinearFunctionException("\(jo,Vector) not supplied"))
+function \{AODT,vDT}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
+    isinvertible(A) || throw(joLinearFunctionException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return get(A.iop)(v)
 end

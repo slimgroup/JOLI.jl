@@ -105,7 +105,7 @@ function *(A::joMatrix,mv::AbstractMatrix)
 end
 
 # *(jo,vec)
-function *(A::joMatrix,v::AbstractVector)
+function *{AODT,vDT}(A::joMatrix{AODT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
     return A.fop(v)
 end
@@ -132,8 +132,8 @@ end
 #end
 
 # \(jo,vec)
-function \(A::joMatrix,v::AbstractVector)
-    isnull(A.iop) && throw(joMatrixException("\(jo,Vector) not supplied"))
+function \{AODT,vDT}(A::joMatrix{AODT},v::AbstractVector{vDT})
+    isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
     return get(A.iop)(v)
 end

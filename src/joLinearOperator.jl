@@ -61,7 +61,7 @@ end
 length(A::joAbstractLinearOperator) = A.m*A.n
 
 # full(jo)
-full(A::joAbstractLinearOperator) = A*eye(A.n)
+full{ODT}(A::joAbstractLinearOperator{ODT}) = A*eye(ODT,A.n)
 
 # norm(jo)
 norm(A::joAbstractLinearOperator,p::Real=2) = norm(double(A),p)
@@ -121,11 +121,11 @@ ctranspose{ODT}(A::joLinearOperator{ODT}) =
 isreal{ODT}(A :: joAbstractLinearOperator{ODT}) = ODT <: Real
 
 # issymmetric(jo)
-issymmetric(A::joAbstractLinearOperator) =
+issymmetric{ODT}(A::joAbstractLinearOperator{ODT}) =
     (A.m == A.n && (vecnorm(double(A)-double(A.')) < joTol))
 
 # ishermitian(jo)
-ishermitian(A::joAbstractLinearOperator) =
+ishermitian{ODT}(A::joAbstractLinearOperator{ODT}) =
     (A.m == A.n && (vecnorm(double(A)-double(A')) < joTol))
 
 ############################################################
@@ -180,7 +180,7 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *(A::joLinearOperator,v::AbstractVector)
+function *{AODT,vDT}(A::joLinearOperator{AODT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return A.fop(v)
 end
@@ -219,7 +219,7 @@ end
 
 # \(jo,mvec)
 function \{AODT,mvDT}(A::joLinearOperator{AODT},mv::AbstractMatrix{mvDT})
-    isnull(A.iop) && throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
+    isinvertible(A) || throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AODT,mvDT)
     MV=zeros(nmvDT,A.n,size(mv,2))
@@ -242,8 +242,8 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \(A::joLinearOperator,v::AbstractVector)
-    isnull(A.iop) && throw(joLinearOperatorException("\(jo,Vector) not supplied"))
+function \{AODT,vDT}(A::joLinearOperator{AODT},v::AbstractVector{vDT})
+    isinvertible(A) || throw(joLinearOperatorException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return get(A.iop)(v)
 end
@@ -428,13 +428,13 @@ end
 ## extra methods
 
 # double(jo)
-double(A::joAbstractLinearOperator) = A*eye(A.n)
+double{ODT}(A::joAbstractLinearOperator{ODT}) = A*eye(ODT,A.n)
 
 # iscomplex(jo)
 iscomplex{ODT}(A :: joAbstractLinearOperator{ODT}) = !(ODT <: Real)
 
 # isinvertible(jo)
-isinvertible(A::joAbstractLinearOperator) = !isnull(A.iop)
+isinvertible{ODT}(A::joAbstractLinearOperator{ODT}) = !isnull(A.iop)
 
 # islinear(jo)
 function islinear{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,verb::Bool=false)
