@@ -1,6 +1,6 @@
 # FFT operators: joDFT
 
-function apply_fft_centered(v::AbstractVector,ms::Tuple)
+function apply_fft_centered(pln,v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -8,13 +8,13 @@ function apply_fft_centered(v::AbstractVector,ms::Tuple)
     vs=collect(ms)
     if lvmp>1 push!(vs,lvmp) end
     rv=reshape(v,vs...)
-    rv=fft(rv,1:l)/sqrt(mp)
+    rv=(pln*rv)/sqrt(mp)
     for d=1:l rv=fftshift(rv,d) end
     lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
     return rv
 end
 
-function apply_ifft_centered(v::AbstractVector,ms::Tuple)
+function apply_ifft_centered(pln,v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -23,12 +23,12 @@ function apply_ifft_centered(v::AbstractVector,ms::Tuple)
     if lvmp>1 push!(vs,lvmp) end
     rv=reshape(v,vs...)
     for d=1:l rv=ifftshift(rv,d) end
-    rv=ifft(rv,1:l)*sqrt(mp)
+    rv=(pln*rv)*sqrt(mp)
     lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
     return rv
 end
 
-function apply_fft(v::AbstractVector,ms::Tuple)
+function apply_fft(pln,v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -36,12 +36,12 @@ function apply_fft(v::AbstractVector,ms::Tuple)
     vs=collect(ms)
     if lvmp>1 push!(vs,lvmp) end
     rv=reshape(v,vs...)
-    rv=fft(rv,1:l)/sqrt(mp)
+    rv=(pln*rv)/sqrt(mp)
     lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
     return rv
 end
 
-function apply_ifft(v::AbstractVector,ms::Tuple)
+function apply_ifft(pln,v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -49,7 +49,7 @@ function apply_ifft(v::AbstractVector,ms::Tuple)
     vs=collect(ms)
     if lvmp>1 push!(vs,lvmp) end
     rv=reshape(v,vs...)
-    rv=ifft(rv,1:l)*sqrt(mp)
+    rv=(pln*rv)*sqrt(mp)
     lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
     return rv
 end
@@ -72,20 +72,22 @@ Multi-dimensional FFT transform over fast dimension(s)
 
 """
 function joDFT(ms::Integer...;centered::Bool=false,elmtype=Float64)
+    pf=plan_fft(zeros(ms))
+    ipf=plan_ifft(zeros(ms))
     if centered
         return joLinearFunctionCT(Complex{elmtype},prod(ms),prod(ms),
-            v1->apply_fft_centered(v1,ms),
-            v2->apply_ifft_centered(v2,ms),
-            v3->apply_ifft_centered(v3,ms),
-            v4->apply_fft_centered(v4,ms),
+            v1->apply_fft_centered(pf,v1,ms),
+            v2->apply_ifft_centered(ipf,v2,ms),
+            v3->apply_ifft_centered(ipf,v3,ms),
+            v4->apply_fft_centered(pf,v4,ms),
             "joDFTc"
             )
     else
         return joLinearFunctionCT(Complex{elmtype},prod(ms),prod(ms),
-            v1->apply_fft(v1,ms),
-            v2->apply_ifft(v2,ms),
-            v3->apply_ifft(v3,ms),
-            v4->apply_fft(v4,ms),
+            v1->apply_fft(pf,v1,ms),
+            v2->apply_ifft(ipf,v2,ms),
+            v3->apply_ifft(ipf,v3,ms),
+            v4->apply_fft(pf,v4,ms),
             "joDFT"
             )
     end

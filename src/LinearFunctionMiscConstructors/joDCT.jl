@@ -1,6 +1,6 @@
 # DCT operators: joDCT
 
-function apply_dct(v::AbstractVector,ms::Tuple)
+function apply_dct(pln,v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -8,12 +8,12 @@ function apply_dct(v::AbstractVector,ms::Tuple)
     vs=collect(ms)
     if lvmp>1 push!(vs,lvmp) end
     rv=reshape(v,vs...)
-    rv=dct(rv,1:l)
+    rv=pln*rv
     lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
     return rv
 end
 
-function apply_idct(v::AbstractVector,ms::Tuple)
+function apply_idct(pln,v::AbstractVector,ms::Tuple)
     l::Integer=length(ms)
     mp::Integer=prod(ms)
     lv::Integer=length(v)
@@ -21,7 +21,7 @@ function apply_idct(v::AbstractVector,ms::Tuple)
     vs=collect(ms)
     if lvmp>1 push!(vs,lvmp) end
     rv=reshape(v,vs...)
-    rv=idct(rv,1:l)
+    rv=pln*rv
     lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
     return rv
 end
@@ -41,12 +41,15 @@ Multi-dimensional DCT transform over fast dimension(s)
 - jo(m; elmtype=Float32) - 1D DCT for 32-bit vectors
 
 """
-joDCT(ms::Integer...;elmtype=Float64) =
+function joDCT(ms::Integer...;elmtype=Float64)
+    pf=plan_dct(zeros(ms))
+    ipf=plan_idct(zeros(ms))
     joLinearFunctionCT(elmtype,prod(ms),prod(ms),
-        v1->apply_dct(v1,ms),
-        v2->apply_idct(v2,ms),
-        v3->apply_idct(v3,ms),
-        v4->apply_dct(v4,ms),
+        v1->apply_dct(pf,v1,ms),
+        v2->apply_idct(ipf,v2,ms),
+        v3->apply_idct(ipf,v3,ms),
+        v4->apply_dct(pf,v4,ms),
         "joDCT"
         )
+end
 
