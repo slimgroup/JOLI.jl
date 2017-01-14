@@ -7,9 +7,8 @@
 
 export joKron, joKronException
 
-immutable joKron <: joAbstractLinearOperator
+immutable joKron{ODT} <: joAbstractLinearOperator{ODT}
     name::String
-    e::DataType
     m::Integer
     n::Integer
     l::Integer
@@ -34,7 +33,7 @@ function joKron(ops::joAbstractLinearOperator...)
         push!(ns,ops[i].n)
         push!(kops,ops[i])
     end
-    return joKron("joKron",e,m,n,l,ms,ns,kops)
+    return joKron{e}("joKron",m,n,l,ms,ns,kops)
 end
 
 type joKronException <: Exception
@@ -44,10 +43,7 @@ end
 ##########################
 ## overloaded Base methods
 
-eltype(A::joKron) = A.e
-
-function transpose(A::joKron)
-    e=A.e
+function transpose{ODT}(A::joKron{ODT})
     m=A.n
     n=A.m
     l=A.l
@@ -57,10 +53,9 @@ function transpose(A::joKron)
     for i=1:l
         push!(kops,A.fop[i].')
     end
-    return joKron("("*A.name*".')",e,m,n,l,ms,ns,kops)
+    return joKron{ODT}("("*A.name*".')",m,n,l,ms,ns,kops)
 end
-function ctranspose(A::joKron)
-    e=A.e
+function ctranspose{ODT}(A::joKron{ODT})
     m=A.n
     n=A.m
     l=A.l
@@ -70,10 +65,9 @@ function ctranspose(A::joKron)
     for i=1:l
         push!(kops,A.fop[i]')
     end
-    return joKron("("*A.name*"')",e,m,n,l,ms,ns,kops)
+    return joKron{ODT}("("*A.name*"')",m,n,l,ms,ns,kops)
 end
-function conj(A::joKron)
-    e=A.e
+function conj{ODT}(A::joKron{ODT})
     m=A.m
     n=A.n
     l=A.l
@@ -83,10 +77,10 @@ function conj(A::joKron)
     for i=1:l
         push!(kops,conj(A.fop[i]))
     end
-    return joKron("(conj("*A.name*"))",e,m,n,l,ms,ns,kops)
+    return joKron{ODT}("(conj("*A.name*"))",m,n,l,ms,ns,kops)
 end
 
-function *(A::joKron,v::AbstractVector)
+function *{AODT,vDT<:Number}(A::joKron{AODT},v::AbstractVector{vDT})
     size(A, 2) == size(v, 1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
     V=reshape(v,ksz...)
@@ -102,9 +96,9 @@ function *(A::joKron,v::AbstractVector)
     end
     return vec(V)
 end
-#function *(A::joKron,mv::AbstractMatrix)
+#function *{AODT,mvDT:<Number}(A::joKron{AODT},mv::AbstractMatrix{mvDT})
     #size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    #MV=zeros(promote_type(A.e,eltype(mv)),size(A,1),size(mv,2))
+    #MV=zeros(promote_type(AODT,eltype(mv)),size(A,1),size(mv,2))
     #for i=1:size(mv,2)
         #MV[:,i]=A*mv[:,i]
     #end
