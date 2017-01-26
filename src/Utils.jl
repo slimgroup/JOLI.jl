@@ -2,6 +2,10 @@
 # Utilities ################################################
 ############################################################
 
+type joUtilsException <: Exception
+    msg :: String
+end
+
 ############################################################
 ## macros ##################################################
 
@@ -40,3 +44,18 @@ Type of element of complex scalar
 
 """
 complex_eltype{T}(a::Complex{T}) = T
+"""
+Type of element of complex data type
+
+    complex_eltype(dt::DataType)
+
+# Example
+
+- complex_eltype(Complex{Float32})
+
+"""
+function complex_eltype(dt::DataType)
+    dt<:Complex || throw(joUtilsException("Input type must be Complex"))
+    a=zero(dt)
+    return complex_eltype(a)
+end

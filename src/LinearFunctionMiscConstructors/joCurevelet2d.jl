@@ -8,12 +8,15 @@ function apply_fdct2Dwrap(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,n
         ccall((:jl_fdct_wrapping_real,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
+        C= eltype(v)==Cdouble ? C : convert(Array{eltype(v),1},C)
     else
         C=zeros(Complex{Cdouble},m)
         X= eltype(v)==Complex{Cdouble} ? v : convert(Array{Complex{Cdouble},1},v)
         ccall((:jl_fdct_wrapping_cpx,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
+        elv= eltype(v)<:Complex ? complex_eltype(eltype(v)) : eltype(v)
+        C= elv==Cdouble ? C : convert(Array{Complex{elv},1},C)
     end
     return C
 end
@@ -26,12 +29,15 @@ function apply_ifdct2Dwrap(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,
         ccall((:jl_ifdct_wrapping_real,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
+        X= eltype(v)==Cdouble ? X : convert(Array{eltype(v),1},X)
     else
         X=zeros(Complex{Cdouble},n1*n2)
         C= eltype(v)==Complex{Cdouble}? v : convert(Array{Complex{Cdouble},1},v)
         ccall((:jl_ifdct_wrapping_cpx,:libdfdct_wrapping),Void,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
+        elv= eltype(v)<:Complex ? complex_eltype(eltype(v)) : eltype(v)
+        X= elv==Cdouble ? X : convert(Array{Complex{elv},1},X)
     end
     return X
 end
