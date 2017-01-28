@@ -444,24 +444,49 @@ isinvertible{ODT}(A::joAbstractLinearOperator{ODT}) = !isnull(A.iop)
 
 # islinear(jo)
 function islinear{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,verb::Bool=false)
-    x::Array{ODT,1}=rand(ODT,A.n)
-    y::Array{ODT,1}=rand(ODT,A.n)
+    x=rand(ODT,A.n)
+    y=rand(ODT,A.n)
     Axy=A*(x+y)
     AxAy=(A*x+A*y)
-    res=vecnorm(Axy-AxAy)
-    test=(res < tol)
-    verb ? println("Linear test passed with tol=$tol: ",test," / diffrence ",res) : test
-    return test
+    dif=vecnorm(Axy-AxAy)
+    test=(dif < tol)
+    verb ? println("Linear test passed ($test) with tol=$tol: / diff=$dif") : test
+    return test,dif
+end
+function islinear{ODT}(A::joAbstractLinearOperator{ODT},DDT::DataType;tol::Number=joTol,verb::Bool=false)
+    x=rand(DDT,A.n)
+    y=rand(DDT,A.n)
+    Axy=A*(x+y)
+    AxAy=(A*x+A*y)
+    dif=vecnorm(Axy-AxAy)
+    test=(dif < tol)
+    verb ? println("Linear test passed ($test) with tol=$tol: / diff=$dif") : test
+    return test,dif
 end
 
 # isadjoint(jo)
-function isadjoint{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,ctmult::Number=1,verb::Bool=false)
-    x::Array{ODT,1}=rand(ODT,A.n)
-    y::Array{ODT,1}=rand(ODT,A.m)
+function isadjoint{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,ctmult::Number=1.,verb::Bool=false)
+    x=rand(ODT,A.n)
+    y=rand(ODT,A.m)
     Axy=dot(A*x,y)
     xAty=dot(x,ctmult*A'*y)
-    res=abs(Axy-xAty)
-    test=(res < tol)
-    verb ? println("Adjoint test passed with tol=$tol ",test," / diffrence ",res) : test
-    return test
+    dif=abs(xAty-Axy)
+    rto=abs(xAty/Axy)
+    test=(dif < tol)
+    rer=abs(dif/xAty)
+    verb ? println("Adjoint test passed ($test) with tol=$tol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") : test
+    return test,dif,rer,rto
 end
+function isadjoint{ODT}(A::joAbstractLinearOperator{ODT},DDT::DataType,RDT::DataType;tol::Number=joTol,ctmult::Number=1.,verb::Bool=false)
+    x=rand(DDT,A.n)
+    y=rand(RDT,A.m)
+    Axy=dot(A*x,y)
+    xAty=dot(x,ctmult*A'*y)
+    dif=abs(xAty-Axy)
+    rto=abs(xAty/Axy)
+    test=(dif < tol)
+    rer=abs(dif/xAty)
+    verb ? println("Adjoint test passed ($test) with tol=$tol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") : test
+    return test,dif,rer,rto
+end
+
