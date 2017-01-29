@@ -10,10 +10,10 @@ for t=1:T # start test loop
 
 println("$tsname ($m,$m)")
     @testset "$m x $m" begin
-        @test isadjoint(Awr)
-        @test isadjoint(Awc)
-        @test isadjoint(Acr)
-        @test isadjoint(Acc)
+        @test isadjoint(Awr)[1]
+        @test isadjoint(Awc)[1]
+        @test isadjoint(Acr)[1]
+        @test isadjoint(Acc)[1]
     end
     
 end # end test loop

@@ -472,8 +472,8 @@ function isadjoint{ODT}(A::joAbstractLinearOperator{ODT};tol::Number=joTol,ctmul
     xAty=dot(x,ctmult*A'*y)
     dif=abs(xAty-Axy)
     rto=abs(xAty/Axy)
-    test=(dif < tol)
     rer=abs(dif/xAty)
+    test=(dif < tol)
     verb ? println("Adjoint test passed ($test) with tol=$tol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") : test
     return test,dif,rer,rto
 end
