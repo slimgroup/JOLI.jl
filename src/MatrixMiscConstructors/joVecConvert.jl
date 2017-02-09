@@ -1,24 +1,24 @@
-# vector conversion operators: joReal joImag joConj
+# vector conversion operators: joReal joImag joConj # fix,DDT,RDT
 
 export joReal, joImag, joConj
-joReal(m::Integer=1,ODT::DataType=Int8) =
-    joMatrix{ODT}("joReal",m,m,
+joReal{CDT}(m::Integer=1,ODT::DataType=Int8,CDT::DataType=Float64) =
+    joMatrix{ODT,Complex{CDT},CDT}("joReal",m,m,
         v1->real(v1),
         v2->complex(v2),
         v3->complex(v3),
         v4->real(v4),
         @NF, @NF, @NF, @NF
         )
-joImag(m::Integer=1,ODT::DataType=Int8) =
-    joMatrix{ODT}("joImag",m,m,
+joImag{CDT}(m::Integer=1,ODT::DataType=Int8,CDT::DataType=Float64) =
+    joMatrix{ODT,Complex{CDT},CDT}("joImag",m,m,
         v1->imag(v1),
         v2->complex(0,v2),
         v3->complex(0,v3),
         v4->complex(0,-v4),
         @NF, @NF, @NF, @NF
         )
-joConj(m::Integer=1,ODT::DataType=Int8) =
-    joMatrix{ODT}("joConj",m,m,
+joConj{DDT}(m::Integer=1,ODT::DataType=Int8,DDT::DataType=Float64) =
+    joMatrix{ODT,DDT,DDT}("joConj",m,m,
         v1->conj(v1),
         v2->conj(v2),
         v3->conj(v3),
