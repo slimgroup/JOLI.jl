@@ -7,8 +7,8 @@ export joAbstractOperator, joAbstractLinearOperator, joAbstractOperatorException
 ############################################################
 ## type definition
 
-abstract joAbstractOperator{ODT<:Number}
-abstract joAbstractLinearOperator{ODT<:Number} <: joAbstractOperator{ODT}
+abstract joAbstractOperator{EDT<:Number,DDT<:Number,RDT<:Number}
+abstract joAbstractLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractOperator{EDT,DDT,RDT}
 
 type joAbstractOperatorException <: Exception
     msg :: String
@@ -25,7 +25,13 @@ end
 ## overloaded Base functions
 
 # eltype(jo)
-eltype{ODT}(A::joAbstractOperator{ODT}) = ODT
+eltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = EDT
+
+# deltype(jo)
+deltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = DDT
+
+# reltype(jo)
+reltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = RDT
 
 # show(jo)
 show(A::joAbstractOperator) = throw(joAbstractOperatorException("show(jo) not implemented"))

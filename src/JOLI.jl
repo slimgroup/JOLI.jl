@@ -20,6 +20,7 @@ import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat
 
 # extra exported methods
+export deltype, reltype
 export double, iscomplex, isinvertible, islinear, isadjoint
 
 # constants
@@ -32,8 +33,8 @@ include("joAbstractOperator.jl")
 include("joLinearOperator.jl")
 include("joMatrix.jl")
 include("joMatrixMiscConstructors.jl")
-include("joLinearFunction.jl")
-include("joLinearFunctionMiscConstructors.jl")
-include("joKron.jl")
+#include("joLinearFunction.jl")
+#include("joLinearFunctionMiscConstructors.jl")
+#include("joKron.jl")
 
 end # module
