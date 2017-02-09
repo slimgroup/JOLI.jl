@@ -7,6 +7,13 @@ export joLinearOperator, joLinearOperatorException
 ############################################################
 ## type definition
 
+"""
+    joLinearOperator glueing type & constructor
+
+    !!! Do not use to create the operators
+    !!! Use joMatrix and joLinearFunction constructors
+
+"""
 immutable joLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{EDT,DDT,RDT}
     name::String
     m::Integer
