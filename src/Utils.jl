@@ -29,33 +29,33 @@ macro NF(fun::Expr)
     return :(Nullable{Function}($fun))
 end
 
-export complex_eltype
+export jo_complex_eltype
 
 """
 Type of element of complex scalar
 
-    complex_eltype(a::Complex)
+    jo_complex_eltype(a::Complex)
 
 # Example
 
-- complex_eltype(1.+im*1.)
+- jo_complex_eltype(1.+im*1.)
 
-- complex_eltype(zero(Complex{Float64}))
+- jo_complex_eltype(zero(Complex{Float64}))
 
 """
-complex_eltype{T}(a::Complex{T}) = T
+jo_complex_eltype{T}(a::Complex{T}) = T
 """
 Type of element of complex data type
 
-    complex_eltype(dt::DataType)
+    jo_complex_eltype(dt::DataType)
 
 # Example
 
-- complex_eltype(Complex{Float32})
+- jo_complex_eltype(Complex{Float32})
 
 """
-function complex_eltype(dt::DataType)
+function jo_complex_eltype(dt::DataType)
     dt<:Complex || throw(joUtilsException("Input type must be Complex"))
     a=zero(dt)
-    return complex_eltype(a)
+    return jo_complex_eltype(a)
 end
