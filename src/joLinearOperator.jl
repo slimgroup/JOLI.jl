@@ -316,9 +316,9 @@ function +{AEDT,ADDT,ARDT,bDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},b::bD
     nEDT=promote_type(AEDT,bDT)
     return joLinearOperator{nEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
         v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,
-        v2->A.fop_T(v2)+b*joOnes(A.m,A.n)*v2,
-        v3->A.fop_CT(v3)+conj(b)*joOnes(A.m,A.n)*v3,
-        v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n)*v4,
+        v2->get(A.fop_T)(v2)+b*joOnes(A.n,A.m)*v2,
+        v3->get(A.fop_CT)(v3)+conj(b)*joOnes(A.n,A.m)*v3,
+        v4->get(A.fop_C)(v4)+conj(b)*joOnes(A.m,A.n)*v4,
         @NF, @NF, @NF, @NF
         )
 end
@@ -326,8 +326,8 @@ function +{AEDT,ADDT,ARDT,bDT<:Number}(A::joAbstractLinearOperator{AEDT,ADDT,ARD
     nEDT=promote_type(AEDT,bDT)
     return joLinearOperator{nEDT,ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
         v1->A*v1+b*joOnes(A.m,A.n)*v1,
-        v2->A.'*v2+b*joOnes(A.m,A.n)*v2,
-        v3->A'*v3+conj(b)*joOnes(A.m,A.n)*v3,
+        v2->A.'*v2+b*joOnes(A.n,A.m)*v2,
+        v3->A'*v3+conj(b)*joOnes(A.n,A.m)*v3,
         v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n)*v4,
         @NF, @NF, @NF, @NF
         )
