@@ -70,7 +70,7 @@ joMatrix outer constructor
 - joMatrix(rand(4,3);name="my matrix")
 
 """
-joMatrix{EDT}(array::AbstractMatrix{EDT},DDT::DataType=Float64;name::String="joMatrix") = # fix,DDT,RDT
+joMatrix{EDT}(array::AbstractMatrix{EDT},DDT::DataType=EDT;name::String="joMatrix") = # fix,DDT,RDT
     joMatrix{EDT,DDT,promote_type(EDT,DDT)}(name,size(array,1),size(array,2),
         v1->array*v1,
         v2->array.'*v2,

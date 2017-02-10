@@ -2,6 +2,7 @@ using Base.Test
 using JOLI
 
 jo_type_mismatch_error_set(false)
+#JOLI.jo_type_mismatch_warn_set(false)
 
 # write your own tests here
 tic()
