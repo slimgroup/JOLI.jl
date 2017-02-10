@@ -14,22 +14,22 @@ if t%2==1
     a=rand(m,n)
     b=rand(m,n)
     vn=rand(n)
-    mvn=rand(n,2)+im*rand(n,2)
-    vm=rand(m)+im*rand(m)
+    mvn=rand(n,2)
+    vm=rand(m)
     mvm=rand(m,2)
 else
     tname="loop $t for complex($m,$n)"
-    a=rand(m,n)+im*rand(m,n)
-    b=rand(m,n)+im*rand(m,n)
-    vn=rand(n)+im*rand(n)
-    mvn=rand(n,2)
-    vm=rand(m)
-    mvm=rand(m,2)+im*rand(m,2)
+    a=rand(Complex{Float64},m,n)
+    b=rand(Complex{Float64},m,n)
+    vn=rand(Complex{Float64},n)
+    mvn=rand(Complex{Float64},n,2)
+    vm=rand(Complex{Float64},m)
+    mvm=rand(Complex{Float64},m,2)
 end
 A=joMatrix(a)
 B=joMatrix(b)
-afac=rand()+rand()*im
-mfac=rand()+rand()*im
+afac=rand(eltype(A))
+mfac=rand(eltype(A))
 
 println("$tsname $tname")
     @testset "$tname A" begin
