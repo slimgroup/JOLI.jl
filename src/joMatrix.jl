@@ -101,13 +101,19 @@ end
 # *(jo,mvec)
 function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) #fix,DDT,RDT
     A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
-    return A.fop(mv)
+    jo_check_type_match(ADDT,mvDT,join(["INPUT to *(jo,vec):",A.name,typeof(A),mvDT]," / "))
+    MV = A.fop(mv)
+    jo_check_type_match(ARDT,eltype(MV),join(["OUTPUT from *(jo,vec):",A.name,typeof(A),eltype(MV)]," / "))
+    return MV
 end
 
 # *(jo,vec)
 function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},v::AbstractVector{vDT}) # fix,DDT,RDT
     A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
-    return A.fop(v)
+    jo_check_type_match(ADDT,vDT,join(["INPUT to *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    V=A.fop(v)
+    jo_check_type_match(ARDT,eltype(V),join(["OUTPUT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    return V
 end
 
 # *(num,jo)

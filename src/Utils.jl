@@ -55,9 +55,65 @@ Type of element of complex data type
 
 """
 function jo_complex_eltype(DT::DataType)
-    DT<:Complex || throw(joUtilsException("Input type must be Complex"))
+    DT<:Complex || throw(joUtilsException("jo_complex_eltype: Input type must be Complex"))
     a=zero(DT)
     return jo_complex_eltype(a)
+end
+
+export jo_check_type_match, jo_type_mismatch_error_set
+global jo_type_mismatch_warn=false
+global jo_type_mismatch_error=true
+"""
+Toggle between warning and error for type mismatch
+
+    jo_type_mismatch_error_set(flag::Bool)
+
+# Examples
+
+- jo_type_mismatch_error_set(true) turns on error
+
+- jo_type_mismatch_error_set(false) reverts to warnings
+
+"""
+function jo_type_mismatch_error_set(flag::Bool)
+    global jo_type_mismatch_warn
+    global jo_type_mismatch_error
+    if flag
+        jo_type_mismatch_warn=false
+        jo_type_mismatch_error=true
+    else
+        jo_type_mismatch_warn=true
+        jo_type_mismatch_error=false
+    end
+    nothing
+end
+function jo_type_mismatch_warn_set(flag::Bool)
+    global jo_type_mismatch_warn
+    println("Very, very bad idea! You are a sneaky fellow.")
+    jo_type_mismatch_warn=flag
+    nothing
+end
+"""
+Check type match
+
+    jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
+
+The bahaviour of the function while types do not match depends on
+values of jo_type_mismatch_warn and jo_type_mismatch_error flags.
+Use jo_type_mismatch_error_set to toggle those flags from warning
+mode to error mode.
+
+# EXAMPLE
+
+- jo_check_type_match(Float32,Float64,"my session")
+
+"""
+function jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
+    if !(DT1==DT2)
+        jo_type_mismatch_error && throw(joUtilsException("type mismatch: $DT1 vs. $DT2 in $where"))
+        jo_type_mismatch_warn && warn("type mismatch: $DT1 vs. $DT2 in $where")
+    end
+    nothing
 end
 
 export jo_convert_type, jo_convert_warn_set
@@ -75,6 +131,7 @@ Set warning mode for jo_convert_type
 function jo_convert_warn_set(flag::Bool)
     global jo_convert_warn
     jo_convert_warn=flag
+    nothing
 end
 
 """
@@ -103,7 +160,7 @@ function jo_convert_type{VT<:Integer}(vin::AbstractArray{VT},DT::DataType)
         if typemax(DT)>typemax(VT)
             vout=convert(AbstractArray{DT},vin)
         else
-            throw(joUtilsException("jo_convert_type: FATAL ERROR: refused conversion from $VT to $DT."))
+            throw(joUtilsException("jo_convert_type: Refused conversion from $VT to $DT."))
         end
     else
         vout=convert(AbstractArray{DT},vin)
@@ -116,7 +173,7 @@ function jo_convert_type{VT<:AbstractFloat}(vin::AbstractArray{VT},DT::DataType)
     if !(DT<:Integer)
         vout=convert(AbstractArray{DT},vin)
     else
-        throw(joUtilsException("jo_convert_type: FATAL ERROR: refused conversion from $VT to $DT."))
+        throw(joUtilsException("jo_convert_type: Refused conversion from $VT to $DT."))
     end
     return vout
 end
@@ -126,10 +183,10 @@ function jo_convert_type{VT<:Complex}(vin::AbstractArray{VT},DT::DataType)
     if DT<:Complex
         vout=convert(AbstractArray{DT},vin)
     elseif DT<:AbstractFloat
-        jo_convert_warn && warn("jo_convert_type: WARNING: Inexact conversion from $VT to $DT. Dropping imaginary part.")
+        jo_convert_warn && warn("jo_convert_type: Inexact conversion from $VT to $DT. Dropping imaginary part.")
         vout=convert(AbstractArray{DT},real(vin))
     else
-        throw(joUtilsException("jo_convert_type: FATAL ERROR: refused conversion from $VT to $DT."))
+        throw(joUtilsException("jo_convert_type: Refused conversion from $VT to $DT."))
     end
     return vout
 end
