@@ -7,6 +7,34 @@ export joMatrix, joMatrixException
 ############################################################
 ## type definition
 
+"""
+joMatrix type
+
+# FIELDS
+
+- name::String : given name
+
+- m::Integer : # of rows
+
+- n::Integer : # of columns
+
+- fop::Function : forward matrix
+
+- fop_T::Function : transpose matrix
+
+- fop_CT::Function : conj transpose matrix
+
+- fop_C::Function : conj matrix
+
+- iop::Nullable{Function} : inverse for fop
+
+- iop_T::Nullable{Function} : inverse for fop_T
+
+- iop_CT::Nullable{Function} : inverse for fop_CT
+
+- iop_C::Nullable{Function} : inverse for fop_C
+
+"""
 immutable joMatrix{ODT<:Number} <: joAbstractLinearOperator{ODT}
     name::String
     m::Integer
@@ -28,6 +56,20 @@ end
 ############################################################
 ## outer constructors
 
+"""
+joMatrix outer constructor
+
+    joMatrix(array::AbstractMatrix,DDT::DataType=Float64;name::String="joMatrix")
+
+# Example
+
+- joMatrix(rand(4,3))
+
+- joMatrix(rand(4,3),Float32)
+
+- joMatrix(rand(4,3);name="my matrix")
+
+"""
 joMatrix{ODT}(array::AbstractMatrix{ODT},name::String="joMatrix") =
     joMatrix{ODT}(name,size(array,1),size(array,2),
         v1->array*v1,
