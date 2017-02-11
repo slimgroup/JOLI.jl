@@ -116,10 +116,10 @@ function jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
     return
 end
 
-export jo_convert_type, jo_convert_warn_set
+export jo_convert, jo_convert_warn_set
 global jo_convert_warn=true
 """
-Set warning mode for jo_convert_type
+Set warning mode for jo_convert
 
     jo_convert_warn_set(flag::Bool)
 
@@ -137,7 +137,7 @@ end
 """
 Type of element of complex data type
 
-    jo_convert_type(v::AbstractArray,DT::DataType)
+    jo_convert(v::AbstractArray,DT::DataType)
 
 # Limitations
 
@@ -150,43 +150,43 @@ Type of element of complex data type
 
 # Example
 
-- jo_convert_type(rand(3),Complex{Float32})
+- jo_convert(rand(3),Complex{Float32})
 
 """
-function jo_convert_type{VT<:Integer}(vin::AbstractArray{VT},DT::DataType)
+function jo_convert{VT<:Integer}(vin::AbstractArray{VT},DT::DataType)
     DT==VT && return vin
-    #println("jo_convert_type{VT<:Integer}")
+    #println("jo_convert{VT<:Integer}")
     if DT<:Integer
         if typemax(DT)>typemax(VT)
             vout=convert(AbstractArray{DT},vin)
         else
-            throw(joUtilsException("jo_convert_type: Refused conversion from $VT to $DT."))
+            throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
         end
     else
         vout=convert(AbstractArray{DT},vin)
     end
     return vout
 end
-function jo_convert_type{VT<:AbstractFloat}(vin::AbstractArray{VT},DT::DataType)
+function jo_convert{VT<:AbstractFloat}(vin::AbstractArray{VT},DT::DataType)
     DT==VT && return vin
-    #println("jo_convert_type{VT<:AbstractFloat}")
+    #println("jo_convert{VT<:AbstractFloat}")
     if !(DT<:Integer)
         vout=convert(AbstractArray{DT},vin)
     else
-        throw(joUtilsException("jo_convert_type: Refused conversion from $VT to $DT."))
+        throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
     end
     return vout
 end
-function jo_convert_type{VT<:Complex}(vin::AbstractArray{VT},DT::DataType)
+function jo_convert{VT<:Complex}(vin::AbstractArray{VT},DT::DataType)
     DT==VT && return vin
-    #println("jo_convert_type{VT<:Complex}")
+    #println("jo_convert{VT<:Complex}")
     if DT<:Complex
         vout=convert(AbstractArray{DT},vin)
     elseif DT<:AbstractFloat
-        jo_convert_warn && warn("jo_convert_type: Inexact conversion from $VT to $DT. Dropping imaginary part.")
+        jo_convert_warn && warn("jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part.")
         vout=convert(AbstractArray{DT},real(vin))
     else
-        throw(joUtilsException("jo_convert_type: Refused conversion from $VT to $DT."))
+        throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
     end
     return vout
 end
