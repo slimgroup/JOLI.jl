@@ -85,13 +85,13 @@ function jo_type_mismatch_error_set(flag::Bool)
         jo_type_mismatch_warn=true
         jo_type_mismatch_error=false
     end
-    nothing
+    return
 end
 function jo_type_mismatch_warn_set(flag::Bool)
     global jo_type_mismatch_warn
     println("Very, very bad idea! You are a sneaky fellow.")
     jo_type_mismatch_warn=flag
-    nothing
+    return
 end
 """
 Check type match
@@ -113,7 +113,7 @@ function jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
         jo_type_mismatch_error && throw(joUtilsException("type mismatch: $DT1 vs. $DT2 in $where"))
         jo_type_mismatch_warn && warn("type mismatch: $DT1 vs. $DT2 in $where")
     end
-    nothing
+    return
 end
 
 export jo_convert_type, jo_convert_warn_set
@@ -131,7 +131,7 @@ Set warning mode for jo_convert_type
 function jo_convert_warn_set(flag::Bool)
     global jo_convert_warn
     jo_convert_warn=flag
-    nothing
+    return
 end
 
 """
