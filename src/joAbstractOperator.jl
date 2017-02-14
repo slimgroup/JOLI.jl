@@ -25,13 +25,13 @@ end
 ## overloaded Base functions
 
 # eltype(jo)
-eltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = EDT
+eltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = throw(joAbstractOperatorException("eltype(jo) not implemented"))
 
 # deltype(jo)
-deltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = DDT
+deltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = throw(joAbstractOperatorException("deltype(jo) not implemented"))
 
 # reltype(jo)
-reltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = RDT
+reltype{EDT,DDT,RDT}(A::joAbstractOperator{EDT,DDT,RDT}) = throw(joAbstractOperatorException("reltype(jo) not implemented"))
 
 # show(jo)
 show(A::joAbstractOperator) = throw(joAbstractOperatorException("show(jo) not implemented"))
