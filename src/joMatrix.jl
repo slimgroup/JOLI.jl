@@ -11,27 +11,16 @@ export joMatrix, joMatrixException
 joMatrix type
 
 # FIELDS
-
 - name::String : given name
-
 - m::Integer : # of rows
-
 - n::Integer : # of columns
-
 - fop::Function : forward matrix
-
 - fop_T::Function : transpose matrix
-
 - fop_CT::Function : conj transpose matrix
-
 - fop_C::Function : conj matrix
-
 - iop::Nullable{Function} : inverse for fop
-
 - iop_T::Nullable{Function} : inverse for fop_T
-
 - iop_CT::Nullable{Function} : inverse for fop_CT
-
 - iop_C::Nullable{Function} : inverse for fop_C
 
 """
@@ -59,16 +48,12 @@ end
 """
 joMatrix outer constructor
 
-    joMatrix(array::AbstractMatrix,DDT::DataType=Float64;name::String="joMatrix")
+    joMatrix(array::AbstractMatrix,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);name::String="joMatrix")
 
 # Example
-
 - joMatrix(rand(4,3)) # implicit domain and range
-
 - joMatrix(rand(4,3),Float32) # implicit range
-
 - joMatrix(rand(4,3),Float32,Float64)
-
 - joMatrix(rand(4,3);name="my matrix") # adding name
 
 """

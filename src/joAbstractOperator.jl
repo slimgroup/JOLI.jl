@@ -13,10 +13,10 @@ abstract joAbstractLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbst
 type joAbstractOperatorException <: Exception
     msg :: String
 end
+
 type joAbstractLinearOperatorException <: Exception
     msg :: String
 end
-
 
 ############################################################
 ## outer constructors

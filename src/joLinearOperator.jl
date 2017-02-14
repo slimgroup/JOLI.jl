@@ -8,9 +8,9 @@ export joLinearOperator, joLinearOperatorException
 ## type definition
 
 """
-    joLinearOperator glueing type & constructor
+    joLinearOperator is glueing type & constructor
 
-    !!! Do not use to create the operators
+    !!! Do not use it to create the operators
     !!! Use joMatrix and joLinearFunction constructors
 
 """
