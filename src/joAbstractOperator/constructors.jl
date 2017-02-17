@@ -1,0 +1,3 @@
+############################################################
+## joAbstractOperator - outer constructors
+
