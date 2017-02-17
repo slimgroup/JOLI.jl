@@ -3,20 +3,20 @@
 ############################################################
 
 # identity operators: joDirac
-include("MatrixMiscConstructors/joDirac.jl")
+include("joMatrixConstructors/joDirac.jl")
 
 # identity operators: joEye
-include("MatrixMiscConstructors/joEye.jl")
+include("joMatrixConstructors/joEye.jl")
 
 # diagonal operators: joDiag
-include("MatrixMiscConstructors/joDiag.jl")
+include("joMatrixConstructors/joDiag.jl")
 
 # matrix of ones
-include("MatrixMiscConstructors/joOnes.jl")
+include("joMatrixConstructors/joOnes.jl")
 
 # matrix of zeros
-include("MatrixMiscConstructors/joZeros.jl")
+include("joMatrixConstructors/joZeros.jl")
 
 # vector conversion operators: joReal joImag joConj
-include("MatrixMiscConstructors/joVecConvert.jl")
+include("joMatrixConstructors/joVecConvert.jl")
 

@@ -3,10 +3,10 @@
 ############################################################
 
 # FFT operators: joDFT
-include("LinearFunctionMiscConstructors/joDFT.jl")
+include("joLinearFunctionConstructors/joDFT.jl")
 
 # DCT operators: joDCT
-include("LinearFunctionMiscConstructors/joDCT.jl")
+include("joLinearFunctionConstructors/joDCT.jl")
 
 # FFT operators: joCurvelet2D
-include("LinearFunctionMiscConstructors/joCurevelet2d.jl")
+include("joLinearFunctionConstructors/joCurevelet2d.jl")
