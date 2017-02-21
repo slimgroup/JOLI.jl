@@ -30,8 +30,6 @@ A=joMatrix(a)
 B=joMatrix(b)
 c=a*b'
 C=A*B'
-afac=rand(Complex{Float64})
-mfac=rand(Complex{Float64})
 
 println("$tsname $tname")
     @testset "$tname A*B" begin

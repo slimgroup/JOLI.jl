@@ -14,26 +14,24 @@ if t%2==1
     a=rand(m,n)
     b=rand(m,n)
     vn=rand(n)
-    mvn=rand(n,2)+im*rand(n,2)
-    vm=rand(m)+im*rand(m)
-    mvm=rand(m,2)
-    A=joMatrix(a)
-    B=joLinearFunctionAll(eltype(b),m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v)
-else
-    tname="loop $t for complex($m,$n)"
-    a=rand(m,n)+im*rand(m,n)
-    b=rand(m,n)+im*rand(m,n)
-    vn=rand(n)+im*rand(n)
     mvn=rand(n,2)
     vm=rand(m)
-    mvm=rand(m,2)+im*rand(m,2)
-    A=joLinearFunctionAll(eltype(a),m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v)
+    mvm=rand(m,2)
+    A=joMatrix(a)
+    B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(b))
+else
+    tname="loop $t for complex($m,$n)"
+    a=rand(Complex{Float64},m,n)
+    b=rand(Complex{Float64},m,n)
+    vn=rand(Complex{Float64},n)
+    mvn=rand(Complex{Float64},n,2)
+    vm=rand(Complex{Float64},m)
+    mvm=rand(Complex{Float64},m,2)
+    A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(a))
     B=joMatrix(b)
 end
 c=a-b
 C=A-B
-afac=rand()+rand()*im
-mfac=rand()+rand()*im
 
 println("$tsname $tname")
     @testset "$tname A*B" begin

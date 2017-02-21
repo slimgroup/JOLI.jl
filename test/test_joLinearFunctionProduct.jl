@@ -30,8 +30,6 @@ A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v
 B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(b))
 c=a*b'
 C=A*B'
-afac=rand(Complex{Float64})
-mfac=rand(Complex{Float64})
 
 println("$tsname $tname")
     @testset "$tname A*B" begin
