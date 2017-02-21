@@ -44,7 +44,7 @@ ctranspose{EDT,DDT,RDT}(A::joMatrix{EDT,DDT,RDT}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joMatrix{AEDT,ADDT,ARDT},B::joMatrix{BEDT,BDDT,BRDT}) # fix,DDT,RDT
+function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joMatrix{AEDT,CDT,ARDT},B::joMatrix{BEDT,BDDT,CDT})
     A.n == B.m || throw(joMatrixException("shape mismatch"))
     nEDT=promote_type(AEDT,BEDT)
     return joMatrix{nEDT,BDDT,ARDT}("("*A.name*"*"*B.name*")",A.m,B.n,
@@ -57,7 +57,7 @@ function *{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joMatrix{AEDT,ADDT,ARDT},B::joMatri
 end
 
 # *(jo,mvec)
-function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) #fix,DDT,RDT
+function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT})
     A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
@@ -66,7 +66,7 @@ function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},mv::Abstract
 end
 
 # *(jo,vec)
-function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},v::AbstractVector{vDT}) # fix,DDT,RDT
+function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
@@ -75,9 +75,8 @@ function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},v::AbstractVe
 end
 
 # *(num,jo)
-function *{aDT<:Number,AEDT,ADDT,ARDT}(a::aDT,A::joMatrix{AEDT,ADDT,ARDT}) # fix,DDT,RDT
-    nEDT=promote_type(aDT,AEDT)
-    return joMatrix{nEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
+function *{AEDT,ADDT,ARDT}(a::AEDT,A::joMatrix{AEDT,ADDT,ARDT})
+    return joMatrix{AEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A.fop(v1),
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
@@ -86,17 +85,20 @@ function *{aDT<:Number,AEDT,ADDT,ARDT}(a::aDT,A::joMatrix{AEDT,ADDT,ARDT}) # fix
         )
 end
 
+# *(jo,num)
+*{AEDT,ADDT,ARDT}(A::joMatrix{AEDT,ADDT,ARDT},a::AEDT) = a*A
+
 ############################################################
 ## overloaded Base \(...jo...)
 
 # \(jo,mvec)
-#function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix,DDT,RDT
+#function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT})
 #    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
 #    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joMatrixException("inverse not defined"))
 #end
 
 # \(jo,vec)
-function \{AEDT,ADDT,ARDT,vDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},v::AbstractVector{vDT}) # fix,DDT,RDT
+function \{AEDT,ADDT,ARDT,vDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
     return get(A.iop)(v)
@@ -106,10 +108,9 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo,jo)
-function +{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joMatrix{AEDT,ADDT,ARDT},B::joMatrix{BEDT,BDDT,BRDT}) # fix,DDT,RDT
+function +{EDT,DDT,RDT}(A::joMatrix{EDT,DDT,RDT},B::joMatrix{EDT,DDT,RDT})
     size(A) == size(B) || throw(joMatrixException("shape mismatch"))
-    nEDT=promote_type(AEDT,BEDT)
-    return joMatrix{nEDT,ADDT,ARDT}("("*A.name*"+"*B.name*")",A.m,B.n,
+    return joMatrix{EDT,DDT,RDT}("("*A.name*"+"*B.name*")",A.m,B.n,
         v1->A.fop(v1)+B.fop(v1),
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
@@ -119,16 +120,18 @@ function +{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joMatrix{AEDT,ADDT,ARDT},B::joMatri
 end
 
 # +(jo,num)
-function +{AEDT,ADDT,ARDT,bDT<:Number}(A::joMatrix{AEDT,ADDT,ARDT},b::bDT) # fix,DDT,RDT
-    nEDT=promote_type(AEDT,bDT)
-    return joMatrix{nEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+b*joOnes(A.m,A.n,nEDT,ADDT)*v1,
-        v2->A.fop_T(v2)+b*joOnes(A.n,A.m,nEDT,ARDT)*v2,
-        v3->A.fop_CT(v3)+conj(b)*joOnes(A.n,A.m,nEDT,ARDT)*v3,
-        v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n,nEDT,ADDT)*v4,
+function +{AEDT,ADDT,ARDT}(A::joMatrix{AEDT,ADDT,ARDT},b::AEDT)
+    return joMatrix{AEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
+        v1->A.fop(v1)+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
+        v2->A.fop_T(v2)+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
+        v3->A.fop_CT(v3)+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
+        v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end
+
+# +(num,jo)
++{AEDT,ADDT,ARDT}(b::AEDT,A::joMatrix{AEDT,ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)

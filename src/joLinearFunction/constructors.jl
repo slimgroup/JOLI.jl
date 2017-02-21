@@ -1,18 +1,20 @@
 ############################################################
 ## joLinearFunction - outer constructors
 
-joLinearFunctionAll(ODT::DataType,m::Integer,n::Integer,
+joLinearFunctionAll(m::Integer,n::Integer,
     fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
     iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
+    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
     name::String="joLinearFunctionAll") =
-        joLinearFunction{ODT}(name,m,n,
+        joLinearFunction{EDT,DDT,RDT}(name,m,n,
             fop,fop_T,fop_CT,fop_C,
             iop,iop_T,iop_CT,iop_C
             )
-joLinearFunctionT(ODT::DataType,m::Integer,n::Integer,
+joLinearFunctionT(m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
+    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
     name::String="joLinearFunctionT") =
-        joLinearFunction{ODT}(name,m,n,
+        joLinearFunction{EDT,DDT,RDT}(name,m,n,
             fop,
             fop_T,
             v3->conj(fop_T(conj(v3))),
@@ -22,10 +24,11 @@ joLinearFunctionT(ODT::DataType,m::Integer,n::Integer,
             v7->conj(iop_T(conj(v7))),
             v8->conj(iop(conj(v8)))
             )
-joLinearFunctionCT(ODT::DataType,m::Integer,n::Integer,
+joLinearFunctionCT(m::Integer,n::Integer,
     fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
+    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
     name::String="joLinearFunctionCT") =
-        joLinearFunction{ODT}(name,m,n,
+        joLinearFunction{EDT,DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,
@@ -35,20 +38,22 @@ joLinearFunctionCT(ODT::DataType,m::Integer,n::Integer,
             iop_CT,
             v8->conj(iop(conj(v8)))
             )
-joLinearFunctionFwdT(ODT::DataType,m::Integer,n::Integer,
+joLinearFunctionFwdT(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
+    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
     name::String="joLinearFunctionFwdT") =
-        joLinearFunction{ODT}(name,m,n,
+        joLinearFunction{EDT,DDT,RDT}(name,m,n,
             fop,
             fop_T,
             v3->conj(fop_T(conj(v3))),
             v4->conj(fop(conj(v4))),
             @NF, @NF, @NF, @NF
             )
-joLinearFunctionFwdCT(ODT::DataType,m::Integer,n::Integer,
+joLinearFunctionFwdCT(m::Integer,n::Integer,
     fop::Function,fop_CT::Function,
+    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
     name::String="joLinearFunctionFwdCT") =
-        joLinearFunction{ODT}(name,m,n,
+        joLinearFunction{EDT,DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,

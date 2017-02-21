@@ -2,8 +2,8 @@
 ## joLinearFunction - overloaded Base functions
 
 # conj(jo)
-conj{ODT}(A::joLinearFunction{ODT}) =
-    joLinearFunction{ODT}("conj("*A.name*")",A.m,A.n,
+conj{EDT,DDT,RDT}(A::joLinearFunction{EDT,DDT,RDT}) =
+    joLinearFunction{EDT,DDT,RDT}("conj("*A.name*")",A.m,A.n,
         get(A.fop_C),
         A.fop_CT,
         A.fop_T,
@@ -15,8 +15,8 @@ conj{ODT}(A::joLinearFunction{ODT}) =
         )
 
 # transpose(jo)
-transpose{ODT}(A::joLinearFunction{ODT}) =
-    joLinearFunction{ODT}(""*A.name*".'",A.n,A.m,
+transpose{EDT,DDT,RDT}(A::joLinearFunction{EDT,DDT,RDT}) =
+    joLinearFunction{EDT,RDT,DDT}(""*A.name*".'",A.n,A.m,
         get(A.fop_T),
         A.fop,
         A.fop_C,
@@ -28,8 +28,8 @@ transpose{ODT}(A::joLinearFunction{ODT}) =
         )
 
 # ctranspose(jo)
-ctranspose{ODT}(A::joLinearFunction{ODT}) =
-    joLinearFunction{ODT}(""*A.name*"'",A.n,A.m,
+ctranspose{EDT,DDT,RDT}(A::joLinearFunction{EDT,DDT,RDT}) =
+    joLinearFunction{EDT,RDT,DDT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
         A.fop,
@@ -44,10 +44,10 @@ ctranspose{ODT}(A::joLinearFunction{ODT}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
+function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joLinearFunction{AEDT,CDT,ARDT},B::joLinearFunction{BEDT,BDDT,CDT})
     A.n == B.m || throw(joLinearFunctionException("shape mismatch"))
-    nODT=promote_type(AODT,BODT)
-    return joLinearFunction{nODT}("("*A.name*"*"*B.name*")",A.m,B.n,
+    nEDT=promote_type(AEDT,BEDT)
+    return joLinearFunction{nEDT,BDDT,ARDT}("("*A.name*"*"*B.name*")",A.m,B.n,
         v1->A.fop(B.fop(v1)),
         v2->get(B.fop_T)(get(A.fop_T)(v2)),
         v3->get(B.fop_CT)(get(A.fop_CT)(v3)),
@@ -57,21 +57,19 @@ function *{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
 end
 
 # *(jo,mvec)
-#function *{AODT,mvDT}(A::joLinearFunction{AODT},mv::AbstractMatrix{mvDT})
-#    A.n == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
-#    return A.fop(mv)
-#end
 
 # *(jo,vec)
-function *{AODT,vDT<:Number}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
+function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joLinearFunction{AEDT,ADDT,ARDT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
-    return A.fop(v)
+    jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    V=A.fop(v)
+    jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    return V
 end
 
 # *(num,jo)
-function *{aDT<:Number,AODT}(a::aDT,A::joLinearFunction{AODT})
-    nODT=promote_type(aDT,AODT)
-    return joLinearFunction{nODT}("(N*"*A.name*")",A.m,A.n,
+function *{AEDT,ADDT,ARDT}(a::AEDT,A::joLinearFunction{AEDT,ADDT,ARDT})
+    return joLinearFunction{AEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A.fop(v1),
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
@@ -80,17 +78,16 @@ function *{aDT<:Number,AODT}(a::aDT,A::joLinearFunction{AODT})
         )
 end
 
+# *(jo,num)
+*{AEDT,ADDT,ARDT}(A::joLinearFunction{AEDT,ADDT,ARDT},a::AEDT) = a*A
+
 ############################################################
 ## overloaded Base \(...jo...)
 
 # \(jo,mvec)
-#function \{AODT,mvDT<:Number}(A::joLinearFunction{AODT},mv::AbstractMatrix{mvDT})
-#    A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
-#    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joLinearFunctionException("inverse not defined"))
-#end
 
 # \(jo,vec)
-function \{AODT,vDT<:Number}(A::joLinearFunction{AODT},v::AbstractVector{vDT})
+function \{AEDT,ADDT,ARDT,vDT<:Number}(A::joLinearFunction{AEDT,ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearFunctionException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     return get(A.iop)(v)
@@ -100,10 +97,9 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo,jo)
-function +{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
+function +{EDT,DDT,RDT}(A::joLinearFunction{EDT,DDT,RDT},B::joLinearFunction{EDT,DDT,RDT})
     size(A) == size(B) || throw(joLinearFunctionException("shape mismatch"))
-    nODT=promote_type(AODT,BODT)
-    return joLinearFunction{nODT}("("*A.name*"+"*B.name*")",A.m,B.n,
+    return joLinearFunction{EDT,DDT,RDT}("("*A.name*"+"*B.name*")",A.m,B.n,
         v1->A.fop(v1)+B.fop(v1),
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
@@ -113,23 +109,25 @@ function +{AODT,BODT}(A::joLinearFunction{AODT},B::joLinearFunction{BODT})
 end
 
 # +(jo,num)
-function +{AODT,bDT<:Number}(A::joLinearFunction{AODT},b::bDT)
-    nODT=promote_type(AODT,bDT)
-    return joLinearFunction{nODT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+b*joOnes(A.m,A.n)*v1,
-        v2->get(A.fop_T)(v2)+b*joOnes(A.n,A.m)*v2,
-        v3->get(A.fop_CT)(v3)+conj(b)*joOnes(A.n,A.m)*v3,
-        v4->get(A.fop_C)(v4)+conj(b)*joOnes(A.m,A.n)*v4,
+function +{AEDT,ADDT,ARDT}(A::joLinearFunction{AEDT,ADDT,ARDT},b::AEDT)
+    return joLinearFunction{AEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
+        v1->A.fop(v1)+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
+        v2->get(A.fop_T)(v2)+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
+        v3->get(A.fop_CT)(v3)+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
+        v4->get(A.fop_C)(v4)+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end
+
+# +(num,jo)
++{AEDT,ADDT,ARDT}(b::AEDT,A::joLinearFunction{AEDT,ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{ODT}(A::joLinearFunction{ODT}) =
-    joLinearFunction{ODT}("(-"*A.name*")",A.m,A.n,
+-{EDT,DDT,RDT}(A::joLinearFunction{EDT,DDT,RDT}) =
+    joLinearFunction{EDT,DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-get(A.fop_T)(v2),
         v3->-get(A.fop_CT)(v3),

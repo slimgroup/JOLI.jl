@@ -7,8 +7,8 @@ export joAbstractOperator, joAbstractLinearOperator, joAbstractOperatorException
 ############################################################
 ## type definition
 
-abstract joAbstractOperator{EDT<:Number,DDT<:Number,RDT<:Number}
-abstract joAbstractLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractOperator{EDT,DDT,RDT}
+abstract joAbstractOperator
+abstract joAbstractLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractOperator
 
 type joAbstractOperatorException <: Exception
     msg :: String

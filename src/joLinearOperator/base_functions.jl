@@ -114,7 +114,7 @@ ishermitian{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joLinearOperator{AEDT,ADDT,ARDT},B::joLinearOperator{BEDT,BDDT,BRDT}) # fix,DDT,RDT
+function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joLinearOperator{AEDT,CDT,ARDT},B::joLinearOperator{BEDT,BDDT,CDT})
     A.n == B.m || throw(joLinearOperatorException("shape mismatch"))
     nEDT=promote_type(AEDT,BEDT)
     return joLinearOperator{nEDT,BDDT,ARDT}("("*A.name*"*"*B.name*")",A.m,B.n,
@@ -125,7 +125,7 @@ function *{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joLinearOperator{AEDT,ADDT,ARDT},B:
         @NF, @NF, @NF, @NF
         )
 end
-function *{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},B::joAbstractLinearOperator{BEDT,BDDT,BRDT}) # fix,DDT,RDT
+function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joAbstractLinearOperator{AEDT,CDT,ARDT},B::joAbstractLinearOperator{BEDT,BDDT,CDT})
     size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     nEDT=promote_type(AEDT,BEDT)
     return joLinearOperator{nEDT,BDDT,ARDT}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
@@ -138,41 +138,45 @@ function *{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joAbstractLinearOperator{AEDT,ADDT,
 end
 
 # *(jo,mvec)
-function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix,DDT,RDT
-    ##isnull(A.fop) && throw(joLinearOperatorException("*(jo,MultiVector) not supplied"))
+function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix DDT/RDT
     A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     nmvDT=promote_type(AEDT,mvDT)
     MV=zeros(nmvDT,A.m,size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A.fop(mv[:,i])
     end
+    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
-function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix,DDT,RDT
-    ##isnull(A.fop) && throw(joAbstractLinearOperatorException("*(jo,MultiVector) not supplied"))
+function *{AEDT,ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix DDT/RDT
     size(A,2) == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     nmvDT=promote_type(AEDT,mvDT)
     MV=zeros(nmvDT,size(A,1),size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A*mv[:,i]
     end
+    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 
 # *(mvec,jo)
 
 # *(jo,vec)
-function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},v::AbstractVector{vDT}) # fix,DDT,RDT
+function *{AEDT,ADDT,ARDT,vDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
-    return A.fop(v)
+    jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    V=A.fop(v)
+    jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    return V
 end
 
 # *(vec,jo)
 
 # *(num,jo)
-function *{aDT<:Number,AEDT,ADDT,ARDT}(a::aDT,A::joLinearOperator{AEDT,ADDT,ARDT}) # fix,DDT,RDT
-    nEDT=promote_type(aDT,AEDT)
-    return joLinearOperator{nEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
+function *{AEDT,ADDT,ARDT}(a::AEDT,A::joLinearOperator{AEDT,ADDT,ARDT}) # fix DDT/RDT
+    return joLinearOperator{AEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A.fop(v1),
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
@@ -180,9 +184,8 @@ function *{aDT<:Number,AEDT,ADDT,ARDT}(a::aDT,A::joLinearOperator{AEDT,ADDT,ARDT
         @NF, @NF, @NF, @NF
         )
 end
-function *{aDT<:Number,AEDT,ADDT,ARDT}(a::aDT,A::joAbstractLinearOperator{AEDT,ADDT,ARDT}) # fix,DDT,RDT
-    nEDT=promote_type(aDT,AEDT)
-    return joLinearOperator{nEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
+function *{AEDT,ADDT,ARDT}(a::AEDT,A::joAbstractLinearOperator{AEDT,ADDT,ARDT}) # fix DDT/RDT
+    return joLinearOperator{AEDT,ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->a*A*v1,
         v2->a*A.'*v2,
         v3->conj(a)*A'*v3,
@@ -192,7 +195,8 @@ function *{aDT<:Number,AEDT,ADDT,ARDT}(a::aDT,A::joAbstractLinearOperator{AEDT,A
 end
 
 # *(jo,num)
-*(A::joAbstractLinearOperator,a::Number) = a*A
+*{AEDT,ADDT,ARDT}(A::joLinearOperator{AEDT,ADDT,ARDT},a::AEDT) = a*A
+*{AEDT,ADDT,ARDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},a::AEDT) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)
@@ -200,7 +204,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix,DDT,RDT
+function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AEDT,mvDT)
@@ -210,7 +214,7 @@ function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},mv::
     end
     return MV
 end
-function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix,DDT,RDT
+function \{AEDT,ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joAbstractLinearOperatorException("\(jo,MultiVector) not supplied"))
     size(A,1) == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     nmvDT=promote_type(AEDT,mvDT)
@@ -224,7 +228,7 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \{AEDT,ADDT,ARDT,vDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},v::AbstractVector{vDT}) # fix,DDT,RDT
+function \{AEDT,ADDT,ARDT,vDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
     return get(A.iop)(v)
@@ -243,10 +247,9 @@ end
 +(A::joAbstractLinearOperator) = A
 
 # +(jo,jo)
-function +{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joLinearOperator{AEDT,ADDT,ARDT},B::joLinearOperator{BEDT,BDDT,BRDT}) # fix,DDT,RDT
+function +{EDT,DDT,RDT}(A::joLinearOperator{EDT,DDT,RDT},B::joLinearOperator{EDT,DDT,RDT})
     size(A) == size(B) || throw(joLinearOperatorException("shape mismatch"))
-    nEDT=promote_type(AEDT,BEDT)
-    return joLinearOperator{nEDT,ADDT,ARDT}("("*A.name*"+"*B.name*")",A.m,B.n,
+    return joLinearOperator{EDT,DDT,RDT}("("*A.name*"+"*B.name*")",A.m,B.n,
         v1->A.fop(v1)+B.fop(v1),
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
@@ -254,10 +257,9 @@ function +{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joLinearOperator{AEDT,ADDT,ARDT},B:
         @NF, @NF, @NF, @NF
         )
 end
-function +{AEDT,ADDT,ARDT,BEDT,BDDT,BRDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},B::joAbstractLinearOperator{BEDT,BDDT,BRDT}) # fix,DDT,RDT
+function +{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT},B::joAbstractLinearOperator{EDT,DDT,RDT})
     size(A) == size(B) || throw(joAbstractLinearOperatorException("shape mismatch"))
-    nEDT=promote_type(AEDT,BEDT)
-    return joLinearOperator{nEDT,ADDT,ARDT}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
+    return joLinearOperator{EDT,DDT,RDT}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
         v1->A*v1+B*v1,
         v2->A.'*v2+B.'*v2,
         v3->A'*v3+B'*v3,
@@ -275,29 +277,28 @@ end
 # +(vec,jo)
 
 # +(jo,num)
-function +{AEDT,ADDT,ARDT,bDT<:Number}(A::joLinearOperator{AEDT,ADDT,ARDT},b::bDT) # fix,DDT,RDT
-    nEDT=promote_type(AEDT,bDT)
-    return joLinearOperator{nEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+b*joOnes(A.m,A.n,nEDT,ADDT)*v1,
-        v2->get(A.fop_T)(v2)+b*joOnes(A.n,A.m,nEDT,ARDT)*v2,
-        v3->get(A.fop_CT)(v3)+conj(b)*joOnes(A.n,A.m,nEDT,ARDT)*v3,
-        v4->get(A.fop_C)(v4)+conj(b)*joOnes(A.m,A.n,nEDT,ADDT)*v4,
+function +{AEDT,ADDT,ARDT}(A::joLinearOperator{AEDT,ADDT,ARDT},b::AEDT)
+    return joLinearOperator{AEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
+        v1->A.fop(v1)+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
+        v2->get(A.fop_T)(v2)+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
+        v3->get(A.fop_CT)(v3)+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
+        v4->get(A.fop_C)(v4)+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end
-function +{AEDT,ADDT,ARDT,bDT<:Number}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},b::bDT) # fix,DDT,RDT
-    nEDT=promote_type(AEDT,bDT)
-    return joLinearOperator{nEDT,ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
-        v1->A*v1+b*joOnes(A.m,A.n,nEDT,ADDT)*v1,
-        v2->A.'*v2+b*joOnes(A.n,A.m,nEDT,ARDT)*v2,
-        v3->A'*v3+conj(b)*joOnes(A.n,A.m,nEDT,ARDT)*v3,
-        v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n,nEDT,ADDT)*v4,
+function +{AEDT,ADDT,ARDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},b::AEDT) # fix,DDT,RDT
+    return joLinearOperator{AEDT,ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
+        v1->A*v1+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
+        v2->A.'*v2+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
+        v3->A'*v3+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
+        v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end
 
 # +(num,jo)
-+(b::Number,A::joAbstractLinearOperator) = A+b
++{AEDT,ADDT,ARDT}(b::AEDT,A::joLinearOperator{AEDT,ADDT,ARDT}) = A+b
++{AEDT,ADDT,ARDT}(b::AEDT,A::joAbstractLinearOperator{AEDT,ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)

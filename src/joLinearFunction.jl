@@ -8,7 +8,10 @@ export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctio
 ############################################################
 ## type definition
 
-immutable joLinearFunction{ODT<:Number} <: joAbstractLinearOperator{ODT}
+"""
+
+"""
+immutable joLinearFunction{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{EDT,DDT,RDT}
     name::String
     m::Integer
     n::Integer
