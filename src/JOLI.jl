@@ -34,7 +34,7 @@ include("joLinearOperator.jl")
 include("joMatrix.jl")
 include("joLinearFunction.jl")
 include("joMatrixConstructors.jl")
-#include("joLinearFunctionConstructors.jl")
+include("joLinearFunctionConstructors.jl")
 #include("joLinearOperatorConstructors.jl")
 
 end # module

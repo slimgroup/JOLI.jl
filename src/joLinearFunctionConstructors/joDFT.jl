@@ -75,20 +75,22 @@ function joDFT(ms::Integer...;centered::Bool=false,elmtype=Float64)
     pf=plan_fft(zeros(ms))
     ipf=plan_ifft(zeros(ms))
     if centered
-        return joLinearFunctionCT(Complex{elmtype},prod(ms),prod(ms),
+        return joLinearFunctionCT(prod(ms),prod(ms),
             v1->apply_fft_centered(pf,v1,ms),
             v2->apply_ifft_centered(ipf,v2,ms),
             v3->apply_ifft_centered(ipf,v3,ms),
             v4->apply_fft_centered(pf,v4,ms),
-            "joDFTc"
+            Complex{elmtype};
+            name="joDFTc"
             )
     else
-        return joLinearFunctionCT(Complex{elmtype},prod(ms),prod(ms),
+        return joLinearFunctionCT(prod(ms),prod(ms),
             v1->apply_fft(pf,v1,ms),
             v2->apply_ifft(ipf,v2,ms),
             v3->apply_ifft(ipf,v3,ms),
             v4->apply_fft(pf,v4,ms),
-            "joDFT"
+            Complex{elmtype};
+            name="joDFT"
             )
     end
 end
