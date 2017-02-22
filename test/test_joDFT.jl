@@ -3,8 +3,8 @@ tsname="joDFT"
 @testset "$tsname" begin
 for t=1:T # start test loop
     m=4^t
-    v1=rand(m)
-    v2=rand(m,m)
+    v1=rand(Complex{Float64},m)
+    v2=rand(Complex{Float64},m,m)
     vv2=vec(v2)
     A1=joDFT(m)
     A2=joDFT(m,m)
