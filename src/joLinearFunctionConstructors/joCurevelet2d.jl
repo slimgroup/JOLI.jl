@@ -104,12 +104,13 @@ function joCurvelet2D(n1::Integer,n2::Integer;
         nbs,nbac,actl,n1,n2,cfmap,m)
     m=convert(Int128,m[])
 
-    return joLinearFunctionCT(eltp,m,n1*n2,
+    return joLinearFunctionCT(m,n1*n2,
         v1->apply_fdct2Dwrap(v1,n1,n2,m,nbs,nbac,actl,rctl,zfin),
         v2->apply_ifdct2Dwrap(v2,n1,n2,m,nbs,nbac,actl,rctl,zfin),
         v3->apply_ifdct2Dwrap(v3,n1,n2,m,nbs,nbac,actl,rctl,zfin),
         v4->apply_fdct2Dwrap(v4,n1,n2,m,nbs,nbac,actl,rctl,zfin),
-        "joCurvelt2Dwrap"
+        eltp;
+        name="joCurvelt2Dwrap"
         )
 end
 

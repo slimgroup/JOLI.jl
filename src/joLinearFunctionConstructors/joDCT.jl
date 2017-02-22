@@ -44,12 +44,13 @@ Multi-dimensional DCT transform over fast dimension(s)
 function joDCT(ms::Integer...;elmtype=Float64)
     pf=plan_dct(zeros(ms))
     ipf=plan_idct(zeros(ms))
-    joLinearFunctionCT(elmtype,prod(ms),prod(ms),
+    joLinearFunctionCT(prod(ms),prod(ms),
         v1->apply_dct(pf,v1,ms),
         v2->apply_idct(ipf,v2,ms),
         v3->apply_idct(ipf,v3,ms),
         v4->apply_dct(pf,v4,ms),
-        "joDCT"
+        elmtype;
+        name="joDCT"
         )
 end
 
