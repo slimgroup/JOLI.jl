@@ -137,7 +137,7 @@ end
 """
 Type of element of complex data type
 
-    jo_convert(v::AbstractArray,DT::DataType)
+    jo_convert(DT::DataType,v::AbstractArray)
 
 # Limitations
 
@@ -150,10 +150,10 @@ Type of element of complex data type
 
 # Example
 
-- jo_convert(rand(3),Complex{Float32})
+- jo_convert(Complex{Float32},rand(3))
 
 """
-function jo_convert{VT<:Integer}(vin::AbstractArray{VT},DT::DataType)
+function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT})
     DT==VT && return vin
     #println("jo_convert{VT<:Integer}")
     if DT<:Integer
@@ -167,7 +167,7 @@ function jo_convert{VT<:Integer}(vin::AbstractArray{VT},DT::DataType)
     end
     return vout
 end
-function jo_convert{VT<:AbstractFloat}(vin::AbstractArray{VT},DT::DataType)
+function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT})
     DT==VT && return vin
     #println("jo_convert{VT<:AbstractFloat}")
     if !(DT<:Integer)
@@ -177,7 +177,7 @@ function jo_convert{VT<:AbstractFloat}(vin::AbstractArray{VT},DT::DataType)
     end
     return vout
 end
-function jo_convert{VT<:Complex}(vin::AbstractArray{VT},DT::DataType)
+function jo_convert{VT<:Complex}(DT::DataType,vin::AbstractArray{VT})
     DT==VT && return vin
     #println("jo_convert{VT<:Complex}")
     if DT<:Complex

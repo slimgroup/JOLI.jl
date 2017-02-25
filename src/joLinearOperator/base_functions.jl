@@ -279,19 +279,19 @@ end
 # +(jo,num)
 function +{AEDT,ADDT,ARDT}(A::joLinearOperator{AEDT,ADDT,ARDT},b::AEDT)
     return joLinearOperator{AEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
-        v2->get(A.fop_T)(v2)+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
-        v3->get(A.fop_CT)(v3)+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
-        v4->get(A.fop_C)(v4)+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
+        v1->A.fop(v1)+joConstants(A.m,A.n,b,AEDT,ADDT,ARDT)*v1,
+        v2->get(A.fop_T)(v2)+joConstants(A.n,A.m,b,AEDT,ARDT,ADDT)*v2,
+        v3->get(A.fop_CT)(v3)+joConstants(A.n,A.m,conj(b),AEDT,ARDT,ADDT)*v3,
+        v4->get(A.fop_C)(v4)+joConstants(A.m,A.n,conj(b)*AEDT,ADDT,ARDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end
-function +{AEDT,ADDT,ARDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},b::AEDT) # fix,DDT,RDT
+function +{AEDT,ADDT,ARDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},b::AEDT)
     return joLinearOperator{AEDT,ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
-        v1->A*v1+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
-        v2->A.'*v2+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
-        v3->A'*v3+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
-        v4->conj(A)*v4+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
+        v1->A*v1+joConstants(A.m,A.n,b,AEDT,ADDT,ARDT)*v1,
+        v2->A.'*v2+joConstants(A.n,A.m,b,AEDT,ARDT,ADDT)*v2,
+        v3->A'*v3+joConstants(A.n,A.m,conj(b),AEDT,ARDT,ADDT)*v3,
+        v4->conj(A)*v4+joConstants(A.m,A.n,conj(b),AEDT,ADDT,ARDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end

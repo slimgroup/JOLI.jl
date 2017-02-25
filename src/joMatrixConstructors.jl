@@ -17,6 +17,9 @@ include("joMatrixConstructors/joOnes.jl")
 # matrix of zeros
 include("joMatrixConstructors/joZeros.jl")
 
+# matrix of constants
+include("joMatrixConstructors/joConstants.jl")
+
 # vector conversion operators: joReal joImag joConj
 include("joMatrixConstructors/joVecConvert.jl")
 
