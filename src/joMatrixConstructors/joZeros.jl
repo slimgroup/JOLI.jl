@@ -1,13 +1,13 @@
-# matrix of zeros # fix,DDT,RDT
+# matrix of zeros
 
 export joZeros
-joZeros(m::Integer,EDT::DataType=Int8,DDT::DataType=Float64) = joZeros(m,m,EDT,DDT)
-joZeros(m::Integer,n::Integer,EDT::DataType=Int8,DDT::DataType=Float64) =
-    joMatrix{EDT,DDT,DDT}("joZeros",m,n,
-        v1->(size(v1,2)>1 ? zeros(promote_type(EDT,eltype(v1)),m,size(v1,2)) : zeros(promote_type(EDT,eltype(v1)),m)),
-        v2->(size(v2,2)>1 ? zeros(promote_type(EDT,eltype(v2)),n,size(v2,2)) : zeros(promote_type(EDT,eltype(v2)),m)),
-        v3->(size(v3,2)>1 ? zeros(promote_type(EDT,eltype(v3)),n,size(v3,2)) : zeros(promote_type(EDT,eltype(v3)),m)),
-        v4->(size(v4,2)>1 ? zeros(promote_type(EDT,eltype(v4)),m,size(v4,2)) : zeros(promote_type(EDT,eltype(v4)),m)),
+joZeros(m::Integer,EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT)) = joZeros(m,m,EDT,DDT,RDT)
+joZeros(m::Integer,n::Integer,EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT)) =
+    joMatrix{EDT,DDT,RDT}("joZeros",m,n,
+        v1->(size(v1,2)>1 ? zeros(RDT,m,size(v1,2)) : zeros(EDT,m)),
+        v2->(size(v2,2)>1 ? zeros(DDT,n,size(v2,2)) : zeros(EDT,n)),
+        v3->(size(v3,2)>1 ? zeros(DDT,n,size(v3,2)) : zeros(EDT,n)),
+        v4->(size(v4,2)>1 ? zeros(RDT,m,size(v4,2)) : zeros(EDT,m)),
         @NF, @NF, @NF, @NF
         )
 

@@ -1,15 +1,15 @@
-# identity operators: joDirac # fix,DDT,RDT
+# identity operators: joDirac
 
 export joDirac
-joDirac(m::Integer=1,EDT::DataType=Int8,DDT::DataType=Float64) =
-    joMatrix{EDT,DDT,DDT}("joDirac",m,m,
-        v1->v1,
-        v2->v2,
-        v3->v3,
-        v4->v4,
-        v5->v5,
-        v6->v6,
-        v7->v7,
-        v8->v8
+joDirac(m::Integer,EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT)) =
+    joMatrix{EDT,DDT,RDT}("joDirac",m,m,
+        v1->jo_convert(RDT,v1),
+        v2->jo_convert(DDT,v2),
+        v3->jo_convert(DDT,v3),
+        v4->jo_convert(RDT,v4),
+        v5->jo_convert(DDT,v5),
+        v6->jo_convert(RDT,v6),
+        v7->jo_convert(RDT,v7),
+        v8->jo_convert(DDT,v8)
         )
 
