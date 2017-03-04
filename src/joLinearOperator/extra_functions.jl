@@ -11,25 +11,18 @@ iscomplex{EDT,DDT,RDT}(A :: joAbstractLinearOperator{EDT,DDT,RDT}) = !(EDT <: Re
 isinvertible{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT}) = !isnull(A.iop)
 
 # islinear(jo) # fix,DDT,RDT
-function islinear{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT};tol::Number=joTol,verbose::Bool=false)
+function islinear{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT};tol::Float64=0.,verbose::Bool=false)
     x=rand(DDT,A.n)
     y=rand(DDT,A.n)
     Axy=A*(x+y)
     AxAy=(A*x+A*y)
     dif=vecnorm(Axy-AxAy)
-    test=(dif < tol)
-    if verbose println("Linear test passed ($test) with tol=$tol: / diff=$dif") end
-    return test,dif
-end
-function islinear{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT},nDDT::DataType;tol::Number=joTol,verbose::Bool=false)
-    x=rand(nDDT,A.n)
-    y=rand(nDDT,A.n)
-    Axy=A*(x+y)
-    AxAy=(A*x+A*y)
-    dif=vecnorm(Axy-AxAy)
-    test=(dif < tol)
-    if verbose println("Linear test passed ($test) with tol=$tol: / diff=$dif") end
-    return test,dif
+    rto=abs(vecnorm(AxAy)/vecnorm(Axy))
+    rer=abs(dif/vecnorm(Axy))
+    mytol=(tol>0 ? tol : sqrt(max(eps(vecnorm(Axy)),eps(vecnorm(AxAy)))))
+    test=(dif < mytol)
+    if verbose println("Linear test passed ($test) with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
+    return test,mytol,dif,rer,rto
 end
 
 # isadjoint(jo) # fix,DDT,RDT
@@ -40,23 +33,9 @@ function isadjoint{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT};tol::Fl
     xAty=dot(x,convert(DDT,ctmult)*(A'*y))
     dif=abs(xAty-Axy)
     rto=abs(xAty/Axy)
-    rer=abs(dif/xAty)
-    mytol=(tol>0 ? tol : sqrt(eps(max(abs(Axy),abs(xAty)))))
+    rer=abs(dif/Axy)
+    mytol=(tol>0 ? tol : sqrt(max(eps(abs(Axy)),eps(abs(xAty)))))
     test=(dif < mytol)
     if verbose println("Adjoint test passed ($test) with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
-    return test,dif,rer,rto
+    return test,mytol,dif,rer,rto
 end
-function isadjoint{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT},nDDT::DataType;tol::Float64=0.,ctmult::Number=1.,verbose::Bool=false)
-    x=rand(nDDT,A.n)
-    y=A*rand(nDDT,A.n)
-    Axy=dot(A*x,y)
-    xAty=dot(x,convert(DDT,ctmult)*(A'*y))
-    dif=abs(xAty-Axy)
-    rto=abs(xAty/Axy)
-    mytol=(tol>0 ? tol : sqrt(eps(max(abs(Axy),abs(xAty)))))
-    test=(dif < mytol)
-    rer=abs(dif/xAty)
-    if verbose println("Adjoint test passed ($test) with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
-    return test,dif,rer,rto
-end
-
