@@ -62,7 +62,9 @@ export joCurvelet2D
 - joCurvelet2D(32,32;real_crvlts=false) - complex transform
 - joCurvelet2D(32,32;all_crvlts=true) - real transform with curevelts at the finnest scales
 - joCurvelet2D(32,32;zero_finest=true) - real transform with zeros at the finnest scales
-- joCurvelet2D(32,32,Float64;all_crvlts=true) - complex transform with real 64-bit input
+- joCurvelet2D(32,32,Float64;real_crvlts=false) - complex transform with real 64-bit input for forward
+- joCurvelet2D(32,32,Float32,Float64;real_crvlts=false) - complex transform with just precision specification for curvelets
+- joCurvelet2D(32,32,Float32,Complex{Float64};real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
 
 Note: isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
@@ -98,7 +100,7 @@ function joCurvelet2D(n1::Integer,n2::Integer,DDT::DataType=Float64,RDT::DataTyp
     else
         eltp=Complex{Cdouble}
         dtp=DDT
-        rtp=Complex{RDT}
+        rtp= RDT<:Complex ? RDT : Complex{RDT}
         apply_fdct2Dwrap=apply_fdct2Dwrap_cplx
         apply_ifdct2Dwrap=apply_ifdct2Dwrap_cplx
         myname="joCurvelt2DwrapCplx"
