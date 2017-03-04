@@ -137,7 +137,7 @@ end
 """
 Type of element of complex data type
 
-    jo_convert(DT::DataType,v::AbstractArray)
+    jo_convert(DT::DataType,v::AbstractArray,warning::Bool=true)
 
 # Limitations
 
@@ -153,7 +153,7 @@ Type of element of complex data type
 - jo_convert(Complex{Float32},rand(3))
 
 """
-function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT})
+function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
     DT==VT && return vin
     #println("jo_convert{VT<:Integer}")
     if DT<:Integer
@@ -167,7 +167,7 @@ function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT})
     end
     return vout
 end
-function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT})
+function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
     DT==VT && return vin
     #println("jo_convert{VT<:AbstractFloat}")
     if !(DT<:Integer)
@@ -177,13 +177,13 @@ function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT})
     end
     return vout
 end
-function jo_convert{VT<:Complex}(DT::DataType,vin::AbstractArray{VT})
+function jo_convert{VT<:Complex}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
     DT==VT && return vin
     #println("jo_convert{VT<:Complex}")
     if DT<:Complex
         vout=convert(AbstractArray{DT},vin)
     elseif DT<:AbstractFloat
-        jo_convert_warn && warn("jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part.")
+        (warning && jo_convert_warn) && warn("jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part.")
         vout=convert(AbstractArray{DT},real(vin))
     else
         throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
