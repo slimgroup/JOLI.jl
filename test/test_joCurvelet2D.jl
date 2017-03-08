@@ -8,7 +8,7 @@ for t=1:T # start test loop
     Acr=joCurvelet2D(m,m;all_crvlts=true)
     Acc=joCurvelet2D(m,m,Complex{Float64};all_crvlts=true,real_crvlts=false)
 
-println("$tsname ($m,$m)")
+    println("$tsname ($m,$m)")
     @testset "$m x $m" begin
         @test isadjoint(Awr)[1]
         @test isadjoint(Awc)[1]

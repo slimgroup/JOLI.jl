@@ -7,7 +7,7 @@
 
 export joKron, joKronException
 
-immutable joKron{ODT} <: joAbstractLinearOperator{ODT}
+immutable joKron{EDT,DDT,RDT} <: joAbstractLinearOperator{EDT,DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -15,6 +15,7 @@ immutable joKron{ODT} <: joAbstractLinearOperator{ODT}
     ms::Array{Integer,1}
     ns::Array{Integer,1}
     fop::Array{joAbstractLinearOperator,1}
+    flip::Bool
 end
 function joKron(ops::joAbstractLinearOperator...)
     isempty(ops) && throw(joKronException("empty argument list"))
@@ -26,6 +27,8 @@ function joKron(ops::joAbstractLinearOperator...)
     ns=Array{Integer}(0)
     kops=Array{joAbstractLinearOperator}(0)
     for i=1:l
+        im1=max(i-1,1)
+        reltype(ops[i])==deltype(ops[im1]) || throw(joKronException("domain/range mismatch for $i operator"))
         e=promote_type(e,eltype(ops[i]))
         m*=ops[i].m
         push!(ms,ops[i].m)
@@ -33,7 +36,7 @@ function joKron(ops::joAbstractLinearOperator...)
         push!(ns,ops[i].n)
         push!(kops,ops[i])
     end
-    return joKron{e}("joKron",m,n,l,ms,ns,kops)
+    return joKron{e,deltype(kops[l]),reltype(kops[1])}("joKron($l)",m,n,l,ms,ns,kops,false)
 end
 
 type joKronException <: Exception
@@ -43,7 +46,7 @@ end
 ##########################
 ## overloaded Base methods
 
-function transpose{ODT}(A::joKron{ODT})
+function transpose{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
     m=A.n
     n=A.m
     l=A.l
@@ -53,9 +56,9 @@ function transpose{ODT}(A::joKron{ODT})
     for i=1:l
         push!(kops,A.fop[i].')
     end
-    return joKron{ODT}("("*A.name*".')",m,n,l,ms,ns,kops)
+    return joKron{EDT,RDT,DDT}("("*A.name*".')",m,n,l,ms,ns,kops,!A.flip)
 end
-function ctranspose{ODT}(A::joKron{ODT})
+function ctranspose{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
     m=A.n
     n=A.m
     l=A.l
@@ -65,9 +68,9 @@ function ctranspose{ODT}(A::joKron{ODT})
     for i=1:l
         push!(kops,A.fop[i]')
     end
-    return joKron{ODT}("("*A.name*"')",m,n,l,ms,ns,kops)
+    return joKron{EDT,RDT,DDT}("("*A.name*"')",m,n,l,ms,ns,kops,!A.flip)
 end
-function conj{ODT}(A::joKron{ODT})
+function conj{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
     m=A.m
     n=A.n
     l=A.l
@@ -77,28 +80,40 @@ function conj{ODT}(A::joKron{ODT})
     for i=1:l
         push!(kops,conj(A.fop[i]))
     end
-    return joKron{ODT}("(conj("*A.name*"))",m,n,l,ms,ns,kops)
+    return joKron{EDT,DDT,RDT}("(conj("*A.name*"))",m,n,l,ms,ns,kops,A.flip)
 end
 
-function *{AODT,vDT<:Number}(A::joKron{AODT},v::AbstractVector{vDT})
-    size(A, 2) == size(v, 1) || throw(joKronException("shape mismatch"))
+function *{AEDT,ADDT,ARDT}(A::joKron{AEDT,ADDT,ARDT},v::AbstractVector{ADDT})
+    size(A,2) == size(v,1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
     V=reshape(v,ksz...)
     p=[x for x in 1:A.l]
-    p=circshift(p,-1)
-    for i=A.l:-1:1
-        V=reshape(V,[ksz[1],prod(ksz[2:length(ksz)])]...)
-        V=A.fop[i]*V
-        ksz[1]=A.fop[i].m
-        V=reshape(V,ksz...)
-        V=permutedims(V,p)
-        ksz=circshift(ksz,-1)
+    if A.flip
+        p=circshift(p,1)
+        for i=1:1:A.l
+            ksz=circshift(ksz,1)
+            V=permutedims(V,p)
+            V=reshape(V,[ksz[1],prod(ksz[2:length(ksz)])]...)
+            V=A.fop[i]*V
+            ksz[1]=A.fop[i].m
+            V=reshape(V,ksz...)
+        end
+    else
+        p=circshift(p,-1)
+        for i=A.l:-1:1
+            V=reshape(V,[ksz[1],prod(ksz[2:length(ksz)])]...)
+            V=A.fop[i]*V
+            ksz[1]=A.fop[i].m
+            V=reshape(V,ksz...)
+            V=permutedims(V,p)
+            ksz=circshift(ksz,-1)
+        end
     end
     return vec(V)
 end
-#function *{AODT,mvDT:<Number}(A::joKron{AODT},mv::AbstractMatrix{mvDT})
+#function *{AEDT,mvDT:<Number}(A::joKron{AEDT},mv::AbstractMatrix{mvDT})
     #size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    #MV=zeros(promote_type(AODT,eltype(mv)),size(A,1),size(mv,2))
+    #MV=zeros(promote_type(AEDT,eltype(mv)),size(A,1),size(mv,2))
     #for i=1:size(mv,2)
         #MV[:,i]=A*mv[:,i]
     #end

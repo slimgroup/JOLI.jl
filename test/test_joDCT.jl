@@ -9,7 +9,7 @@ for t=1:T # start test loop
     A1=joDCT(m)
     A2=joDCT(m,m)
 
-println("$tsname ($m,$m)")
+    println("$tsname ($m,$m)")
     @testset "$m x $m" begin
         @test isadjoint(joDCT(m))[1]
         @test norm(A1*v1-dct(v1))<joTol
