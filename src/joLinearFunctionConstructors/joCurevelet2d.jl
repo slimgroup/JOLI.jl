@@ -44,7 +44,7 @@ end
 export joCurvelet2D
 """
     joCurvelet2D(n1,n2
-                [DDT::DataType=Float64,RDT::DataType=Float64;
+                [;DDT=Float64,RDT=Float64,
                  nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
 2D Curvelet transform (wrapping) over fast dimensions
@@ -58,18 +58,20 @@ export joCurvelet2D
 - zero_finest - zero out finnest scales (defaults to false)
 
 # Examples
-- joCurvelet2D(32,32) - real transform
-- joCurvelet2D(32,32;real_crvlts=false) - complex transform
-- joCurvelet2D(32,32;all_crvlts=true) - real transform with curevelts at the finnest scales
-- joCurvelet2D(32,32;zero_finest=true) - real transform with zeros at the finnest scales
-- joCurvelet2D(32,32,Float64;real_crvlts=false) - complex transform with real 64-bit input for forward
-- joCurvelet2D(32,32,Float32,Float64;real_crvlts=false) - complex transform with just precision specification for curvelets
-- joCurvelet2D(32,32,Float32,Complex{Float64};real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
+- joCurvelet2D(32,32) - real transform (64-bit)
+- joCurvelet2D(32,32;real_crvlts=false) - complex transform (64-bit)
+- joCurvelet2D(32,32;all_crvlts=true) - real transform with curevelts at the finnest scales (64-bit)
+- joCurvelet2D(32,32;zero_finest=true) - real transform with zeros at the finnest scales (64-bit)
+- joCurvelet2D(32,32;DDT=Float64,real_crvlts=false) - complex transform with real 64-bit input for forward
+- joCurvelet2D(32,32;DDT=Float32,RDT=Float64,real_crvlts=false) - complex transform with just precision specification for curvelets
+- joCurvelet2D(32,32;DDT=Float32,RDT=Complex{Float64},real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
 
-Note: isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
+# Notes
+- if DDT:<Real for complex transform then imaginary part will be neglected for transpose/ctranspose
+- isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 """
-function joCurvelet2D(n1::Integer,n2::Integer,DDT::DataType=Float64,RDT::DataType=Float64;
+function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataType=Float64,
             nbscales::Integer=0,
             nbangles_coarse::Integer=16,
             all_crvlts::Bool=false,
