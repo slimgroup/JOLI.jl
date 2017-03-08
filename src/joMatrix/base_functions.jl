@@ -122,10 +122,10 @@ end
 # +(jo,num)
 function +{AEDT,ADDT,ARDT}(A::joMatrix{AEDT,ADDT,ARDT},b::AEDT)
     return joMatrix{AEDT,ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+b*joOnes(A.m,A.n,AEDT,ADDT)*v1,
-        v2->A.fop_T(v2)+b*joOnes(A.n,A.m,AEDT,ARDT)*v2,
-        v3->A.fop_CT(v3)+conj(b)*joOnes(A.n,A.m,AEDT,ARDT)*v3,
-        v4->A.fop_C(v4)+conj(b)*joOnes(A.m,A.n,AEDT,ADDT)*v4,
+        v1->A.fop(v1)+joConstants(A.m,A.n,b;EDT=AEDT,DDT=ADDT,RDT=ARDT)*v1,
+        v2->A.fop_T(v2)+joConstants(A.n,A.m,b;EDT=AEDT,DDT=ARDT,RDT=ADDT)*v2,
+        v3->A.fop_CT(v3)+joConstants(A.n,A.m,conj(b);EDT=AEDT,DDT=ARDT,RDT=ADDT)*v3,
+        v4->A.fop_C(v4)+joConstants(A.m,A.n,conj(b);EDT=AEDT,DDT=ADDT,RDT=ARDT)*v4,
         @NF, @NF, @NF, @NF
         )
 end
