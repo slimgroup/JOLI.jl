@@ -7,9 +7,9 @@ for t=1:T # start test loop
     a=rand(Complex{Float64},s[1,:]...)
     A=joMatrix(a)
     b=rand(Complex{Float64},s[2,:]...)
-    B=joMatrix(b,Complex{Float32},Complex{Float64})
+    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
     c=rand(Complex{Float64},s[3,:]...)
-    C=joMatrix(c,Complex{Float64},Complex{Float32})
+    C=joMatrix(c;DDT=Complex{Float64},RDT=Complex{Float32})
     k=kron(a,b,c)
     K=joKron(A,B,C)
     Km=K.m
