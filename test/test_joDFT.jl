@@ -6,8 +6,8 @@ for t=1:T # start test loop
     v1=rand(Complex{Float64},m)
     v2=rand(Complex{Float64},m,m)
     vv2=vec(v2)
-    A1=joDFT(m)
-    A2=joDFT(m,m)
+    A1=joDFT(m;DDT=Complex{Float64})
+    A2=joDFT(m,m;DDT=Complex{Float64})
 
     println("$tsname ($m,$m)")
     @testset "$m x $m" begin
