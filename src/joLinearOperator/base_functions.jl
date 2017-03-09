@@ -122,7 +122,7 @@ function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joLinearOperator{AEDT,CDT,ARDT},B::joLine
         v2->get(B.fop_T)(get(A.fop_T)(v2)),
         v3->get(B.fop_CT)(get(A.fop_CT)(v3)),
         v4->get(A.fop_C)(get(B.fop_C)(v4)),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joAbstractLinearOperator{AEDT,CDT,ARDT},B::joAbstractLinearOperator{BEDT,BDDT,CDT})
@@ -133,7 +133,7 @@ function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joAbstractLinearOperator{AEDT,CDT,ARDT},B
         v2->B.'*(A.'*v2),
         v3->B'*(A'*v3),
         v4->conj(A)*(conj(B)*v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 
@@ -181,7 +181,7 @@ function *{AEDT,ADDT,ARDT}(a::AEDT,A::joLinearOperator{AEDT,ADDT,ARDT}) # fix DD
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
         v4->conj(a)*A.fop_C(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 function *{AEDT,ADDT,ARDT}(a::AEDT,A::joAbstractLinearOperator{AEDT,ADDT,ARDT}) # fix DDT/RDT
@@ -190,7 +190,7 @@ function *{AEDT,ADDT,ARDT}(a::AEDT,A::joAbstractLinearOperator{AEDT,ADDT,ARDT}) 
         v2->a*A.'*v2,
         v3->conj(a)*A'*v3,
         v4->conj(a)*conj(A)*v4,
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 
@@ -254,7 +254,7 @@ function +{EDT,DDT,RDT}(A::joLinearOperator{EDT,DDT,RDT},B::joLinearOperator{EDT
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
         v4->A.fop_C(v4)+B.fop_C(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 function +{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT},B::joAbstractLinearOperator{EDT,DDT,RDT})
@@ -264,7 +264,7 @@ function +{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT},B::joAbstractLi
         v2->A.'*v2+B.'*v2,
         v3->A'*v3+B'*v3,
         v4->conj(A)*v4+conj(B)*v4,
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 
@@ -283,7 +283,7 @@ function +{AEDT,ADDT,ARDT}(A::joLinearOperator{AEDT,ADDT,ARDT},b::AEDT)
         v2->get(A.fop_T)(v2)+joConstants(A.n,A.m,b;EDT=AEDT,DDT=ARDT,RDT=ADDT)*v2,
         v3->get(A.fop_CT)(v3)+joConstants(A.n,A.m,conj(b);EDT=AEDT,DDT=ARDT,RDT=ADDT)*v3,
         v4->get(A.fop_C)(v4)+joConstants(A.m,A.n,conj(b);EDT=AEDT,DDT=ADDT,RDT=ARDT)*v4,
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 function +{AEDT,ADDT,ARDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},b::AEDT)
@@ -292,7 +292,7 @@ function +{AEDT,ADDT,ARDT}(A::joAbstractLinearOperator{AEDT,ADDT,ARDT},b::AEDT)
         v2->A.'*v2+joConstants(A.n,A.m,b;EDT=AEDT,DDT=ARDT,RDT=ADDT)*v2,
         v3->A'*v3+joConstants(A.n,A.m,conj(b);EDT=AEDT,DDT=ARDT,RDT=ADDT)*v3,
         v4->conj(A)*v4+joConstants(A.m,A.n,conj(b);EDT=AEDT,DDT=ADDT,RDT=ARDT)*v4,
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 

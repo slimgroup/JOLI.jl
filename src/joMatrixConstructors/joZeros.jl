@@ -8,6 +8,6 @@ joZeros(m::Integer,n::Integer;EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataT
         v2->(size(v2,2)>1 ? zeros(DDT,n,size(v2,2)) : zeros(EDT,n)),
         v3->(size(v3,2)>1 ? zeros(DDT,n,size(v3,2)) : zeros(EDT,n)),
         v4->(size(v4,2)>1 ? zeros(RDT,m,size(v4,2)) : zeros(EDT,m)),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 

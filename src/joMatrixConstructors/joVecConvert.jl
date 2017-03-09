@@ -7,7 +7,7 @@ joReal(m::Integer;CDP::DataType=Float64) =
         v2->complex(v2),
         v3->complex(v3),
         v4->real(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 joImag(m::Integer;CDP::DataType=Float64) =
     joMatrix{CDP,Complex{CDP},CDP}("joImag",m,m,
@@ -15,7 +15,7 @@ joImag(m::Integer;CDP::DataType=Float64) =
         v2->complex(zero(CDP),v2),
         v3->complex(zero(CDP),v3),
         v4->imag(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 joConj(m::Integer;CDT::DataType=Complex{Float64}) =
     joMatrix{CDT,CDT,CDT}("joConj",m,m,
@@ -23,7 +23,7 @@ joConj(m::Integer;CDT::DataType=Complex{Float64}) =
         v2->conj(v2),
         v3->conj(v3),
         v4->conj(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 joConvert(m::Integer;EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT)) =
     joMatrix{EDT,DDT,RDT}("joConvert",m,m,

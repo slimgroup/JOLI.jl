@@ -52,7 +52,7 @@ function *{AEDT,ARDT,BEDT,BDDT,CDT}(A::joMatrix{AEDT,CDT,ARDT},B::joMatrix{BEDT,
         v2->B.fop_T(A.fop_T(v2)),
         v3->B.fop_CT(A.fop_CT(v3)),
         v4->A.fop_C(B.fop_C(v4)),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 
@@ -81,7 +81,7 @@ function *{AEDT,ADDT,ARDT}(a::AEDT,A::joMatrix{AEDT,ADDT,ARDT})
         v2->a*A.fop_T(v2),
         v3->conj(a)*A.fop_CT(v3),
         v4->conj(a)*A.fop_C(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 
@@ -115,7 +115,7 @@ function +{EDT,DDT,RDT}(A::joMatrix{EDT,DDT,RDT},B::joMatrix{EDT,DDT,RDT})
         v2->A.fop_T(v2)+B.fop_T(v2),
         v3->A.fop_CT(v3)+B.fop_CT(v3),
         v4->A.fop_C(v4)+B.fop_C(v4),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 
@@ -126,7 +126,7 @@ function +{AEDT,ADDT,ARDT}(A::joMatrix{AEDT,ADDT,ARDT},b::AEDT)
         v2->A.fop_T(v2)+joConstants(A.n,A.m,b;EDT=AEDT,DDT=ARDT,RDT=ADDT)*v2,
         v3->A.fop_CT(v3)+joConstants(A.n,A.m,conj(b);EDT=AEDT,DDT=ARDT,RDT=ADDT)*v3,
         v4->A.fop_C(v4)+joConstants(A.m,A.n,conj(b);EDT=AEDT,DDT=ADDT,RDT=ARDT)*v4,
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 end
 

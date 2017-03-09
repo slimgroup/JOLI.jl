@@ -8,6 +8,6 @@ joConstants(m::Integer,n::Integer,a::Number;EDT::DataType=typeof(a),DDT::DataTyp
         v2->jo_convert(DDT,a*ones(eltype(v2),n,1)*sum(v2,1),false),
         v3->jo_convert(DDT,a*ones(eltype(v3),n,1)*sum(v3,1),false),
         v4->jo_convert(RDT,a*ones(eltype(v4),m,1)*sum(v4,1),false),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
 

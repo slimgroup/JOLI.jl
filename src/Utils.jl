@@ -9,23 +9,23 @@ end
 ############################################################
 ## macros ##################################################
 
-export @NF
+export @joNF
 
 """
 Nullable{Function} macro for null function
 
-    @NF
+    @joNF
 """
-macro NF()
+macro joNF()
     return :(Nullable{Function}())
 end
 
 """
 Nullable{Function} macro for given function
 
-    @NF ... | @NF(...)
+    @joNF ... | @joNF(...)
 """
-macro NF(fun::Expr)
+macro joNF(fun::Expr)
     return :(Nullable{Function}($fun))
 end
 

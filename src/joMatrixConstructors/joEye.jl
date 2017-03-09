@@ -18,7 +18,7 @@ joEye(m::Integer,n::Integer;EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataTyp
         v2->jo_convert(DDT,speye(eltype(v2),n,m)*v2,false),
         v3->jo_convert(DDT,speye(eltype(v3),n,m)*v3,false),
         v4->jo_convert(RDT,speye(eltype(v4),m,n)*v4,false),
-        @NF, @NF, @NF, @NF
+        @joNF, @joNF, @joNF, @joNF
         )
         #v5->speye(EDT,m,n)\v5, v6->speye(EDT,n,m)\v6, v7->speye(EDT,n,m)\v7, v8->speye(EDT,m,n)\v8
         #v5->speye(EDT,n,m)*v5, v6->speye(EDT,m,n)*v6, v7->speye(EDT,m,n)*v7, v8->speye(EDT,n,m)*v8

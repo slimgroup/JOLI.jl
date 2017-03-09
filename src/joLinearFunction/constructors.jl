@@ -47,7 +47,7 @@ joLinearFunctionFwdT(m::Integer,n::Integer,
             fop_T,
             v3->conj(fop_T(conj(v3))),
             v4->conj(fop(conj(v4))),
-            @NF, @NF, @NF, @NF
+            @joNF, @joNF, @joNF, @joNF
             )
 joLinearFunctionFwdCT(m::Integer,n::Integer,
     fop::Function,fop_CT::Function,
@@ -58,6 +58,6 @@ joLinearFunctionFwdCT(m::Integer,n::Integer,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,
             v4->conj(fop(conj(v4))),
-            @NF, @NF, @NF, @NF
+            @joNF, @joNF, @joNF, @joNF
             )
 
