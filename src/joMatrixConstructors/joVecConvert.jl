@@ -2,31 +2,31 @@
 
 export joReal, joImag, joConj, joConvert
 joReal(m::Integer;CDP::DataType=Float64) =
-    joMatrix{CDP,Complex{CDP},CDP}("joReal",m,m,
-        v1->real(v1),
-        v2->complex(v2),
-        v3->complex(v3),
-        v4->real(v4),
+    joMatrix{Complex{CDP},CDP}("joReal",m,m,
+        v1->jo_convert(CDP,real(v1),false),
+        v2->jo_convert(Complex{CDP},complex(v2),false),
+        v3->jo_convert(Complex{CDP},complex(v3),false),
+        v4->jo_convert(CDP,real(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
 joImag(m::Integer;CDP::DataType=Float64) =
-    joMatrix{CDP,Complex{CDP},CDP}("joImag",m,m,
-        v1->imag(v1),
-        v2->complex(zero(CDP),v2),
-        v3->complex(zero(CDP),v3),
-        v4->imag(v4),
+    joMatrix{Complex{CDP},CDP}("joImag",m,m,
+        v1->jo_convert(CDP,imag(v1),false),
+        v2->jo_convert(Complex{CDP},complex(zero(CDP),v2),false),
+        v3->jo_convert(Complex{CDP},complex(zero(CDP),v3),false),
+        v4->jo_convert(CDP,imag(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
 joConj(m::Integer;CDT::DataType=Complex{Float64}) =
-    joMatrix{CDT,CDT,CDT}("joConj",m,m,
-        v1->conj(v1),
-        v2->conj(v2),
-        v3->conj(v3),
-        v4->conj(v4),
+    joMatrix{CDT,CDT}("joConj",m,m,
+        v1->jo_convert(Complex{CDT},conj(v1),false),
+        v2->jo_convert(Complex{CDT},conj(v2),false),
+        v3->jo_convert(Complex{CDT},conj(v3),false),
+        v4->jo_convert(Complex{CDT},conj(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
-joConvert(m::Integer;EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT)) =
-    joMatrix{EDT,DDT,RDT}("joConvert",m,m,
+joConvert(m::Integer,DDT::DataType,RDT::DataType) =
+    joMatrix{DDT,RDT}("joConvert",m,m,
         v1->jo_convert(RDT,v1,false),
         v2->jo_convert(DDT,v2,false),
         v3->jo_convert(DDT,v3,false),

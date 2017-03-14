@@ -4,17 +4,17 @@
 joLinearFunctionAll(m::Integer,n::Integer,
     fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
     iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
-    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
+    DDT::DataType,RDT::DataType=DDT;
     name::String="joLinearFunctionAll") =
-        joLinearFunction{EDT,DDT,RDT}(name,m,n,
+        joLinearFunction{DDT,RDT}(name,m,n,
             fop,fop_T,fop_CT,fop_C,
             iop,iop_T,iop_CT,iop_C
             )
 joLinearFunctionT(m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
-    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
+    DDT::DataType,RDT::DataType=DDT;
     name::String="joLinearFunctionT") =
-        joLinearFunction{EDT,DDT,RDT}(name,m,n,
+        joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             fop_T,
             v3->conj(fop_T(conj(v3))),
@@ -26,9 +26,9 @@ joLinearFunctionT(m::Integer,n::Integer,
             )
 joLinearFunctionCT(m::Integer,n::Integer,
     fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
-    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
+    DDT::DataType,RDT::DataType=DDT;
     name::String="joLinearFunctionCT") =
-        joLinearFunction{EDT,DDT,RDT}(name,m,n,
+        joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,
@@ -40,9 +40,9 @@ joLinearFunctionCT(m::Integer,n::Integer,
             )
 joLinearFunctionFwdT(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
-    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
+    DDT::DataType,RDT::DataType=DDT;
     name::String="joLinearFunctionFwdT") =
-        joLinearFunction{EDT,DDT,RDT}(name,m,n,
+        joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             fop_T,
             v3->conj(fop_T(conj(v3))),
@@ -51,9 +51,9 @@ joLinearFunctionFwdT(m::Integer,n::Integer,
             )
 joLinearFunctionFwdCT(m::Integer,n::Integer,
     fop::Function,fop_CT::Function,
-    EDT::DataType,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT);
+    DDT::DataType,RDT::DataType=DDT;
     name::String="joLinearFunctionFwdCT") =
-        joLinearFunction{EDT,DDT,RDT}(name,m,n,
+        joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_CT(conj(v2))),
             fop_CT,

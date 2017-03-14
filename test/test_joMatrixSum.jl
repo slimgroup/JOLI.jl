@@ -1,5 +1,5 @@
 T=6
-tsname="joLinearOperator - Sum"
+tsname="joMatrix - Sum"
 @testset "$tsname" begin
 for t=1:T # start test loop
 
@@ -18,7 +18,7 @@ if t%2==1
     vm=rand(m)
     mvm=rand(m,2)
     A=joMatrix(a)
-    B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm))
+    B=joMatrix(b)
 else
     tname="loop $t for complex($m,$n)"
     a=rand(Complex{Float64},m,n)
@@ -27,12 +27,10 @@ else
     mvn=rand(Complex{Float64},n,2)
     vm=rand(Complex{Float64},m)
     mvm=rand(Complex{Float64},m,2)
-    # needed to be reversed in 0.5.1 (see below)
-    A=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm))
-    B=joMatrix(a)
+    A=joMatrix(a)
+    B=joMatrix(b)
 end
-# needed to be reversed in 0.5.1
-c=b+a
+c=a+b
 C=A+B
 
 println("$tsname $tname")

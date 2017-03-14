@@ -2,22 +2,17 @@
 # joAbstractOperator #######################################
 ############################################################
 
-export joAbstractOperator, joAbstractLinearOperator, joAbstractOperatorException
+export joAbstractOperator, joAbstractOperatorException
 
 ############################################################
 ## type definition
 
 abstract joAbstractOperator
-abstract joAbstractLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractOperator
-
-type joAbstractOperatorException <: Exception
-    msg :: String
-end
 
 ############################################################
 ## type exceptions
 
-type joAbstractLinearOperatorException <: Exception
+type joAbstractOperatorException <: Exception
     msg :: String
 end
 

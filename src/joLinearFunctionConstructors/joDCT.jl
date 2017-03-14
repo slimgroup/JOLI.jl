@@ -49,7 +49,7 @@ function joDCT(ms::Integer...;DDT::DataType=Float64,RDT::DataType=DDT)
         v2->apply_idct(ipf,v2,ms,DDT),
         v3->apply_idct(ipf,v3,ms,DDT),
         v4->apply_dct(pf,v4,ms,RDT),
-        DDT,DDT,RDT;
+        DDT,RDT;
         name="joDCT"
         )
 end

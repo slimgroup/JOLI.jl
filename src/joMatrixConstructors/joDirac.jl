@@ -1,8 +1,8 @@
 # identity operators: joDirac
 
 export joDirac
-joDirac(m::Integer;EDT::DataType=Float64,DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT)) =
-    joMatrix{EDT,DDT,RDT}("joDirac",m,m,
+joDirac(m::Integer;DDT::DataType=Float64,RDT::DataType=DDT) =
+    joMatrix{DDT,RDT}("joDirac",m,m,
         v1->jo_convert(RDT,v1,false),
         v2->jo_convert(DDT,v2,false),
         v3->jo_convert(DDT,v3,false),

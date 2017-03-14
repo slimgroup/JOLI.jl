@@ -1,7 +1,9 @@
 ############################################################
+# joAbstractLinearOperator #################################
 # joLinearOperator #########################################
 ############################################################
 
+export joAbstractLinearOperator, joAbstractLinearOperatorException
 export joLinearOperator, joLinearOperatorException
 
 ############################################################
@@ -14,7 +16,8 @@ export joLinearOperator, joLinearOperatorException
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-immutable joLinearOperator{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{EDT,DDT,RDT}
+abstract joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator
+immutable joLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -30,6 +33,10 @@ end
 
 ############################################################
 ## type exceptions
+
+type joAbstractLinearOperatorException <: Exception
+    msg :: String
+end
 
 type joLinearOperatorException <: Exception
     msg :: String

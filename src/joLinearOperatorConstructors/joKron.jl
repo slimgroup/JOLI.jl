@@ -7,7 +7,7 @@
 
 export joKron, joKronException
 
-immutable joKron{EDT,DDT,RDT} <: joAbstractLinearOperator{EDT,DDT,RDT}
+immutable joKron{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -29,14 +29,13 @@ function joKron(ops::joAbstractLinearOperator...)
     for i=1:l
         im1=max(i-1,1)
         reltype(ops[i])==deltype(ops[im1]) || throw(joKronException("domain/range mismatch for $i operator"))
-        e=promote_type(e,eltype(ops[i]))
         m*=ops[i].m
         push!(ms,ops[i].m)
         n*=ops[i].n
         push!(ns,ops[i].n)
         push!(kops,ops[i])
     end
-    return joKron{e,deltype(kops[l]),reltype(kops[1])}("joKron($l)",m,n,l,ms,ns,kops,false)
+    return joKron{deltype(kops[l]),reltype(kops[1])}("joKron($l)",m,n,l,ms,ns,kops,false)
 end
 
 type joKronException <: Exception
@@ -46,7 +45,7 @@ end
 ##########################
 ## overloaded Base methods
 
-function transpose{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
+function transpose{DDT,RDT}(A::joKron{DDT,RDT})
     m=A.n
     n=A.m
     l=A.l
@@ -56,9 +55,9 @@ function transpose{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
     for i=1:l
         push!(kops,A.fop[i].')
     end
-    return joKron{EDT,RDT,DDT}("("*A.name*".')",m,n,l,ms,ns,kops,!A.flip)
+    return joKron{RDT,DDT}("("*A.name*".')",m,n,l,ms,ns,kops,!A.flip)
 end
-function ctranspose{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
+function ctranspose{DDT,RDT}(A::joKron{DDT,RDT})
     m=A.n
     n=A.m
     l=A.l
@@ -68,9 +67,9 @@ function ctranspose{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
     for i=1:l
         push!(kops,A.fop[i]')
     end
-    return joKron{EDT,RDT,DDT}("("*A.name*"')",m,n,l,ms,ns,kops,!A.flip)
+    return joKron{RDT,DDT}("("*A.name*"')",m,n,l,ms,ns,kops,!A.flip)
 end
-function conj{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
+function conj{DDT,RDT}(A::joKron{DDT,RDT})
     m=A.m
     n=A.n
     l=A.l
@@ -80,10 +79,10 @@ function conj{EDT,DDT,RDT}(A::joKron{EDT,DDT,RDT})
     for i=1:l
         push!(kops,conj(A.fop[i]))
     end
-    return joKron{EDT,DDT,RDT}("(conj("*A.name*"))",m,n,l,ms,ns,kops,A.flip)
+    return joKron{DDT,RDT}("(conj("*A.name*"))",m,n,l,ms,ns,kops,A.flip)
 end
 
-function *{AEDT,ADDT,ARDT}(A::joKron{AEDT,ADDT,ARDT},v::AbstractVector{ADDT})
+function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT})
     size(A,2) == size(v,1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
     V=reshape(v,ksz...)

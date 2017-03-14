@@ -11,7 +11,7 @@ export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctio
 """
 
 """
-immutable joLinearFunction{EDT<:Number,DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{EDT,DDT,RDT}
+immutable joLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer

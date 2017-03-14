@@ -26,14 +26,13 @@ else
     vm=rand(Complex{Float64},m)
     mvm=rand(Complex{Float64},m,2)
 end
-A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(a))
-B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(b))
-afac=rand(eltype(A))
-mfac=rand(eltype(A))
+A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(vn),eltype(vm))
+B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm))
+afac=rand(eltype(a))
+mfac=rand(eltype(a))
 
 println("$tsname $tname")
     @testset "$tname A" begin
-        @test eltype(A)==eltype(a)
         @test size(A)==size(a)
         @test length(A)==length(a)
         @test full(A)==a

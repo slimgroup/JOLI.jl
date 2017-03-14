@@ -2,16 +2,16 @@
 ## joLinearOperator - extra functions
 
 # double(jo)
-double{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT}) = A*eye(DDT,A.n)
+double{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
 
 # iscomplex(jo)
-iscomplex{EDT,DDT,RDT}(A :: joAbstractLinearOperator{EDT,DDT,RDT}) = !(EDT <: Real)
+iscomplex{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = !(DDT<:Real && RDT<:Real)
 
 # isinvertible(jo)
-isinvertible{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT}) = !isnull(A.iop)
+isinvertible{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = !isnull(A.iop)
 
-# islinear(jo) # fix,DDT,RDT
-function islinear{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT};tol::Float64=0.,verbose::Bool=false)
+# islinear(jo)
+function islinear{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT};tol::Float64=0.,verbose::Bool=false)
     x=rand(DDT,A.n)
     y=rand(DDT,A.n)
     Axy=A*(x+y)
@@ -25,8 +25,8 @@ function islinear{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT};tol::Flo
     return test,mytol,dif,rer,rto
 end
 
-# isadjoint(jo) # fix,DDT,RDT
-function isadjoint{EDT,DDT,RDT}(A::joAbstractLinearOperator{EDT,DDT,RDT};tol::Float64=0.,ctmult::Number=1.,verbose::Bool=false)
+# isadjoint(jo)
+function isadjoint{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT};tol::Float64=0.,ctmult::Number=1.,verbose::Bool=false)
     x=rand(DDT,A.n)
     y=A*rand(DDT,A.n)
     Axy=dot(A*x,y)

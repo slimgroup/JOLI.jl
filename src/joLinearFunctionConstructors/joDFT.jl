@@ -86,7 +86,7 @@ function joDFT(ms::Integer...;centered::Bool=false,DDT::DataType=Float64,RDT::Da
             v2->apply_ifft_centered(ipf,v2,ms,DDT),
             v3->apply_ifft_centered(ipf,v3,ms,DDT),
             v4->apply_fft_centered(pf,v4,ms,RDT),
-            RDT,DDT,RDT;
+            DDT,RDT;
             name="joDFTc"
             )
     else
@@ -95,7 +95,7 @@ function joDFT(ms::Integer...;centered::Bool=false,DDT::DataType=Float64,RDT::Da
             v2->apply_ifft(ipf,v2,ms,DDT),
             v3->apply_ifft(ipf,v3,ms,DDT),
             v4->apply_fft(pf,v4,ms,RDT),
-            RDT,DDT,RDT;
+            DDT,RDT;
             name="joDFT"
             )
     end

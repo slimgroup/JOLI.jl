@@ -28,12 +28,11 @@ else
 end
 A=joMatrix(a)
 B=joMatrix(b)
-afac=rand(eltype(A))
-mfac=rand(eltype(A))
+afac=rand(eltype(a))
+mfac=rand(eltype(a))
 
 println("$tsname $tname")
     @testset "$tname A" begin
-        @test eltype(A)==eltype(a)
         @test size(A)==size(a)
         @test length(A)==length(a)
         @test full(A)==a

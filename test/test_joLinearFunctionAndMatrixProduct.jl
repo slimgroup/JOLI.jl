@@ -18,7 +18,7 @@ if t%2==1
     vm=rand(m)
     mvm=rand(m,2)
     A=joMatrix(a)
-    B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(b))
+    B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm))
 else
     tname="loop $t for complex($m,$n)"
     a=rand(Complex{Float64},m,n)
@@ -27,7 +27,7 @@ else
     mvn=rand(Complex{Float64},n,2)
     vm=rand(Complex{Float64},m)
     mvm=rand(Complex{Float64},m,2)
-    A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(a))
+    A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(vn),eltype(vm))
     B=joMatrix(b)
 end
 c=a*b'
@@ -35,7 +35,6 @@ C=A*B'
 
 println("$tsname $tname")
     @testset "$tname A*B" begin
-        @test eltype(C)==eltype(c)
         @test size(C)==size(c)
         @test length(C)==length(c)
         @test norm(full(C)-c)<joTol

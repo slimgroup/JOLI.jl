@@ -93,14 +93,12 @@ function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataTyp
     rctl=convert(Cint,real_crvlts)
     zfin=convert(Cint,zero_finest)
     if real_crvlts
-        eltp=Cdouble
         dtp=DDT
         rtp=RDT
         apply_fdct2Dwrap=apply_fdct2Dwrap_real
         apply_ifdct2Dwrap=apply_ifdct2Dwrap_real
         myname="joCurvelt2DwrapReal"
     else
-        eltp=Complex{Cdouble}
         dtp=DDT
         rtp= RDT<:Complex ? RDT : Complex{RDT}
         apply_fdct2Dwrap=apply_fdct2Dwrap_cplx
@@ -121,7 +119,7 @@ function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataTyp
         v2->apply_ifdct2Dwrap(v2,n1,n2,m,dtp,nbs,nbac,actl,rctl,zfin),
         v3->apply_ifdct2Dwrap(v3,n1,n2,m,dtp,nbs,nbac,actl,rctl,zfin),
         v4->apply_fdct2Dwrap(v4,n1,n2,m,rtp,nbs,nbac,actl,rctl,zfin),
-        eltp,dtp,rtp;
+        dtp,rtp;
         name=myname
         )
 end

@@ -33,7 +33,6 @@ C=A*B'
 
 println("$tsname $tname")
     @testset "$tname A*B" begin
-        @test eltype(C)==eltype(c)
         @test size(C)==size(c)
         @test length(C)==length(c)
         @test norm(full(C)-c)<joTol
