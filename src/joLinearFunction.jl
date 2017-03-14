@@ -9,7 +9,7 @@ export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctio
 ## type definition
 
 """
-joMatrix type
+joLinearFunction type
 
 # TYPE PARAMETERS
 - DDT::DataType : domain DataType
