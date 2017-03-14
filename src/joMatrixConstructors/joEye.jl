@@ -13,7 +13,7 @@ joEye(m::Integer;DDT::DataType=Float64,RDT::DataType=DDT) =
         v8->jo_convert(DDT,v8,false)
         )
 joEye(m::Integer,n::Integer;DDT::DataType=Float64,RDT::DataType=DDT) =
-    joMatrix{EDT,DDT,DDT}("joEye",m,n,
+    joMatrix{DDT,DDT}("joEye",m,n,
         v1->jo_convert(RDT,speye(eltype(v1),m,n)*v1,false),
         v2->jo_convert(DDT,speye(eltype(v2),n,m)*v2,false),
         v3->jo_convert(DDT,speye(eltype(v3),n,m)*v3,false),
