@@ -10,6 +10,10 @@ export joMatrix, joMatrixException
 """
 joMatrix type
 
+# TYPE PARAMETERS
+- DDT::DataType : domain DataType
+- RDT::DataType : range DataType
+
 # FIELDS
 - name::String : given name
 - m::Integer : # of rows

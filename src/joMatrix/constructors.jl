@@ -9,6 +9,8 @@ joMatrix outer constructor
              RDT::DataType=promote_type(eltype(array),DDT),
              name::String="joMatrix")
 
+Look up argument names in help to joMatrix.
+
 # Example
 - joMatrix(rand(4,3)) # implicit domain and range
 - joMatrix(rand(4,3);DDT=Float32) # implicit range
