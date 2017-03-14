@@ -136,24 +136,26 @@ function *{ARDT,BDDT,CDT}(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLin
 end
 
 # *(jo,mvec)
-function *{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix DDT/RDT
+function *{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV=zeros(ARDT,A.m,size(mv,2))
     for i=1:size(mv,2)
-        MV[:,i]=A.fop(mv[:,i])
+        V=A.fop(mv[:,i])
+        i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+        MV[:,i]=V
     end
-    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
-function *{ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT}) # fix DDT/RDT
+function *{ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     size(A,2) == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV=zeros(ARDT,size(A,1),size(mv,2))
     for i=1:size(mv,2)
-        MV[:,i]=A*mv[:,i]
+        V=A*mv[:,i]
+        i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+        MV[:,i]=V
     end
-    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 
@@ -171,7 +173,7 @@ end
 # *(vec,jo)
 
 # *(num,jo)
-function *{ADDT,ARDT}(a::Number,A::joLinearOperator{ADDT,ARDT}) # fix DDT/RDT
+function *{ADDT,ARDT}(a::Number,A::joLinearOperator{ADDT,ARDT})
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->jo_convert(ARDT,a*A.fop(v1),false),
         v2->jo_convert(ADDT,a*A.fop_T(v2),false),
@@ -180,7 +182,7 @@ function *{ADDT,ARDT}(a::Number,A::joLinearOperator{ADDT,ARDT}) # fix DDT/RDT
         @joNF, @joNF, @joNF, @joNF
         )
 end
-function *{ADDT,ARDT}(a::Number,A::joAbstractLinearOperator{ADDT,ARDT}) # fix DDT/RDT
+function *{ADDT,ARDT}(a::Number,A::joAbstractLinearOperator{ADDT,ARDT})
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->jo_convert(ARDT,a*A*v1,false),
         v2->jo_convert(ADDT,a*A.'*v2,false),
