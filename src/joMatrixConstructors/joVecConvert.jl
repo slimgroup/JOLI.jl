@@ -13,16 +13,16 @@ joImag(m::Integer;CDP::DataType=Float64) =
     joMatrix{Complex{CDP},CDP}("joImag",m,m,
         v1->jo_convert(CDP,imag(v1),false),
         v2->jo_convert(Complex{CDP},complex(zero(CDP),v2),false),
-        v3->jo_convert(Complex{CDP},complex(zero(CDP),v3),false),
-        v4->jo_convert(CDP,imag(v4),false),
+        v3->jo_convert(Complex{CDP},complex(zero(CDP),-v3),false),
+        v4->jo_convert(CDP,-imag(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
-joConj(m::Integer;CDT::DataType=Complex{Float64}) =
-    joMatrix{CDT,CDT}("joConj",m,m,
-        v1->jo_convert(Complex{CDT},conj(v1),false),
-        v2->jo_convert(Complex{CDT},conj(v2),false),
-        v3->jo_convert(Complex{CDT},conj(v3),false),
-        v4->jo_convert(Complex{CDT},conj(v4),false),
+joConj(m::Integer;CDP::DataType=Float64) =
+    joMatrix{Complex{CDP},Complex{CDP}}("joConj",m,m,
+        v1->jo_convert(Complex{CDP},conj(v1),false),
+        v2->jo_convert(Complex{CDP},conj(v2),false),
+        v3->jo_convert(Complex{CDP},conj(v3),false),
+        v4->jo_convert(Complex{CDP},conj(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
 joConvert(m::Integer,DDT::DataType,RDT::DataType) =
