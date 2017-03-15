@@ -1,4 +1,12 @@
-T=3
+try
+    h=Base.Libdl.dlopen(:libdfdct_wrapping)
+    T=3
+    Base.Libdl.dlclose(h)
+catch
+    T=0
+    warn("Skipping Curvelet tests - libdfdct_wrapping not found")
+end
+
 tsname="joCurvelet2D"
 @testset "$tsname" begin
 for t=1:T # start test loop
