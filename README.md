@@ -4,3 +4,13 @@ Julia framework for constructing matrix-free linear operators
 with explicite domain/range type control
 and applying them in basic algebraic matrix-vector operations.
 
+## INSTALLATION
+
+From julia prompt run the following if you do not have GitHub account
+
+    Pkg.clone(“https://github.com/slimgroup/JOLI.jl")
+
+or with GitHub account (and SSH keys registared)
+
+    Pkg.clone("git@github.com:slimgroup/JOLI.jl.git")
+
