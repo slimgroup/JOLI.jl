@@ -22,6 +22,10 @@ for t=1:T # start test loop
         @test isadjoint(Awc)[1]
         @test isadjoint(Acr)[1]
         @test isadjoint(Acc)[1]
+        @test islinear(Awr)[1]
+        @test islinear(Awc)[1]
+        @test islinear(Acr)[1]
+        @test islinear(Acc)[1]
     end
     
 end # end test loop
