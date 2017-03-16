@@ -16,4 +16,4 @@ or with GitHub account (and SSH keys registared)
 
 ## Examples (to be extended)
 
-Check [joDCT](src/joLinearFunctionConstructors/joDCT.jl) for an example of how to build your own operator.
+Check [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl) for an example of how to build your own operator.
