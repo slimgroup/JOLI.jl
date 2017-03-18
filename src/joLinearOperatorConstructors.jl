@@ -4,3 +4,7 @@
 
 # joKron
 include("joLinearOperatorConstructors/joKron.jl")
+
+# joBlockDiag
+include("joLinearOperatorConstructors/joBlockDiag.jl")
+

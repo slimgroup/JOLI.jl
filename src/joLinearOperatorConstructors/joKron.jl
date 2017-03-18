@@ -51,7 +51,7 @@ Kronecker product
 
 # Notes
 - the domain and range types of joKron are equal respectively to domain type of rightmost operator and range type of leftmost operator
-- all operators in the chain have to have consistent passing domain/range types, i.e. domain type of operator on the left have to be the same as range type of operator on the right
+- all operators in the chain must have consistent passing domain/range types, i.e. domain type of operator on the left have to be the same as range type of operator on the right
 
 """
 function joKron(ops::joAbstractLinearOperator...)
@@ -83,7 +83,7 @@ function joKron(ops::joAbstractLinearOperator...)
         push!(fops_C,conj(ops[i]))
     end
     return joKron{deltype(fops[l]),reltype(fops[1])}("joKron($l)",m,n,l,ms,ns,false,
-    fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
+                 fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
 ############################
