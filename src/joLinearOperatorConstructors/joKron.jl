@@ -33,7 +33,7 @@ type joKronException <: Exception
 end
 
 ############################################################
-## joLinearOperator - outer constructors
+## outer constructors
 
 """
     joKron(ops::joAbstractLinearOperator...)
@@ -72,7 +72,7 @@ function joKron(ops::joAbstractLinearOperator...)
     iops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
         im1=max(i-1,1)
-        reltype(ops[i])==deltype(ops[im1]) || throw(joKronException("domain/range mismatch for $i operator"))
+        reltype(ops[i])==deltype(ops[im1]) || throw(joKronException("domain/range type mismatch for $i operator"))
         m*=ops[i].m
         push!(ms,ops[i].m)
         n*=ops[i].n
