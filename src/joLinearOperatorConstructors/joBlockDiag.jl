@@ -1,5 +1,5 @@
 ############################################################
-# joBlockDiag ###################################################
+# joBlockDiag ##############################################
 ############################################################
 
 ##################
@@ -37,7 +37,7 @@ end
 """
     joBlockDiag(ops::joAbstractLinearOperator...)
 
-BlockDiagecker product
+Block-diagonal operator
 
 # Example
     a=rand(Complex{Float64},4,4);
@@ -46,7 +46,7 @@ BlockDiagecker product
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
     c=rand(Complex{Float64},6,6);
     C=joMatrix(c;DDT=Complex{Float62},RDT=Complex{Float64},name="C")
-    K=joBlockDiag(A,B,C)
+    BD=joBlockDiag(A,B,C)
 
 # Notes
 - all given operators must have same domain/range types
