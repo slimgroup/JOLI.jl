@@ -56,7 +56,6 @@ Kronecker product
 """
 function joKron(ops::joAbstractLinearOperator...)
     isempty(ops) && throw(joKronException("empty argument list"))
-    e=eltype(ops[1])
     m=1
     n=1
     l=length(ops)

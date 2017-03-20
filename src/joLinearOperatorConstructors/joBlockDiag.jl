@@ -35,30 +35,33 @@ end
 ## outer constructors
 
 """
-    joBlockDiag(ops::joAbstractLinearOperator...)
+    joBlockDiag(ops::joAbstractLinearOperator...;weights::AbstractVector)
 
-Block-diagonal operator
+Block-diagonal operator composed from diffrent square JOLI operators
 
 # Example
     a=rand(Complex{Float64},4,4);
+    w=rand(Complex{Float64},3)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
     b=rand(Complex{Float64},8,8);
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
     c=rand(Complex{Float64},6,6);
     C=joMatrix(c;DDT=Complex{Float62},RDT=Complex{Float64},name="C")
-    BD=joBlockDiag(A,B,C)
+    BD=joBlockDiag(A,B,C) # basic block diagonal
+    BD=joBlockDiag(A,B,C;weights=w) # weighted block diagonal
 
 # Notes
 - all given operators must have same domain/range types
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 
 """
-function joBlockDiag(ops::joAbstractLinearOperator...)
+function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;weights::AbstractVector{WDT}=zeros(0))
     isempty(ops) && throw(joBlockDiagException("empty argument list"))
-    e=eltype(ops[1])
     m=0
     n=0
     l=length(ops)
+    (length(weights)==l || length(weights)==0) || throw(joBlockDiagException("lenght of weights vector does not match number of operators"))
+    weighted=(length(weights)==l)
     ms=Vector{Integer}(0)
     ns=Vector{Integer}(0)
     fops=Vector{joAbstractLinearOperator}(0)
@@ -77,12 +80,70 @@ function joBlockDiag(ops::joAbstractLinearOperator...)
         push!(ms,ops[i].m)
         n+=ops[i].n
         push!(ns,ops[i].n)
-        push!(fops,ops[i])
-        push!(fops_T,ops[i].')
-        push!(fops_CT,ops[i]')
-        push!(fops_C,conj(ops[i]))
+        if weighted
+            push!(fops,weights[i]*ops[i])
+            push!(fops_T,weights[i]*ops[i].')
+            push!(fops_CT,conj(weights[i])*ops[i]')
+            push!(fops_C,conj(weights[i])*conj(ops[i]))
+        else
+            push!(fops,ops[i])
+            push!(fops_T,ops[i].')
+            push!(fops_CT,ops[i]')
+            push!(fops_C,conj(ops[i]))
+        end
     end
     return joBlockDiag{deltype(fops[l]),reltype(fops[1])}("joBlockDiag($l)",m,n,l,ms,ns,
+                      fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
+end
+"""
+    joBlockDiag(l::Integer,op::joAbstractLinearOperator;weights::AbstractVector)
+
+Block-diagonal operator composed from l-times replicated square JOLI operator
+
+# Example
+    a=rand(Complex{Float64},4,4);
+    w=rand(Complex{Float64},3)
+    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
+    BD=joBlockDiag(3,A) # basic block diagonal
+    BD=joBlockDiag(3,A;weights=w) # weighted block diagonal
+
+# Notes
+- all given operators must have same domain/range types
+- the domain/range types of joBlockDiag are equal to domain/range types of the given operators
+
+"""
+function joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;weights::AbstractVector{WDT}=zeros(0))
+    op.m==op.n || throw(joBlockDiagException("non-square operator"))
+    m=l*op.m
+    n=l*op.n
+    (length(weights)==l || length(weights)==0) || throw(joBlockDiagException("lenght of weights vector does not match number of operators"))
+    weighted=(length(weights)==l)
+    ms=Vector{Integer}(0)
+    ns=Vector{Integer}(0)
+    fops=Vector{joAbstractLinearOperator}(0)
+    fops_T=Vector{joAbstractLinearOperator}(0)
+    fops_CT=Vector{joAbstractLinearOperator}(0)
+    fops_C=Vector{joAbstractLinearOperator}(0)
+    iops=Vector{joAbstractLinearOperator}(0)
+    iops_T=Vector{joAbstractLinearOperator}(0)
+    iops_CT=Vector{joAbstractLinearOperator}(0)
+    iops_C=Vector{joAbstractLinearOperator}(0)
+    for i=1:l
+        push!(ms,op.m)
+        push!(ns,op.n)
+        if weighted
+            push!(fops,weights[i]*op)
+            push!(fops_T,weights[i]*op.')
+            push!(fops_CT,conj(weights[i])*op')
+            push!(fops_C,conj(weights[i])*conj(op))
+        else
+            push!(fops,op)
+            push!(fops_T,op.')
+            push!(fops_CT,op')
+            push!(fops_C,conj(op))
+        end
+    end
+    return joBlockDiag{deltype(op),reltype(op)}("joBlockDiag($l)",m,n,l,ms,ns,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
