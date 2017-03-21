@@ -17,7 +17,7 @@ show(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 showall(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # display(jo)
-display(A::joAbstractLinearOperator) = show(A)
+display(A::joAbstractLinearOperator) = showall(A)
 
 # size(jo)
 size(A::joAbstractLinearOperator) = A.m,A.n

@@ -14,6 +14,7 @@ immutable joBlockDiag{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
     l::Integer
     ms::Vector{Integer}
     ns::Vector{Integer}
+    ws::Vector{Number}
     fop::Vector{joAbstractLinearOperator}
     fop_T::Vector{joAbstractLinearOperator}
     fop_CT::Vector{joAbstractLinearOperator}
@@ -92,7 +93,7 @@ function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;weights::Abst
             push!(fops_C,conj(ops[i]))
         end
     end
-    return joBlockDiag{deltype(fops[l]),reltype(fops[1])}("joBlockDiag($l)",m,n,l,ms,ns,
+    return joBlockDiag{deltype(fops[l]),reltype(fops[1])}("joBlockDiag($l)",m,n,l,ms,ns,weights,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 """
@@ -143,31 +144,46 @@ function joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;weight
             push!(fops_C,conj(op))
         end
     end
-    return joBlockDiag{deltype(op),reltype(op)}("joBlockDiag($l)",m,n,l,ms,ns,
+    return joBlockDiag{deltype(op),reltype(op)}("joBlockDiag($l)",m,n,l,ms,ns,weights,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
 ############################
 ## overloaded Base functions
 
+# showall(jo)
+function showall(A::joBlockDiag)
+    println("# joBlockDiag")
+    println("-     name: ",A.name)
+    println("-     type: ",typeof(A))
+    println("-     size: ",size(A))
+    println("- # of ops: ",A.l)
+    println("-  m-sizes: ",A.ms)
+    println("-  n-sizes: ",A.ns)
+    println("- weigthts: ",A.ws)
+    for i=1:A.l
+    println("*     op $i: ",(A.fop[i].name,typeof(A.fop[i]),A.fop[i].m,A.fop[i].n))
+    end
+end
+
 # conj(jo)
 conj{DDT,RDT}(A::joBlockDiag{DDT,RDT}) =
     joBlockDiag{DDT,RDT}("(conj("*A.name*"))",
-        A.m,A.n,A.l,A.ms,A.ns,
+        A.m,A.n,A.l,A.ms,A.ns,A.ws,
         A.fop_C,A.fop_CT,A.fop_T,A.fop,
         A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 # transpose(jo)
 transpose{DDT,RDT}(A::joBlockDiag{DDT,RDT}) =
     joBlockDiag{RDT,DDT}("("*A.name*".')",
-        A.n,A.m,A.l,A.ns,A.ms,
+        A.n,A.m,A.l,A.ns,A.ms,A.ws,
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # ctranspose(jo)
 ctranspose{DDT,RDT}(A::joBlockDiag{DDT,RDT}) =
     joBlockDiag{RDT,DDT}("("*A.name*"')",
-        A.n,A.m,A.l,A.ns,A.ms,
+        A.n,A.m,A.l,A.ns,A.ms,A.ws,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,
         A.iop_CT,A.iop_C,A.iop,A.iop_T)
 

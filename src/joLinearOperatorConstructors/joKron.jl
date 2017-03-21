@@ -88,6 +88,21 @@ end
 ############################
 ## overloaded Base functions
 
+# showall(jo)
+function showall(A::joKron)
+    println("# joKron")
+    println("-     name: ",A.name)
+    println("-     type: ",typeof(A))
+    println("-     size: ",size(A))
+    println("- # of ops: ",A.l)
+    println("-  m-sizes: ",A.ms)
+    println("-  n-sizes: ",A.ns)
+    println("-  flipped: ",A.flip)
+    for i=1:A.l
+    println("*     op $i: ",(A.fop[i].name,typeof(A.fop[i]),A.fop[i].m,A.fop[i].n))
+    end
+end
+
 # conj(jo)
 conj{DDT,RDT}(A::joKron{DDT,RDT}) =
     joKron{DDT,RDT}("(conj("*A.name*"))",
