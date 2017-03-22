@@ -17,7 +17,7 @@ import Base.transpose, Base.ctranspose
 import Base.isreal, Base.issymmetric, Base.ishermitian
 import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
-import Base.hcat, Base.vcat
+import Base.hcat, Base.vcat, Base.hvcat
 
 # extra exported methods
 export deltype, reltype

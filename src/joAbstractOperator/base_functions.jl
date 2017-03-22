@@ -267,3 +267,7 @@ hcat(ops :: joAbstractOperator...)  = throw(joAbstractOperatorException("hcat(jo
 ## overloaded Base vcat(...jo...)
 vcat(ops :: joAbstractOperator...)  = throw(joAbstractOperatorException("vcat(jo...).' not implemented"))
 
+############################################################
+## overloaded Base hvcat(...jo...)
+hvcat(ops :: joAbstractOperator...)  = throw(joAbstractOperatorException("hvcat(jo...).' not implemented"))
+
