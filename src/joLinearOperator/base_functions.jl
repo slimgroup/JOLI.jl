@@ -400,7 +400,13 @@ end
 
 ############################################################
 ## overloaded Base hcat(...jo...)
+hcat(ops::joAbstractLinearOperator...) = throw(joLinearOperatorException("hcat(jo...).' not implemented"))
 
 ############################################################
 ## overloaded Base vcat(...jo...)
+vcat(ops::joAbstractLinearOperator...) = throw(joLinearOperatorException("vcat(jo...).' not implemented"))
+
+############################################################
+## overloaded Base hvcat(...jo...)
+hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = throw(joLinearOperatorException("hvcat(jo...).' not implemented"))
 

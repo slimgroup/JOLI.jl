@@ -113,7 +113,7 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 ## overloaded Base +(...jo...)
 
 # +(jo)
-+(A::joAbstractOperator)  = throw(joAbstractOperatorException("+(jo) not implemented"))
++(A::joAbstractOperator) = throw(joAbstractOperatorException("+(jo) not implemented"))
 
 # +(jo,jo)
 +(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("+(jo,jo) not implemented"))
@@ -134,7 +134,7 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 +(A::joAbstractOperator,b) = throw(joAbstractOperatorException("+(jo,any) not implemented"))
 
 # +(num,jo)
-+(b,A::joAbstractOperator)  = throw(joAbstractOperatorException("+(any,jo) not implemented"))
++(b,A::joAbstractOperator) = throw(joAbstractOperatorException("+(any,jo) not implemented"))
 
 ############################################################
 ## overloaded Base -(...jo...)
@@ -143,7 +143,7 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 -(A::joAbstractOperator) = throw(joAbstractOperatorException("-(jo) not implemented"))
 
 # -(jo,jo)
--(A::joAbstractOperator,B::joAbstractOperator)  = throw(joAbstractOperatorException("-(jo,jo) not implemented"))
+-(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("-(jo,jo) not implemented"))
 
 # -(jo,mvec)
 -(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("-(jo,mvec) not implemented"))
@@ -158,10 +158,10 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 -(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("-(vec,jo) not implemented"))
 
 # -(jo,num)
--(A::joAbstractOperator,b)  = throw(joAbstractOperatorException("-(jo,any) not implemented"))
+-(A::joAbstractOperator,b) = throw(joAbstractOperatorException("-(jo,any) not implemented"))
 
 # -(num,jo)
--(b,A::joAbstractOperator)  = throw(joAbstractOperatorException("-(any,jo).' not implemented"))
+-(b,A::joAbstractOperator) = throw(joAbstractOperatorException("-(any,jo).' not implemented"))
 
 ############################################################
 ## overloaded Base .*(...jo...)
@@ -233,13 +233,13 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 .+(A::joAbstractOperator,b) = throw(joAbstractOperatorException(".+(jo,any) not implemented"))
 
 # .+(num,jo)
-.+(b,A::joAbstractOperator)  = throw(joAbstractOperatorException(".+(any,jo) not implemented"))
+.+(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(any,jo) not implemented"))
 
 ############################################################
 ## overloaded Base .-(...jo...)
 
 # .-(jo,jo)
-.-(A::joAbstractOperator,B::joAbstractOperator)  = throw(joAbstractOperatorException(".-(jo,jo) not implemented"))
+.-(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".-(jo,jo) not implemented"))
 
 # .-(jo,mvec)
 .-(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".-(jo,mvec) not implemented"))
@@ -254,20 +254,20 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 .-(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(vec,jo) not implemented"))
 
 # .-(jo,num)
-.-(A::joAbstractOperator,b)  = throw(joAbstractOperatorException(".-(jo,any) not implemented"))
+.-(A::joAbstractOperator,b) = throw(joAbstractOperatorException(".-(jo,any) not implemented"))
 
 # .-(num,jo)
-.-(b,A::joAbstractOperator)  = throw(joAbstractOperatorException(".-(any,jo).' not implemented"))
+.-(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(any,jo).' not implemented"))
 
 ############################################################
 ## overloaded Base hcat(...jo...)
-hcat(ops :: joAbstractOperator...)  = throw(joAbstractOperatorException("hcat(jo...).' not implemented"))
+hcat(ops::joAbstractOperator...) = throw(joAbstractOperatorException("hcat(jo...).' not implemented"))
 
 ############################################################
 ## overloaded Base vcat(...jo...)
-vcat(ops :: joAbstractOperator...)  = throw(joAbstractOperatorException("vcat(jo...).' not implemented"))
+vcat(ops::joAbstractOperator...) = throw(joAbstractOperatorException("vcat(jo...).' not implemented"))
 
 ############################################################
 ## overloaded Base hvcat(...jo...)
-hvcat(ops :: joAbstractOperator...)  = throw(joAbstractOperatorException("hvcat(jo...).' not implemented"))
+hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractOperator...) = throw(joAbstractOperatorException("hvcat(jo...).' not implemented"))
 
