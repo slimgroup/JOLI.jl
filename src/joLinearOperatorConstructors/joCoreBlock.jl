@@ -38,7 +38,7 @@ end
 ## outer constructors
 
 """
-    joCoreBlock(ops::joAbstractLinearOperator...;moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector)
+    joCoreBlock(ops::joAbstractLinearOperator...;moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector,name::String)
 
 Universal (Core) block operator composed from different JOLI operators
 
@@ -62,7 +62,7 @@ Universal (Core) block operator composed from different JOLI operators
 
 """
 function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
-           #moffsets::AbstractVector{MNDT}=zeros(Integer,0),noffsets::AbstractVector{MNDT}=zeros(Integer,0),weights::AbstractVector{WDT}=zeros(0))
+           #moffsets::AbstractVector{MNDT}=zeros(Integer,0),noffsets::AbstractVector{MNDT}=zeros(Integer,0),weights::AbstractVector{WDT}=zeros(0),name::String="joCoreBlock")
     isempty(ops) && throw(joCoreBlockException("empty argument list"))
     mykws=Dict(kwargs[i][1]=>kwargs[i][2] for i in 1:length(kwargs))
     mo=Base.deepcopy(get(mykws, :moffsets, zeros(Int,0)))
@@ -73,6 +73,8 @@ function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
     eltype(no)<:Integer || throw(joCoreBlockException("noffsets vector must have integer elements"))
     ws=Base.deepcopy(get(mykws, :weights, zeros(0)))
     typeof(ws)<:AbstractVector || throw(joCoreBlockException("weights must be a vector"))
+    name=get(mykws, :name, "joCoreBlock")
+    typeof(name)<:String || throw(joCoreBlockException("name must be a string"))
     l=length(ops)
     ms=Vector{Integer}(0)
     ns=Vector{Integer}(0)
@@ -130,7 +132,7 @@ function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
             push!(fops_C,conj(ops[i]))
         end
     end
-    return joCoreBlock{deltype(fops[l]),reltype(fops[1])}("joCoreBlock($l)",m,n,l,ms,ns,mo,no,ws,
+    return joCoreBlock{deltype(fops[l]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
