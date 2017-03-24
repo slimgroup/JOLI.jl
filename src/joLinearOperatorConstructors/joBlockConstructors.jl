@@ -38,7 +38,7 @@ end
 """
     joBlockDiag(ops::joAbstractLinearOperator...;weights::AbstractVector)
 
-Block-diagonal operator composed from diffrent square JOLI operators
+Block-diagonal operator composed from different square JOLI operators
 
 # Example
     a=rand(Complex{Float64},4,4);

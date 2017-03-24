@@ -5,9 +5,8 @@
 # joKron
 include("joLinearOperatorConstructors/joKron.jl")
 
-# joBlockDiag
-include("joLinearOperatorConstructors/joBlockDiag.jl")
-
-# joBlock
-include("joLinearOperatorConstructors/joBlock.jl")
+# joCoreBlock
+include("joLinearOperatorConstructors/joCoreBlock.jl")
+# joCoreBlock derivatives: joBlock joBlockDiag joDict joStack
+include("joLinearOperatorConstructors/joBlockConstructors.jl")
 

@@ -1,13 +1,13 @@
 ############################################################
-# joBlock ##############################################
+# joCoreBlock ##############################################
 ############################################################
 
 ##################
 ## type definition
 
-export joBlock, joBlockException
+export joCoreBlock, joCoreBlockException
 
-immutable joBlock{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
+immutable joCoreBlock{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -30,7 +30,7 @@ end
 ############################################################
 ## type exceptions
 
-type joBlockException <: Exception
+type joCoreBlockException <: Exception
     msg :: String
 end
 
@@ -38,9 +38,9 @@ end
 ## outer constructors
 
 """
-    joBlock(ops::joAbstractLinearOperator...;moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector)
+    joCoreBlock(ops::joAbstractLinearOperator...;moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector)
 
-Block operator composed from diffrent JOLI operators
+Universal (Core) block operator composed from different JOLI operators
 
 # Example
     a=rand(Complex{Float64},4,5);
@@ -51,40 +51,40 @@ Block operator composed from diffrent JOLI operators
     C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
     moff=[0;5;13]
     noff=[0;6;15]
-    BD=joBlock(A,B,C;moffsets=moff,noffsets=noff) # sparse blocks
-    BD=joBlock(A,B,C) # basic diagonal-corners adjacent blocks
+    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff) # sparse blocks
+    BD=joCoreBlock(A,B,C) # basic diagonal-corners adjacent blocks
     w=rand(Complex{Float64},3)
-    BD=joBlock(A,B,C;weights=w) # weighted basic diagonal-corners adjacent blocks
+    BD=joCoreBlock(A,B,C;weights=w) # weighted basic diagonal-corners adjacent blocks
 
 # Notes
 - all given operators must have same domain/range types
-- the domain/range types of joBlock are equal to domain/range types of the given operators
+- the domain/range types of joCoreBlock are equal to domain/range types of the given operators
 
 """
-function joBlock(ops::joAbstractLinearOperator...;kwargs...)
+function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
            #moffsets::AbstractVector{MNDT}=zeros(Integer,0),noffsets::AbstractVector{MNDT}=zeros(Integer,0),weights::AbstractVector{WDT}=zeros(0))
-    isempty(ops) && throw(joBlockException("empty argument list"))
+    isempty(ops) && throw(joCoreBlockException("empty argument list"))
     mykws=Dict(kwargs[i][1]=>kwargs[i][2] for i in 1:length(kwargs))
     mo=Base.deepcopy(get(mykws, :moffsets, zeros(Int,0)))
-    typeof(mo)<:AbstractVector || throw(joBlockException("moffsets must be a vector"))
-    eltype(mo)<:Integer || throw(joBlockException("moffsets vector must have integer elements"))
+    typeof(mo)<:AbstractVector || throw(joCoreBlockException("moffsets must be a vector"))
+    eltype(mo)<:Integer || throw(joCoreBlockException("moffsets vector must have integer elements"))
     no=Base.deepcopy(get(mykws, :noffsets, zeros(Int,0)))
-    typeof(no)<:AbstractVector || throw(joBlockException("noffsets must be a vector"))
-    eltype(no)<:Integer || throw(joBlockException("noffsets vector must have integer elements"))
+    typeof(no)<:AbstractVector || throw(joCoreBlockException("noffsets must be a vector"))
+    eltype(no)<:Integer || throw(joCoreBlockException("noffsets vector must have integer elements"))
     ws=Base.deepcopy(get(mykws, :weights, zeros(0)))
-    typeof(ws)<:AbstractVector || throw(joBlockException("weights must be a vector"))
+    typeof(ws)<:AbstractVector || throw(joCoreBlockException("weights must be a vector"))
     l=length(ops)
     ms=Vector{Integer}(0)
     ns=Vector{Integer}(0)
     for i=1:l
-        deltype(ops[i])==deltype(ops[1]) || throw(joBlockException("domain type mismatch for $i operator"))
-        reltype(ops[i])==reltype(ops[1]) || throw(joBlockException("range type mismatch for $i operator"))
+        deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
+        reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
         push!(ms,ops[i].m)
         push!(ns,ops[i].n)
     end
-    (length(mo)==l || length(mo)==0) || throw(joBlockException("lenght of moffsets vector does not match number of operators"))
-    (length(no)==l || length(no)==0) || throw(joBlockException("lenght of noffsets vector does not match number of operators"))
-    (length(ws)==l || length(ws)==0) || throw(joBlockException("lenght of weights vector does not match number of operators"))
+    (length(mo)==l || length(mo)==0) || throw(joCoreBlockException("lenght of moffsets vector does not match number of operators"))
+    (length(no)==l || length(no)==0) || throw(joCoreBlockException("lenght of noffsets vector does not match number of operators"))
+    (length(ws)==l || length(ws)==0) || throw(joCoreBlockException("lenght of weights vector does not match number of operators"))
     if (length(mo)==0 && length(no)==0)
         m=sum(ms)
         n=sum(ns)
@@ -130,7 +130,7 @@ function joBlock(ops::joAbstractLinearOperator...;kwargs...)
             push!(fops_C,conj(ops[i]))
         end
     end
-    return joBlock{deltype(fops[l]),reltype(fops[1])}("joBlock($l)",m,n,l,ms,ns,mo,no,ws,
+    return joCoreBlock{deltype(fops[l]),reltype(fops[1])}("joCoreBlock($l)",m,n,l,ms,ns,mo,no,ws,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
@@ -138,8 +138,8 @@ end
 ## overloaded Base functions
 
 # showall(jo)
-function showall(A::joBlock)
-    println("# joBlock")
+function showall(A::joCoreBlock)
+    println("# joCoreBlock")
     println("-      name: ",A.name)
     println("-      type: ",typeof(A))
     println("-      size: ",size(A))
@@ -155,22 +155,22 @@ function showall(A::joBlock)
 end
 
 # conj(jo)
-conj{DDT,RDT}(A::joBlock{DDT,RDT}) =
-    joBlock{DDT,RDT}("(conj("*A.name*"))",
+conj{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
+    joCoreBlock{DDT,RDT}("(conj("*A.name*"))",
         A.m,A.n,A.l,A.ms,A.ns,A.mo,A.no,A.ws,
         A.fop_C,A.fop_CT,A.fop_T,A.fop,
         A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joBlock{DDT,RDT}) =
-    joBlock{RDT,DDT}("("*A.name*".')",
+transpose{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
+    joCoreBlock{RDT,DDT}("("*A.name*".')",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joBlock{DDT,RDT}) =
-    joBlock{RDT,DDT}("("*A.name*"')",
+ctranspose{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
+    joCoreBlock{RDT,DDT}("("*A.name*"')",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,
         A.iop_CT,A.iop_C,A.iop,A.iop_T)
@@ -179,8 +179,8 @@ ctranspose{DDT,RDT}(A::joBlock{DDT,RDT}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,vec)
-function *{ADDT,ARDT}(A::joBlock{ADDT,ARDT},v::AbstractVector{ADDT})
-    size(A,2) == size(v,1) || throw(joBlockException("shape mismatch"))
+function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT})
+    size(A,2) == size(v,1) || throw(joCoreBlockException("shape mismatch"))
     V=zeros(ARDT,A.m)
     for i=1:1:A.l
         sm=A.mo[i]+1
@@ -193,8 +193,8 @@ function *{ADDT,ARDT}(A::joBlock{ADDT,ARDT},v::AbstractVector{ADDT})
 end
 
 # *(jo,mvec)
-#function *{AEDT,mvDT:<Number}(A::joBlock{AEDT},mv::AbstractMatrix{mvDT})
-    #size(A, 2) == size(mv, 1) || throw(joBlockException("shape mismatch"))
+#function *{AEDT,mvDT:<Number}(A::joCoreBlock{AEDT},mv::AbstractMatrix{mvDT})
+    #size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
     #MV=zeros(promote_type(AEDT,eltype(mv)),size(A,1),size(mv,2))
     #for i=1:size(mv,2)
         #MV[:,i]+=A*mv[:,i]
