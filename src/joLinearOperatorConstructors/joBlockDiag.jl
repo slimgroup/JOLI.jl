@@ -42,13 +42,13 @@ Block-diagonal operator composed from diffrent square JOLI operators
 
 # Example
     a=rand(Complex{Float64},4,4);
-    w=rand(Complex{Float64},3)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
     b=rand(Complex{Float64},8,8);
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
     c=rand(Complex{Float64},6,6);
-    C=joMatrix(c;DDT=Complex{Float62},RDT=Complex{Float64},name="C")
+    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
     BD=joBlockDiag(A,B,C) # basic block diagonal
+    w=rand(Complex{Float64},3)
     BD=joBlockDiag(A,B,C;weights=w) # weighted block diagonal
 
 # Notes
@@ -66,6 +66,7 @@ function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;
     weighted=(length(weights)==l)
     ms=Vector{Integer}(0)
     ns=Vector{Integer}(0)
+    ws=Base.deepcopy(weights)
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)
@@ -83,10 +84,10 @@ function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;
         n+=ops[i].n
         push!(ns,ops[i].n)
         if weighted
-            push!(fops,weights[i]*ops[i])
-            push!(fops_T,weights[i]*ops[i].')
-            push!(fops_CT,conj(weights[i])*ops[i]')
-            push!(fops_C,conj(weights[i])*conj(ops[i]))
+            push!(fops,ws[i]*ops[i])
+            push!(fops_T,ws[i]*ops[i].')
+            push!(fops_CT,conj(ws[i])*ops[i]')
+            push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
             push!(fops_T,ops[i].')
@@ -94,7 +95,7 @@ function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;
             push!(fops_C,conj(ops[i]))
         end
     end
-    return joBlockDiag{deltype(fops[l]),reltype(fops[1])}("joBlockDiag($l)",m,n,l,ms,ns,weights,
+    return joBlockDiag{deltype(fops[l]),reltype(fops[1])}("joBlockDiag($l)",m,n,l,ms,ns,ws,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 """
@@ -123,6 +124,7 @@ function joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
     weighted=(length(weights)==l)
     ms=Vector{Integer}(0)
     ns=Vector{Integer}(0)
+    ws=Base.deepcopy(weights)
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)
@@ -135,10 +137,10 @@ function joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
         push!(ms,op.m)
         push!(ns,op.n)
         if weighted
-            push!(fops,weights[i]*op)
-            push!(fops_T,weights[i]*op.')
-            push!(fops_CT,conj(weights[i])*op')
-            push!(fops_C,conj(weights[i])*conj(op))
+            push!(fops,ws[i]*op)
+            push!(fops_T,ws[i]*op.')
+            push!(fops_CT,conj(ws[i])*op')
+            push!(fops_C,conj(ws[i])*conj(op))
         else
             push!(fops,op)
             push!(fops_T,op.')
@@ -146,7 +148,7 @@ function joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
             push!(fops_C,conj(op))
         end
     end
-    return joBlockDiag{deltype(op),reltype(op)}("joBlockDiag($l)",m,n,l,ms,ns,weights,
+    return joBlockDiag{deltype(op),reltype(op)}("joBlockDiag($l)",m,n,l,ms,ns,ws,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
@@ -195,7 +197,7 @@ ctranspose{DDT,RDT}(A::joBlockDiag{DDT,RDT}) =
 # *(jo,vec)
 function *{ADDT,ARDT}(A::joBlockDiag{ADDT,ARDT},v::AbstractVector{ADDT})
     size(A,2) == size(v,1) || throw(joBlockDiagException("shape mismatch"))
-    V=zeros(ARDT,A.n)
+    V=zeros(ARDT,A.m)
     s::Integer=0
     e::Integer=0
     for i=1:1:A.l
@@ -209,7 +211,7 @@ end
 # *(jo,mvec)
 #function *{AEDT,mvDT:<Number}(A::joBlockDiag{AEDT},mv::AbstractMatrix{mvDT})
     #size(A, 2) == size(mv, 1) || throw(joBlockDiagException("shape mismatch"))
-    #MV=zeros(promote_type(AEDT,eltype(mv)),size(A,1),size(mv,2))
+    #MV=zeros(promote_type(AEDT,eltype(mv)),A.m,size(mv,2))
     #for i=1:size(mv,2)
         #MV[:,i]=A*mv[:,i]
     #end
