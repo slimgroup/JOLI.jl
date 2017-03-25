@@ -22,35 +22,35 @@ for t=1:T # start test loop
     println("$tsname $tname")
     @testset "$m x $n" begin
 
-    @test norm(double(joZeros(m,n))-zeros(m,n)) < joTol
-    @test norm(double(joZeros(m,n).')-zeros(m,n).') < joTol
-    @test norm(double(joZeros(m,n)')-zeros(m,n)') < joTol
-    @test norm(double(conj(joZeros(m,n)))-conj(zeros(m,n))) < joTol
+    @test norm(elements(joZeros(m,n))-zeros(m,n)) < joTol
+    @test norm(elements(joZeros(m,n).')-zeros(m,n).') < joTol
+    @test norm(elements(joZeros(m,n)')-zeros(m,n)') < joTol
+    @test norm(elements(conj(joZeros(m,n)))-conj(zeros(m,n))) < joTol
 
-    @test norm(double(joOnes(m,n))-ones(m,n)) < joTol
-    @test norm(double(joOnes(m,n).')-ones(m,n).') < joTol
-    @test norm(double(joOnes(m,n)')-ones(m,n)') < joTol
-    @test norm(double(conj(joOnes(m,n)))-conj(ones(m,n))) < joTol
+    @test norm(elements(joOnes(m,n))-ones(m,n)) < joTol
+    @test norm(elements(joOnes(m,n).')-ones(m,n).') < joTol
+    @test norm(elements(joOnes(m,n)')-ones(m,n)') < joTol
+    @test norm(elements(conj(joOnes(m,n)))-conj(ones(m,n))) < joTol
 
-    @test norm(double(joConstants(m,n,a))-(a*ones(m,n))) < joTol
-    @test norm(double(joConstants(m,n,a).')-(a*ones(m,n)).') < joTol
-    @test norm(double(joConstants(m,n,a)')-(a*ones(m,n))') < joTol
-    @test norm(double(conj(joConstants(m,n,a)))-(conj(a*ones(m,n)))) < joTol
+    @test norm(elements(joConstants(m,n,a))-(a*ones(m,n))) < joTol
+    @test norm(elements(joConstants(m,n,a).')-(a*ones(m,n)).') < joTol
+    @test norm(elements(joConstants(m,n,a)')-(a*ones(m,n))') < joTol
+    @test norm(elements(conj(joConstants(m,n,a)))-(conj(a*ones(m,n)))) < joTol
 
-    @test norm(double(joDirac(m))-eye(m)) < joTol
-    @test norm(double(joDirac(m).')-eye(m).') < joTol
-    @test norm(double(joDirac(m)')-eye(m)') < joTol
-    @test norm(double(conj(joDirac(m)))-conj(eye(m))) < joTol
+    @test norm(elements(joDirac(m))-eye(m)) < joTol
+    @test norm(elements(joDirac(m).')-eye(m).') < joTol
+    @test norm(elements(joDirac(m)')-eye(m)') < joTol
+    @test norm(elements(conj(joDirac(m)))-conj(eye(m))) < joTol
 
-    @test norm(double(joEye(m,n))-eye(m,n)) < joTol
-    @test norm(double(joEye(m,n).')-eye(m,n).') < joTol
-    @test norm(double(joEye(m,n)')-eye(m,n)') < joTol
-    @test norm(double(conj(joEye(m,n)))-conj(eye(m,n))) < joTol
+    @test norm(elements(joEye(m,n))-eye(m,n)) < joTol
+    @test norm(elements(joEye(m,n).')-eye(m,n).') < joTol
+    @test norm(elements(joEye(m,n)')-eye(m,n)') < joTol
+    @test norm(elements(conj(joEye(m,n)))-conj(eye(m,n))) < joTol
 
-    @test norm(double(joDiag(v))-diagm(v)) < joTol
-    @test norm(double(joDiag(v).')-diagm(v).') < joTol
-    @test norm(double(joDiag(v)')-diagm(v)') < joTol
-    @test norm(double(conj(joDiag(v)))-conj(diagm(v))) < joTol
+    @test norm(elements(joDiag(v))-diagm(v)) < joTol
+    @test norm(elements(joDiag(v).')-diagm(v).') < joTol
+    @test norm(elements(joDiag(v)')-diagm(v)') < joTol
+    @test norm(elements(conj(joDiag(v)))-conj(diagm(v))) < joTol
 
     #joVecConvert.jl
     if t%2==0

@@ -36,7 +36,7 @@ println("$tsname $tname")
         @test size(A)==size(a)
         @test length(A)==length(a)
         @test full(A)==a
-        @test double(A)==a
+        @test elements(A)==a
         @test norm(A)==norm(a)
         for i=1:2
             @test norm(A,i)==norm(a,i)
@@ -47,11 +47,11 @@ println("$tsname $tname")
             @test vecnorm(A,i)==vecnorm(a,i)
         end
         @test vecnorm(A,Inf)==vecnorm(a,Inf)
-        @test double(A')==a'
-        @test double(A.')==a.'
-        @test double(conj(A))==conj(a)
-        @test double(+A)==+a
-        @test double(-A)==-a
+        @test elements(A')==a'
+        @test elements(A.')==a.'
+        @test elements(conj(A))==conj(a)
+        @test elements(+A)==+a
+        @test elements(-A)==-a
         @test norm(A*vn-a*vn)<joTol
         @test norm(A*mvn-a*mvn)<joTol
         @test norm(A'*vm-a'*vm)<joTol
@@ -62,34 +62,34 @@ println("$tsname $tname")
         @test norm((A.')'*mvn-(a.')'*mvn)<joTol
         @test norm((A').'*vn-(a').'*vn)<joTol
         @test norm((A').'*mvn-(a').'*mvn)<joTol
-        @test norm(double(A.'*A)-(a.'*a))<joTol
-        @test norm(double(A*A.')-(a*a.'))<joTol
-        @test norm(double(A'*A)-(a'*a))<joTol
-        @test norm(double(A*A')-(a*a'))<joTol
+        @test norm(elements(A.'*A)-(a.'*a))<joTol
+        @test norm(elements(A*A.')-(a*a.'))<joTol
+        @test norm(elements(A'*A)-(a'*a))<joTol
+        @test norm(elements(A*A')-(a*a'))<joTol
         @test norm(A\vm-a\vm)<joTol
         @test norm(A\mvm-a\mvm)<joTol
         @test norm(A'\vn-a'\vn)<joTol
         @test norm(A'\mvn-a'\mvn)<joTol
         @test norm(A.'\vn-a.'\vn)<joTol
         @test norm(A.'\mvn-a.'\mvn)<joTol
-        @test norm(double(A+B)-(a+b))<joTol
-        @test norm(double(A-B)-(a-b))<joTol
-        @test norm(double(mfac*A)-(mfac*a))<joTol
-        @test norm(double(mfac*A.')-(mfac*a.'))<joTol
-        @test norm(double(mfac*A')-(mfac*a'))<joTol
-        @test norm(double(mfac*conj(A))-(mfac*conj(a)))<joTol
-        @test norm(double(A*mfac)-(a*mfac))<joTol
-        @test norm(double(A.'*mfac)-(a.'*mfac))<joTol
-        @test norm(double(A'*mfac)-(a'*mfac))<joTol
-        @test norm(double(conj(A)*mfac)-(conj(a)*mfac))<joTol
-        @test norm(double(A+afac)-(a+afac))<joTol
-        @test norm(double(A.'+afac)-(a.'+afac))<joTol
-        @test norm(double(A'+afac)-(a'+afac))<joTol
-        @test norm(double(conj(A)+afac)-(conj(a)+afac))<joTol
-        @test norm(double(afac+A)-(afac+a))<joTol
-        @test norm(double(afac+A.')-(afac+a.'))<joTol
-        @test norm(double(afac+A')-(afac+a'))<joTol
-        @test norm(double(afac+conj(A))-(afac+conj(a)))<joTol
+        @test norm(elements(A+B)-(a+b))<joTol
+        @test norm(elements(A-B)-(a-b))<joTol
+        @test norm(elements(mfac*A)-(mfac*a))<joTol
+        @test norm(elements(mfac*A.')-(mfac*a.'))<joTol
+        @test norm(elements(mfac*A')-(mfac*a'))<joTol
+        @test norm(elements(mfac*conj(A))-(mfac*conj(a)))<joTol
+        @test norm(elements(A*mfac)-(a*mfac))<joTol
+        @test norm(elements(A.'*mfac)-(a.'*mfac))<joTol
+        @test norm(elements(A'*mfac)-(a'*mfac))<joTol
+        @test norm(elements(conj(A)*mfac)-(conj(a)*mfac))<joTol
+        @test norm(elements(A+afac)-(a+afac))<joTol
+        @test norm(elements(A.'+afac)-(a.'+afac))<joTol
+        @test norm(elements(A'+afac)-(a'+afac))<joTol
+        @test norm(elements(conj(A)+afac)-(conj(a)+afac))<joTol
+        @test norm(elements(afac+A)-(afac+a))<joTol
+        @test norm(elements(afac+A.')-(afac+a.'))<joTol
+        @test norm(elements(afac+A')-(afac+a'))<joTol
+        @test norm(elements(afac+conj(A))-(afac+conj(a)))<joTol
     end
 
 end # end test loop

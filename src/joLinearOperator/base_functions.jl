@@ -40,10 +40,10 @@ length(A::joAbstractLinearOperator) = A.m*A.n
 full{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
 
 # norm(jo)
-norm(A::joAbstractLinearOperator,p::Real=2) = norm(double(A),p)
+norm(A::joAbstractLinearOperator,p::Real=2) = norm(elements(A),p)
 
 # vecnorm(jo)
-vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(double(A),p)
+vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(elements(A),p)
 
 # real(jo)
 real{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = A
@@ -104,11 +104,11 @@ isreal{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = (DDT<:Real && RDT<:Rea
 
 # issymmetric(jo)
 issymmetric{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) =
-    (A.m == A.n && (vecnorm(double(A)-double(A.')) < joTol))
+    (A.m == A.n && (vecnorm(elements(A)-elements(A.')) < joTol))
 
 # ishermitian(jo)
 ishermitian{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) =
-    (A.m == A.n && (vecnorm(double(A)-double(A')) < joTol))
+    (A.m == A.n && (vecnorm(elements(A)-elements(A')) < joTol))
 
 ############################################################
 ## overloaded Base *(...jo...)

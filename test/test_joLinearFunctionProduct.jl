@@ -36,7 +36,7 @@ println("$tsname $tname")
         @test size(C)==size(c)
         @test length(C)==length(c)
         @test norm(full(C)-c)<joTol
-        @test norm(double(C)-c)<joTol
+        @test norm(elements(C)-c)<joTol
         @test norm(C)-norm(c)<joTol
         for i=1:2
             @test norm(C,i)-norm(c,i)<joTol
@@ -47,10 +47,10 @@ println("$tsname $tname")
             @test vecnorm(C,i)-vecnorm(c,i)<joTol
         end
         @test vecnorm(C,Inf)-vecnorm(c,Inf)<joTol
-        @test norm(double(C')-c')<joTol
-        @test norm(double(C.')-c.')<joTol
-        @test norm(double(+C)-(+c))<joTol
-        @test norm(double(-C)-(-c))<joTol
+        @test norm(elements(C')-c')<joTol
+        @test norm(elements(C.')-c.')<joTol
+        @test norm(elements(+C)-(+c))<joTol
+        @test norm(elements(-C)-(-c))<joTol
         @test norm(C*vm-c*vm)<joTol
         @test norm(C*mvm-c*mvm)<joTol
         @test norm(C'*vm-c'*vm)<joTol
@@ -61,10 +61,10 @@ println("$tsname $tname")
         @test norm((C.')'*mvm-(c.')'*mvm)<joTol
         @test norm((C').'*vm-(c').'*vm)<joTol
         @test norm((C').'*mvm-(c').'*mvm)<joTol
-        @test norm(double(C.'*C)-(c.'*c))<joTol
-        @test norm(double(C*C.')-(c*c.'))<joTol
-        @test norm(double(C'*C)-(c'*c))<joTol
-        @test norm(double(C*C')-(c*c'))<joTol
+        @test norm(elements(C.'*C)-(c.'*c))<joTol
+        @test norm(elements(C*C.')-(c*c.'))<joTol
+        @test norm(elements(C'*C)-(c'*c))<joTol
+        @test norm(elements(C*C')-(c*c'))<joTol
         #@test norm(C\vm-c\vm)<joTol
         #@test norm(C\mvm-c\mvm)<joTol
         #@test norm(C'\vm-c'\vm)<joTol

@@ -1,8 +1,8 @@
 ############################################################
 ## joAbstractOperator - extra functions
 
-# double(jo)
-double(A::joAbstractOperator)  = throw(joAbstractOperatorException("double(jo) not implemented"))
+# elements(jo)
+elements(A::joAbstractOperator)  = throw(joAbstractOperatorException("elements(jo) not implemented"))
 
 # iscomplex(jo)
 iscomplex(A :: joAbstractOperator) = throw(joAbstractOperatorException("iscomplex(jo) not implemented"))

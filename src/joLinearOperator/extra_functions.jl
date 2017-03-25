@@ -1,8 +1,8 @@
 ############################################################
 ## joLinearOperator - extra functions
 
-# double(jo)
-double{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
+# elements(jo)
+elements{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
 
 # iscomplex(jo)
 iscomplex{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = !(DDT<:Real && RDT<:Real)

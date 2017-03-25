@@ -21,7 +21,7 @@ import Base.hcat, Base.vcat, Base.hvcat
 
 # extra exported methods
 export deltype, reltype
-export double, iscomplex, isinvertible, islinear, isadjoint
+export elements, iscomplex, isinvertible, islinear, isadjoint
 
 # constants
 export joTol
