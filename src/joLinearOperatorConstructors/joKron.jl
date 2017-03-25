@@ -56,11 +56,12 @@ Kronecker product
 """
 function joKron(ops::joAbstractLinearOperator...)
     isempty(ops) && throw(joKronException("empty argument list"))
-    m=1
-    n=1
     l=length(ops)
-    ms=Vector{Integer}(0)
-    ns=Vector{Integer}(0)
+    for i=2:l
+        reltype(ops[i])==deltype(ops[i-1]) || throw(joKronException("domain/range type mismatch for $i operator"))
+    end
+    ms=zeros(Int,l)
+    ns=zeros(Int,l)
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)
@@ -70,12 +71,12 @@ function joKron(ops::joAbstractLinearOperator...)
     iops_CT=Vector{joAbstractLinearOperator}(0)
     iops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
-        im1=max(i-1,1)
-        reltype(ops[i])==deltype(ops[im1]) || throw(joKronException("domain/range type mismatch for $i operator"))
-        m*=ops[i].m
-        push!(ms,ops[i].m)
-        n*=ops[i].n
-        push!(ns,ops[i].n)
+        ms[i]=ops[i].m
+        ns[i]=ops[i].n
+    end
+    m=prod(ms)
+    n=prod(ns)
+    for i=1:l
         push!(fops,ops[i])
         push!(fops_T,ops[i].')
         push!(fops_CT,ops[i]')

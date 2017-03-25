@@ -62,36 +62,38 @@ Universal (Core) block operator composed from different JOLI operators
 
 """
 function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
-           #moffsets::AbstractVector{MNDT}=zeros(Integer,0),noffsets::AbstractVector{MNDT}=zeros(Integer,0),weights::AbstractVector{WDT}=zeros(0),name::String="joCoreBlock")
+           #moffsets::AbstractVector{MNDT}=zeros(Int,0),noffsets::AbstractVector{MNDT}=zeros(Int,0),weights::AbstractVector{WDT}=zeros(0),name::String="joCoreBlock")
     isempty(ops) && throw(joCoreBlockException("empty argument list"))
+    l=length(ops)
+    for i=1:l
+        deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
+        reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
+    end
     mykws=Dict(kwargs[i][1]=>kwargs[i][2] for i in 1:length(kwargs))
     mo=Base.deepcopy(get(mykws, :moffsets, zeros(Int,0)))
     typeof(mo)<:AbstractVector || throw(joCoreBlockException("moffsets must be a vector"))
     eltype(mo)<:Integer || throw(joCoreBlockException("moffsets vector must have integer elements"))
+    (length(mo)==l || length(mo)==0) || throw(joCoreBlockException("lenght of moffsets vector does not match number of operators"))
     no=Base.deepcopy(get(mykws, :noffsets, zeros(Int,0)))
     typeof(no)<:AbstractVector || throw(joCoreBlockException("noffsets must be a vector"))
     eltype(no)<:Integer || throw(joCoreBlockException("noffsets vector must have integer elements"))
+    (length(no)==l || length(no)==0) || throw(joCoreBlockException("lenght of noffsets vector does not match number of operators"))
     ws=Base.deepcopy(get(mykws, :weights, zeros(0)))
     typeof(ws)<:AbstractVector || throw(joCoreBlockException("weights must be a vector"))
+    (length(ws)==l || length(ws)==0) || throw(joCoreBlockException("lenght of weights vector does not match number of operators"))
     name=get(mykws, :name, "joCoreBlock")
     typeof(name)<:String || throw(joCoreBlockException("name must be a string"))
-    l=length(ops)
-    ms=Vector{Integer}(0)
-    ns=Vector{Integer}(0)
+    ms=zeros(Int,l)
+    ns=zeros(Int,l)
     for i=1:l
-        deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
-        reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
-        push!(ms,ops[i].m)
-        push!(ns,ops[i].n)
+        ms[i]=ops[i].m
+        ns[i]=ops[i].n
     end
-    (length(mo)==l || length(mo)==0) || throw(joCoreBlockException("lenght of moffsets vector does not match number of operators"))
-    (length(no)==l || length(no)==0) || throw(joCoreBlockException("lenght of noffsets vector does not match number of operators"))
-    (length(ws)==l || length(ws)==0) || throw(joCoreBlockException("lenght of weights vector does not match number of operators"))
     if (length(mo)==0 && length(no)==0)
         m=sum(ms)
         n=sum(ns)
-        mo=zeros(Integer,l)
-        no=zeros(Integer,l)
+        mo=zeros(Int,l)
+        no=zeros(Int,l)
         mo[1]=0
         no[1]=0
         for i=2:l
@@ -132,7 +134,7 @@ function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
             push!(fops_C,conj(ops[i]))
         end
     end
-    return joCoreBlock{deltype(fops[l]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
+    return joCoreBlock{deltype(fops[1]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 
