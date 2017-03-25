@@ -400,11 +400,11 @@ end
 
 ############################################################
 ## overloaded Base hcat(...jo...)
-hcat(ops::joAbstractLinearOperator...) = throw(joLinearOperatorException("hcat(jo...).' not implemented"))
+hcat(ops::joAbstractLinearOperator...) = joDict(ops...)
 
 ############################################################
 ## overloaded Base vcat(...jo...)
-vcat(ops::joAbstractLinearOperator...) = throw(joLinearOperatorException("vcat(jo...).' not implemented"))
+vcat(ops::joAbstractLinearOperator...) = joStack(ops...)
 
 ############################################################
 ## overloaded Base hvcat(...jo...)
