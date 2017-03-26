@@ -19,15 +19,19 @@ Dictionary operator composed from different square JOLI operators
 # Example
     a=rand(Complex{Float64},4,4);
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},8,8);
+    b=rand(Complex{Float64},4,8);
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,6);
+    c=rand(Complex{Float64},4,6);
     C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
-    BD=joDict(A,B,C) # basic block diagonal
+    # either
+        D=joDict(A,B,C) # basic dictionary in function syntax
+    #or
+        D=[A B C] # basic dictionary in [] syntax
     w=rand(Complex{Float64},3)
-    BD=joDict(A,B,C;weights=w) # weighted block diagonal
+    D=joDict(A,B,C;weights=w) # weighted dictionary
 
 # Notes
+- all operators must have the same # of rows (M)
 - all given operators must have same domain/range types
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
@@ -90,10 +94,11 @@ Dictionary operator composed from l-times replicated square JOLI operator
     a=rand(Complex{Float64},4,4);
     w=rand(Complex{Float64},3)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    BD=joDict(3,A) # basic block diagonal
-    BD=joDict(3,A;weights=w) # weighted block diagonal
+    D=joDict(3,A) # basic dictionary
+    D=joDict(3,A;weights=w) # weighted dictionary
 
 # Notes
+- all operators must have the same # of rows (M)
 - all given operators must have same domain/range types
 - the domain/range types of joDict are equal to domain/range types of the given operators
 

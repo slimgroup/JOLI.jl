@@ -19,15 +19,19 @@ Stack operator composed from different square JOLI operators
 # Example
     a=rand(Complex{Float64},4,4);
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},8,8);
+    b=rand(Complex{Float64},8,4);
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,6);
+    c=rand(Complex{Float64},6,4);
     C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
-    BD=joStack(A,B,C) # basic block diagonal
+    # either
+        S=joStack(A,B,C) # basic stack in function syntax
+    # or
+        S=[A; B; C] # basic stack in [] syntax
     w=rand(Complex{Float64},3)
-    BD=joStack(A,B,C;weights=w) # weighted block diagonal
+    S=joStack(A,B,C;weights=w) # weighted stack
 
 # Notes
+- all operators must have the same # of columns (N)
 - all given operators must have same domain/range types
 - the domain/range types of joStack are equal to domain/range types of the given operators
 
@@ -90,10 +94,11 @@ Stack operator composed from l-times replicated square JOLI operator
     a=rand(Complex{Float64},4,4);
     w=rand(Complex{Float64},3)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    BD=joStack(3,A) # basic block diagonal
-    BD=joStack(3,A;weights=w) # weighted block diagonal
+    S=joStack(3,A) # basic stack
+    S=joStack(3,A;weights=w) # weighted stack
 
 # Notes
+- all operators must have the same # of columns (N)
 - all given operators must have same domain/range types
 - the domain/range types of joStack are equal to domain/range types of the given operators
 

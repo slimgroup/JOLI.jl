@@ -28,6 +28,7 @@ Block-diagonal operator composed from different square JOLI operators
     BD=joBlockDiag(A,B,C;weights=w) # weighted block diagonal
 
 # Notes
+- all operators must be square (M(i)==N(i))
 - all given operators must have same domain/range types
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 
