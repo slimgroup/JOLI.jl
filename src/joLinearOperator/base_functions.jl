@@ -408,5 +408,5 @@ vcat(ops::joAbstractLinearOperator...) = joStack(ops...)
 
 ############################################################
 ## overloaded Base hvcat(...jo...)
-hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = throw(joLinearOperatorException("hvcat(jo...).' not implemented"))
+hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(collect(rows),ops...)
 
