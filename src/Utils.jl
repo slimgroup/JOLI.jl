@@ -135,7 +135,7 @@ function jo_convert_warn_set(flag::Bool)
 end
 
 """
-Type of element of complex data type
+Convert vector to new type
 
     jo_convert(DT::DataType,v::AbstractArray,warning::Bool=true)
 
@@ -189,4 +189,60 @@ function jo_convert{VT<:Complex}(DT::DataType,vin::AbstractArray{VT},warning::Bo
         throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
     end
     return vout
+end
+"""
+Convert number to new type
+
+    jo_convert(DT::DataType,n::Number,warning::Bool=true)
+
+# Limitations
+
+- converting integer number to shorter representation will throw an error
+
+- converting float/complex number to integer will throw an error
+
+- converting from complex to float drops immaginary part and issues warning;
+  use jo_convert_warn_set(false) to turn off the warning
+
+# Example
+
+- jo_convert(Complex{Float32},rand())
+
+"""
+function jo_convert{NT<:Integer}(DT::DataType,nin::NT,warning::Bool=true)
+    DT==NT && return nin
+    #println("jo_convert{NT<:Integer}")
+    if DT<:Integer
+        if typemax(DT)>typemax(NT)
+            nout=convert(DT,nin)
+        else
+            throw(joUtilsException("jo_convert: Refused conversion from $NT to $DT."))
+        end
+    else
+        nout=convert(DT,nin)
+    end
+    return nout
+end
+function jo_convert{NT<:AbstractFloat}(DT::DataType,nin::NT,warning::Bool=true)
+    DT==NT && return nin
+    #println("jo_convert{NT<:AbstractFloat}")
+    if !(DT<:Integer)
+        nout=convert(DT,nin)
+    else
+        throw(joUtilsException("jo_convert: Refused conversion from $NT to $DT."))
+    end
+    return nout
+end
+function jo_convert{NT<:Complex}(DT::DataType,nin::NT,warning::Bool=true)
+    DT==NT && return nin
+    #println("jo_convert{NT<:Complex}")
+    if DT<:Complex
+        nout=convert(DT,nin)
+    elseif DT<:AbstractFloat
+        (warning && jo_convert_warn) && warn("jo_convert: Inexact conversion from $NT to $DT. Dropping imaginary part.")
+        nout=convert(DT,real(nin))
+    else
+        throw(joUtilsException("jo_convert: Refused conversion from $NT to $DT."))
+    end
+    return nout
 end
