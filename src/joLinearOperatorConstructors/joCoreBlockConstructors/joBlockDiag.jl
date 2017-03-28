@@ -39,8 +39,8 @@ function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;
     l=length(ops)
     for i=1:l
         ops[i].m==ops[i].n || throw(joBlockDiagException("non-square $i operator"))
-        deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
-        reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
+        deltype(ops[i])==deltype(ops[1]) || throw(joBlockDiagException("domain type mismatch for $i operator"))
+        reltype(ops[i])==reltype(ops[1]) || throw(joBlockDiagException("range type mismatch for $i operator"))
     end
     (length(weights)==l || length(weights)==0) || throw(joBlockDiagException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)

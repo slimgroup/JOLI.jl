@@ -44,10 +44,11 @@ function joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLi
            weights::AbstractVector{WDT}=zeros(0),name::String="joBlock")
     isempty(ops) && throw(joBlockException("empty argument list"))
     l=length(ops)
+    sum(rows)==l || throw(joBlockException("sum of operators in the rows does not match # of operators"))
     r=length(rows)
     for i=1:l
-        deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
-        reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
+        deltype(ops[i])==deltype(ops[1]) || throw(joBlockException("domain type mismatch for $i operator"))
+        reltype(ops[i])==reltype(ops[1]) || throw(joBlockException("range type mismatch for $i operator"))
     end
     i=0
     mm=1

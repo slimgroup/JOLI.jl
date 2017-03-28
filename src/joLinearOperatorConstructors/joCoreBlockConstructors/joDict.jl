@@ -42,8 +42,8 @@ function joDict{WDT<:Number}(ops::joAbstractLinearOperator...;
     l=length(ops)
     for i=1:l
         ops[i].m==ops[1].m || throw(joDictException("size mismatch for $i operator"))
-        deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
-        reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
+        deltype(ops[i])==deltype(ops[1]) || throw(joDictException("domain type mismatch for $i operator"))
+        reltype(ops[i])==reltype(ops[1]) || throw(joDictException("range type mismatch for $i operator"))
     end
     (length(weights)==l || length(weights)==0) || throw(joDictException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
