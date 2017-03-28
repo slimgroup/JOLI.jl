@@ -87,7 +87,6 @@ function joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLi
     end
     m=sum(rm)
     n=rn[1]
-    println((m,n))
     weighted=(length(ws)==l)
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
