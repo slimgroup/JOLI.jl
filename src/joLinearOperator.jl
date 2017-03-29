@@ -9,6 +9,7 @@ export joLinearOperator, joLinearOperatorException
 ############################################################
 ## type definition
 
+abstract joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator
 """
     joLinearOperator is glueing type & constructor
 
@@ -16,7 +17,6 @@ export joLinearOperator, joLinearOperatorException
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-abstract joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator
 immutable joLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer

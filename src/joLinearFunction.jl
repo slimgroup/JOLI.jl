@@ -19,10 +19,10 @@ joLinearFunction type
 - name::String : given name
 - m::Integer : # of rows
 - n::Integer : # of columns
-- fop::Function : forward matrix
-- fop_T::Nullable{Function} : transpose matrix
-- fop_CT::Nullable{Function} : conj transpose matrix
-- fop_C::Nullable{Function} : conj matrix
+- fop::Function : forward function
+- fop_T::Nullable{Function} : transpose function
+- fop_CT::Nullable{Function} : conj transpose function
+- fop_C::Nullable{Function} : conj function
 - iop::Nullable{Function} : inverse for fop
 - iop_T::Nullable{Function} : inverse for fop_T
 - iop_CT::Nullable{Function} : inverse for fop_CT
