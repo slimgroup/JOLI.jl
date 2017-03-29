@@ -76,9 +76,19 @@ function *{ADDT,ARDT}(a::Number,A::joLinearFunction{ADDT,ARDT})
         @joNF, @joNF, @joNF, @joNF
         )
 end
+function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joLinearFunction{ADDT,ARDT})
+    return joLinearFunction{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
+        v1->jo_convert(ARDT,a.rdt*A.fop(v1),false),
+        v2->jo_convert(ADDT,a.ddt*A.fop_T(v2),false),
+        v3->jo_convert(ADDT,conj(a.ddt)*A.fop_CT(v3),false),
+        v4->jo_convert(ARDT,conj(a.rdt)*A.fop_C(v4),false),
+        @joNF, @joNF, @joNF, @joNF
+        )
+end
 
 # *(jo,num)
 *{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},a::Number) = a*A
+*{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)
@@ -118,9 +128,19 @@ function +{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},b::Number)
         @joNF, @joNF, @joNF, @joNF
         )
 end
+function +{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},b::joNumber{ADDT,ARDT})
+    return joLinearFunction{ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
+        v1->A.fop(v1)+joConstants(A.m,A.n,b.rdt;DDT=ADDT,RDT=ARDT)*v1,
+        v2->get(A.fop_T)(v2)+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
+        v3->get(A.fop_CT)(v3)+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
+        v4->get(A.fop_C)(v4)+joConstants(A.m,A.n,conj(b.rdt);DDT=ADDT,RDT=ARDT)*v4,
+        @joNF, @joNF, @joNF, @joNF
+        )
+end
 
 # +(num,jo)
 +{ADDT,ARDT}(b::Number,A::joLinearFunction{ADDT,ARDT}) = A+b
++{ADDT,ARDT}(b::joNumber{ADDT,ARDT},A::joLinearFunction{ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)

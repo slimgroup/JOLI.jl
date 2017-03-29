@@ -182,6 +182,15 @@ function *{ADDT,ARDT}(a::Number,A::joLinearOperator{ADDT,ARDT})
         @joNF, @joNF, @joNF, @joNF
         )
 end
+function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joLinearOperator{ADDT,ARDT})
+    return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
+        v1->jo_convert(ARDT,a.rdt*A.fop(v1),false),
+        v2->jo_convert(ADDT,a.ddt*A.fop_T(v2),false),
+        v3->jo_convert(ADDT,conj(a.ddt)*A.fop_CT(v3),false),
+        v4->jo_convert(ARDT,conj(a.rdt)*A.fop_C(v4),false),
+        @joNF, @joNF, @joNF, @joNF
+        )
+end
 function *{ADDT,ARDT}(a::Number,A::joAbstractLinearOperator{ADDT,ARDT})
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->jo_convert(ARDT,a*A*v1,false),
@@ -191,10 +200,21 @@ function *{ADDT,ARDT}(a::Number,A::joAbstractLinearOperator{ADDT,ARDT})
         @joNF, @joNF, @joNF, @joNF
         )
 end
+function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joAbstractLinearOperator{ADDT,ARDT})
+    return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
+        v1->jo_convert(ARDT,a.rdt*A*v1,false),
+        v2->jo_convert(ADDT,a.ddt*A.'*v2,false),
+        v3->jo_convert(ADDT,conj(a.ddt)*A'*v3,false),
+        v4->jo_convert(ARDT,conj(a.rdt)*conj(A)*v4,false),
+        @joNF, @joNF, @joNF, @joNF
+        )
+end
 
 # *(jo,num)
 *{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::Number) = a*A
+*{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 *{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},a::Number) = a*A
+*{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)
@@ -283,6 +303,15 @@ function +{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},b::Number)
         @joNF, @joNF, @joNF, @joNF
         )
 end
+function +{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},b::joNumber{ADDT,ARDT})
+    return joLinearOperator{ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
+        v1->A.fop(v1)+joConstants(A.m,A.n,b.rdt;DDT=ADDT,RDT=ARDT)*v1,
+        v2->get(A.fop_T)(v2)+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
+        v3->get(A.fop_CT)(v3)+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
+        v4->get(A.fop_C)(v4)+joConstants(A.m,A.n,conj(b.rdt);DDT=ADDT,RDT=ARDT)*v4,
+        @joNF, @joNF, @joNF, @joNF
+        )
+end
 function +{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},b::Number)
     return joLinearOperator{ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
         v1->A*v1+joConstants(A.m,A.n,b;DDT=ADDT,RDT=ARDT)*v1,
@@ -292,10 +321,21 @@ function +{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},b::Number)
         @joNF, @joNF, @joNF, @joNF
         )
 end
+function +{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},b::joNumber{ADDT,ARDT})
+    return joLinearOperator{ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
+        v1->A*v1+joConstants(A.m,A.n,b.rdt;DDT=ADDT,RDT=ARDT)*v1,
+        v2->A.'*v2+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
+        v3->A'*v3+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
+        v4->conj(A)*v4+joConstants(A.m,A.n,conj(b.rdt);DDT=ADDT,RDT=ARDT)*v4,
+        @joNF, @joNF, @joNF, @joNF
+        )
+end
 
 # +(num,jo)
 +{ADDT,ARDT}(b::Number,A::joLinearOperator{ADDT,ARDT}) = A+b
++{ADDT,ARDT}(b::joNumber{ADDT,ARDT},A::joLinearOperator{ADDT,ARDT}) = A+b
 +{ADDT,ARDT}(b::Number,A::joAbstractLinearOperator{ADDT,ARDT}) = A+b
++{ADDT,ARDT}(b::joNumber{ADDT,ARDT},A::joAbstractLinearOperator{ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)
@@ -326,9 +366,11 @@ end
 
 # -(jo,num)
 -(A::joAbstractLinearOperator,b::Number) = A+(-b)
+-(A::joAbstractLinearOperator,b::joNumber) = A+(-b)
 
 # -(num,jo)
 -(b::Number,A::joAbstractLinearOperator) = -A+b
+-(b::joNumber,A::joAbstractLinearOperator) = -A+b
 
 ############################################################
 ## overloaded Base .*(...jo...)

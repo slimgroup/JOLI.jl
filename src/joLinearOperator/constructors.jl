@@ -1,6 +1,8 @@
 ############################################################
 ## joLinearOperator - outer constructors
 
+############################################################
+## joNumber - extra constructor with joAbstractLinearOperator
 """
 joNumber outer constructor
 
@@ -11,13 +13,3 @@ Create joNumber with types matching the given operator.
 """
 joNumber{NT<:Number,DDT,RDT}(num::NT,A::joAbstractLinearOperator{DDT,RDT}) =
     joNumber{DDT,RDT}(jo_convert(DDT,num),jo_convert(RDT,num))
-"""
-joNumber outer constructor
-
-    joNumber(num)
-
-Create joNumber with types matching given number
-
-"""
-joNumber{NT<:Number}(num::NT) = joNumber{NT,NT}(num,num)
-
