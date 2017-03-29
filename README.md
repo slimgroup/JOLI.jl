@@ -14,6 +14,10 @@ or with GitHub account (and SSH keys registared)
 
     Pkg.clone("git@github.com:slimgroup/JOLI.jl.git")
 
+## Documentation
+
+For now it is just [REFERENCE giude](REFERENCE.md). More will come later.
+
 ## Examples (to be extended)
 
 Check [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl) for an example of how to build your own operator.

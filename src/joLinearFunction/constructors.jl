@@ -13,7 +13,7 @@ joLinearFunction outer constructor
 Look up argument names in help to joLinearFunction.
 
 # Notes
-- the developer is ressponsible for ensuring that used functions take/return correct DDT/RDT
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
 joLinearFunctionAll(m::Integer,n::Integer,
@@ -36,7 +36,7 @@ joLinearFunction outer constructor
 Look up argument names in help to joLinearFunction.
 
 # Notes
-- the developer is ressponsible for ensuring that used functions take/return correct DDT/RDT
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
 joLinearFunctionT(m::Integer,n::Integer,
@@ -64,7 +64,7 @@ joLinearFunction outer constructor
 Look up argument names in help to joLinearFunction.
 
 # Notes
-- the developer is ressponsible for ensuring that used functions take/return correct DDT/RDT
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
 joLinearFunctionCT(m::Integer,n::Integer,
@@ -92,7 +92,7 @@ joLinearFunction outer constructor
 Look up argument names in help to joLinearFunction.
 
 # Notes
-- the developer is ressponsible for ensuring that used functions take/return correct DDT/RDT
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
 joLinearFunctionFwdT(m::Integer,n::Integer,
@@ -117,7 +117,7 @@ joLinearFunction outer constructor
 Look up argument names in help to joLinearFunction.
 
 # Notes
-- the developer is ressponsible for ensuring that used functions take/return correct DDT/RDT
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
 joLinearFunctionFwdCT(m::Integer,n::Integer,
