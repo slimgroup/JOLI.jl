@@ -256,6 +256,10 @@ end
 # \(num,jo)
 
 # \(jo,num)
+#\{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::Number) = inv(a)*A
+#\{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = inv(a)*A
+#\{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},a::Number) = inv(a)*A
+#\{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = inv(a)*A
 
 ############################################################
 ## overloaded Base +(...jo...)
