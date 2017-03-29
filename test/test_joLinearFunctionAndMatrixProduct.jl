@@ -32,6 +32,10 @@ else
 end
 c=a*b'
 C=A*B'
+afac=rand(eltype(c))
+Afac=joNumber(afac,C)
+mfac=rand(eltype(c))
+Mfac=joNumber(mfac,C)
 
 println("$tsname $tname")
     @testset "$tname A*B" begin
@@ -67,6 +71,38 @@ println("$tsname $tname")
         @test norm(elements(C*C.')-(c*c.'))<joTol
         @test norm(elements(C'*C)-(c'*c))<joTol
         @test norm(elements(C*C')-(c*c'))<joTol
+        @test norm(elements(mfac*C)-(mfac*c))<joTol
+        @test norm(elements(mfac*C.')-(mfac*c.'))<joTol
+        @test norm(elements(mfac*C')-(mfac*c'))<joTol
+        @test norm(elements(mfac*conj(C))-(mfac*conj(c)))<joTol
+        @test norm(elements(C*mfac)-(c*mfac))<joTol
+        @test norm(elements(C.'*mfac)-(c.'*mfac))<joTol
+        @test norm(elements(C'*mfac)-(c'*mfac))<joTol
+        @test norm(elements(conj(C)*mfac)-(conj(c)*mfac))<joTol
+        @test norm(elements(Mfac*C)-(mfac*c))<joTol
+        @test norm(elements(Mfac*C.')-(mfac*c.'))<joTol
+        @test norm(elements(Mfac*C')-(mfac*c'))<joTol
+        @test norm(elements(Mfac*conj(C))-(mfac*conj(c)))<joTol
+        @test norm(elements(C*Mfac)-(c*mfac))<joTol
+        @test norm(elements(C.'*Mfac)-(c.'*mfac))<joTol
+        @test norm(elements(C'*Mfac)-(c'*mfac))<joTol
+        @test norm(elements(conj(C)*Mfac)-(conj(c)*mfac))<joTol
+        @test norm(elements(C+afac)-(c+afac))<joTol
+        @test norm(elements(C.'+afac)-(c.'+afac))<joTol
+        @test norm(elements(C'+afac)-(c'+afac))<joTol
+        @test norm(elements(conj(C)+afac)-(conj(c)+afac))<joTol
+        @test norm(elements(afac+C)-(afac+c))<joTol
+        @test norm(elements(afac+C.')-(afac+c.'))<joTol
+        @test norm(elements(afac+C')-(afac+c'))<joTol
+        @test norm(elements(afac+conj(C))-(afac+conj(c)))<joTol
+        @test norm(elements(C+Afac)-(c+afac))<joTol
+        @test norm(elements(C.'+Afac)-(c.'+afac))<joTol
+        @test norm(elements(C'+Afac)-(c'+afac))<joTol
+        @test norm(elements(conj(C)+Afac)-(conj(c)+afac))<joTol
+        @test norm(elements(Afac+C)-(afac+c))<joTol
+        @test norm(elements(Afac+C.')-(afac+c.'))<joTol
+        @test norm(elements(Afac+C')-(afac+c'))<joTol
+        @test norm(elements(Afac+conj(C))-(afac+conj(c)))<joTol
         #@test norm(C\vm-c\vm)<joTol
         #@test norm(C\mvm-c\mvm)<joTol
         #@test norm(C'\vn-c'\vn)<joTol

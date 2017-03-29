@@ -29,7 +29,9 @@ end
 A=joMatrix(a)
 B=joMatrix(b)
 afac=rand(eltype(a))
+Afac=joNumber(afac,A)
 mfac=rand(eltype(a))
+Mfac=joNumber(mfac,A)
 
 println("$tsname $tname")
     @testset "$tname A" begin
@@ -82,6 +84,14 @@ println("$tsname $tname")
         @test norm(elements(A.'*mfac)-(a.'*mfac))<joTol
         @test norm(elements(A'*mfac)-(a'*mfac))<joTol
         @test norm(elements(conj(A)*mfac)-(conj(a)*mfac))<joTol
+        @test norm(elements(Mfac*A)-(mfac*a))<joTol
+        @test norm(elements(Mfac*A.')-(mfac*a.'))<joTol
+        @test norm(elements(Mfac*A')-(mfac*a'))<joTol
+        @test norm(elements(Mfac*conj(A))-(mfac*conj(a)))<joTol
+        @test norm(elements(A*Mfac)-(a*mfac))<joTol
+        @test norm(elements(A.'*Mfac)-(a.'*mfac))<joTol
+        @test norm(elements(A'*Mfac)-(a'*mfac))<joTol
+        @test norm(elements(conj(A)*Mfac)-(conj(a)*mfac))<joTol
         @test norm(elements(A+afac)-(a+afac))<joTol
         @test norm(elements(A.'+afac)-(a.'+afac))<joTol
         @test norm(elements(A'+afac)-(a'+afac))<joTol
@@ -90,6 +100,14 @@ println("$tsname $tname")
         @test norm(elements(afac+A.')-(afac+a.'))<joTol
         @test norm(elements(afac+A')-(afac+a'))<joTol
         @test norm(elements(afac+conj(A))-(afac+conj(a)))<joTol
+        @test norm(elements(A+Afac)-(a+afac))<joTol
+        @test norm(elements(A.'+Afac)-(a.'+afac))<joTol
+        @test norm(elements(A'+Afac)-(a'+afac))<joTol
+        @test norm(elements(conj(A)+Afac)-(conj(a)+afac))<joTol
+        @test norm(elements(Afac+A)-(afac+a))<joTol
+        @test norm(elements(Afac+A.')-(afac+a.'))<joTol
+        @test norm(elements(Afac+A')-(afac+a'))<joTol
+        @test norm(elements(Afac+conj(A))-(afac+conj(a)))<joTol
     end
 
 end # end test loop
