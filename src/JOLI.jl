@@ -29,7 +29,7 @@ export joTol
 joTol = 10e-12
 
 # package for each operator code goes here
-include("Types.jl")
+include("MiscTypes.jl")
 include("Utils.jl")
 include("joAbstractOperator.jl")
 include("joLinearOperator.jl")
