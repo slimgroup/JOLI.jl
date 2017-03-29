@@ -60,10 +60,10 @@ end
 
 export joDFT
 """
+Multi-dimensional FFT transform over fast dimension(s)
+
     joDFT(m[,n[, ...]]
             [;centered=false,DDT=Float64,RDT=(DDT:<Real?Complex{DDT}:DDT)])
-
-Multi-dimensional FFT transform over fast dimension(s)
 
 # Examples
 

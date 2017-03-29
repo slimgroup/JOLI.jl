@@ -12,9 +12,9 @@ end
 ## outer constructors
 
 """
-    joDict(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
-
 Dictionary operator composed from different square JOLI operators
+
+    joDict(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);
@@ -86,9 +86,9 @@ function joDict{WDT<:Number}(ops::joAbstractLinearOperator...;
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 """
-    joDict(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
-
 Dictionary operator composed from l-times replicated square JOLI operator
+
+    joDict(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);

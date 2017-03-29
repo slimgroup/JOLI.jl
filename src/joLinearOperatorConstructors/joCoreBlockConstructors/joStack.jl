@@ -12,9 +12,9 @@ end
 ## outer constructors
 
 """
-    joStack(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
-
 Stack operator composed from different square JOLI operators
+
+    joStack(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);
@@ -86,9 +86,9 @@ function joStack{WDT<:Number}(ops::joAbstractLinearOperator...;
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 """
-    joStack(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
-
 Stack operator composed from l-times replicated square JOLI operator
+
+    joStack(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);

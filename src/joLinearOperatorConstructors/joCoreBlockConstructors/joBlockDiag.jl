@@ -12,9 +12,9 @@ end
 ## outer constructors
 
 """
-    joBlockDiag(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
-
 Block-diagonal operator composed from different square JOLI operators
+
+    joBlockDiag(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);
@@ -84,9 +84,9 @@ function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;
                       fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
 end
 """
-    joBlockDiag(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
-
 Block-diagonal operator composed from l-times replicated square JOLI operator
+
+    joBlockDiag(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);

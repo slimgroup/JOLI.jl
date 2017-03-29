@@ -30,9 +30,9 @@ end
 
 export joDCT
 """
-    joDCT(m[,n[, ...]] [;DDT=Float64,RDT=DDT])
-
 Multi-dimensional DCT transform over fast dimension(s)
+
+    joDCT(m[,n[, ...]] [;DDT=Float64,RDT=DDT])
 
 # Examples
 - joDCT(m) - 1D DCT

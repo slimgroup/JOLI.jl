@@ -43,11 +43,11 @@ end
 
 export joCurvelet2D
 """
+2D Curvelet transform (wrapping) over fast dimensions
+
     joCurvelet2D(n1,n2
                 [;DDT=Float64,RDT=DDT,
                  nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
-
-2D Curvelet transform (wrapping) over fast dimensions
 
 # Arguments
 - n1,n2 - image sizes
