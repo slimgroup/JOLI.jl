@@ -46,14 +46,14 @@ norm(A::joAbstractLinearOperator,p::Real=2) = norm(elements(A),p)
 vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(elements(A),p)
 
 # real(jo)
-real{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = A
+#real{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = A
 function real{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT})
     throw(joLinearOperatorException("real(jo) not implemented"))
 end
 joReal{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = real(A)
 
 # imag(jo)
-imag{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = joZeros(A.m,A.n,DDT,RDT)
+#imag{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = joZeros(A.m,A.n,DDT,RDT)
 function imag{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT})
     throw(joLinearOperatorException("imag(jo) not implemented"))
 end
