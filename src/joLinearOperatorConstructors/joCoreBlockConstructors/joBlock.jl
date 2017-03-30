@@ -27,11 +27,11 @@ Block operator composed from different square JOLI operators
     d=rand(Complex{Float64},6,6);
     D=joMatrix(d;DDT=Complex{Float32},RDT=Complex{Float64},name="D")
     # either
-        S=joBlock([2,2],A,B,C,D) # basic stack in function syntax
+        S=joBlock([2,2],A,B,C,D) # basic block in function syntax
     # or
-        S=[A B; C D] # basic stack in [] syntax
+        S=[A B; C D] # basic block in [] syntax
     w=rand(Complex{Float64},4)
-    S=joBlock(A,B,C;weights=w) # weighted stack
+    S=joBlock(A,B,C;weights=w) # weighted block
 
 # Notes
 - operators are to be given in row-major order
