@@ -3,12 +3,12 @@
 
 # JOLI reference
 
-- [JOLI reference](index.md#JOLI-reference-1)
-    - [Types](index.md#Types-1)
-    - [Constructors](index.md#Constructors-1)
-    - [Functions](index.md#Functions-1)
-    - [Macros](index.md#Macros-1)
-    - [Index](index.md#Index-1)
+- [JOLI reference](REFERENCE.md#JOLI-reference-1)
+    - [Types](REFERENCE.md#Types-1)
+    - [Constructors](REFERENCE.md#Constructors-1)
+    - [Functions](REFERENCE.md#Functions-1)
+    - [Macros](REFERENCE.md#Macros-1)
+    - [Index](REFERENCE.md#Index-1)
 
 
 <a id='Types-1'></a>
@@ -42,7 +42,7 @@ joMatrix type
   * iop_C::Nullable{Function} : inverse for fop_C
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joMatrix.jl#L10-L30' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joMatrix.jl#L10-L30' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearFunction' href='#JOLI.joLinearFunction'>#</a>
 **`JOLI.joLinearFunction`** &mdash; *Type*.
@@ -71,7 +71,7 @@ joLinearFunction type
   * iop_C::Nullable{Function} : inverse for fop_C
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearFunction.jl#L11-L31' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearFunction.jl#L11-L31' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearOperator' href='#JOLI.joLinearOperator'>#</a>
 **`JOLI.joLinearOperator`** &mdash; *Type*.
@@ -86,7 +86,7 @@ joLinearOperator is glueing type & constructor
 ```
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearOperator.jl#L13-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearOperator.jl#L13-L19' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joNumber' href='#JOLI.joNumber'>#</a>
 **`JOLI.joNumber`** &mdash; *Type*.
@@ -108,7 +108,7 @@ A number type to use for jo operations with number
   * rdt::RDT : number to use when acting on vector to return range vector
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/MiscTypes.jl#L8-L21' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/MiscTypes.jl#L8-L21' class='documenter-source'>source</a><br>
 
 
 <a id='Constructors-1'></a>
@@ -144,7 +144,7 @@ Look up argument names in help to joMatrix.
   * if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joMatrix/constructors.jl#L4-L24' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joMatrix/constructors.jl#L4-L24' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearFunctionAll' href='#JOLI.joLinearFunctionAll'>#</a>
 **`JOLI.joLinearFunctionAll`** &mdash; *Function*.
@@ -168,7 +168,7 @@ Look up argument names in help to joLinearFunction.
   * the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearFunction/constructors.jl#L4-L18' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearFunction/constructors.jl#L4-L18' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearFunctionT' href='#JOLI.joLinearFunctionT'>#</a>
 **`JOLI.joLinearFunctionT`** &mdash; *Function*.
@@ -191,7 +191,7 @@ Look up argument names in help to joLinearFunction.
   * the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearFunction/constructors.jl#L28-L41' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearFunction/constructors.jl#L28-L41' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearFunctionCT' href='#JOLI.joLinearFunctionCT'>#</a>
 **`JOLI.joLinearFunctionCT`** &mdash; *Function*.
@@ -214,7 +214,7 @@ Look up argument names in help to joLinearFunction.
   * the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearFunction/constructors.jl#L56-L69' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearFunction/constructors.jl#L56-L69' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearFunctionFwdT' href='#JOLI.joLinearFunctionFwdT'>#</a>
 **`JOLI.joLinearFunctionFwdT`** &mdash; *Function*.
@@ -237,7 +237,7 @@ Look up argument names in help to joLinearFunction.
   * the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearFunction/constructors.jl#L84-L97' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearFunction/constructors.jl#L84-L97' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joLinearFunctionFwdCT' href='#JOLI.joLinearFunctionFwdCT'>#</a>
 **`JOLI.joLinearFunctionFwdCT`** &mdash; *Function*.
@@ -260,7 +260,7 @@ Look up argument names in help to joLinearFunction.
   * the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearFunction/constructors.jl#L109-L122' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearFunction/constructors.jl#L109-L122' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joNumber-Tuple{NT<:Number}' href='#JOLI.joNumber-Tuple{NT<:Number}'>#</a>
 **`JOLI.joNumber`** &mdash; *Method*.
@@ -276,7 +276,7 @@ joNumber(num)
 Create joNumber with types matching given number
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/MiscTypes.jl#L26-L33' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/MiscTypes.jl#L26-L33' class='documenter-source'>source</a><br>
 
 <a id='JOLI.joNumber-Tuple{NT<:Number,JOLI.joAbstractLinearOperator{DDT,RDT}}' href='#JOLI.joNumber-Tuple{NT<:Number,JOLI.joAbstractLinearOperator{DDT,RDT}}'>#</a>
 **`JOLI.joNumber`** &mdash; *Method*.
@@ -292,7 +292,7 @@ joNumber(num,A::joAbstractLinearOperator{DDT,RDT})
 Create joNumber with types matching the given operator.
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/joLinearOperator/constructors.jl#L6-L13' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/joLinearOperator/constructors.jl#L6-L13' class='documenter-source'>source</a><br>
 
 
 <a id='Functions-1'></a>
@@ -316,7 +316,7 @@ Nullable{Function} macro for null function
 ```
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/Utils.jl#L14-L18' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/Utils.jl#L14-L18' class='documenter-source'>source</a><br>
 
 <a id='JOLI.@joNF-Tuple{Expr}' href='#JOLI.@joNF-Tuple{Expr}'>#</a>
 **`JOLI.@joNF`** &mdash; *Macro*.
@@ -330,25 +330,25 @@ Nullable{Function} macro for given function
 ```
 
 
-<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/548c848bb810414db33d50a71d61a587aa702bbb/src/Utils.jl#L23-L27' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/slimgroup/JOLI.jl/tree/798ecfc383bc75dcfbe9a3718671c0aed42c2621/src/Utils.jl#L23-L27' class='documenter-source'>source</a><br>
 
 
 <a id='Index-1'></a>
 
 ## Index
 
-- [`JOLI.joLinearFunction`](index.md#JOLI.joLinearFunction)
-- [`JOLI.joLinearOperator`](index.md#JOLI.joLinearOperator)
-- [`JOLI.joMatrix`](index.md#JOLI.joMatrix-Tuple{AbstractArray{EDT,2}})
-- [`JOLI.joMatrix`](index.md#JOLI.joMatrix)
-- [`JOLI.joNumber`](index.md#JOLI.joNumber-Tuple{NT<:Number})
-- [`JOLI.joNumber`](index.md#JOLI.joNumber-Tuple{NT<:Number,JOLI.joAbstractLinearOperator{DDT,RDT}})
-- [`JOLI.joNumber`](index.md#JOLI.joNumber)
-- [`JOLI.joLinearFunctionAll`](index.md#JOLI.joLinearFunctionAll)
-- [`JOLI.joLinearFunctionCT`](index.md#JOLI.joLinearFunctionCT)
-- [`JOLI.joLinearFunctionFwdCT`](index.md#JOLI.joLinearFunctionFwdCT)
-- [`JOLI.joLinearFunctionFwdT`](index.md#JOLI.joLinearFunctionFwdT)
-- [`JOLI.joLinearFunctionT`](index.md#JOLI.joLinearFunctionT)
-- [`JOLI.@joNF`](index.md#JOLI.@joNF-Tuple{})
-- [`JOLI.@joNF`](index.md#JOLI.@joNF-Tuple{Expr})
+- [`JOLI.joLinearFunction`](REFERENCE.md#JOLI.joLinearFunction)
+- [`JOLI.joLinearOperator`](REFERENCE.md#JOLI.joLinearOperator)
+- [`JOLI.joMatrix`](REFERENCE.md#JOLI.joMatrix-Tuple{AbstractArray{EDT,2}})
+- [`JOLI.joMatrix`](REFERENCE.md#JOLI.joMatrix)
+- [`JOLI.joNumber`](REFERENCE.md#JOLI.joNumber-Tuple{NT<:Number})
+- [`JOLI.joNumber`](REFERENCE.md#JOLI.joNumber-Tuple{NT<:Number,JOLI.joAbstractLinearOperator{DDT,RDT}})
+- [`JOLI.joNumber`](REFERENCE.md#JOLI.joNumber)
+- [`JOLI.joLinearFunctionAll`](REFERENCE.md#JOLI.joLinearFunctionAll)
+- [`JOLI.joLinearFunctionCT`](REFERENCE.md#JOLI.joLinearFunctionCT)
+- [`JOLI.joLinearFunctionFwdCT`](REFERENCE.md#JOLI.joLinearFunctionFwdCT)
+- [`JOLI.joLinearFunctionFwdT`](REFERENCE.md#JOLI.joLinearFunctionFwdT)
+- [`JOLI.joLinearFunctionT`](REFERENCE.md#JOLI.joLinearFunctionT)
+- [`JOLI.@joNF`](REFERENCE.md#JOLI.@joNF-Tuple{})
+- [`JOLI.@joNF`](REFERENCE.md#JOLI.@joNF-Tuple{Expr})
 
