@@ -1,6 +1,7 @@
 # JOLI reference
 
 ```@contents
+Depth = 3
 ```
 
 ##  Constructors
