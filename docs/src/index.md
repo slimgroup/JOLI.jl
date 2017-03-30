@@ -43,6 +43,21 @@ joNumber{NT<:Number}(num::NT)
 joNumber{NT<:Number,DDT,RDT}(num::NT,A::joAbstractLinearOperator{DDT,RDT})
 ```
 
+## Pre-built operators
+
+### joMatrix based
+
+```@docs
+```
+
+### joLinearFunction based
+
+```@docs
+joDCT(ms::Integer...;DDT::DataType=Float64,RDT::DataType=DDT)
+joDFT(ms::Integer...;centered::Bool=false,DDT::DataType=Float64,RDT::DataType=(DDT<:Real?Complex{DDT}:DDT))
+joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataType=DDT, nbscales::Integer=0, nbangles_coarse::Integer=16, all_crvlts::Bool=false, real_crvlts::Bool=true, zero_finest::Bool=false)
+```
+
 ## Functions
 
 ```@docs
