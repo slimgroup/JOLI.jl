@@ -10,7 +10,7 @@ joLinearFunction outer constructor
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLinearFunctionAll")
 
-Look up argument names in help to joLinearFunction.
+Look up argument names in help to joLinearFunction type.
 
 # Notes
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
@@ -33,7 +33,7 @@ joLinearFunction outer constructor
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLinearFunctionT")
 
-Look up argument names in help to joLinearFunction.
+Look up argument names in help to joLinearFunction type.
 
 # Notes
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
@@ -61,7 +61,7 @@ joLinearFunction outer constructor
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLinearFunctionCT")
 
-Look up argument names in help to joLinearFunction.
+Look up argument names in help to joLinearFunction type.
 
 # Notes
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
@@ -89,7 +89,7 @@ joLinearFunction outer constructor
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLinearFunctionFwdT")
 
-Look up argument names in help to joLinearFunction.
+Look up argument names in help to joLinearFunction type.
 
 # Notes
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
@@ -114,7 +114,7 @@ joLinearFunction outer constructor
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLinearFunctionFwdCT")
 
-Look up argument names in help to joLinearFunction.
+Look up argument names in help to joLinearFunction type.
 
 # Notes
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT

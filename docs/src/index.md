@@ -22,7 +22,21 @@ joLinearFunctionFwdT(m::Integer,n::Integer, fop::Function,fop_T::Function, DDT::
 joLinearFunctionFwdCT(m::Integer,n::Integer, fop::Function,fop_CT::Function, DDT::DataType,RDT::DataType=DDT; name::String="joLinearFunctionFwdCT")
 ```
 
-### Miscaleneous types
+### Composite operators
+
+```@docs
+joKron(ops::joAbstractLinearOperator...)
+joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...; weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag")
+joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator; weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag")
+joDict{WDT<:Number}(ops::joAbstractLinearOperator...; weights::AbstractVector{WDT}=zeros(0),name::String="joDict")
+joDict{WDT<:Number}(l::Integer,op::joAbstractLinearOperator; weights::AbstractVector{WDT}=zeros(0),name::String="joDict")
+joStack{WDT<:Number}(ops::joAbstractLinearOperator...; weights::AbstractVector{WDT}=zeros(0),name::String="joStack")
+joStack{WDT<:Number}(l::Integer,op::joAbstractLinearOperator; weights::AbstractVector{WDT}=zeros(0),name::String="joStack")
+joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLinearOperator...; weights::AbstractVector{WDT}=zeros(0),name::String="joBlock")
+joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
+```
+
+### Miscaleneous
 
 ```@docs
 joNumber{NT<:Number}(num::NT)

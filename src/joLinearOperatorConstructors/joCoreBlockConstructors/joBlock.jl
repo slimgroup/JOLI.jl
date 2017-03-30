@@ -14,7 +14,8 @@ end
 """
 Block operator composed from different square JOLI operators
 
-    joBlock(rows::Tuple{Vararg{Int}},ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
+    joBlock(rows::Tuple{Vararg{Int}},ops::joAbstractLinearOperator...;
+        weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);

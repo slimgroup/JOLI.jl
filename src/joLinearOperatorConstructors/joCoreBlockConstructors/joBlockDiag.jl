@@ -14,7 +14,8 @@ end
 """
 Block-diagonal operator composed from different square JOLI operators
 
-    joBlockDiag(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
+    joBlockDiag(ops::joAbstractLinearOperator...;
+        weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);

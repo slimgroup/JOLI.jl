@@ -40,7 +40,8 @@ end
 """
 Universal (Core) block operator composed from different JOLI operators
 
-    joCoreBlock(ops::joAbstractLinearOperator...;moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector,name::String)
+    joCoreBlock(ops::joAbstractLinearOperator...;
+        moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,5);

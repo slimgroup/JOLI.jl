@@ -14,7 +14,8 @@ end
 """
 Stack operator composed from different square JOLI operators
 
-    joStack(ops::joAbstractLinearOperator...;weights::AbstractVector,name::String)
+    joStack(ops::joAbstractLinearOperator...;
+        weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);
@@ -88,7 +89,8 @@ end
 """
 Stack operator composed from l-times replicated square JOLI operator
 
-    joStack(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
+    joStack(l::Int,op::joAbstractLinearOperator;
+        weights::AbstractVector,name::String)
 
 # Example
     a=rand(Complex{Float64},4,4);
