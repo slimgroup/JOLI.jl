@@ -61,8 +61,8 @@ joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataType=DDT, nb
 ## Functions
 
 ```@docs
-jo_complex_eltype{T}(a::Complex{T})
 jo_complex_eltype(DT::DataType)
+jo_complex_eltype{T}(a::Complex{T})
 jo_type_mismatch_error_set(flag::Bool)
 jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
 jo_convert_warn_set(flag::Bool)

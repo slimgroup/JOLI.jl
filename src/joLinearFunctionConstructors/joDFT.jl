@@ -71,7 +71,7 @@ Multi-dimensional FFT transform over fast dimension(s)
 - joDFT(m; centered=true) - 1D FFT with centered coefficients
 - joDFT(m,n) - 2D FFT
 - joDFT(m; DDT=Float32) - 1D FFT for 32-bit input
-- joDFT(m; DDT=Float32,RDT=Float64) - 1D FFT for 32-bit input and 64-bit output
+- joDFT(m; DDT=Float32,RDT=Complex{Float64}) - 1D FFT for 32-bit input and 64-bit output
 
 # Notes
 - if DDT:<Real then imaginary part will be neglected for transpose/ctranspose
