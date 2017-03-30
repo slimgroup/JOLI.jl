@@ -3,14 +3,6 @@
 ```@contents
 ```
 
-## Types
-```@docs
-joMatrix
-joLinearFunction
-joLinearOperator
-joNumber
-```
-
 ##  Constructors
 
 ### Matrix-based operators
@@ -45,6 +37,15 @@ joNumber{NT<:Number,DDT,RDT}(num::NT,A::joAbstractLinearOperator{DDT,RDT})
 ```@docs
 @joNF()
 @joNF(fun::Expr)
+```
+
+## Types
+
+```@docs
+joMatrix
+joLinearFunction
+joLinearOperator
+joNumber
 ```
 
 ## Index
