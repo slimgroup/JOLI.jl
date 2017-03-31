@@ -20,4 +20,5 @@ For now it is just [REFERENCE giude](REFERENCE.md). More will come later.
 
 ## Examples (to be extended)
 
-Check [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl) for an example of how to build your own operator.
+Check [templates](templates) for an examples of how to build your own operators.
+or see DCT implementation in [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl).
