@@ -14,11 +14,11 @@ or with GitHub account (and SSH keys registared)
 
     Pkg.clone("git@github.com:slimgroup/JOLI.jl.git")
 
-## Documentation
+## Documentation (more to come)
 
-For now it is just [REFERENCE guide](REFERENCE.md). More will come later.
+For now it is just [REFERENCE guide](REFERENCE.md).
 
-## Examples (to be extended)
+## Examples (more to come)
 
 Check [templates](templates) for an examples of how to build your own operators,
 or look up DCT implementation in [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl).
