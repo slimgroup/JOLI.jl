@@ -16,7 +16,7 @@ or with GitHub account (and SSH keys registared)
 
 ## Documentation
 
-For now it is just [REFERENCE giude](REFERENCE.md). More will come later.
+For now it is just [REFERENCE guide](REFERENCE.md). More will come later.
 
 ## Examples (to be extended)
 
