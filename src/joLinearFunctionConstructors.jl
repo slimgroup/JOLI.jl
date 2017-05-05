@@ -9,4 +9,7 @@ include("joLinearFunctionConstructors/joDFT.jl")
 include("joLinearFunctionConstructors/joDCT.jl")
 
 # FFT operators: joCurvelet2D
-include("joLinearFunctionConstructors/joCurevelet2d.jl")
+include("joLinearFunctionConstructors/joCurvelet2d.jl")
+
+# Padding/extension operators: joExtension
+include("joLinearFunctionConstructors/joExtension.jl")
