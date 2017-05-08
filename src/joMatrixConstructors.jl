@@ -23,3 +23,6 @@ include("joMatrixConstructors/joConstants.jl")
 # vector conversion operators: joReal joImag joConj
 include("joMatrixConstructors/joVecConvert.jl")
 
+# sinc interpolation
+include("joMatrixConstructors/joSincInterp.jl")
+
