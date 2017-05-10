@@ -23,7 +23,7 @@ function joSincInterp{T<:AbstractFloat,I<:Integer}(xin::AbstractArray{T,1},xout:
         window = [kaiser_window(xout[i]-xin[j],r,r_b[r]) for i in 1:length(xout), j in 1:length(xin)]
         S = S .* window
     end
-    return joMatrix(S)
+    return joMatrix(S;name="joSincInterp")
 end
 
 function kaiser_window(x,r,b)
