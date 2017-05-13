@@ -193,19 +193,19 @@ function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joLinearOperator{ADDT,ARDT})
 end
 function *{ADDT,ARDT}(a::Number,A::joAbstractLinearOperator{ADDT,ARDT})
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a*A*v1,false),
-        v2->jo_convert(ADDT,a*A.'*v2,false),
-        v3->jo_convert(ADDT,conj(a)*A'*v3,false),
-        v4->jo_convert(ARDT,conj(a)*conj(A)*v4,false),
+        v1->jo_convert(ARDT,a*(A*v1),false),
+        v2->jo_convert(ADDT,a*(A.'*v2),false),
+        v3->jo_convert(ADDT,conj(a)*(A'*v3),false),
+        v4->jo_convert(ARDT,conj(a)*(conj(A)*v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
 end
 function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joAbstractLinearOperator{ADDT,ARDT})
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a.rdt*A*v1,false),
-        v2->jo_convert(ADDT,a.ddt*A.'*v2,false),
-        v3->jo_convert(ADDT,conj(a.ddt)*A'*v3,false),
-        v4->jo_convert(ARDT,conj(a.rdt)*conj(A)*v4,false),
+        v1->jo_convert(ARDT,a.rdt*(A*v1),false),
+        v2->jo_convert(ADDT,a.ddt*(A.'*v2),false),
+        v3->jo_convert(ADDT,conj(a.ddt)*(A'*v3),false),
+        v4->jo_convert(ARDT,conj(a.rdt)*(conj(A)*v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
 end

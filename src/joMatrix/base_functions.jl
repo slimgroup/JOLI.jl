@@ -64,28 +64,8 @@ function *{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
 end
 
 # *(num,jo)
-function *{ADDT,ARDT}(a::Number,A::joMatrix{ADDT,ARDT})
-    return joMatrix{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a*A.fop(v1),false),
-        v2->jo_convert(ADDT,a*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
-function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joMatrix{ADDT,ARDT})
-    return joMatrix{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a.rdt*A.fop(v1),false),
-        v2->jo_convert(ADDT,a.ddt*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a.ddt)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a.rdt)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # *(jo,num)
-*{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},a::Number) = a*A
-*{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)

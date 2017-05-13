@@ -68,28 +68,8 @@ function *{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVect
 end
 
 # *(num,jo)
-function *{ADDT,ARDT}(a::Number,A::joLinearFunction{ADDT,ARDT})
-    return joLinearFunction{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a*A.fop(v1),false),
-        v2->jo_convert(ADDT,a*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
-function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joLinearFunction{ADDT,ARDT})
-    return joLinearFunction{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a.rdt*A.fop(v1),false),
-        v2->jo_convert(ADDT,a.ddt*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a.ddt)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a.rdt)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # *(jo,num)
-*{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},a::Number) = a*A
-*{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)
