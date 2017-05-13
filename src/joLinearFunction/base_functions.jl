@@ -56,6 +56,17 @@ function *{ARDT,BDDT,CDT}(A::joLinearFunction{CDT,ARDT},B::joLinearFunction{BDDT
 end
 
 # *(jo,mvec)
+function *{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    A.n == size(mv,1) || throw(joLinearFunction("shape mismatch"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    MV=zeros(ARDT,A.m,size(mv,2))
+    for i=1:size(mv,2)
+        V=A.fop(mv[:,i])
+        i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+        MV[:,i]=V
+    end
+    return MV
+end
 
 # *(jo,vec)
 function *{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
