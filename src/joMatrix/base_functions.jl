@@ -44,16 +44,6 @@ ctranspose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *{ARDT,BDDT,CDT}(A::joMatrix{CDT,ARDT},B::joMatrix{BDDT,CDT})
-    A.n == B.m || throw(joMatrixException("shape mismatch"))
-    return joMatrix{BDDT,ARDT}("("*A.name*"*"*B.name*")",A.m,B.n,
-        v1->A.fop(B.fop(v1)),
-        v2->B.fop_T(A.fop_T(v2)),
-        v3->B.fop_CT(A.fop_CT(v3)),
-        v4->A.fop_C(B.fop_C(v4)),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # *(jo,mvec)
 function *{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
