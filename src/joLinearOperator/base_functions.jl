@@ -48,14 +48,14 @@ vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(elements(A),p)
 # real(jo)
 #real{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = A
 function real{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT})
-    throw(joLinearOperatorException("real(jo) not implemented"))
+    throw(joAbstractLinearOperatorException("real(jo) not implemented"))
 end
 joReal{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = real(A)
 
 # imag(jo)
 #imag{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = joZeros(A.m,A.n,DDT,RDT)
 function imag{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT})
-    throw(joLinearOperatorException("imag(jo) not implemented"))
+    throw(joAbstractLinearOperatorException("imag(jo) not implemented"))
 end
 joImag{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = imag(A)
 
@@ -148,7 +148,7 @@ function *{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMa
     return MV
 end
 function *{ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    size(A,2) == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    size(A,2) == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV=zeros(ARDT,size(A,1),size(mv,2))
     for i=1:size(mv,2)
