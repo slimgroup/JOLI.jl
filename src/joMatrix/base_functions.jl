@@ -90,28 +90,8 @@ end
 # +(jo,jo)
 
 # +(jo,num)
-function +{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},b::Number)
-    return joMatrix{ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+joConstants(A.m,A.n,b;DDT=ADDT,RDT=ARDT)*v1,
-        v2->A.fop_T(v2)+joConstants(A.n,A.m,b;DDT=ARDT,RDT=ADDT)*v2,
-        v3->A.fop_CT(v3)+joConstants(A.n,A.m,conj(b);DDT=ARDT,RDT=ADDT)*v3,
-        v4->A.fop_C(v4)+joConstants(A.m,A.n,conj(b);DDT=ADDT,RDT=ARDT)*v4,
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
-function +{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},b::joNumber{ADDT,ARDT})
-    return joMatrix{ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+joConstants(A.m,A.n,b.rdt;DDT=ADDT,RDT=ARDT)*v1,
-        v2->A.fop_T(v2)+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
-        v3->A.fop_CT(v3)+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
-        v4->A.fop_C(v4)+joConstants(A.m,A.n,conj(b.rdt);DDT=ADDT,RDT=ARDT)*v4,
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # +(num,jo)
-+{ADDT,ARDT}(b::Number,A::joMatrix{ADDT,ARDT}) = A+b
-+{ADDT,ARDT}(b::joNumber{ADDT,ARDT},A::joMatrix{ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)
