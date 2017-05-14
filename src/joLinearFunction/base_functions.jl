@@ -88,16 +88,6 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo,jo)
-function +{DDT,RDT}(A::joLinearFunction{DDT,RDT},B::joLinearFunction{DDT,RDT})
-    size(A) == size(B) || throw(joLinearFunctionException("shape mismatch"))
-    return joLinearFunction{DDT,RDT}("("*A.name*"+"*B.name*")",A.m,B.n,
-        v1->A.fop(v1)+B.fop(v1),
-        v2->get(A.fop_T)(v2)+get(B.fop_T)(v2),
-        v3->get(A.fop_CT)(v3)+get(B.fop_CT)(v3),
-        v4->get(A.fop_C)(v4)+get(B.fop_C)(v4),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # +(jo,num)
 function +{ADDT,ARDT}(A::joLinearFunction{ADDT,ARDT},b::Number)

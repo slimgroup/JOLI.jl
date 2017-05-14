@@ -88,16 +88,6 @@ end
 ## overloaded Base +(...jo...)
 
 # +(jo,jo)
-function +{DDT,RDT}(A::joMatrix{DDT,RDT},B::joMatrix{DDT,RDT})
-    size(A) == size(B) || throw(joMatrixException("shape mismatch"))
-    return joMatrix{DDT,RDT}("("*A.name*"+"*B.name*")",A.m,B.n,
-        v1->A.fop(v1)+B.fop(v1),
-        v2->A.fop_T(v2)+B.fop_T(v2),
-        v3->A.fop_CT(v3)+B.fop_CT(v3),
-        v4->A.fop_C(v4)+B.fop_C(v4),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # +(jo,num)
 function +{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},b::Number)
