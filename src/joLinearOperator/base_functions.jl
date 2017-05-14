@@ -227,7 +227,7 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMa
     A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     MV=zeros(ADDT,A.n,size(mv,2))
     for i=1:size(mv,2)
-        MV[:,i]=A.iop(mv[:,i])
+        MV[:,i]=get(A.iop)(mv[:,i])
     end
     return MV
 end

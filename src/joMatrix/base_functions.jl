@@ -71,10 +71,12 @@ end
 ## overloaded Base \(...jo...)
 
 # \(jo,mvec)
-#function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-#    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
-#    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joMatrixException("inverse not defined"))
-#end
+function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
+    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
+    MV=get(A.iop)(mv)
+    return MV
+end
 
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
