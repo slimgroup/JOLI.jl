@@ -1,6 +1,6 @@
 ############################################################
 ## joLinearOperator - overloaded Base functions
-# commons methods class for joAbstractLinearOperator
+# commons methods class for jo[Abstract]LinearOperator
 
 # eltype(jo)
 eltype{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = promote_type(DDT,RDT)

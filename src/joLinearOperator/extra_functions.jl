@@ -1,5 +1,6 @@
 ############################################################
 ## joLinearOperator - extra functions
+# commons methods class for jo[Abstract]LinearOperator
 
 # elements(jo)
 elements{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
@@ -39,3 +40,4 @@ function isadjoint{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT};tol::Float64=0.
     if verbose println("Adjoint test passed ($test) with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
     return test,mytol,dif,rer,rto
 end
+
