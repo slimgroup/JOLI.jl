@@ -176,7 +176,7 @@ end
 ## overloaded Base .-(...jo...)
 
 ############################################################
-## overloaded Base
+## overloaded Base block methods
 
 # hcat(...jo...)
 
