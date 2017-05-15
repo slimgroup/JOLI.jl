@@ -114,16 +114,6 @@ ishermitian{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) =
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *{ARDT,BDDT,CDT}(A::joLinearOperator{CDT,ARDT},B::joLinearOperator{BDDT,CDT})
-    A.n == B.m || throw(joLinearOperatorException("shape mismatch"))
-    return joLinearOperator{BDDT,ARDT}("("*A.name*"*"*B.name*")",A.m,B.n,
-        v1->A.fop(B.fop(v1)),
-        v2->get(B.fop_T)(get(A.fop_T)(v2)),
-        v3->get(B.fop_CT)(get(A.fop_CT)(v3)),
-        v4->get(A.fop_C)(get(B.fop_C)(v4)),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 function *{ARDT,BDDT,CDT}(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLinearOperator{BDDT,CDT})
     size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     return joLinearOperator{BDDT,ARDT}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
