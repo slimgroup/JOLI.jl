@@ -149,24 +149,6 @@ function *{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVect
 end
 
 # *(num,jo)
-function *{ADDT,ARDT}(a::Number,A::joLinearOperator{ADDT,ARDT})
-    return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a*A.fop(v1),false),
-        v2->jo_convert(ADDT,a*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
-function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joLinearOperator{ADDT,ARDT})
-    return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a.rdt*A.fop(v1),false),
-        v2->jo_convert(ADDT,a.ddt*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a.ddt)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a.rdt)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 function *{ADDT,ARDT}(a::Number,A::joAbstractLinearOperator{ADDT,ARDT})
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->jo_convert(ARDT,a*(A*v1),false),
@@ -187,8 +169,6 @@ function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joAbstractLinearOperator{ADDT,AR
 end
 
 # *(jo,num)
-*{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::Number) = a*A
-*{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 *{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},a::Number) = a*A
 *{ADDT,ARDT}(A::joAbstractLinearOperator{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 
