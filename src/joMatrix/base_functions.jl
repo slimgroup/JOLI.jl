@@ -1,5 +1,34 @@
 ############################################################
 ## joMatrix - overloaded Base functions
+# un-implemented methods are defined in joLinearOperator/base_functions.jl
+
+# eltype(jo)
+
+# deltype(jo)
+
+# reltype(jo)
+
+# show(jo)
+
+# showall(jo)
+
+# display(jo)
+
+# size(jo)
+
+# size(jo,1/2)
+
+# length(jo)
+
+# full(jo)
+
+# norm(jo)
+
+# vecnorm(jo)
+
+# real(jo)
+
+# imag(jo)
 
 # conj(jo)
 conj{DDT,RDT}(A::joMatrix{DDT,RDT}) =
@@ -39,6 +68,12 @@ ctranspose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
         A.iop,
         A.iop_T
         )
+
+# isreal(jo)
+
+# issymmetric(jo)
+
+# ishermitian(jo)
 
 ############################################################
 ## overloaded Base *(...jo...)
@@ -86,8 +121,12 @@ function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
     return V
 end
 
+
+# \(jo,num)
 ############################################################
 ## overloaded Base +(...jo...)
+
+# +(jo)
 
 # +(jo,jo)
 
@@ -111,6 +150,12 @@ end
         v8->-get(A.iop_C)(v8)
         )
 
+# -(jo,jo)
+
+# -(jo,num)
+
+# -(num,jo)
+
 ############################################################
 ## overloaded Base .*(...jo...)
 
@@ -124,11 +169,11 @@ end
 ## overloaded Base .-(...jo...)
 
 ############################################################
-## overloaded Base hcat(...jo...)
+## overloaded Base
 
-############################################################
-## overloaded Base vcat(...jo...)
+# hcat(...jo...)
 
-############################################################
-## overloaded Base hvcat(...jo...)
+# vcat(...jo...)
+
+# hvcat(...jo...)
 

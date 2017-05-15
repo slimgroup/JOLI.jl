@@ -1,5 +1,6 @@
 ############################################################
 ## joLinearOperator - overloaded Base functions
+# commons methods class for joAbstractLinearOperator
 
 # eltype(jo)
 eltype{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = promote_type(DDT,RDT)
@@ -149,8 +150,6 @@ function *{ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{ADDT,ARDT},mv::Ab
     return MV
 end
 
-# *(mvec,jo)
-
 # *(jo,vec)
 function *{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
@@ -159,8 +158,6 @@ function *{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVect
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     return V
 end
-
-# *(vec,jo)
 
 # *(num,jo)
 function *{ADDT,ARDT}(a::Number,A::joLinearOperator{ADDT,ARDT})
@@ -209,8 +206,6 @@ end
 ############################################################
 ## overloaded Base \(...jo...)
 
-# \(jo,jo)
-
 # \(jo,mvec)
 function \{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
@@ -231,8 +226,6 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{ADDT,ARDT},mv::Ab
     return MV
 end
 
-# \(mvec,jo)
-
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,Vector) not supplied"))
@@ -240,10 +233,6 @@ function \{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVect
     V=get(A.iop)(v)
     return V
 end
-
-# \(vec,jo)
-
-# \(num,jo)
 
 # \(jo,num)
 #\{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},a::Number) = inv(a)*A
@@ -278,14 +267,6 @@ function +{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},B::joAbstractLinearOper
         @joNF, @joNF, @joNF, @joNF
         )
 end
-
-# +(jo,mvec)
-
-# +(mvec,jo)
-
-# +(jo,vec)
-
-# +(vec,jo)
 
 # +(jo,num)
 function +{ADDT,ARDT}(A::joLinearOperator{ADDT,ARDT},b::Number)
@@ -350,14 +331,6 @@ end
 # -(jo,jo)
 -(A::joAbstractLinearOperator,B::joAbstractLinearOperator) = A+(-B)
 
-# -(jo,mvec)
-
-# -(mvec,jo)
-
-# -(jo,vec)
-
-# -(vec,jo)
-
 # -(jo,num)
 -(A::joAbstractLinearOperator,b::Number) = A+(-b)
 -(A::joAbstractLinearOperator,b::joNumber) = A+(-b)
@@ -369,80 +342,24 @@ end
 ############################################################
 ## overloaded Base .*(...jo...)
 
-# .*(jo,jo)
-
-# .*(jo,mvec)
-
-# .*(mvec,jo)
-
-# .*(jo,vec)
-
-# .*(vec,jo)
-
-# .*(num,jo)
-
-# .*(jo,num)
-
 ############################################################
 ## overloaded Base .\(...jo...)
-
-# .\(jo,jo)
-
-# .\(jo,mvec)
-
-# .\(mvec,jo)
-
-# .\(jo,vec)
-
-# .\(vec,jo)
-
-# .\(num,jo)
-
-# .\(jo,num)
 
 ############################################################
 ## overloaded Base .+(...jo...)
 
-# .+(jo,jo)
-
-# .+(jo,mvec)
-
-# .+(mvec,jo)
-
-# .+(jo,vec)
-
-# .+(vec,jo)
-
-# .+(jo,num)
-
-# .+(num,jo)
-
 ############################################################
 ## overloaded Base .-(...jo...)
 
-# .-(jo,jo)
-
-# .-(jo,mvec)
-
-# .-(mvec,jo)
-
-# .-(jo,vec)
-
-# .-(vec,jo)
-
-# .-(jo,num)
-
-# .-(num,jo)
-
 ############################################################
-## overloaded Base hcat(...jo...)
+## overloaded Base block methods
+
+# hcat(...jo...)
 hcat(ops::joAbstractLinearOperator...) = joDict(ops...)
 
-############################################################
-## overloaded Base vcat(...jo...)
+# vcat(...jo...)
 vcat(ops::joAbstractLinearOperator...) = joStack(ops...)
 
-############################################################
-## overloaded Base hvcat(...jo...)
+# hvcat(...jo...)
 hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(collect(rows),ops...)
 
