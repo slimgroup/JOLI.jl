@@ -198,12 +198,12 @@ function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT})
 end
 
 # *(jo,mvec)
-#function *{AEDT,mvDT:<Number}(A::joCoreBlock{AEDT},mv::AbstractMatrix{mvDT})
-    #size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
-    #MV=zeros(promote_type(AEDT,eltype(mv)),size(A,1),size(mv,2))
-    #for i=1:size(mv,2)
-        #MV[:,i]+=A*mv[:,i]
-    #end
-    #return MV
-#end
+function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT})
+    size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
+    MV=zeros(ARDT,size(A,1),size(mv,2))
+    for i=1:size(mv,2)
+        MV[:,i]+=A*mv[:,i]
+    end
+    return MV
+end
 
