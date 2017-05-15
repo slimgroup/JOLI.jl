@@ -185,15 +185,6 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMa
     end
     return MV
 end
-function \{ADDT,ARDT,mvDT<:Number}(A::joAbstractLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    isinvertible(A) || throw(joAbstractLinearOperatorException("\(jo,MultiVector) not supplied"))
-    size(A,1) == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
-    MV=zeros(ADDT,size(A,2),size(mv,2))
-    for i=1:size(mv,2)
-        MV[:,i]=A\mv[:,i]
-    end
-    return MV
-end
 
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVector{vDT})
