@@ -121,8 +121,8 @@ function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
     return V
 end
 
-
 # \(jo,num)
+
 ############################################################
 ## overloaded Base +(...jo...)
 
