@@ -159,12 +159,12 @@ function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT})
 end
 
 # *(jo,mvec)
-#function *{AEDT,mvDT:<Number}(A::joKron{AEDT},mv::AbstractMatrix{mvDT})
-    #size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    #MV=zeros(promote_type(AEDT,eltype(mv)),A.m,size(mv,2))
-    #for i=1:size(mv,2)
-        #MV[:,i]=A*mv[:,i]
-    #end
-    #return MV
-#end
+function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT})
+    size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
+    MV=zeros(ARDT,A.m,size(mv,2))
+    for i=1:size(mv,2)
+        MV[:,i]=A*mv[:,i]
+    end
+    return MV
+end
 
