@@ -194,8 +194,12 @@ end
 function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT})
     size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
     MV=zeros(ARDT,size(A,1),size(mv,2))
-    for i=1:size(mv,2)
-        MV[:,i]+=A*mv[:,i]
+    for i=1:1:A.l
+        sm=A.mo[i]+1
+        em=A.mo[i]+A.ms[i]
+        sn=A.no[i]+1
+        en=A.no[i]+A.ns[i]
+        MV[sm:em,:]+=A.fop[i]*mv[sn:en,:]
     end
     return MV
 end

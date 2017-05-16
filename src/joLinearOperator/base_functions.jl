@@ -130,12 +130,8 @@ end
 function *{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    MV=zeros(ARDT,A.m,size(mv,2))
-    for i=1:size(mv,2)
-        V=A.fop(mv[:,i])
-        i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
-        MV[:,i]=V
-    end
+    MV = A.fop(mv)
+    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 
