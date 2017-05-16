@@ -42,6 +42,8 @@ for t=1:T # start test loop
         @test norm(bd'*mvm-BD'*mvm)<eps(norm(bd'*mvm))^(1./3.)
         @test norm(conj(bd)*vn-conj(BD)*vn)<eps(norm(conj(bd)*vn))^(1./3.)
         @test norm(conj(bd)*mvn-conj(BD)*mvn)<eps(norm(conj(bd)*mvn))^(1./3.)
+        @test norm((-bd)*vn-(-BD)*vn)<eps(norm((-bd)*vn))^(1./3.)
+        @test norm((-bd)*mvn-(-BD)*mvn)<eps(norm((-bd)*mvn))^(1./3.)
     end
 
 end # end test loop
@@ -90,6 +92,8 @@ for t=1:T # start test loop
         @test norm(bd'*mvm-BD'*mvm)<eps(norm(bd'*mvm))^(1./3.)
         @test norm(conj(bd)*vn-conj(BD)*vn)<eps(norm(conj(bd)*vn))^(1./3.)
         @test norm(conj(bd)*mvn-conj(BD)*mvn)<eps(norm(conj(bd)*mvn))^(1./3.)
+        @test norm((-bd)*vn-(-BD)*vn)<eps(norm((-bd)*vn))^(1./3.)
+        @test norm((-bd)*mvn-(-BD)*mvn)<eps(norm((-bd)*mvn))^(1./3.)
     end
 
 end # end test loop

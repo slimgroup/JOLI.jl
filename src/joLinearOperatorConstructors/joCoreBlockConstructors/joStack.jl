@@ -66,10 +66,6 @@ function joStack{WDT<:Number}(ops::joAbstractLinearOperator...;
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)
     fops_C=Vector{joAbstractLinearOperator}(0)
-    iops=Vector{joAbstractLinearOperator}(0)
-    iops_T=Vector{joAbstractLinearOperator}(0)
-    iops_CT=Vector{joAbstractLinearOperator}(0)
-    iops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
@@ -84,7 +80,7 @@ function joStack{WDT<:Number}(ops::joAbstractLinearOperator...;
         end
     end
     return joCoreBlock{deltype(fops[1]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
+                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 """
 Stack operator composed from l-times replicated square JOLI operator
@@ -127,10 +123,6 @@ function joStack{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)
     fops_C=Vector{joAbstractLinearOperator}(0)
-    iops=Vector{joAbstractLinearOperator}(0)
-    iops_T=Vector{joAbstractLinearOperator}(0)
-    iops_CT=Vector{joAbstractLinearOperator}(0)
-    iops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*op)
@@ -145,6 +137,6 @@ function joStack{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
         end
     end
     return joCoreBlock{deltype(op),reltype(op)}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
+                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 

@@ -37,6 +37,8 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=c
         @test norm(bm'*mvm-CB'*mvm)<eps(norm(bm'*mvm))^(1./3.)
         @test norm(conj(bm)*vn-conj(CB)*vn)<eps(norm(conj(bm)*vn))^(1./3.)
         @test norm(conj(bm)*mvn-conj(CB)*mvn)<eps(norm(conj(bm)*mvn))^(1./3.)
+        @test norm((-bm)*vn-(-CB)*vn)<eps(norm((-bm)*vn))^(1./3.)
+        @test norm((-bm)*mvn-(-CB)*mvn)<eps(norm((-bm)*mvn))^(1./3.)
     end
 
 end # end test loop
@@ -80,6 +82,8 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=w[3]*c
         @test norm(bm'*mvm-CB'*mvm)<eps(norm(bm'*mvm))^(1./3.)
         @test norm(conj(bm)*vn-conj(CB)*vn)<eps(norm(conj(bm)*vn))^(1./3.)
         @test norm(conj(bm)*mvn-conj(CB)*mvn)<eps(norm(conj(bm)*mvn))^(1./3.)
+        @test norm((-bm)*vn-(-CB)*vn)<eps(norm((-bm)*vn))^(1./3.)
+        @test norm((-bm)*mvn-(-CB)*mvn)<eps(norm((-bm)*mvn))^(1./3.)
     end
 
 end # end test loop
