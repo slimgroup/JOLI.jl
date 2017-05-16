@@ -31,6 +31,8 @@ for t=1:T # start test loop
         @test norm(k'*mvm-K'*mvm)<eps(norm(k'*mvm))^(1./3.)
         @test norm(conj(k)*vn-conj(K)*vn)<eps(norm(conj(k)*vn))^(1./3.)
         @test norm(conj(k)*mvn-conj(K)*mvn)<eps(norm(conj(k)*mvn))^(1./3.)
+        @test norm((-k)*vn-(-K)*vn)<eps(norm((-k)*vn))^(1./3.)
+        @test norm((-k)*mvn-(-K)*mvn)<eps(norm((-k)*mvn))^(1./3.)
     end
 
 end # end test loop
