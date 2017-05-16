@@ -37,10 +37,12 @@ conj{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         A.fop_CT,
         A.fop_T,
         A.fop,
+        A.fMVok,
         A.iop_C,
         A.iop_CT,
         A.iop_T,
-        A.iop
+        A.iop,
+        A.iMVok
         )
 
 # transpose(jo)
@@ -50,10 +52,12 @@ transpose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         A.fop,
         A.fop_C,
         A.fop_CT,
+        A.fMVok,
         A.iop_T,
         A.iop,
         A.iop_C,
-        A.iop_CT
+        A.iop_CT,
+        A.iMVok
         )
 
 # ctranspose(jo)
@@ -63,10 +67,12 @@ ctranspose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         A.fop_C,
         A.fop,
         A.fop_T,
+        A.fMVok,
         A.iop_CT,
         A.iop_C,
         A.iop,
-        A.iop_T
+        A.iop_T,
+        A.iMVok
         )
 
 # isreal(jo)
@@ -85,10 +91,14 @@ function *{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
     A.n == size(mv,1) || throw(joLinearFunction("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV=zeros(ARDT,A.m,size(mv,2))
-    for i=1:size(mv,2)
-        V=A.fop(mv[:,i])
-        i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
-        MV[:,i]=V
+    if A.fMVok
+        MV=A.fop(mv)
+    else
+        for i=1:size(mv,2)
+            V=A.fop(mv[:,i])
+            i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
     end
     return MV
 end
@@ -151,10 +161,12 @@ end
         v2->-get(A.fop_T)(v2),
         v3->-get(A.fop_CT)(v3),
         v4->-get(A.fop_C)(v4),
+        A.fMVok,
         v5->-get(A.iop)(v5),
         v6->-get(A.iop_T)(v6),
         v7->-get(A.iop_CT)(v7),
-        v8->-get(A.iop_C)(v8)
+        v8->-get(A.iop_C)(v8),
+        A.iMVok
         )
 
 # -(jo,jo)
