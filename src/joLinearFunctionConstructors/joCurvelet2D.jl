@@ -26,7 +26,6 @@ function apply_fdct2Dwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Inte
     ccall((:jl_fdct_wrapping_cpx,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
         n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
-    elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
     C=jo_convert(rdt,C,false)
     return C
 end
@@ -36,7 +35,6 @@ function apply_ifdct2Dwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int
     ccall((:jl_ifdct_wrapping_cpx,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
         n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
-    elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
     X=jo_convert(rdt,X,false)
     return X
 end
