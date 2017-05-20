@@ -4,7 +4,7 @@ try
     T=3
     Base.Libdl.dlclose(h)
 catch
-    warn("Skipping Curvelet tests - libdfdct_wrapping not found")
+    warn("Skipping joCurvelet2D tests - libdfdct_wrapping not found")
 end
 
 tsname="joCurvelet2D"
