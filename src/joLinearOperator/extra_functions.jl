@@ -29,14 +29,12 @@ end
 # isadjoint(jo)
 function isadjoint{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT};tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false)
     if userange
-        println("using range")
         x= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex(randn(A.m),randn(A.m)))
         x/=convert(RDT,normfactor)
         y= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex(randn(A.m),randn(A.m)))
         y*=convert(RDT,normfactor)
         x=A'*x
     else
-        println("using domain")
         x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
         x/=convert(DDT,normfactor)
         y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
