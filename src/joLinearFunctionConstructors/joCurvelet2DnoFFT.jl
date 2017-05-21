@@ -45,7 +45,7 @@ export joCurvelet2DnoFFT
 2D Curvelet transform (wrapping) over fast dimensions without FFT
 
     joCurvelet2DnoFFT(n1,n2
-                [;DDT=Float64,RDT=DDT,
+                [;DDT=Complex{Float64},RDT=DDT,
                  nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
 # Arguments
@@ -66,7 +66,7 @@ export joCurvelet2DnoFFT
 - joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=Complex{Float64},real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
 
 # Notes
-- if DDT:<Real for complex transform then imaginary part will be neglected for transpose/ctranspose
+- real joCurvelet2DnoFFT passed adjoint test while either combined with joDFT, or with isadjont flag userange=true
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 """
@@ -91,7 +91,7 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::Da
     actl=convert(Cint,all_crvlts)
     rctl=convert(Cint,real_crvlts)
     zfin=convert(Cint,zero_finest)
-    dtp=Complex{DDT}
+    dtp= DDT<:Complex ? DDT : Complex{DDT}
     if real_crvlts
         rtp=RDT
         apply_fdct2DnoFFTwrap=apply_fdct2DnoFFTwrap_real
