@@ -30,19 +30,17 @@ end
 function isadjoint{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT};tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false)
     if userange
         x= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex(randn(A.m),randn(A.m)))
-        x/=convert(RDT,normfactor)
         y= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex(randn(A.m),randn(A.m)))
-        y*=convert(RDT,normfactor)
         x=A'*x
     else
         x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
-        x/=convert(DDT,normfactor)
         y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
-        y*=convert(DDT,normfactor)
         y=A*y
     end
-    Axy=dot(A*x,y)
-    xAty=dot(x,A'*y)
+    nfr=convert(RDT,normfactor)
+    nfd=convert(DDT,normfactor)
+    Axy=dot((A*x)/nfr,y)
+    xAty=dot(x,(A'*y)*nfd)
     dif=abs(xAty-Axy)
     rto=abs(xAty/Axy)
     rer=abs(dif/Axy)
