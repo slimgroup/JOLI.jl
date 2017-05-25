@@ -5,6 +5,7 @@
 module JOLI
 
 # what's being used
+using NFFT
 
 # what's imported
 import Base.eltype

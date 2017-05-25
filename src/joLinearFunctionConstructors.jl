@@ -8,6 +8,9 @@ include("joLinearFunctionConstructors/joDFT.jl")
 # DCT operators: joDCT
 include("joLinearFunctionConstructors/joDCT.jl")
 
+# NFFT operators: joNFFT
+include("joLinearFunctionConstructors/joNFFT.jl")
+
 # CurveLab operators: joCurvelet2D joCurvelet2DnoFFT
 include("joLinearFunctionConstructors/joCurvelet2D.jl")
 include("joLinearFunctionConstructors/joCurvelet2DnoFFT.jl")
