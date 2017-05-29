@@ -23,10 +23,12 @@ joLinearFunction type
 - fop_T::Nullable{Function} : transpose function
 - fop_CT::Nullable{Function} : conj transpose function
 - fop_C::Nullable{Function} : conj function
+- fMVok : whether fops are rady to handle mvec
 - iop::Nullable{Function} : inverse for fop
 - iop_T::Nullable{Function} : inverse for fop_T
 - iop_CT::Nullable{Function} : inverse for fop_CT
 - iop_C::Nullable{Function} : inverse for fop_C
+- iMVok::Bool : whether iops are rady to handle mvec
 
 """
 immutable joLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
@@ -37,10 +39,12 @@ immutable joLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{
     fop_T::Nullable{Function}  # transpose
     fop_CT::Nullable{Function} # conj transpose
     fop_C::Nullable{Function}  # conj
+    fMVok::Bool                # forward can do mvec
     iop::Nullable{Function}
     iop_T::Nullable{Function}
     iop_CT::Nullable{Function}
     iop_C::Nullable{Function}
+    iMVok::Bool
 end
 
 ############################################################

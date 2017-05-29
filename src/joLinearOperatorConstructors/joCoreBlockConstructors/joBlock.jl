@@ -94,10 +94,6 @@ function joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLi
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)
     fops_C=Vector{joAbstractLinearOperator}(0)
-    iops=Vector{joAbstractLinearOperator}(0)
-    iops_T=Vector{joAbstractLinearOperator}(0)
-    iops_CT=Vector{joAbstractLinearOperator}(0)
-    iops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
@@ -112,6 +108,6 @@ function joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLi
         end
     end
     return joCoreBlock{deltype(fops[1]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,iops,iops_T,iops_CT,iops_C)
+                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 

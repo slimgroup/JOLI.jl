@@ -20,5 +20,5 @@ For now it is just [REFERENCE guide](REFERENCE.md).
 
 ## Examples (more to come)
 
-Check [templates](templates) for an examples of how to build your own operators,
+Check [templates](templates) for an examples of how to build your own operators or types,
 or look up DCT implementation in [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl).

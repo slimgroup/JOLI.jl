@@ -1,5 +1,34 @@
 ############################################################
 ## joMatrix - overloaded Base functions
+# un-implemented methods are defined in joLinearOperator/base_functions.jl
+
+# eltype(jo)
+
+# deltype(jo)
+
+# reltype(jo)
+
+# show(jo)
+
+# showall(jo)
+
+# display(jo)
+
+# size(jo)
+
+# size(jo,1/2)
+
+# length(jo)
+
+# full(jo)
+
+# norm(jo)
+
+# vecnorm(jo)
+
+# real(jo)
+
+# imag(jo)
 
 # conj(jo)
 conj{DDT,RDT}(A::joMatrix{DDT,RDT}) =
@@ -40,20 +69,16 @@ ctranspose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
         A.iop_T
         )
 
+# isreal(jo)
+
+# issymmetric(jo)
+
+# ishermitian(jo)
+
 ############################################################
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-function *{ARDT,BDDT,CDT}(A::joMatrix{CDT,ARDT},B::joMatrix{BDDT,CDT})
-    A.n == B.m || throw(joMatrixException("shape mismatch"))
-    return joMatrix{BDDT,ARDT}("("*A.name*"*"*B.name*")",A.m,B.n,
-        v1->A.fop(B.fop(v1)),
-        v2->B.fop_T(A.fop_T(v2)),
-        v3->B.fop_CT(A.fop_CT(v3)),
-        v4->A.fop_C(B.fop_C(v4)),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # *(jo,mvec)
 function *{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
@@ -74,37 +99,19 @@ function *{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
 end
 
 # *(num,jo)
-function *{ADDT,ARDT}(a::Number,A::joMatrix{ADDT,ARDT})
-    return joMatrix{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a*A.fop(v1),false),
-        v2->jo_convert(ADDT,a*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
-function *{ADDT,ARDT}(a::joNumber{ADDT,ARDT},A::joMatrix{ADDT,ARDT})
-    return joMatrix{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
-        v1->jo_convert(ARDT,a.rdt*A.fop(v1),false),
-        v2->jo_convert(ADDT,a.ddt*A.fop_T(v2),false),
-        v3->jo_convert(ADDT,conj(a.ddt)*A.fop_CT(v3),false),
-        v4->jo_convert(ARDT,conj(a.rdt)*A.fop_C(v4),false),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # *(jo,num)
-*{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},a::Number) = a*A
-*{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},a::joNumber{ADDT,ARDT}) = a*A
 
 ############################################################
 ## overloaded Base \(...jo...)
 
 # \(jo,mvec)
-#function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-#    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
-#    return !isnull(A.iop) ? get(A.iop)(mv) : throw(joMatrixException("inverse not defined"))
-#end
+function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
+    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
+    MV=get(A.iop)(mv)
+    return MV
+end
 
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
@@ -114,44 +121,18 @@ function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
     return V
 end
 
+# \(jo,num)
+
 ############################################################
 ## overloaded Base +(...jo...)
 
+# +(jo)
+
 # +(jo,jo)
-function +{DDT,RDT}(A::joMatrix{DDT,RDT},B::joMatrix{DDT,RDT})
-    size(A) == size(B) || throw(joMatrixException("shape mismatch"))
-    return joMatrix{DDT,RDT}("("*A.name*"+"*B.name*")",A.m,B.n,
-        v1->A.fop(v1)+B.fop(v1),
-        v2->A.fop_T(v2)+B.fop_T(v2),
-        v3->A.fop_CT(v3)+B.fop_CT(v3),
-        v4->A.fop_C(v4)+B.fop_C(v4),
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # +(jo,num)
-function +{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},b::Number)
-    return joMatrix{ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+joConstants(A.m,A.n,b;DDT=ADDT,RDT=ARDT)*v1,
-        v2->A.fop_T(v2)+joConstants(A.n,A.m,b;DDT=ARDT,RDT=ADDT)*v2,
-        v3->A.fop_CT(v3)+joConstants(A.n,A.m,conj(b);DDT=ARDT,RDT=ADDT)*v3,
-        v4->A.fop_C(v4)+joConstants(A.m,A.n,conj(b);DDT=ADDT,RDT=ARDT)*v4,
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
-function +{ADDT,ARDT}(A::joMatrix{ADDT,ARDT},b::joNumber{ADDT,ARDT})
-    return joMatrix{ADDT,ARDT}("("*A.name*"+N)",A.m,A.n,
-        v1->A.fop(v1)+joConstants(A.m,A.n,b.rdt;DDT=ADDT,RDT=ARDT)*v1,
-        v2->A.fop_T(v2)+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
-        v3->A.fop_CT(v3)+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
-        v4->A.fop_C(v4)+joConstants(A.m,A.n,conj(b.rdt);DDT=ADDT,RDT=ARDT)*v4,
-        @joNF, @joNF, @joNF, @joNF
-        )
-end
 
 # +(num,jo)
-+{ADDT,ARDT}(b::Number,A::joMatrix{ADDT,ARDT}) = A+b
-+{ADDT,ARDT}(b::joNumber{ADDT,ARDT},A::joMatrix{ADDT,ARDT}) = A+b
 
 ############################################################
 ## overloaded Base -(...jo...)
@@ -169,6 +150,12 @@ end
         v8->-get(A.iop_C)(v8)
         )
 
+# -(jo,jo)
+
+# -(jo,num)
+
+# -(num,jo)
+
 ############################################################
 ## overloaded Base .*(...jo...)
 
@@ -182,11 +169,11 @@ end
 ## overloaded Base .-(...jo...)
 
 ############################################################
-## overloaded Base hcat(...jo...)
+## overloaded Base block methods
 
-############################################################
-## overloaded Base vcat(...jo...)
+# hcat(...jo...)
 
-############################################################
-## overloaded Base hvcat(...jo...)
+# vcat(...jo...)
+
+# hvcat(...jo...)
 
