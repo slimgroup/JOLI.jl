@@ -13,3 +13,8 @@ include("joLinearFunctionConstructors/joCurvelet2d.jl")
 
 # Padding/extension operators: joExtension
 include("joLinearFunctionConstructors/joExtension.jl")
+
+# Permutation operator: joPermutation
+include("joLinearFunctionConstructors/joPermutation.jl")
+
+

@@ -2,7 +2,7 @@ export joExtension, EXT_TYPE
 
 @enum EXT_TYPE pad_zeros pad_border pad_periodic
 
-function apply_pad{T<:Integer,DDT<:AbstractFloat}(v::Array{DDT,1},n::T,pad_type::EXT_TYPE,pad_upper::T,pad_lower::T; forw_mode::Bool=true)
+function apply_pad{T<:Integer,DDT<:Number}(v::Array{DDT,1},n::T,pad_type::EXT_TYPE,pad_upper::T,pad_lower::T; forw_mode::Bool=true)
     nbdry_pts::T = pad_lower+pad_upper
     next::T = n+nbdry_pts
     lenv::T = length(v)   

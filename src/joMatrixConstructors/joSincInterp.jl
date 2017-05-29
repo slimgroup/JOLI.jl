@@ -11,7 +11,7 @@ export joSincInterp
 #   xout - 1D output grid
 #   r    - kaiser window parameter (default: 0, no windowing)
 #
-function joSincInterp{T<:AbstractFloat,I<:Integer}(xin::AbstractArray{T,1},xout::AbstractArray{T,1};r::I=0)
+function joSincInterp{T<:AbstractFloat,I<:Integer}(xin::AbstractArray{T,1},xout::AbstractArray{T,1};r::I=0,DomainT=T,RangeT=T)
     if length(xout)>1
         dx = xout[2]-xout[1]
         xin = xin./dx
@@ -23,7 +23,7 @@ function joSincInterp{T<:AbstractFloat,I<:Integer}(xin::AbstractArray{T,1},xout:
         window = [kaiser_window(xout[i]-xin[j],r,r_b[r]) for i in 1:length(xout), j in 1:length(xin)]
         S = S .* window
     end
-    return joMatrix(S)
+    return joMatrix(S,DDT=DomainT,RDT=RangeT)
 end
 
 function kaiser_window(x,r,b)
