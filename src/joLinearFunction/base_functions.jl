@@ -124,9 +124,13 @@ end
 function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joLinearFunctionException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
-    MV=zeros(ADDT,A.n,size(mv,2))
-    for i=1:size(mv,2)
-        MV[:,i]=get(A.iop)(mv[:,i])
+    if A.iMVok
+        MV = get(A.iop)(mv)
+    else
+        MV=zeros(ADDT,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            MV[:,i]=get(A.iop)(mv[:,i])
+        end
     end
     return MV
 end
