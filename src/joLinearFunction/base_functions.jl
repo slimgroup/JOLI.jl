@@ -124,12 +124,15 @@ end
 function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joLinearFunctionException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
+    jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if A.iMVok
         MV = get(A.iop)(mv)
     else
         MV=zeros(ADDT,A.n,size(mv,2))
         for i=1:size(mv,2)
-            MV[:,i]=get(A.iop)(mv[:,i])
+            V=get(A.iop)(mv[:,i])
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
         end
     end
     return MV
@@ -139,7 +142,9 @@ end
 function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearFunctionException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
+    jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=get(A.iop)(v)
+    jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     return V
 end
 

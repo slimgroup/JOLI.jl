@@ -175,10 +175,9 @@ end
 function \{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
-    MV=zeros(ADDT,A.n,size(mv,2))
-    for i=1:size(mv,2)
-        MV[:,i]=get(A.iop)(mv[:,i])
-    end
+    jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    MV=get(A.iop)(mv)
+    jo_check_type_match(ADDT,eltype(MV),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 
@@ -186,7 +185,9 @@ end
 function \{ADDT,ARDT,vDT<:Number}(A::joLinearOperator{ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joLinearOperatorException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=get(A.iop)(v)
+    jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     return V
 end
 

@@ -109,7 +109,9 @@ end
 function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
     A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
+    jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV=get(A.iop)(mv)
+    jo_check_type_match(ADDT,eltype(MV),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 
@@ -117,7 +119,9 @@ end
 function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
     isinvertible(A) || throw(joMatrixException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
+    jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=get(A.iop)(v)
+    jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     return V
 end
 
