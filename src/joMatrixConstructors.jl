@@ -26,3 +26,5 @@ include("joMatrixConstructors/joVecConvert.jl")
 # sinc interpolation
 include("joMatrixConstructors/joSincInterp.jl")
 
+# 1D linear interpolation
+include("joMatrixConstructors/joLinInterp1D.jl")
