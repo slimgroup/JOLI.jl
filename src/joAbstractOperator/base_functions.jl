@@ -260,14 +260,27 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 .-(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(any,jo).' not implemented"))
 
 ############################################################
-## overloaded Base hcat(...jo...)
+## overloaded Base block methods
+
+# hcat(...jo...)
 hcat(ops::joAbstractOperator...) = throw(joAbstractOperatorException("hcat(jo...).' not implemented"))
 
-############################################################
-## overloaded Base vcat(...jo...)
+
+# vcat(...jo...)
 vcat(ops::joAbstractOperator...) = throw(joAbstractOperatorException("vcat(jo...).' not implemented"))
 
-############################################################
-## overloaded Base hvcat(...jo...)
+# hvcat(...jo...)
 hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractOperator...) = throw(joAbstractOperatorException("hvcat(jo...).' not implemented"))
+
+############################################################
+## overloaded Base.LinAlg functions
+
+# A_mul_B!(vec,jo,vec)
+A_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("A_mul_B!(vec,jo,vec) not implemented"))
+
+# At_mul_B!(vec,jo,vec)
+At_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("At_mul_B!(vec,jo,vec) not implemented"))
+
+# Ac_mul_B!(vec,jo,vec)
+Ac_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("Ac_mul_B!(vec,jo,vec) not implemented"))
 
