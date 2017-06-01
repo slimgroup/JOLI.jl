@@ -1,3 +1,4 @@
 julia 0.5
 DistributedArrays
+IterativeSolvers
 NFFT

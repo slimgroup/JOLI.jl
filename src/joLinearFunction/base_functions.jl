@@ -206,3 +206,12 @@ end
 
 # hvcat(...jo...)
 
+############################################################
+## overloaded Base.LinAlg functions
+
+# A_mul_B!(vec,jo,vec)
+
+# At_mul_B!(vec,jo,vec)
+
+# Ac_mul_B!(vec,jo,vec)
+

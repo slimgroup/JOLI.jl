@@ -5,9 +5,10 @@
 module JOLI
 
 # what's being used
+using IterativeSolvers
 using NFFT
 
-# what's imported
+# what's imported from Base
 import Base.eltype
 import Base.show, Base.showall, Base.display
 import Base.size, Base.length
@@ -20,6 +21,10 @@ import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
+import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
+
+# what's imported from IterativeSolvers
+import IterativeSolvers.Adivtype, IterativeSolvers.Amultype
 
 # extra exported methods
 export deltype, reltype
