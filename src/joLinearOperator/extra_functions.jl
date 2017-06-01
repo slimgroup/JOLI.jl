@@ -8,8 +8,8 @@ elements{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
 # iscomplex(jo)
 iscomplex{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = !(DDT<:Real && RDT<:Real)
 
-# isinvertible(jo)
-isinvertible{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = !isnull(A.iop)
+# hasinverse(jo)
+hasinverse{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = !isnull(A.iop)
 
 # islinear(jo)
 function islinear{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,verbose::Bool=false)

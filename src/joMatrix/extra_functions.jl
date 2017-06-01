@@ -7,7 +7,7 @@ elements{DDT,RDT}(A::joMatrix{DDT,RDT}) = A*speye(DDT,A.n)
 
 # iscomplex(jo)
 
-# isinvertible(jo)
+# hasinverse(jo)
 
 # islinear(jo)
 
