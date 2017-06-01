@@ -7,8 +7,8 @@ elements(A::joAbstractOperator)  = throw(joAbstractOperatorException("elements(j
 # iscomplex(jo)
 iscomplex(A :: joAbstractOperator) = throw(joAbstractOperatorException("iscomplex(jo) not implemented"))
 
-# isinvertible(jo)
-isinvertible(A::joAbstractOperator) = throw(joAbstractOperatorException("isinvertible(jo) not implemented"))
+# hasinverse(jo)
+hasinverse(A::joAbstractOperator) = throw(joAbstractOperatorException("hasinverse(jo) not implemented"))
 
 # islinear(jo)
 islinear(A::joAbstractOperator) = throw(joAbstractOperatorException("islinear(jo) not implemented"))

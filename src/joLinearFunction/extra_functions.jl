@@ -6,7 +6,7 @@
 
 # iscomplex(jo)
 
-# isinvertible(jo)
+# hasinverse(jo)
 
 # islinear(jo)
 
