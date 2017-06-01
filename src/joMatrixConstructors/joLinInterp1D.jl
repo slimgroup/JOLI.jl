@@ -1,12 +1,15 @@
+export joLinInterp1D
+
 # 1D Linear interpolation operator
 #
 # Parameters:
-#   xin - input grid
+#   xin  - input grid
 #   xout - output grid
+#   T    - vector data type
 #
 # Note: the interval [minimum(xout),maximum(xout)] must be contained
 # in the interval [minimum(xin),maximum(xin)]
-function joLinInterp1D(xin,xout)
+function joLinInterp1D(xin,xout,T)
     xin = sort(xin)
     xout = sort(xout)
     nin = length(xin)
@@ -17,6 +20,7 @@ function joLinInterp1D(xin,xout)
     b = (xout-xin[I])./(xin[I+1]-xin[I])
     a = (xin[I+1]-xout)./(xin[I+1]-xin[I])
     A = sparse(1:nout,I,a,nout,nin) + sparse(1:nout,min(I+1,nin),b,nout,nin)
+    return joMatrix(A,DDT=T,name="joLinInterp1D")
 end
 
 # 1D nearest neighbourhood operator, returns a vector I of size length(xout)
