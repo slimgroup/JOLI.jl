@@ -4,9 +4,11 @@
 
 # elements(jo)
 
-# iscomplex(jo)
-
 # hasinverse(jo)
+
+# issquare(jo)
+
+# iscomplex(jo)
 
 # islinear(jo)
 

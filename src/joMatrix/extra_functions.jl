@@ -5,9 +5,11 @@
 # elements(jo)
 elements{DDT,RDT}(A::joMatrix{DDT,RDT}) = A*speye(DDT,A.n)
 
-# iscomplex(jo)
-
 # hasinverse(jo)
+
+# issquare(jo)
+
+# iscomplex(jo)
 
 # islinear(jo)
 
