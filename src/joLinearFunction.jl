@@ -2,8 +2,10 @@
 # joLinearFunction #########################################
 ############################################################
 
-export joLinearFunction, joLinearFunctionAll, joLinearFunctionT, joLinearFunctionCT,
-       joLinearFunctionFwdT, joLinearFunctionFwdCT, joLinearFunctionException
+export joLinearFunction,
+       joLinearFunctionAll, joLinearFunctionT, joLinearFunctionCT,
+       joLinearFunctionFwd, joLinearFunctionFwdT, joLinearFunctionFwdCT,
+       joLinearFunctionException
 
 ############################################################
 ## type definition

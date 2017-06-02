@@ -29,6 +29,29 @@ macro joNF(fun::Expr)
     return :(Nullable{Function}($fun))
 end
 
+############################################################
+## dafault iterative solver ################################
+global jo_default_iterative_solver = (A,v)->gmres(A,v)[1]
+export jo_default_iterative_solver_set
+"""
+Set default iterative solver for \(jo,vec)
+
+    jo_default_iterative_solver_set(f::Function)
+
+Where f must take two arguments (op,vec) and return vec.
+
+# Example (using IterativeSolvers)
+- jo_default_iterative_solver_set((A,v)->lsqr(A,v)[1])
+
+"""
+function jo_default_iterative_solver_set(f::Function)
+    global jo_default_iterative_solver
+    jo_default_iterative_solver = (A,b)->f(A,b)
+end
+
+############################################################
+## complex precision type ##################################
+
 export jo_complex_eltype
 
 """
@@ -37,9 +60,7 @@ Type of element of complex scalar
     jo_complex_eltype(a::Complex)
 
 # Example
-
 - jo_complex_eltype(1.+im*1.)
-
 - jo_complex_eltype(zero(Complex{Float64}))
 
 """
@@ -50,7 +71,6 @@ Type of element of complex data type
     jo_complex_eltype(DT::DataType)
 
 # Example
-
 - jo_complex_eltype(Complex{Float32})
 
 """
@@ -59,6 +79,9 @@ function jo_complex_eltype(DT::DataType)
     a=zero(DT)
     return jo_complex_eltype(a)
 end
+
+############################################################
+## type checks #############################################
 
 export jo_check_type_match, jo_type_mismatch_error_set
 global jo_type_mismatch_warn=false
@@ -69,9 +92,7 @@ Toggle between warning and error for type mismatch
     jo_type_mismatch_error_set(flag::Bool)
 
 # Examples
-
 - jo_type_mismatch_error_set(true) turns on error
-
 - jo_type_mismatch_error_set(false) reverts to warnings
 
 """
@@ -104,7 +125,6 @@ Use jo_type_mismatch_error_set to toggle those flags from warning
 mode to error mode.
 
 # EXAMPLE
-
 - jo_check_type_match(Float32,Float64,"my session")
 
 """
@@ -116,6 +136,9 @@ function jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
     return
 end
 
+############################################################
+## type conversion utlis ###################################
+
 export jo_convert, jo_convert_warn_set
 global jo_convert_warn=true
 """
@@ -124,7 +147,6 @@ Set warning mode for jo_convert
     jo_convert_warn_set(flag::Bool)
 
 # Example
-
 - jo_convert_warn_set(false) turns of the warnings
 
 """
@@ -140,16 +162,12 @@ Convert vector to new type
     jo_convert(DT::DataType,v::AbstractArray,warning::Bool=true)
 
 # Limitations
-
 - converting integer array to shorter representation will throw an error
-
 - converting float/complex array to integer will throw an error
-
 - converting from complex to float drops immaginary part and issues warning;
   use jo_convert_warn_set(false) to turn off the warning
 
 # Example
-
 - jo_convert(Complex{Float32},rand(3))
 
 """
@@ -196,16 +214,12 @@ Convert number to new type
     jo_convert(DT::DataType,n::Number,warning::Bool=true)
 
 # Limitations
-
 - converting integer number to shorter representation will throw an error
-
 - converting float/complex number to integer will throw an error
-
 - converting from complex to float drops immaginary part and issues warning;
   use jo_convert_warn_set(false) to turn off the warning
 
 # Example
-
 - jo_convert(Complex{Float32},rand())
 
 """
