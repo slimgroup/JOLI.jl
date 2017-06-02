@@ -94,10 +94,34 @@ joLinearFunctionCT(m::Integer,n::Integer,
 """
 joLinearFunction outer constructor
 
+    joLinearFunctionFwd(m::Integer,n::Integer,
+        fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,
+        name::String="joLinearFunctionAll")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunctionFwd(m::Integer,n::Integer,
+    fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,
+    name::String="joLinearFunctionAll") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,fop_T,fop_CT,fop_C,fMVok,
+            @joNF, @joNF, @joNF, @joNF, false
+            )
+"""
+joLinearFunction outer constructor
+
     joLinearFunctionFwdT(m::Integer,n::Integer,
         fop::Function,fop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
-        fMVok::Bool=false,iMVok::Bool=false,
+        fMVok::Bool=false,
         name::String="joLinearFunctionFwdT")
 
 Look up argument names in help to joLinearFunction type.
@@ -109,7 +133,7 @@ Look up argument names in help to joLinearFunction type.
 joLinearFunctionFwdT(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
-    fMVok::Bool=false,iMVok::Bool=false,
+    fMVok::Bool=false,
     name::String="joLinearFunctionFwdT") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
@@ -117,7 +141,7 @@ joLinearFunctionFwdT(m::Integer,n::Integer,
             v3->conj(fop_T(conj(v3))),
             v4->conj(fop(conj(v4))),
             fMVok,
-            @joNF, @joNF, @joNF, @joNF, iMVok
+            @joNF, @joNF, @joNF, @joNF, false
             )
 """
 joLinearFunction outer constructor
@@ -125,7 +149,7 @@ joLinearFunction outer constructor
     joLinearFunctionFwdCT(m::Integer,n::Integer,
         fop::Function,fop_CT::Function,
         DDT::DataType,RDT::DataType=DDT;
-        fMVok::Bool=false,iMVok::Bool=false,
+        fMVok::Bool=false,
         name::String="joLinearFunctionFwdCT")
 
 Look up argument names in help to joLinearFunction type.
@@ -137,7 +161,7 @@ Look up argument names in help to joLinearFunction type.
 joLinearFunctionFwdCT(m::Integer,n::Integer,
     fop::Function,fop_CT::Function,
     DDT::DataType,RDT::DataType=DDT;
-    fMVok::Bool=false,iMVok::Bool=false,
+    fMVok::Bool=false,
     name::String="joLinearFunctionFwdCT") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
@@ -145,6 +169,6 @@ joLinearFunctionFwdCT(m::Integer,n::Integer,
             fop_CT,
             v4->conj(fop(conj(v4))),
             fMVok,
-            @joNF, @joNF, @joNF, @joNF, iMVok
+            @joNF, @joNF, @joNF, @joNF, false
             )
 
