@@ -28,7 +28,7 @@ import IterativeSolvers.Adivtype, IterativeSolvers.Amultype
 
 # extra exported methods
 export deltype, reltype
-export elements, hasinverse, iscomplex, islinear, isadjoint
+export elements, hasinverse, issquare, iscomplex, islinear, isadjoint
 
 # constants
 export joTol
