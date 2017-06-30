@@ -19,7 +19,7 @@ function joLinInterp1D(xin,xout,T)
     xin = [xin;1e12]
     b = (xout-xin[I])./(xin[I+1]-xin[I])
     a = (xin[I+1]-xout)./(xin[I+1]-xin[I])
-    A = sparse(1:nout,I,a,nout,nin) + sparse(1:nout,min(I+1,nin),b,nout,nin)
+    A = sparse(1:nout,I,a,nout,nin) + sparse(1:nout,min.(I+1,nin),b,nout,nin)
     return joMatrix(A,DDT=T,name="joLinInterp1D")
 end
 
