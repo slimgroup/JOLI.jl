@@ -11,6 +11,12 @@ hasinverse{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = !isnull(A.iop)
 # issquare(jo)
 issquare{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = (A.m == A.n)
 
+# istall(jo)
+istall{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = (A.m > A.n)
+
+# iswide(jo)
+iswide{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = (A.m < A.n)
+
 # iscomplex(jo)
 iscomplex{DDT,RDT}(A :: joAbstractLinearOperator{DDT,RDT}) = !(DDT<:Real && RDT<:Real)
 
@@ -23,8 +29,8 @@ function islinear{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::F
     RER=Array{Float64,1}(0)
     RTO=Array{Float64,1}(0)
     for s=1:samples
-        x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
-        y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
+        x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
+        y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
         Axy=A*(x+y)
         AxAy=(A*x+A*y)
         dif=vecnorm(Axy-AxAy); push!(DIF,dif)
@@ -48,12 +54,12 @@ function isadjoint{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::
     RTO=Array{Float64,1}(0)
     for s=1:samples
         if userange
-            x= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex(randn(A.m),randn(A.m)))
-            y= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex(randn(A.m),randn(A.m)))
+            x= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex.(randn(A.m),randn(A.m)))
+            y= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex.(randn(A.m),randn(A.m)))
             x=A'*x
         else
-            x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
-            y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex(randn(A.n),randn(A.n)))
+            x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
+            y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
             y=A*y
         end
         nfr=convert(RDT,normfactor)

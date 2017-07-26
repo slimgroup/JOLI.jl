@@ -122,29 +122,62 @@ end
 
 # \(jo,mvec)
 function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    hasinverse(A) || throw(joLinearFunctionException("\(jo,MultiVector) not supplied"))
     A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
-    jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    if A.iMVok
-        MV = get(A.iop)(mv)
-    else
+    jo_check_type_match(ARDT,mvDT,join(["RDT for \(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    if hasinverse(A)
+        if A.iMVok
+            MV = get(A.iop)(mv)
+        else
+            MV=zeros(ADDT,A.n,size(mv,2))
+            for i=1:size(mv,2)
+                V=get(A.iop)(mv[:,i])
+                i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+                MV[:,i]=V
+            end
+        end
+    elseif issquare(A)
         MV=zeros(ADDT,A.n,size(mv,2))
         for i=1:size(mv,2)
-            V=get(A.iop)(mv[:,i])
-            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            V=jo_convert(ADDT,jo_iterative_solver4square(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
             MV[:,i]=V
         end
+    elseif (istall(A) && !isnull(jo_iterative_solver4tall))
+        MV=zeros(ADDT,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4tall(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
+        MV=zeros(ADDT,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4wide(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    else
+        throw(joLinearFunctionException("\(jo,MultiVector) not supplied"))
     end
     return MV
 end
 
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
-    hasinverse(A) || throw(joLinearFunctionException("\(jo,Vector) not supplied"))
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
-    jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
-    V=get(A.iop)(v)
-    jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    jo_check_type_match(ARDT,vDT,join(["RDT for \(jo,vec):",A.name,typeof(A),vDT]," / "))
+    if hasinverse(A)
+        V=get(A.iop)(v)
+        jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    elseif issquare(A)
+        V=jo_convert(ADDT,jo_iterative_solver4square(A,v))
+    elseif (istall(A) && !isnull(jo_iterative_solver4tall))
+        V=jo_convert(ADDT,jo_iterative_solver4tall(A,v))
+    elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
+        V=jo_convert(ADDT,jo_iterative_solver4wide(A,v))
+    else
+        throw(joLinearFunctionException("\(jo,Vector) not supplied"))
+    end
     return V
 end
 

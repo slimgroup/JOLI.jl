@@ -165,99 +165,103 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 
 ############################################################
 ## overloaded Base .*(...jo...)
+## function Base.broadcast(::typeof(*), ...)
 
 # .*(jo,jo)
-.*(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".*(jo,jo) not implemented"))
+##.*(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".*(jo,jo) not implemented"))
 
 # .*(jo,mvec)
-.*(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".*(jo,mvec) not implemented"))
+##.*(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".*(jo,mvec) not implemented"))
 
 # .*(mvec,jo)
-.*(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".*(mvec,jo) not implemented"))
+##.*(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".*(mvec,jo) not implemented"))
 
 # .*(jo,vec)
-.*(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".*(jo,vec) not implemented"))
+##.*(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".*(jo,vec) not implemented"))
 
 # .*(vec,jo)
-.*(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".*(vec,jo) not implemented"))
+##.*(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".*(vec,jo) not implemented"))
 
 # .*(num,jo)
-.*(a,A::joAbstractOperator) = throw(joAbstractOperatorException(".*(any,jo) not implemented"))
+##.*(a,A::joAbstractOperator) = throw(joAbstractOperatorException(".*(any,jo) not implemented"))
 
 # .*(jo,num)
-.*(A::joAbstractOperator,a) = throw(joAbstractOperatorException(".*(jo,any) not implemented"))
+##.*(A::joAbstractOperator,a) = throw(joAbstractOperatorException(".*(jo,any) not implemented"))
 
 ############################################################
 ## overloaded Base .\(...jo...)
+## function Base.broadcast(::typeof(\), ...)
 
 # .\(jo,jo)
-.\(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".\(jo,jo) not implemented"))
+##.\(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".\(jo,jo) not implemented"))
 
 # .\(jo,mvec)
-.\(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".\(jo,mvec) not implemented"))
+##.\(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".\(jo,mvec) not implemented"))
 
 # .\(mvec,jo)
-.\(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".\(mvec,jo) not implemented"))
+##.\(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".\(mvec,jo) not implemented"))
 
 # .\(jo,vec)
-.\(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".\(jo,vec) not implemented"))
+##.\(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".\(jo,vec) not implemented"))
 
 # .\(vec,jo)
-.\(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".\(vec,jo) not implemented"))
+##.\(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".\(vec,jo) not implemented"))
 
 # .\(num,jo)
-.\(a,A::joAbstractOperator) = throw(joAbstractOperatorException(".\(any,jo) not implemented"))
+##.\(a,A::joAbstractOperator) = throw(joAbstractOperatorException(".\(any,jo) not implemented"))
 
 # .\(jo,num)
-.\(A::joAbstractOperator,a) = throw(joAbstractOperatorException(".\(jo,any) not implemented"))
+##.\(A::joAbstractOperator,a) = throw(joAbstractOperatorException(".\(jo,any) not implemented"))
 
 ############################################################
 ## overloaded Base .+(...jo...)
+## function Base.broadcast(::typeof(+), ...)
 
 # .+(jo,jo)
-.+(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".+(jo,jo) not implemented"))
+##.+(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".+(jo,jo) not implemented"))
 
 # .+(jo,mvec)
-.+(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".+(jo,mvec) not implemented"))
+##.+(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".+(jo,mvec) not implemented"))
 
 # .+(mvec,jo)
-.+(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(mvec,jo) not implemented"))
+##.+(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(mvec,jo) not implemented"))
 
 # .+(jo,vec)
-.+(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".+(jo,vec) not implemented"))
+##.+(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".+(jo,vec) not implemented"))
 
 # .+(vec,jo)
-.+(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(vec,jo) not implemented"))
+##.+(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(vec,jo) not implemented"))
 
 # .+(jo,num)
-.+(A::joAbstractOperator,b) = throw(joAbstractOperatorException(".+(jo,any) not implemented"))
+##.+(A::joAbstractOperator,b) = throw(joAbstractOperatorException(".+(jo,any) not implemented"))
 
 # .+(num,jo)
-.+(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(any,jo) not implemented"))
+##.+(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".+(any,jo) not implemented"))
 
 ############################################################
 ## overloaded Base .-(...jo...)
+## function Base.broadcast(::typeof(-), ...)
 
 # .-(jo,jo)
-.-(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".-(jo,jo) not implemented"))
+##.-(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException(".-(jo,jo) not implemented"))
 
 # .-(jo,mvec)
-.-(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".-(jo,mvec) not implemented"))
+##.-(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException(".-(jo,mvec) not implemented"))
 
 # .-(mvec,jo)
-.-(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(mvec,jo) not implemented"))
+##.-(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(mvec,jo) not implemented"))
 
 # .-(jo,vec)
-.-(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".-(jo,vec) not implemented"))
+##.-(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException(".-(jo,vec) not implemented"))
 
 # .-(vec,jo)
-.-(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(vec,jo) not implemented"))
+##.-(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(vec,jo) not implemented"))
 
 # .-(jo,num)
-.-(A::joAbstractOperator,b) = throw(joAbstractOperatorException(".-(jo,any) not implemented"))
+##.-(A::joAbstractOperator,b) = throw(joAbstractOperatorException(".-(jo,any) not implemented"))
 
 # .-(num,jo)
-.-(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(any,jo).' not implemented"))
+##.-(b,A::joAbstractOperator) = throw(joAbstractOperatorException(".-(any,jo).' not implemented"))
 
 ############################################################
 ## overloaded Base block methods

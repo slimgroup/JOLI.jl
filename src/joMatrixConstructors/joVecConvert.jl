@@ -4,16 +4,16 @@ export joReal, joImag, joConj, joConvert
 joReal(m::Integer;CDP::DataType=Float64) =
     joMatrix{Complex{CDP},CDP}("joReal",m,m,
         v1->jo_convert(CDP,real(v1),false),
-        v2->jo_convert(Complex{CDP},complex(v2),false),
-        v3->jo_convert(Complex{CDP},complex(v3),false),
+        v2->jo_convert(Complex{CDP},complex.(v2),false),
+        v3->jo_convert(Complex{CDP},complex.(v3),false),
         v4->jo_convert(CDP,real(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
 joImag(m::Integer;CDP::DataType=Float64) =
     joMatrix{Complex{CDP},CDP}("joImag",m,m,
         v1->jo_convert(CDP,imag(v1),false),
-        v2->jo_convert(Complex{CDP},complex(zero(CDP),v2),false),
-        v3->jo_convert(Complex{CDP},complex(zero(CDP),-v3),false),
+        v2->jo_convert(Complex{CDP},complex.(zero(CDP),v2),false),
+        v3->jo_convert(Complex{CDP},complex.(zero(CDP),-v3),false),
         v4->jo_convert(CDP,-imag(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )

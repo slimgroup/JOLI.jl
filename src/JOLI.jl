@@ -28,11 +28,11 @@ import IterativeSolvers.Adivtype, IterativeSolvers.Amultype
 
 # extra exported methods
 export deltype, reltype
-export elements, hasinverse, issquare, iscomplex, islinear, isadjoint
+export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint
 
 # constants
 export joTol
-joTol = 10e-12
+joTol = sqrt(eps())
 
 # package for each operator code goes here
 include("MiscTypes.jl")

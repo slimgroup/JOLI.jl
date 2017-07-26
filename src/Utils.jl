@@ -30,23 +30,63 @@ macro joNF(fun::Expr)
 end
 
 ############################################################
-## dafault iterative solver ################################
-global jo_default_iterative_solver = (A,v)->gmres(A,v)[1]
-export jo_default_iterative_solver_set
+## dafault iterative solver for square operator ############
+global jo_iterative_solver4square = (A,v)->gmres(A,v)[1]
+export jo_set_iterative_solver4square
 """
-Set default iterative solver for \(jo,vec)
+Set default iterative solver for \(jo,vec) and square jo
 
-    jo_default_iterative_solver_set(f::Function)
+    jo_set_iterative_solver4square(f::Function)
 
-Where f must take two arguments (op,vec) and return vec.
+Where f must take two arguments (jo,vec) and return vec.
 
 # Example (using IterativeSolvers)
-- jo_default_iterative_solver_set((A,v)->lsqr(A,v)[1])
+- jo_set_iterative_solver4square((A,v)->gmres(A,v)[1])
 
 """
-function jo_default_iterative_solver_set(f::Function)
-    global jo_default_iterative_solver
-    jo_default_iterative_solver = (A,b)->f(A,b)
+function jo_set_iterative_solver4square(f::Function)
+    global jo_iterative_solver4square
+    jo_iterative_solver4square = (A,b)->f(A,b)
+end
+
+############################################################
+## dafault iterative solver for tall operator ##############
+global jo_iterative_solver4tall = @joNF
+export jo_set_iterative_solver4tall
+"""
+Set default iterative solver for \(jo,vec) and tall jo
+
+    jo_set_iterative_solver4tall(f::Function)
+
+Where f must take two arguments (jo,vec) and return vec.
+
+# Example
+- jo_set_iterative_solver4tall((A,v)->tall_solve(A,v))
+
+"""
+function jo_set_iterative_solver4tall(f::Function)
+    global jo_iterative_solver4tall
+    jo_iterative_solver4tall = (A,b)->f(A,b)
+end
+
+############################################################
+## dafault iterative solver for wide operator ##############
+global jo_iterative_solver4wide = @joNF
+export jo_set_iterative_solver4wide
+"""
+Set default iterative solver for \(jo,vec) and wide jo
+
+    jo_set_iterative_solver4wide(f::Function)
+
+Where f must take two arguments (jo,vec) and return vec.
+
+# Example
+- jo_set_iterative_solver4wide((A,v)->wide_solve(A,v))
+
+"""
+function jo_set_iterative_solver4wide(f::Function)
+    global jo_iterative_solver4wide
+    jo_iterative_solver4wide = (A,b)->f(A,b)
 end
 
 ############################################################

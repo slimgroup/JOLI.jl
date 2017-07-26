@@ -56,13 +56,13 @@ for t=1:T # start test loop
     if t%2==0
 
         @test norm(joReal(n)*v-real(v)) < joTol
-        @test norm(joReal(n).'*real(v)-complex(real(v))) < joTol
-        @test norm(joReal(n)'*real(v)-complex(real(v))) < joTol
+        @test norm(joReal(n).'*real(v)-complex.(real(v))) < joTol
+        @test norm(joReal(n)'*real(v)-complex.(real(v))) < joTol
         @test norm(conj(joReal(n))*v-real(v)) < joTol
 
         @test norm(joImag(n)*v-imag(v)) < joTol
-        @test norm(joImag(n).'*imag(v)-complex(0.,imag(v))) < joTol
-        @test norm(joImag(n)'*imag(v)-complex(0.,-imag(v))) < joTol
+        @test norm(joImag(n).'*imag(v)-complex.(0.,imag(v))) < joTol
+        @test norm(joImag(n)'*imag(v)-complex.(0.,-imag(v))) < joTol
         @test norm(conj(joImag(n))*v-imag(-v)) < joTol
 
         @test norm(joConj(n)*v-conj(v)) < joTol

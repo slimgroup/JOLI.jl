@@ -65,12 +65,14 @@ println("$tsname $tname")
         @test norm(elements(C*C.')-(c*c.'))<joTol
         @test norm(elements(C'*C)-(c'*c))<joTol
         @test norm(elements(C*C')-(c*c'))<joTol
-        #@test norm(C\vm-c\vm)<joTol
-        #@test norm(C\mvm-c\mvm)<joTol
-        #@test norm(C'\vm-c'\vm)<joTol
-        #@test norm(C'\mvm-c'\mvm)<joTol
-        #@test norm(C.'\vn-c.'\vn)<joTol
-        #@test norm(C.'\mvn-c.'\mvn)<joTol
+        if (issquare(C) && m==n)
+            @test norm(C\vm-c\vm)<joTol^(2/3)
+            @test norm(C\mvm-c\mvm)<joTol^(2/3)
+            @test norm(C'\vm-c'\vm)<joTol^(2/3)
+            @test norm(C'\mvm-c'\mvm)<joTol^(2/3)
+            @test norm(C.'\vn-c.'\vn)<joTol^(2/3)
+            @test norm(C.'\mvn-c.'\mvn)<joTol^(2/3)
+        end
     end
 
 end # end test loop
