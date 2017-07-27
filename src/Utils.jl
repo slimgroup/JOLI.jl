@@ -31,7 +31,7 @@ end
 
 ############################################################
 ## dafault iterative solver for square operator ############
-global jo_iterative_solver4square = (A,v)->gmres(A,v)[1]
+global jo_iterative_solver4square = (A,v)->gmres(A,v)
 export jo_set_iterative_solver4square
 """
 Set default iterative solver for \(jo,vec) and square jo
@@ -41,7 +41,7 @@ Set default iterative solver for \(jo,vec) and square jo
 Where f must take two arguments (jo,vec) and return vec.
 
 # Example (using IterativeSolvers)
-- jo_set_iterative_solver4square((A,v)->gmres(A,v)[1])
+- jo_set_iterative_solver4square((A,v)->gmres(A,v))
 
 """
 function jo_set_iterative_solver4square(f::Function)
