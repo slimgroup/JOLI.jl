@@ -10,7 +10,7 @@ From julia prompt run the following if you do not have GitHub account
 
     Pkg.clone("https://github.com/slimgroup/JOLI.jl.git")
 
-or with GitHub account (and SSH keys registared)
+or with GitHub account (and SSH keys registered)
 
     Pkg.clone("git@github.com:slimgroup/JOLI.jl.git")
 
