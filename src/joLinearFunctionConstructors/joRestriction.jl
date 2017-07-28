@@ -29,7 +29,7 @@ function joRestriction(n::Integer,idx::AbstractVector{Int};DDT::DataType=Float64
             size(x,2)>1 ? y[idx,:]=x : y[idx]=x
             return y
         end
-    joLinearFunctionFwd(m,n,
+    return joLinearFunctionFwd(m,n,
         v1->jo_convert(RDT,fwd(v1,m,idx),false),
         v2->jo_convert(DDT,rev(v2,n,idx),false),
         v3->jo_convert(DDT,rev(v3,n,idx),false),

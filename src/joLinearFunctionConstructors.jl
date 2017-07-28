@@ -18,6 +18,9 @@ include("joLinearFunctionConstructors/joCurvelet2DnoFFT.jl")
 # restriction operator
 include("joLinearFunctionConstructors/joRestriction.jl")
 
+# mask operator
+include("joLinearFunctionConstructors/joMask.jl")
+
 # Padding/extension operators: joExtension
 include("joLinearFunctionConstructors/joExtension.jl")
 
