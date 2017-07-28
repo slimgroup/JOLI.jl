@@ -2,7 +2,7 @@
 
 function apply_fdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     C=zeros(Cdouble,m)
-    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
+    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
     X=jo_convert(Cdouble,v,false)
     ccall((:jl_fdct_wrapping_real,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),
@@ -12,7 +12,7 @@ function apply_fdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Inte
 end
 function apply_ifdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     X=zeros(Cdouble,n1*n2)
-    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: imput vector must be real for real transform"))
+    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
     C=jo_convert(Cdouble,v,false)
     ccall((:jl_ifdct_wrapping_real,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),

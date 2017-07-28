@@ -11,7 +11,7 @@ function apply_fdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m:
 end
 function apply_ifdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
     X=zeros(Complex{Cdouble},n1*n2)
-    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2DnoFFT: imput vector must be real for real transform"))
+    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2DnoFFT: input vector must be real for real transform"))
     C=jo_convert(Cdouble,v,false)
     ccall((:jl_ifdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Complex{Cdouble}}}),
