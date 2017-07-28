@@ -15,10 +15,12 @@ include("joLinearFunctionConstructors/joNFFT.jl")
 include("joLinearFunctionConstructors/joCurvelet2D.jl")
 include("joLinearFunctionConstructors/joCurvelet2DnoFFT.jl")
 
+# restriction operator
+include("joLinearFunctionConstructors/joRestriction.jl")
+
 # Padding/extension operators: joExtension
 include("joLinearFunctionConstructors/joExtension.jl")
 
 # Permutation operator: joPermutation
 include("joLinearFunctionConstructors/joPermutation.jl")
-
 
