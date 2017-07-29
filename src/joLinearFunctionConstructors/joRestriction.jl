@@ -4,10 +4,10 @@ export joRestriction
 """
 Restriction operator
 
-    joRestriction(n::Integer,idx::AbstractVector{Int}[;DDT=Float64,RDT=DDT])
+    joRestriction(n,idx[;DDT=Float64,RDT=DDT,makecopy=true])
 
 # Arguments
-- n::Integer - number of rows
+- n::Integer - number of columns
 - idx::AbstractVector{Int} - vector of indecies
 
 # Exmaple
@@ -16,24 +16,25 @@ Restriction operator
 - A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joRestriction(n::Integer,idx::AbstractVector{Int};DDT::DataType=Float64,RDT::DataType=DDT)
+function joRestriction{VDT<:Integer}(n::Integer,idx::Vector{VDT};DDT::DataType=Float64,RDT::DataType=DDT,makecopy::Bool=true)
     m::Int=length(idx)
     n>=m || throw(joLinearFunctionException("joRestriction: length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joRestriction: max(idx) must be <= n"))
-    fwd=(x,m,idx)->begin
-            y= size(x,2)>1 ? x[idx,:] : x[idx]
+    myidx= makecopy ? Base.deepcopy(idx) : idx
+    fwd=(x,m,i)->begin
+            y= size(x,2)>1 ? x[i,:] : x[i]
             return y
         end
-    rev=(x,n,idx)->begin
+    rev=(x,n,i)->begin
             y= size(x,2)>1 ? zeros(eltype(x),n,size(x,2)) : zeros(eltype(x),n)
-            size(x,2)>1 ? y[idx,:]=x : y[idx]=x
+            size(x,2)>1 ? y[i,:]=x : y[i]=x
             return y
         end
     return joLinearFunctionFwd(m,n,
-        v1->jo_convert(RDT,fwd(v1,m,idx),false),
-        v2->jo_convert(DDT,rev(v2,n,idx),false),
-        v3->jo_convert(DDT,rev(v3,n,idx),false),
-        v4->jo_convert(RDT,fwd(v4,m,idx),false),
+        v1->jo_convert(RDT,fwd(v1,m,myidx),false),
+        v2->jo_convert(DDT,rev(v2,n,myidx),false),
+        v3->jo_convert(DDT,rev(v3,n,myidx),false),
+        v4->jo_convert(RDT,fwd(v4,m,myidx),false),
         DDT,RDT;
         name="joRestriction",
         fMVok=true

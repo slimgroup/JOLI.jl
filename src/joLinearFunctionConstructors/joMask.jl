@@ -4,19 +4,19 @@ export joMask
 """
 Mask operator
 
-    joMask(n::Integer,idx::AbstractVector{Int}[;DDT=Float64,RDT=DDT])
+    joMask(n,idx[;DDT=Float64,RDT=DDT])
 
 # Arguments
-- n::Integer - number of rows
-- idx::AbstractVector{Int} - vector of true indecies
+- n::Integer - size of square operator
+- idx::Vector{Integer} - vector of true indecies
 
-# Exmaple
+# Examples
 - A=joMask(3,[1,3])
 - A=joMask(3,[1,3];DDT=Float32)
 - A=joMask(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joMask(n::Integer,idx::AbstractVector{Int};DDT::DataType=Float64,RDT::DataType=DDT)
+function joMask{VDT<:Integer}(n::Integer,idx::Vector{VDT};DDT::DataType=Float64,RDT::DataType=DDT)
     l=length(idx)
     n>=l || throw(joLinearFunctionException("joMask length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joMask max(idx) must be <= n"))
@@ -35,12 +35,12 @@ end
 """
 Mask operator
 
-    joMask(mask::BitArray{1}[;DDT=Float64,RDT=DDT])
+    joMask(mask[;DDT=Float64,RDT=DDT,makecopy=true])
 
 # Arguments
-- mask::BitArray{1} - BitArray mask
+- mask::BitArray{1} - BitArray mask of true indecies
 
-# Exmaple
+# Examples
 - mask=falses(3)
 - mask[[1,3]]=true
 - A=joMask(mask)
@@ -48,13 +48,14 @@ Mask operator
 - A=joMask(mask;DDT=Float32,RDT=Float64)
 
 """
-function joMask(mask::BitArray{1};DDT::DataType=Float64,RDT::DataType=DDT)
+function joMask(mask::BitArray{1};DDT::DataType=Float64,RDT::DataType=DDT,makecopy::Bool=true)
     n=length(mask)
+    mymask= makecopy ? Base.deepcopy(mask) : mask
     return joLinearFunctionFwd(n,n,
-        v1->jo_convert(RDT,mask.*v1,false),
-        v2->jo_convert(DDT,mask.*v2,false),
-        v3->jo_convert(DDT,mask.*v3,false),
-        v4->jo_convert(RDT,mask.*v4,false),
+        v1->jo_convert(RDT,mymask.*v1,false),
+        v2->jo_convert(DDT,mymask.*v2,false),
+        v3->jo_convert(DDT,mymask.*v3,false),
+        v4->jo_convert(RDT,mymask.*v4,false),
         DDT,RDT;
         name="joMask",
         fMVok=true
