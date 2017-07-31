@@ -94,7 +94,7 @@ function *{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
         MV=A.fop(mv)
         jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     else
-        MV=zeros(ARDT,A.m,size(mv,2))
+        MV=Matrix{ARDT}(A.m,size(mv,2))
         for i=1:size(mv,2)
             V=A.fop(mv[:,i])
             i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
@@ -128,7 +128,7 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
         if A.iMVok
             MV = get(A.iop)(mv)
         else
-            MV=zeros(ADDT,A.n,size(mv,2))
+            MV=Matrix{ADDT}(A.n,size(mv,2))
             for i=1:size(mv,2)
                 V=get(A.iop)(mv[:,i])
                 i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
@@ -136,21 +136,21 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
             end
         end
     elseif issquare(A)
-        MV=zeros(ADDT,A.n,size(mv,2))
+        MV=Matrix{ADDT}(A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4square(A,mv[:,i]))
             i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
             MV[:,i]=V
         end
     elseif (istall(A) && !isnull(jo_iterative_solver4tall))
-        MV=zeros(ADDT,A.n,size(mv,2))
+        MV=Matrix{ADDT}(A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4tall(A,mv[:,i]))
             i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
             MV[:,i]=V
         end
     elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
-        MV=zeros(ADDT,A.n,size(mv,2))
+        MV=Matrix{ADDT}(A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4wide(A,mv[:,i]))
             i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))

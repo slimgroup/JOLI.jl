@@ -188,7 +188,7 @@ ctranspose{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
 # *(jo,vec)
 function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT})
     size(A,2) == size(v,1) || throw(joCoreBlockException("shape mismatch"))
-    V=zeros(ARDT,A.m)
+    V=zeros(ARDT,A.m) # must be preallocated with zeros
     for i=1:1:A.l
         sm=A.mo[i]+1
         em=A.mo[i]+A.ms[i]
@@ -202,7 +202,7 @@ end
 # *(jo,mvec)
 function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT})
     size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
-    MV=zeros(ARDT,size(A,1),size(mv,2))
+    MV=zeros(ARDT,size(A,1),size(mv,2)) # must be preallocated with zeros
     for i=1:1:A.l
         sm=A.mo[i]+1
         em=A.mo[i]+A.ms[i]

@@ -154,7 +154,7 @@ end
 # *(jo,mvec)
 function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT})
     size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    MV=zeros(ARDT,A.m,size(mv,2))
+    MV=Matrix{ARDT}(A.m,size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A*mv[:,i]
     end

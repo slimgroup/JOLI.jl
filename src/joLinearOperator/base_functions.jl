@@ -179,21 +179,21 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearOperator{ADDT,ARDT},mv::AbstractMa
         MV=get(A.iop)(mv)
         jo_check_type_match(ADDT,eltype(MV),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     elseif issquare(A)
-        MV=zeros(ADDT,A.n,size(mv,2))
+        MV=Matrix{ADDT}(A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4square(A,mv[:,i]))
             i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
             MV[:,i]=V
         end
     elseif (istall(A) && !isnull(jo_iterative_solver4tall))
-        MV=zeros(ADDT,A.n,size(mv,2))
+        MV=Matrix{ADDT}(A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4tall(A,mv[:,i]))
             i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
             MV[:,i]=V
         end
     elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
-        MV=zeros(ADDT,A.n,size(mv,2))
+        MV=Matrix{ADDT}(A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4wide(A,mv[:,i]))
             i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
