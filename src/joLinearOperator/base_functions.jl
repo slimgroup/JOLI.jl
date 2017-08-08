@@ -325,11 +325,14 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(coll
 ## overloaded Base.LinAlg functions
 
 # A_mul_B!(vec,jo,vec)
-A_mul_B!(y::AbstractVector,A::joAbstractLinearOperator,x::AbstractVector) = y[:] = A * x
+A_mul_B!{DDT,RDT}(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) = y[:] = A * x
+A_mul_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) = y[:,:] = A * x
 
 # At_mul_B!(vec,jo,vec)
-At_mul_B!(y::AbstractVector,A::joAbstractLinearOperator,x::AbstractVector) = y[:] = A.' * x
+At_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) = y[:] = A.' * x
+At_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) = y[:,:] = A.' * x
 
 # Ac_mul_B!(vec,jo,vec)
-Ac_mul_B!(y::AbstractVector,A::joAbstractLinearOperator,x::AbstractVector) = y[:] = A' * x
+Ac_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) = y[:] = A' * x
+Ac_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) = y[:,:] = A' * x
 
