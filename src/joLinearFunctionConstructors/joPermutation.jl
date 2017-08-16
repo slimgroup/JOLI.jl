@@ -1,6 +1,6 @@
 export joPermutation
     
-function joPermutation{T<:Integer}(perm::AbstractVector{T}; DDT::DataType=Float64,RDT::DataType=DDT)
+function joPermutation{T<:Integer}(perm::AbstractVector{T}; DDT::DataType=joFloat,RDT::DataType=DDT)
     n = length(perm)
     minimum(perm)==1 && maximum(perm)==n || throw(ArgumentError("perm must have values between 1 and n"))
     length(unique(perm))==n || throw(ArgumentError("perm must have unique values"))

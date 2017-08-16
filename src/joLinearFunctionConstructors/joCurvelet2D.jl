@@ -44,7 +44,7 @@ export joCurvelet2D
 2D Curvelet transform (wrapping) over fast dimensions
 
     joCurvelet2D(n1,n2
-                [;DDT=Float64,RDT=DDT,
+                [;DDT=joFloat,RDT=DDT,
                  nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
 # Arguments
@@ -69,7 +69,7 @@ export joCurvelet2D
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 """
-function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataType=DDT,
+function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,
             nbscales::Integer=0,
             nbangles_coarse::Integer=16,
             all_crvlts::Bool=false,

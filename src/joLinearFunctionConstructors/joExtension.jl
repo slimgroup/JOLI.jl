@@ -40,7 +40,7 @@ end
 """
 1D extension operator 
 
-   joExtension(n,pad_type; pad_lower=0,pad_upper=0,DDT=Float64,RDT=DDT)
+   joExtension(n,pad_type; pad_lower=0,pad_upper=0,DDT=joFloat,RDT=DDT)
 
 # Arguments
 - n : size of input vector
@@ -62,7 +62,7 @@ end
   - extends a n-length vector so that x[n+1:n+10] = x[n]
 
 """
-function joExtension{T<:Integer}(n::T, pad_type::EXT_TYPE; pad_upper::T=0,pad_lower::T=0,DDT::DataType=Float64,RDT::DataType=DDT)
+function joExtension{T<:Integer}(n::T, pad_type::EXT_TYPE; pad_upper::T=0,pad_lower::T=0,DDT::DataType=joFloat,RDT::DataType=DDT)
     
     return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,
                                 v1->apply_pad(v1,n,pad_type,pad_upper,pad_lower,forw_mode=true),

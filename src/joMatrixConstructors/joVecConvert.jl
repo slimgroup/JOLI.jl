@@ -1,7 +1,7 @@
 # vector conversion operators: joReal joImag joConj joConvert
 
 export joReal, joImag, joConj, joConvert
-joReal(m::Integer;CDP::DataType=Float64) =
+joReal(m::Integer;CDP::DataType=joFloat) =
     joMatrix{Complex{CDP},CDP}("joReal",m,m,
         v1->jo_convert(CDP,real(v1),false),
         v2->jo_convert(Complex{CDP},complex.(v2),false),
@@ -9,7 +9,7 @@ joReal(m::Integer;CDP::DataType=Float64) =
         v4->jo_convert(CDP,real(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
-joImag(m::Integer;CDP::DataType=Float64) =
+joImag(m::Integer;CDP::DataType=joFloat) =
     joMatrix{Complex{CDP},CDP}("joImag",m,m,
         v1->jo_convert(CDP,imag(v1),false),
         v2->jo_convert(Complex{CDP},complex.(zero(CDP),v2),false),
@@ -17,7 +17,7 @@ joImag(m::Integer;CDP::DataType=Float64) =
         v4->jo_convert(CDP,-imag(v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
-joConj(m::Integer;CDP::DataType=Float64) =
+joConj(m::Integer;CDP::DataType=joFloat) =
     joMatrix{Complex{CDP},Complex{CDP}}("joConj",m,m,
         v1->jo_convert(Complex{CDP},conj(v1),false),
         v2->jo_convert(Complex{CDP},conj(v2),false),

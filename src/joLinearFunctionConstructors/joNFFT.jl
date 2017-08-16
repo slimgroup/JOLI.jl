@@ -34,7 +34,7 @@ export joNFFT
 """
 1D NFFT transform over fast dimension (wrapper to https://github.com/tknopp/NFFT.jl/tree/master)
 
-    joNFFT(N,nodes::Vector{Float64} [,m=4,sigma=2.0,window=:kaiser_bessel,K=2000;centered=false,DDT=Complex{Float64},RDT=DDT])
+    joNFFT(N,nodes::Vector{joFloat} [,m=4,sigma=2.0,window=:kaiser_bessel,K=2000;centered=false,DDT=joComplex,RDT=DDT])
 
 # Examples
 - joNFFT(N,nodes) - 1D NFFT
@@ -44,7 +44,7 @@ export joNFFT
 - see https://github.com/tknopp/NFFT.jl/tree/master for docs for optional parameters to NFFTplan
 
 """
-function joNFFT(N::Integer,pos::Vector{Float64},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;centered::Bool=false,DDT::DataType=Complex{Float64},RDT::DataType=DDT)
+function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;centered::Bool=false,DDT::DataType=joComplex,RDT::DataType=DDT)
     M=length(pos)
     p=NFFTPlan(pos,N,m,sigma,window,K)
     if centered

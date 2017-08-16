@@ -45,7 +45,7 @@ export joCurvelet2DnoFFT
 2D Curvelet transform (wrapping) over fast dimensions without FFT
 
     joCurvelet2DnoFFT(n1,n2
-                [;DDT=Complex{Float64},RDT=DDT,
+                [;DDT=joComplex,RDT=DDT,
                  nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
 # Arguments
@@ -70,7 +70,7 @@ export joCurvelet2DnoFFT
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 """
-function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=Float64,RDT::DataType=DDT,
+function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,
             nbscales::Integer=0,
             nbangles_coarse::Integer=16,
             all_crvlts::Bool=false,

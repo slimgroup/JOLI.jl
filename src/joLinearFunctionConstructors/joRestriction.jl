@@ -4,7 +4,7 @@ export joRestriction
 """
 Restriction operator
 
-    joRestriction(n,idx[;DDT=Float64,RDT=DDT,makecopy=true])
+    joRestriction(n,idx[;DDT=joFloat,RDT=DDT,makecopy=true])
 
 # Arguments
 - n::Integer - number of columns
@@ -16,7 +16,7 @@ Restriction operator
 - A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joRestriction{VDT<:Integer}(n::Integer,idx::Vector{VDT};DDT::DataType=Float64,RDT::DataType=DDT,makecopy::Bool=true)
+function joRestriction{VDT<:Integer}(n::Integer,idx::Vector{VDT};DDT::DataType=joFloat,RDT::DataType=DDT,makecopy::Bool=true)
     m::Int=length(idx)
     n>=m || throw(joLinearFunctionException("joRestriction: length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joRestriction: max(idx) must be <= n"))

@@ -63,7 +63,7 @@ export joDFT
 Multi-dimensional FFT transform over fast dimension(s)
 
     joDFT(m[,n[, ...]]
-            [;centered=false,DDT=Float64,RDT=(DDT:<Real?Complex{DDT}:DDT)])
+            [;centered=false,DDT=joFloat,RDT=(DDT:<Real?Complex{DDT}:DDT)])
 
 # Examples
 
@@ -77,7 +77,7 @@ Multi-dimensional FFT transform over fast dimension(s)
 - if DDT:<Real then imaginary part will be neglected for transpose/ctranspose
 
 """
-function joDFT(ms::Integer...;centered::Bool=false,DDT::DataType=Float64,RDT::DataType=(DDT<:Real?Complex{DDT}:DDT))
+function joDFT(ms::Integer...;centered::Bool=false,DDT::DataType=joFloat,RDT::DataType=(DDT<:Real?Complex{DDT}:DDT))
     pf=plan_fft(zeros(ms))
     ipf=plan_ifft(zeros(ms))
     if centered

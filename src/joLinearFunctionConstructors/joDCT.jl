@@ -32,7 +32,7 @@ export joDCT
 """
 Multi-dimensional DCT transform over fast dimension(s)
 
-    joDCT(m[,n[, ...]] [;DDT=Float64,RDT=DDT])
+    joDCT(m[,n[, ...]] [;DDT=joFloat,RDT=DDT])
 
 # Examples
 - joDCT(m) - 1D DCT
@@ -41,7 +41,7 @@ Multi-dimensional DCT transform over fast dimension(s)
 - joDCT(m; DDT=Float32,RDT=Float64) - 1D DCT for 32-bit input and 64-bit output
 
 """
-function joDCT(ms::Integer...;DDT::DataType=Float64,RDT::DataType=DDT)
+function joDCT(ms::Integer...;DDT::DataType=joFloat,RDT::DataType=DDT)
     pf=plan_dct(zeros(ms))
     ipf=plan_idct(zeros(ms))
     joLinearFunctionCT(prod(ms),prod(ms),

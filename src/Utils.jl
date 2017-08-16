@@ -6,6 +6,70 @@ type joUtilsException <: Exception
     msg :: String
 end
 
+
+############################################################
+## default types ###########################################
+export joInt, joFloat, joComplex
+global joInt=Int64
+global joFloat=Float64
+global joComplex=Complex{Float64}
+export jo_set_joInt, jo_set_joFloat, jo_set_joComplex, jo_set_jo32bit, jo_set_jo64bit
+"""
+set default integer type joInt
+
+    function jo_set_joInt(DT::DataType=joInt)
+
+"""
+function jo_set_joInt(DT::DataType=joInt)
+    global joInt=DT
+    return joInt
+end
+"""
+set default float type joFloat
+
+    function jo_set_joFloat(DT::DataType=joFloat)
+
+"""
+function jo_set_joFloat(DT::DataType=joFloat)
+    global joFloat=DT
+    return joFloat
+end
+"""
+set default complex type joComplex
+
+    function jo_set_joComplex(DT::DataType=joComplex)
+
+"""
+function jo_set_joComplex(DT::DataType=joComplex)
+    global joComplex=DT
+    return joComplex
+end
+"""
+set default typa joInt, joFloat, joComplex to 32 bit
+
+    function jo_set_jo32bit()
+
+"""
+function jo_set_jo32bit()
+    global joInt=Int32
+    global joFloat=Float32
+    global joComplex=Complex{Float32}
+    return joInt, joFloat, joComplex
+end
+"""
+set default typa joInt, joFloat, joComplex to 64 bit
+
+    function jo_set_jo64bit()
+
+"""
+function jo_set_jo64bit()
+    global joInt=Int64
+    global joFloat=Float64
+    global joComplex=Complex{Float64}
+    return joInt, joFloat, joComplex
+end
+
+
 ############################################################
 ## macros ##################################################
 
