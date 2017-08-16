@@ -32,7 +32,7 @@ export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isad
 
 # constants
 export joTol
-joTol = sqrt(eps())
+global joTol = sqrt(eps())
 
 # package for each operator code goes here
 include("MiscTypes.jl")

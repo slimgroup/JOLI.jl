@@ -54,6 +54,7 @@ function jo_set_jo32bit()
     global joInt=Int32
     global joFloat=Float32
     global joComplex=Complex{Float32}
+    global joTol=sqrt(eps(Float32))
     return joInt, joFloat, joComplex
 end
 """
@@ -66,6 +67,7 @@ function jo_set_jo64bit()
     global joInt=Int64
     global joFloat=Float64
     global joComplex=Complex{Float64}
+    global joTol=sqrt(eps(Float64))
     return joInt, joFloat, joComplex
 end
 
