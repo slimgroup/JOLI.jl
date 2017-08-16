@@ -13,44 +13,44 @@ export joInt, joFloat, joComplex
 global joInt=Int64
 global joFloat=Float64
 global joComplex=Complex{Float64}
-export jo_set_joInt, jo_set_joFloat, jo_set_joComplex, jo_set_jo32bit, jo_set_jo64bit
+export jo_joInt_set, jo_joFloat_set, jo_joComplex_set, jo_jo32bit_set, jo_jo64bit_set
 """
 set default integer type joInt
 
-    function jo_set_joInt(DT::DataType=joInt)
+    function jo_joInt_set(DT::DataType=joInt)
 
 """
-function jo_set_joInt(DT::DataType=joInt)
+function jo_joInt_set(DT::DataType=joInt)
     global joInt=DT
     return joInt
 end
 """
 set default float type joFloat
 
-    function jo_set_joFloat(DT::DataType=joFloat)
+    function jo_joFloat_set(DT::DataType=joFloat)
 
 """
-function jo_set_joFloat(DT::DataType=joFloat)
+function jo_joFloat_set(DT::DataType=joFloat)
     global joFloat=DT
     return joFloat
 end
 """
 set default complex type joComplex
 
-    function jo_set_joComplex(DT::DataType=joComplex)
+    function jo_joComplex_set(DT::DataType=joComplex)
 
 """
-function jo_set_joComplex(DT::DataType=joComplex)
+function jo_joComplex_set(DT::DataType=joComplex)
     global joComplex=DT
     return joComplex
 end
 """
 set default typa joInt, joFloat, joComplex to 32 bit
 
-    function jo_set_jo32bit()
+    function jo_jo32bit_set()
 
 """
-function jo_set_jo32bit()
+function jo_jo32bit_set()
     global joInt=Int32
     global joFloat=Float32
     global joComplex=Complex{Float32}
@@ -60,10 +60,10 @@ end
 """
 set default typa joInt, joFloat, joComplex to 64 bit
 
-    function jo_set_jo64bit()
+    function jo_jo64bit_set()
 
 """
-function jo_set_jo64bit()
+function jo_jo64bit_set()
     global joInt=Int64
     global joFloat=Float64
     global joComplex=Complex{Float64}
@@ -98,19 +98,19 @@ end
 ############################################################
 ## dafault iterative solver for square operator ############
 global jo_iterative_solver4square = (A,v)->gmres(A,v)
-export jo_set_iterative_solver4square
+export jo_iterative_solver4square_set
 """
 Set default iterative solver for \(jo,vec) and square jo
 
-    jo_set_iterative_solver4square(f::Function)
+    jo_iterative_solver4square_set(f::Function)
 
 Where f must take two arguments (jo,vec) and return vec.
 
 # Example (using IterativeSolvers)
-- jo_set_iterative_solver4square((A,v)->gmres(A,v))
+- jo_iterative_solver4square_set((A,v)->gmres(A,v))
 
 """
-function jo_set_iterative_solver4square(f::Function)
+function jo_iterative_solver4square_set(f::Function)
     global jo_iterative_solver4square
     jo_iterative_solver4square = (A,b)->f(A,b)
 end
@@ -118,19 +118,19 @@ end
 ############################################################
 ## dafault iterative solver for tall operator ##############
 global jo_iterative_solver4tall = @joNF
-export jo_set_iterative_solver4tall
+export jo_iterative_solver4tall_set
 """
 Set default iterative solver for \(jo,vec) and tall jo
 
-    jo_set_iterative_solver4tall(f::Function)
+    jo_iterative_solver4tall_set(f::Function)
 
 Where f must take two arguments (jo,vec) and return vec.
 
 # Example
-- jo_set_iterative_solver4tall((A,v)->tall_solve(A,v))
+- jo_iterative_solver4tall_set((A,v)->tall_solve(A,v))
 
 """
-function jo_set_iterative_solver4tall(f::Function)
+function jo_iterative_solver4tall_set(f::Function)
     global jo_iterative_solver4tall
     jo_iterative_solver4tall = (A,b)->f(A,b)
 end
@@ -138,19 +138,19 @@ end
 ############################################################
 ## dafault iterative solver for wide operator ##############
 global jo_iterative_solver4wide = @joNF
-export jo_set_iterative_solver4wide
+export jo_iterative_solver4wide_set
 """
 Set default iterative solver for \(jo,vec) and wide jo
 
-    jo_set_iterative_solver4wide(f::Function)
+    jo_iterative_solver4wide_set(f::Function)
 
 Where f must take two arguments (jo,vec) and return vec.
 
 # Example
-- jo_set_iterative_solver4wide((A,v)->wide_solve(A,v))
+- jo_iterative_solver4wide_set((A,v)->wide_solve(A,v))
 
 """
-function jo_set_iterative_solver4wide(f::Function)
+function jo_iterative_solver4wide_set(f::Function)
     global jo_iterative_solver4wide
     jo_iterative_solver4wide = (A,b)->f(A,b)
 end
