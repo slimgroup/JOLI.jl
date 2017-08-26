@@ -19,7 +19,7 @@ A number type to use for jo operations with number
 - rdt::RDT : number to use when acting on vector to return range vector
 
 """
-immutable joNumber{DDT<:Number,RDT<:Number}
+struct joNumber{DDT<:Number,RDT<:Number}
     ddt::DDT
     rdt::RDT
 end

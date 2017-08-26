@@ -28,7 +28,7 @@ joMatrix type
 - iop_C::Nullable{Function} : inverse for fop_C
 
 """
-immutable joMatrix{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joMatrix{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer

@@ -10,7 +10,7 @@ export joAddSolverAny, joAddSolverAll
 ############################################################
 ## type definition
 
-abstract joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator
+abstract type joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator end
 """
     joLinearOperator is glueing type & constructor
 
@@ -18,7 +18,7 @@ abstract joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-immutable joLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer

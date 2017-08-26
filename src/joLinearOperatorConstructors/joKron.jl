@@ -7,7 +7,7 @@
 
 export joKron, joKronException
 
-immutable joKron{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
+struct joKron{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer

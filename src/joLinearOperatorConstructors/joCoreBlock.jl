@@ -7,7 +7,7 @@
 
 export joCoreBlock, joCoreBlockException
 
-immutable joCoreBlock{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
+struct joCoreBlock{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer

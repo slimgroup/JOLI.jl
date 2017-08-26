@@ -33,7 +33,7 @@ joLinearFunction type
 - iMVok::Bool : whether iops are rady to handle mvec
 
 """
-immutable joLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer

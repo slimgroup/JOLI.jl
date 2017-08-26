@@ -27,15 +27,15 @@ else
     mvn=rand(Complex{Float64},n,2)
     vm=rand(Complex{Float64},m)
     mvm=rand(Complex{Float64},m,2)
-    # needed to be reversed in 0.5.1 (see below)
-    #A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(vn),eltype(vm))
-    #B=joMatrix(b)
-    A=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
-    B=joMatrix(a)
+    # needed to be reversed in 0.5.1 (see below) / OK again in 0.6
+    A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
+    B=joMatrix(b)
+    #A=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
+    #B=joMatrix(a)
 end
-# needed to be reversed in 0.5.1
-#c=a+b
-c=b+a
+# needed to be reversed in 0.5.1 / OK again in 0.6
+c=a+b
+#c=b+a
 C=A+B
 
 println("$tsname $tname")

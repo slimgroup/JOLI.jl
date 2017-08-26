@@ -7,7 +7,7 @@ export joAbstractOperator, joAbstractOperatorException
 ############################################################
 ## type definition
 
-abstract joAbstractOperator
+abstract type joAbstractOperator end
 
 ############################################################
 ## type exceptions
