@@ -6,6 +6,7 @@ module JOLI
 
 # what's being used
 using IterativeSolvers
+using InplaceOps
 using NFFT
 
 # what's imported from Base
@@ -22,10 +23,16 @@ import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
 import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
+import Base.A_ldiv_B!, Base.At_ldiv_B!, Base.Ac_ldiv_B!
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype
 # discarded IterativeSolvers.Amultype
+
+# what's imported from InplaceOps
+import InplaceOps.op_transpose, InplaceOps.op_ctranspose
+import InplaceOps.Transpose, InplaceOps.CTranspose
+import InplaceOps.mul!, InplaceOps.ldiv!
 
 # extra exported methods
 export deltype, reltype
@@ -45,5 +52,6 @@ include("joLinearFunction.jl")
 include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
+include("joInplaceOpsSupport.jl")
 
 end # module

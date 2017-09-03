@@ -327,12 +327,20 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(coll
 # A_mul_B!(vec,jo,vec)
 A_mul_B!{DDT,RDT}(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) = y[:] = A * x
 A_mul_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) = y[:,:] = A * x
-
 # At_mul_B!(vec,jo,vec)
 At_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) = y[:] = A.' * x
 At_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) = y[:,:] = A.' * x
-
 # Ac_mul_B!(vec,jo,vec)
 Ac_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) = y[:] = A' * x
 Ac_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) = y[:,:] = A' * x
+
+# A_ldiv_B!(vec,jo,vec)
+A_ldiv_B!{DDT,RDT}(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) = y[:] = A \ x
+A_ldiv_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) = y[:,:] = A \ x
+# At_ldiv_B!(vec,jo,vec)
+At_ldiv_B!{DDT,RDT}(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) = y[:] = A.' \ x
+At_ldiv_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) = y[:,:] = A.' \ x
+# Ac_ldiv_B!(vec,jo,vec)
+Ac_ldiv_B!{DDT,RDT}(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) = y[:] = A' \ x
+Ac_ldiv_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) = y[:,:] = A' \ x
 
