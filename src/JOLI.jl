@@ -24,7 +24,8 @@ import Base.inv
 import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
 
 # what's imported from IterativeSolvers
-import IterativeSolvers.Adivtype, IterativeSolvers.Amultype
+import IterativeSolvers.Adivtype
+# discarded IterativeSolvers.Amultype
 
 # extra exported methods
 export deltype, reltype
