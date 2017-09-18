@@ -155,6 +155,16 @@ function jo_iterative_solver4wide_set(f::Function)
     jo_iterative_solver4wide = (A,b)->f(A,b)
 end
 
+export jo_precision_type
+"""
+Type of the real number or element type of complex number.
+
+# Example
+- jo_precision_type(1.)
+- jo_precision_type(1+im*3.)
+"""
+jo_precision_type{ITx<:Number, Tx<:Union{Complex{ITx}, ITx}}(x::Tx) = ITx
+
 ############################################################
 ## complex precision type ##################################
 
