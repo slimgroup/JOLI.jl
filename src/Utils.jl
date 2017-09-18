@@ -155,6 +155,9 @@ function jo_iterative_solver4wide_set(f::Function)
     jo_iterative_solver4wide = (A,b)->f(A,b)
 end
 
+############################################################
+## smart precision type ####################################
+
 export jo_precision_type
 """
 Type of the real number or element type of complex number.
