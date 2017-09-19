@@ -190,9 +190,16 @@ end
 ############################################################
 ## overloaded Base.LinAlg functions
 
-# A_mul_B!(vec,jo,vec)
+# A_mul_B!(...,jo,...)
 
-# At_mul_B!(vec,jo,vec)
+# At_mul_B!(...,jo,...)
 
-# Ac_mul_B!(vec,jo,vec)
+# Ac_mul_B!(...,jo,...)
+
+# A_ldiv_B!(...,jo,...)
+
+# At_ldiv_B!(...,jo,...)
+
+# Ac_ldiv_B!(...,jo,...)
+
 
