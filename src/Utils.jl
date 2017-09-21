@@ -211,8 +211,8 @@ Toggle between warning and error for type mismatch
     jo_type_mismatch_error_set(flag::Bool)
 
 # Examples
-- jo_type_mismatch_error_set(true) turns on error
-- jo_type_mismatch_error_set(false) reverts to warnings
+- jo_type_mismatch_error_set(false) turns on warnings instead of errors
+- jo_type_mismatch_error_set(true) reverts to errors
 
 """
 function jo_type_mismatch_error_set(flag::Bool)
@@ -229,7 +229,8 @@ function jo_type_mismatch_error_set(flag::Bool)
 end
 function jo_type_mismatch_warn_set(flag::Bool)
     global jo_type_mismatch_warn
-    println("Very, very bad idea! You are a sneaky fellow.")
+    warn("Very, very bad idea! You are a sneaky fellow.")
+    warn("Function jo_type_mismatch_warn_set is deprecated and will be removed in the future.")
     jo_type_mismatch_warn=flag
     return
 end

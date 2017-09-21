@@ -52,6 +52,6 @@ include("joLinearFunction.jl")
 include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
-include("joInplaceOpsSupport.jl")
+include("joAbstractLinearOperator.jl")
 
 end # module
