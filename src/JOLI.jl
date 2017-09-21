@@ -46,12 +46,12 @@ global joTol = sqrt(eps())
 include("MiscTypes.jl")
 include("Utils.jl")
 include("joAbstractOperator.jl")
+include("joAbstractLinearOperator.jl")
 include("joLinearOperator.jl")
 include("joMatrix.jl")
 include("joLinearFunction.jl")
 include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
-include("joAbstractLinearOperator.jl")
 
 end # module

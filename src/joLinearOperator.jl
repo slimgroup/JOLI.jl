@@ -1,16 +1,13 @@
 ############################################################
-# joAbstractLinearOperator #################################
 # joLinearOperator #########################################
 ############################################################
 
-export joAbstractLinearOperator, joAbstractLinearOperatorException
 export joLinearOperator, joLinearOperatorException
 export joAddSolverAny, joAddSolverAll
 
 ############################################################
 ## type definition
 
-abstract type joAbstractLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator end
 """
     joLinearOperator is glueing type & constructor
 
@@ -34,10 +31,6 @@ end
 
 ############################################################
 ## type exceptions
-
-type joAbstractLinearOperatorException <: Exception
-    msg :: String
-end
 
 type joLinearOperatorException <: Exception
     msg :: String
