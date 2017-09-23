@@ -1,10 +1,10 @@
 ############################################################
-# Misc Types ###############################################
+## joNumber
 ############################################################
 
-############################################################
-## joNumber
 export joNumber
+
+# type definition
 """
 joNumber type
 
@@ -23,15 +23,4 @@ struct joNumber{DDT<:Number,RDT<:Number}
     ddt::DDT
     rdt::RDT
 end
-"""
-joNumber outer constructor
-
-    joNumber(num)
-
-Create joNumber with types matching given number
-
-"""
-joNumber{NT<:Number}(num::NT) = joNumber{NT,NT}(num,num)
--{DDT,RDT}(n::joNumber{DDT,RDT}) = joNumber{DDT,RDT}(-n.ddt,-n.rdt)
-inv{DDT,RDT}(n::joNumber{DDT,RDT}) = joNumber{DDT,RDT}(inv(n.ddt),inv(n.rdt))
 
