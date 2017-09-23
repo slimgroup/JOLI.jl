@@ -3,7 +3,6 @@
 ############################################################
 
 export joLinearOperator, joLinearOperatorException
-export joAddSolverAny, joAddSolverAll
 
 # type definition
 """

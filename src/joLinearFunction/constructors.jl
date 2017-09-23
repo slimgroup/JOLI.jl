@@ -1,6 +1,11 @@
 ############################################################
 ## joLinearFunction - outer constructors
 
+export joLinearFunctionAll, joLinearFunctionT, joLinearFunctionCT,
+       joLinearFunctionFwd, joLinearFunctionFwdT, joLinearFunctionFwdCT
+
+# outer constructors
+
 """
 joLinearFunction outer constructor
 

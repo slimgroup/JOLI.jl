@@ -1,8 +1,9 @@
 ############################################################
-## joLinearOperator - outer constructors
+## joAbstractLinearOperator - outer constructors
 
-############################################################
-## joAddSolver - outer constructor for adding solver to operator
+export joAddSolverAny, joAddSolverAll
+
+# joAddSolver - outer constructor for adding solver to operator
 """
 joAddSolver outer constructor
 
@@ -66,15 +67,3 @@ joAddSolverAll{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},
             v8->slvr_C(conj(A),v8)
             )
 
-############################################################
-## joNumber - extra constructor with joAbstractLinearOperator
-"""
-joNumber outer constructor
-
-    joNumber(num,A::joAbstractLinearOperator{DDT,RDT})
-
-Create joNumber with types matching the given operator.
-
-"""
-joNumber{NT<:Number,DDT,RDT}(num::NT,A::joAbstractLinearOperator{DDT,RDT}) =
-    joNumber{DDT,RDT}(jo_convert(DDT,num),jo_convert(RDT,num))
