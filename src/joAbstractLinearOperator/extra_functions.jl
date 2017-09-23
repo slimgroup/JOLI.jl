@@ -1,6 +1,5 @@
 ############################################################
 ## joAbstractLinearOperator - extra functions
-# commons methods class for jo[Abstract]LinearOperator
 
 # elements(jo)
 elements{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)

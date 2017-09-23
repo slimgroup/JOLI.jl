@@ -10,6 +10,12 @@ hasinverse(A::joAbstractOperator) = throw(joAbstractOperatorException("hasinvers
 # issquare(jo)
 issquare(A :: joAbstractOperator) = throw(joAbstractOperatorException("issquare(jo) not implemented"))
 
+# istall(jo)
+istall(A :: joAbstractOperator) = throw(joAbstractOperatorException("istall(jo) not implemented"))
+
+# iswide(jo)
+iswide(A :: joAbstractOperator) = throw(joAbstractOperatorException("iswide(jo) not implemented"))
+
 # iscomplex(jo)
 iscomplex(A :: joAbstractOperator) = throw(joAbstractOperatorException("iscomplex(jo) not implemented"))
 
