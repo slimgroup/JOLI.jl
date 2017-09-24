@@ -104,6 +104,8 @@ function *{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
     return MV
 end
 
+# *(mvec,jo)
+
 # *(jo,vec)
 function *{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
@@ -113,12 +115,16 @@ function *{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVect
     return V
 end
 
+# *(vec,jo)
+
 # *(num,jo)
 
 # *(jo,num)
 
 ############################################################
 ## overloaded Base \(...jo...)
+
+# \(jo,jo)
 
 # \(jo,mvec)
 function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
@@ -162,6 +168,8 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
     return MV
 end
 
+# \(mvec,jo)
+
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
@@ -181,6 +189,10 @@ function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVect
     return V
 end
 
+# \(vec,jo)
+
+# \(num,jo)
+
 # \(jo,num)
 
 ############################################################
@@ -189,6 +201,14 @@ end
 # +(jo)
 
 # +(jo,jo)
+
+# +(jo,mvec)
+
+# +(mvec,jo)
+
+# +(jo,vec)
+
+# +(vec,jo)
 
 # +(jo,num)
 
@@ -213,6 +233,14 @@ end
         )
 
 # -(jo,jo)
+
+# -(jo,mvec)
+
+# -(mvec,jo)
+
+# -(jo,vec)
+
+# -(vec,jo)
 
 # -(jo,num)
 
