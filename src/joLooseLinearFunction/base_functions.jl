@@ -1,5 +1,5 @@
 ############################################################
-## joLinearFunction - overloaded Base functions
+## joLooseLinearFunction - overloaded Base functions
 
 # eltype(jo)
 
@@ -30,8 +30,8 @@
 # imag(jo)
 
 # conj(jo)
-conj{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
-    joLinearFunction{DDT,RDT}("conj("*A.name*")",A.m,A.n,
+conj{DDT,RDT}(A::joLooseLinearFunction{DDT,RDT}) =
+    joLooseLinearFunction{DDT,RDT}("conj("*A.name*")",A.m,A.n,
         get(A.fop_C),
         A.fop_CT,
         A.fop_T,
@@ -45,8 +45,8 @@ conj{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         )
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
-    joLinearFunction{RDT,DDT}(""*A.name*".'",A.n,A.m,
+transpose{DDT,RDT}(A::joLooseLinearFunction{DDT,RDT}) =
+    joLooseLinearFunction{RDT,DDT}(""*A.name*".'",A.n,A.m,
         get(A.fop_T),
         A.fop,
         A.fop_C,
@@ -60,8 +60,8 @@ transpose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         )
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
-    joLinearFunction{RDT,DDT}(""*A.name*"'",A.n,A.m,
+ctranspose{DDT,RDT}(A::joLooseLinearFunction{DDT,RDT}) =
+    joLooseLinearFunction{RDT,DDT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
         A.fop,
@@ -86,8 +86,8 @@ ctranspose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    A.n == size(mv,1) || throw(joLinearFunction("shape mismatch"))
+function *{ADDT,ARDT,mvDT<:Number}(A::joLooseLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    A.n == size(mv,1) || throw(joLooseLinearFunction("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if A.fMVok
         MV=A.fop(mv)
@@ -106,8 +106,8 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
-    A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
+function *{ADDT,ARDT,vDT<:Number}(A::joLooseLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
+    A.n == size(v,1) || throw(joLooseLinearFunctionException("shape mismatch"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
@@ -126,8 +126,8 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
+function \{ADDT,ARDT,mvDT<:Number}(A::joLooseLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    A.m == size(mv,1) || throw(joLooseLinearFunctionException("shape mismatch"))
     jo_check_type_match(ARDT,mvDT,join(["RDT for \(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if hasinverse(A)
         if A.iMVok
@@ -162,7 +162,7 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMa
             MV[:,i]=V
         end
     else
-        throw(joLinearFunctionException("\(jo,MultiVector) not supplied"))
+        throw(joLooseLinearFunctionException("\(jo,MultiVector) not supplied"))
     end
     return MV
 end
@@ -170,8 +170,8 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
-    A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
+function \{ADDT,ARDT,vDT<:Number}(A::joLooseLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
+    A.m == size(v,1) || throw(joLooseLinearFunctionException("shape mismatch"))
     jo_check_type_match(ARDT,vDT,join(["RDT for \(jo,vec):",A.name,typeof(A),vDT]," / "))
     if hasinverse(A)
         V=get(A.iop)(v)
@@ -183,7 +183,7 @@ function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVect
     elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
         V=jo_convert(ADDT,jo_iterative_solver4wide(A,v))
     else
-        throw(joLinearFunctionException("\(jo,Vector) not supplied"))
+        throw(joLooseLinearFunctionException("\(jo,Vector) not supplied"))
     end
     return V
 end
@@ -217,8 +217,8 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
-    joLinearFunction{DDT,RDT}("(-"*A.name*")",A.m,A.n,
+-{DDT,RDT}(A::joLooseLinearFunction{DDT,RDT}) =
+    joLooseLinearFunction{DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-get(A.fop_T)(v2),
         v3->-get(A.fop_CT)(v3),
@@ -280,4 +280,5 @@ end
 # At_ldiv_B!(...,jo,...)
 
 # Ac_ldiv_B!(...,jo,...)
+
 

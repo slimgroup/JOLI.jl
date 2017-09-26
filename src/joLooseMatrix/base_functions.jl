@@ -1,5 +1,5 @@
 ############################################################
-## joMatrix - overloaded Base functions
+## joLooseMatrix - overloaded Base functions
 
 # eltype(jo)
 
@@ -30,8 +30,8 @@
 # imag(jo)
 
 # conj(jo)
-conj{DDT,RDT}(A::joMatrix{DDT,RDT}) =
-    joMatrix{DDT,RDT}("conj("*A.name*")",A.m,A.n,
+conj{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+    joLooseMatrix{DDT,RDT}("conj("*A.name*")",A.m,A.n,
         A.fop_C,
         A.fop_CT,
         A.fop_T,
@@ -43,8 +43,8 @@ conj{DDT,RDT}(A::joMatrix{DDT,RDT}) =
         )
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
-    joMatrix{RDT,DDT}(""*A.name*".'",A.n,A.m,
+transpose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+    joLooseMatrix{RDT,DDT}(""*A.name*".'",A.n,A.m,
         A.fop_T,
         A.fop,
         A.fop_C,
@@ -56,8 +56,8 @@ transpose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
         )
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
-    joMatrix{RDT,DDT}(""*A.name*"'",A.n,A.m,
+ctranspose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+    joLooseMatrix{RDT,DDT}(""*A.name*"'",A.n,A.m,
         A.fop_CT,
         A.fop_C,
         A.fop,
@@ -80,8 +80,8 @@ ctranspose{DDT,RDT}(A::joMatrix{DDT,RDT}) =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
+function *{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    A.n == size(mv,1) || throw(joLooseMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
@@ -91,8 +91,8 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
-    A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
+function *{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT})
+    A.n == size(v,1) || throw(joLooseMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
@@ -111,14 +111,14 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
-    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
+function \{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+    A.m == size(mv,1) || throw(joLooseMatrixException("shape mismatch"))
     jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if hasinverse(A)
         MV=get(A.iop)(mv)
         jo_check_type_match(ADDT,eltype(MV),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     else
-        throw(joMatrixException("\(jo,Vector) not supplied"))
+        throw(joLooseMatrixException("\(jo,Vector) not supplied"))
     end
     return MV
 end
@@ -126,14 +126,14 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
-    A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
+function \{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT})
+    A.m == size(v,1) || throw(joLooseMatrixException("shape mismatch"))
     jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     if hasinverse(A)
         V=get(A.iop)(v)
         jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     else
-        throw(joMatrixException("\(jo,Vector) not supplied"))
+        throw(joLooseMatrixException("\(jo,Vector) not supplied"))
     end
     return V
 end
@@ -167,8 +167,8 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{DDT,RDT}(A::joMatrix{DDT,RDT}) =
-    joMatrix{DDT,RDT}("(-"*A.name*")",A.m,A.n,
+-{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+    joLooseMatrix{DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-A.fop_T(v2),
         v3->-A.fop_CT(v3),
