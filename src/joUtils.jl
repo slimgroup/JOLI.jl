@@ -8,6 +8,19 @@ end
 
 
 ############################################################
+## type tree ###############################################
+function type_tree(top::DataType=joAbstractOperator,in::String="- ")
+    println(in,top)
+    ts = subtypes(top)
+    if length(ts) > 0
+        for t in ts
+            T=Base.unwrap_unionall(t)
+            type_tree(T,"  "*in)
+        end
+    end
+end
+
+############################################################
 ## default types ###########################################
 export joInt, joFloat, joComplex
 global joInt=Int64
@@ -71,12 +84,9 @@ function jo_jo64bit_set()
     return joInt, joFloat, joComplex
 end
 
-
 ############################################################
 ## macros ##################################################
-
 export @joNF
-
 """
 Nullable{Function} macro for null function
 
@@ -85,7 +95,6 @@ Nullable{Function} macro for null function
 macro joNF()
     return :(Nullable{Function}())
 end
-
 """
 Nullable{Function} macro for given function
 
@@ -157,7 +166,6 @@ end
 
 ############################################################
 ## smart precision type ####################################
-
 export jo_precision_type
 """
 Type of the real number or element type of complex number.
@@ -170,9 +178,7 @@ jo_precision_type{ITx<:Number, Tx<:Union{Complex{ITx}, ITx}}(x::Tx) = ITx
 
 ############################################################
 ## complex precision type ##################################
-
 export jo_complex_eltype
-
 """
 Type of element of complex scalar
 
@@ -201,7 +207,6 @@ end
 
 ############################################################
 ## type checks #############################################
-
 export jo_check_type_match, jo_type_mismatch_error_set
 global jo_type_mismatch_warn=false
 global jo_type_mismatch_error=true
@@ -258,7 +263,6 @@ end
 
 ############################################################
 ## type conversion utlis ###################################
-
 export jo_convert, jo_convert_warn_set
 global jo_convert_warn=true
 """
@@ -275,7 +279,6 @@ function jo_convert_warn_set(flag::Bool)
     jo_convert_warn=flag
     return
 end
-
 """
 Convert vector to new type
 
