@@ -9,8 +9,8 @@ export joLinearFunctionInplaceAll, joLinearFunctionInplaceT, joLinearFunctionInp
 joLinearFunctionInplace outer constructor
 
     joLinearFunctionInplaceAll(m::Integer,n::Integer,
-        fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
-        iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
+        fop::Function,fop_T::Function,fop_CT::Function,
+        iop::Function,iop_T::Function,iop_CT::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
         name::String="joLinearFunctionInplaceAll")
@@ -22,14 +22,14 @@ Look up argument names in help to joLinearFunctionInplace type.
 
 """
 joLinearFunctionInplaceAll(m::Integer,n::Integer,
-    fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
-    iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
+    fop::Function,fop_T::Function,fop_CT::Function,
+    iop::Function,iop_T::Function,iop_CT::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
     name::String="joLinearFunctionInplaceAll") =
         joLinearFunctionInplace{DDT,RDT}(name,m,n,
-            fop,fop_T,fop_CT,fop_C,fMVok,
-            iop,iop_T,iop_CT,iop_C,iMVok
+            fop,fop_T,fop_CT,fMVok,
+            iop,iop_T,iop_CT,iMVok
             )
 """
 joLinearFunctionInplace outer constructor
@@ -55,11 +55,9 @@ joLinearFunctionInplaceT(m::Integer,n::Integer,
             fop,
             fop_T,
             @joNF,
-            @joNF,
             fMVok,
             iop,
             iop_T,
-            @joNF,
             @joNF,
             iMVok
             )
@@ -87,19 +85,17 @@ joLinearFunctionInplaceCT(m::Integer,n::Integer,
             fop,
             @joNF,
             fop_CT,
-            @joNF,
             fMVok,
             iop,
             @joNF,
             iop_CT,
-            @joNF,
             iMVok
             )
 """
 joLinearFunctionInplace outer constructor
 
     joLinearFunctionInplaceFwd(m::Integer,n::Integer,
-        fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+        fop::Function,fop_T::Function,fop_CT::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
         name::String="joLinearFunctionInplaceAll")
@@ -111,13 +107,13 @@ Look up argument names in help to joLinearFunctionInplace type.
 
 """
 joLinearFunctionInplaceFwd(m::Integer,n::Integer,
-    fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+    fop::Function,fop_T::Function,fop_CT::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
     name::String="joLinearFunctionInplaceAll") =
         joLinearFunctionInplace{DDT,RDT}(name,m,n,
-            fop,fop_T,fop_CT,fop_C,fMVok,
-            @joNF, @joNF, @joNF, @joNF, false
+            fop,fop_T,fop_CT,fMVok,
+            @joNF, @joNF, @joNF, false
             )
 """
 joLinearFunctionInplace outer constructor
@@ -143,9 +139,8 @@ joLinearFunctionInplaceFwdT(m::Integer,n::Integer,
             fop,
             fop_T,
             @joNF,
-            @joNF,
             fMVok,
-            @joNF, @joNF, @joNF, @joNF, false
+            @joNF, @joNF, @joNF, false
             )
 """
 joLinearFunctionInplace outer constructor
@@ -171,8 +166,7 @@ joLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
             fop,
             @joNF,
             fop_CT,
-            @joNF,
             fMVok,
-            @joNF, @joNF, @joNF, @joNF, false
+            @joNF, @joNF, @joNF, false
             )
 

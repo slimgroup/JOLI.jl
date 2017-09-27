@@ -30,49 +30,10 @@
 # imag(jo)
 
 # conj(jo)
-conj{DDT,RDT}(A::joLinearFunctionInplace{DDT,RDT}) =
-    joLinearFunctionInplace{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        get(A.fop_C),
-        A.fop_CT,
-        A.fop_T,
-        A.fop,
-        A.fMVok,
-        A.iop_C,
-        A.iop_CT,
-        A.iop_T,
-        A.iop,
-        A.iMVok
-        )
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joLinearFunctionInplace{DDT,RDT}) =
-    joLinearFunctionInplace{RDT,DDT}(""*A.name*".'",A.n,A.m,
-        get(A.fop_T),
-        A.fop,
-        A.fop_C,
-        A.fop_CT,
-        A.fMVok,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_CT,
-        A.iMVok
-        )
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joLinearFunctionInplace{DDT,RDT}) =
-    joLinearFunctionInplace{RDT,DDT}(""*A.name*"'",A.n,A.m,
-        get(A.fop_CT),
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.fMVok,
-        A.iop_CT,
-        A.iop_C,
-        A.iop,
-        A.iop_T,
-        A.iMVok
-        )
 
 # isreal(jo)
 
@@ -181,22 +142,22 @@ A_mul_B!{DDT,RDT}(y::AbstractVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::
 A_mul_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = A.fop(y,x)
 
 # At_mul_B!(...,jo,...)
-At_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{RDT}) = A.fop_T(y,x)
-At_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{RDT}) = A.fop_T(y,x)
+At_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{RDT}) = get(A.fop_T)(y,x)
+At_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{RDT}) = get(A.fop_T)(y,x)
 
 # Ac_mul_B!(...,jo,...)
-Ac_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{RDT}) = A.fop_CT(y,x)
-Ac_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{RDT}) = A.fop_CT(y,x)
+Ac_mul_B!{DDT,RDT}(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{RDT}) = get(A.fop_CT)(y,x)
+Ac_mul_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{RDT}) = get(A.fop_CT)(y,x)
 
 # A_ldiv_B!(...,jo,...)
-A_ldiv_B!{DDT,RDT}(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) = A.iop(y,x)
-A_ldiv_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = A.iop(y,x)
+A_ldiv_B!{DDT,RDT}(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) = get(A.iop)(y,x)
+A_ldiv_B!{DDT,RDT}(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = get(A.iop)(y,x)
 
 # At_ldiv_B!(...,jo,...)
-At_ldiv_B!{DDT,RDT}(y::AbstractVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) = A.iop_T(y,x)
-At_ldiv_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = A.iop_T(y,x)
+At_ldiv_B!{DDT,RDT}(y::AbstractVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) = get(A.iop_T)(y,x)
+At_ldiv_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = get(A.iop_T)(y,x)
 
 # Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!{DDT,RDT}(y::AbstractVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) = A.iop_CT(y,x)
-Ac_ldiv_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = A.iop_CT(y,x)
+Ac_ldiv_B!{DDT,RDT}(y::AbstractVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) = get(A.iop_CT)(y,x)
+Ac_ldiv_B!{DDT,RDT}(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) = get(A.iop_CT)(y,x)
 

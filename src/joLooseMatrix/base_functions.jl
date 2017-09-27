@@ -82,9 +82,7 @@ ctranspose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
 # *(jo,mvec)
 function *{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     A.n == size(mv,1) || throw(joLooseMatrixException("shape mismatch"))
-    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
-    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 
@@ -93,9 +91,7 @@ end
 # *(jo,vec)
 function *{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT})
     A.n == size(v,1) || throw(joLooseMatrixException("shape mismatch"))
-    jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
-    jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     return V
 end
 
@@ -113,10 +109,8 @@ end
 # \(jo,mvec)
 function \{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
     A.m == size(mv,1) || throw(joLooseMatrixException("shape mismatch"))
-    jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if hasinverse(A)
         MV=get(A.iop)(mv)
-        jo_check_type_match(ADDT,eltype(MV),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     else
         throw(joLooseMatrixException("\(jo,Vector) not supplied"))
     end
@@ -128,10 +122,8 @@ end
 # \(jo,vec)
 function \{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT})
     A.m == size(v,1) || throw(joLooseMatrixException("shape mismatch"))
-    jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     if hasinverse(A)
         V=get(A.iop)(v)
-        jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     else
         throw(joLooseMatrixException("\(jo,Vector) not supplied"))
     end
@@ -228,5 +220,4 @@ end
 # At_ldiv_B!(...,jo,...)
 
 # Ac_ldiv_B!(...,jo,...)
-
 
