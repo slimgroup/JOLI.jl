@@ -65,49 +65,49 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 ## overloaded Base *(...jo...)
 
 # *(jo,jo)
-*(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("*(jo,jo) not implemented"))
+*(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("*(jo,jo) not implemented or type mismatch"))
 
 # *(jo,mvec)
-*(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("*(jo,mvec) not implemented"))
+*(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("*(jo,mvec) not implemented or type mismatch"))
 
 # *(mvec,jo)
-*(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("*(mvec,jo) not implemented"))
+*(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("*(mvec,jo) not implemented or type mismatch"))
 
 # *(jo,vec)
-*(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("*(jo,vec) not implemented"))
+*(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("*(jo,vec) not implemented or type mismatch"))
 
 # *(vec,jo)
-*(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("*(vec,jo) not implemented"))
+*(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("*(vec,jo) not implemented or type mismatch"))
 
 # *(num,jo)
-*(a,A::joAbstractOperator) = throw(joAbstractOperatorException("*(any,jo) not implemented"))
+*(a,A::joAbstractOperator) = throw(joAbstractOperatorException("*(any,jo) not implemented or type mismatch"))
 
 # *(jo,num)
-*(A::joAbstractOperator,a) = throw(joAbstractOperatorException("*(jo,any) not implemented"))
+*(A::joAbstractOperator,a) = throw(joAbstractOperatorException("*(jo,any) not implemented or type mismatch"))
 
 ############################################################
 ## overloaded Base \(...jo...)
 
 # \(jo,jo)
-\(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("\(jo,jo) not implemented"))
+\(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("\(jo,jo) not implemented or type mismatch"))
 
 # \(jo,mvec)
-\(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("\(jo,mvec) not implemented"))
+\(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("\(jo,mvec) not implemented or type mismatch"))
 
 # \(mvec,jo)
-\(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("\(mvec,jo) not implemented"))
+\(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("\(mvec,jo) not implemented or type mismatch"))
 
 # \(jo,vec)
-\(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("\(jo,vec) not implemented"))
+\(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("\(jo,vec) not implemented or type mismatch"))
 
 # \(vec,jo)
-\(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("\(vec,jo) not implemented"))
+\(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("\(vec,jo) not implemented or type mismatch"))
 
 # \(num,jo)
-\(a,A::joAbstractOperator) = throw(joAbstractOperatorException("\(any,jo) not implemented"))
+\(a,A::joAbstractOperator) = throw(joAbstractOperatorException("\(any,jo) not implemented or type mismatch"))
 
 # \(jo,num)
-\(A::joAbstractOperator,a) = throw(joAbstractOperatorException("\(jo,any) not implemented"))
+\(A::joAbstractOperator,a) = throw(joAbstractOperatorException("\(jo,any) not implemented or type mismatch"))
 
 ############################################################
 ## overloaded Base +(...jo...)
@@ -116,25 +116,25 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 +(A::joAbstractOperator) = throw(joAbstractOperatorException("+(jo) not implemented"))
 
 # +(jo,jo)
-+(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("+(jo,jo) not implemented"))
++(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("+(jo,jo) not implemented or type mismatch"))
 
 # +(jo,mvec)
-+(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("+(jo,mvec) not implemented"))
++(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("+(jo,mvec) not implemented or type mismatch"))
 
 # +(mvec,jo)
-+(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("+(mvec,jo) not implemented"))
++(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("+(mvec,jo) not implemented or type mismatch"))
 
 # +(jo,vec)
-+(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("+(jo,vec) not implemented"))
++(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("+(jo,vec) not implemented or type mismatch"))
 
 # +(vec,jo)
-+(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("+(vec,jo) not implemented"))
++(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("+(vec,jo) not implemented or type mismatch"))
 
 # +(jo,num)
-+(A::joAbstractOperator,b) = throw(joAbstractOperatorException("+(jo,any) not implemented"))
++(A::joAbstractOperator,b) = throw(joAbstractOperatorException("+(jo,any) not implemented or type mismatch"))
 
 # +(num,jo)
-+(b,A::joAbstractOperator) = throw(joAbstractOperatorException("+(any,jo) not implemented"))
++(b,A::joAbstractOperator) = throw(joAbstractOperatorException("+(any,jo) not implemented or type mismatch"))
 
 ############################################################
 ## overloaded Base -(...jo...)
@@ -143,25 +143,25 @@ ishermitian(A :: joAbstractOperator) = throw(joAbstractOperatorException("isherm
 -(A::joAbstractOperator) = throw(joAbstractOperatorException("-(jo) not implemented"))
 
 # -(jo,jo)
--(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("-(jo,jo) not implemented"))
+-(A::joAbstractOperator,B::joAbstractOperator) = throw(joAbstractOperatorException("-(jo,jo) not implemented or type mismatch"))
 
 # -(jo,mvec)
--(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("-(jo,mvec) not implemented"))
+-(A::joAbstractOperator,mv::AbstractMatrix) = throw(joAbstractOperatorException("-(jo,mvec) not implemented or type mismatch"))
 
 # -(mvec,jo)
--(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("-(mvec,jo) not implemented"))
+-(mv::AbstractMatrix,A::joAbstractOperator) = throw(joAbstractOperatorException("-(mvec,jo) not implemented or type mismatch"))
 
 # -(jo,vec)
--(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("-(jo,vec) not implemented"))
+-(A::joAbstractOperator,v::AbstractVector) = throw(joAbstractOperatorException("-(jo,vec) not implemented or type mismatch"))
 
 # -(vec,jo)
--(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("-(vec,jo) not implemented"))
+-(v::AbstractVector,A::joAbstractOperator) = throw(joAbstractOperatorException("-(vec,jo) not implemented or type mismatch"))
 
 # -(jo,num)
--(A::joAbstractOperator,b) = throw(joAbstractOperatorException("-(jo,any) not implemented"))
+-(A::joAbstractOperator,b) = throw(joAbstractOperatorException("-(jo,any) not implemented or type mismatch"))
 
 # -(num,jo)
--(b,A::joAbstractOperator) = throw(joAbstractOperatorException("-(any,jo).' not implemented"))
+-(b,A::joAbstractOperator) = throw(joAbstractOperatorException("-(any,jo).' not implemented or type mismatch"))
 
 ############################################################
 ## overloaded Base .*(...jo...)
@@ -280,26 +280,26 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractOperator...) = throw(joAbstractOp
 ## overloaded Base.LinAlg functions
 
 # A_mul_B!(...,jo,...)
-A_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("A_mul_B!(vec,jo,vec) not implemented"))
-A_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("A_mul_B!(mat,jo,mat) not implemented"))
+A_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("A_mul_B!(vec,jo,vec) not implemented or type mismatch"))
+A_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("A_mul_B!(mat,jo,mat) not implemented or type mismatch"))
 
 # At_mul_B!(...,jo,...)
-At_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("At_mul_B!(vec,jo,vec) not implemented"))
-At_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("At_mul_B!(mat,jo,mat) not implemented"))
+At_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("At_mul_B!(vec,jo,vec) not implemented or type mismatch"))
+At_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("At_mul_B!(mat,jo,mat) not implemented or type mismatch"))
 
 # Ac_mul_B!(...,jo,...)
-Ac_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("Ac_mul_B!(vec,jo,vec) not implemented"))
-Ac_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("Ac_mul_B!(mat,jo,mat) not implemented"))
+Ac_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("Ac_mul_B!(vec,jo,vec) not implemented or type mismatch"))
+Ac_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("Ac_mul_B!(mat,jo,mat) not implemented or type mismatch"))
 
 # A_ldiv_B!(...,jo,...)
-A_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("A_ldiv_B!(vec,jo,vec) not implemented"))
-A_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("A_ldiv_B!(mat,jo,mat) not implemented"))
+A_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("A_ldiv_B!(vec,jo,vec) not implemented or type mismatch"))
+A_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("A_ldiv_B!(mat,jo,mat) not implemented or type mismatch"))
 
 # At_ldiv_B!(...,jo,...)
-At_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("At_ldiv_B!(vec,jo,vec) not implemented"))
-At_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("At_ldiv_B!(mat,jo,mat) not implemented"))
+At_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("At_ldiv_B!(vec,jo,vec) not implemented or type mismatch"))
+At_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("At_ldiv_B!(mat,jo,mat) not implemented or type mismatch"))
 
 # Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("Ac_ldiv_B!(vec,jo,vec) not implemented"))
-Ac_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("Ac_ldiv_B!(mat,jo,mat) not implemented"))
+Ac_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=throw(joAbstractOperatorException("Ac_ldiv_B!(vec,jo,vec) not implemented or type mismatch"))
+Ac_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=throw(joAbstractOperatorException("Ac_ldiv_B!(mat,jo,mat) not implemented or type mismatch"))
 
