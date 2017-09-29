@@ -9,7 +9,7 @@ for t=1:T # start test loop
     A1=joDCT(m)
     A2=joDCT(m,m)
 
-    println("$tsname ($m,$m)")
+    verbose && println("$tsname ($m,$m)")
     @testset "$m x $m" begin
         @test isadjoint(joDCT(m))[1]
         @test islinear(joDCT(m))[1]

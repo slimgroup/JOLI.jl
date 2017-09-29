@@ -19,7 +19,7 @@ for t=1:T # start test loop
         v=rand(Complex{Float64},n)
     end
 
-    println("$tsname $tname")
+    verbose && println("$tsname $tname")
     @testset "$m x $n" begin
 
     @test norm(elements(joZeros(m,n))-zeros(m,n)) < joTol

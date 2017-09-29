@@ -33,7 +33,7 @@ Afac=joNumber(afac,A)
 mfac=rand(eltype(a))
 Mfac=joNumber(mfac,A)
 
-println("$tsname $tname")
+verbose && println("$tsname $tname")
     @testset "$tname A" begin
         @test size(A)==size(a)
         @test length(A)==length(a)

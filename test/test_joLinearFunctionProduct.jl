@@ -31,7 +31,7 @@ B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v
 c=a*b'
 C=A*B'
 
-println("$tsname $tname")
+verbose && println("$tsname $tname")
     @testset "$tname A*B" begin
         @test size(C)==size(c)
         @test length(C)==length(c)

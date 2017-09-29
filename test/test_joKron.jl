@@ -15,7 +15,7 @@ for t=1:T # start test loop
     Km=K.m
     Kn=K.n
 
-    println("$tsname ($Km,$Kn)")
+    verbose && println("$tsname ($Km,$Kn)")
     @testset "$Km x $Kn" begin
         sn=prod(s[:,2])
         sm=prod(s[:,1])

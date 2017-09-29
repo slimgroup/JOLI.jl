@@ -9,7 +9,7 @@ for t=1:T # start test loop
     A1=joDFT(m;DDT=Complex{Float64})
     A2=joDFT(m,m;DDT=Complex{Float64})
 
-    println("$tsname ($m,$m)")
+    verbose && println("$tsname ($m,$m)")
     @testset "$m x $m" begin
         @test isadjoint(joDFT(m))[1]
         @test isadjoint(joDFT(m;centered=true))[1]

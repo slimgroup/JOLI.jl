@@ -38,7 +38,7 @@ c=a+b
 #c=b+a
 C=A+B
 
-println("$tsname $tname")
+verbose && println("$tsname $tname")
     @testset "$tname A*B" begin
         @test size(C)==size(c)
         @test length(C)==length(c)

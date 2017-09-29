@@ -23,7 +23,7 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=c
     CBm=CB.m
     CBn=CB.n
 
-    println("$tsname ($CBm,$CBn)")
+    verbose && println("$tsname ($CBm,$CBn)")
     @testset "$CBm x $CBn" begin
         vn=rand(Complex{Float32},CBn);
         vm=rand(Complex{Float64},CBm);
@@ -68,7 +68,7 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=w[3]*c
     CBm=CB.m
     CBn=CB.n
 
-    println("$tsname ($CBm,$CBn)")
+    verbose && println("$tsname ($CBm,$CBn)")
     @testset "$CBm x $CBn" begin
         vn=rand(Complex{Float32},CBn);
         vm=rand(Complex{Float64},CBm);

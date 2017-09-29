@@ -18,7 +18,7 @@ for t=1:T # start test loop
     AcR=joCurvelet2DnoFFT(m,m;all_crvlts=true)*joDFT(m,m)
     Acc=joCurvelet2DnoFFT(m,m;all_crvlts=true,real_crvlts=false)
 
-    println("$tsname ($m,$m)")
+    verbose && println("$tsname ($m,$m)")
     @testset "$m x $m" begin
         @test isadjoint(Awr;userange=true)[1]
         @test isadjoint(AwR)[1]

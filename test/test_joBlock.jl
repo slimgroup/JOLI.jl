@@ -28,7 +28,7 @@ for t=1:T # start test loop
     BDm=BD.m
     BDn=BD.n
 
-    println("$tsname ($BDm,$BDn)")
+    verbose && println("$tsname ($BDm,$BDn)")
     @testset "$BDm x $BDn" begin
         vn=rand(Complex{Float32},BDn);
         vm=rand(Complex{Float64},BDm);
@@ -78,7 +78,7 @@ for t=1:T # start test loop
     BDm=BD.m
     BDn=BD.n
 
-    println("$tsname ($BDm,$BDn)")
+    verbose && println("$tsname ($BDm,$BDn)")
     @testset "$BDm x $BDn" begin
         vn=rand(Complex{Float32},BDn);
         vm=rand(Complex{Float64},BDm);
