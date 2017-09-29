@@ -1,7 +1,9 @@
 mn=rand(3:7)
-@testset "Inplace operators" begin
+tsname="InplaceOps"
+@testset "$tsname" begin
 
-@testset "Fake" begin
+verbose && println("$tsname - Regular ($mn,$mn)")
+@testset "Regular" begin
     DDT=Float32
     RDT=Float64
     A=joMatrix(rand(mn,mn),DDT=DDT,RDT=RDT)
@@ -69,7 +71,8 @@ mn=rand(3:7)
     @test MY≈my
 end
 
-@testset "joMatrix" begin
+verbose && println("$tsname - joMatrixInplace ($mn,$mn)")
+@testset "joMatrixInplace" begin
     DDT=Float64
     RDT=Float64
     a=rand(mn,mn)
@@ -139,7 +142,8 @@ end
     @test MY≈my
 end
 
-@testset "joLooseMatrix" begin
+verbose && println("$tsname - joLooseMatrixInplace ($mn,$mn)")
+@testset "joLooseMatrixInplace" begin
     DDT=Float64
     RDT=Float64
     a=rand(mn,mn)
@@ -209,7 +213,8 @@ end
     @test MY≈my
 end
 
-@testset "joLinearFunction" begin
+verbose && println("$tsname - joLinearFunctionInplace ($mn,$mn)")
+@testset "joLinearFunctionInplace" begin
     DDT=Float64
     RDT=Float64
     a=rand(mn,mn)
@@ -287,7 +292,8 @@ end
     @test MY≈my
 end
 
-@testset "joLooseLinearFunction" begin
+verbose && println("$tsname - joLooseLinearFunctionInplace ($mn,$mn)")
+@testset "joLooseLinearFunctionInplace" begin
     DDT=Float64
     RDT=Float64
     a=rand(mn,mn)
