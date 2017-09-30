@@ -9,13 +9,13 @@ end
 
 ############################################################
 ## type tree ###############################################
-function type_tree(top::DataType=joAbstractOperator;bl::String="* ",in::String="  ")
-    println(bl,top)
+function type_tree(top::DataType=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
+    super ? println(bl,top," <: ",supertype(top)) : println(bl,top)
     ts = subtypes(top)
     if length(ts) > 0
         for t in ts
             T=Base.unwrap_unionall(t)
-            type_tree(T;bl=in*bl,in=in)
+            type_tree(T;bl=in*bl,in=in,super=false)
         end
     end
 end
