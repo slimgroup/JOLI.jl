@@ -1,40 +1,40 @@
 ############################################################
-## joAbstractLinearOperatorInplaceInplace - overloaded Base functions
+## joAbstractFosterLinearOperator - overloaded Base functions
 
 # eltype(jo)
-eltype{DDT,RDT}(A::joAbstractLinearOperatorInplace{DDT,RDT}) = promote_type(DDT,RDT)
+eltype{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = promote_type(DDT,RDT)
 
 # deltype(jo)
-deltype{DDT,RDT}(A::joAbstractLinearOperatorInplace{DDT,RDT}) = DDT
+deltype{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = DDT
 
 # reltype(jo)
-reltype{DDT,RDT}(A::joAbstractLinearOperatorInplace{DDT,RDT}) = RDT
+reltype{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = RDT
 
 # show(jo)
-show(A::joAbstractLinearOperatorInplace) = println((typeof(A),A.name,A.m,A.n))
+show(A::joAbstractFosterLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # showall(jo)
-showall(A::joAbstractLinearOperatorInplace) = println((typeof(A),A.name,A.m,A.n))
+showall(A::joAbstractFosterLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # display(jo)
-display(A::joAbstractLinearOperatorInplace) = showall(A)
+display(A::joAbstractFosterLinearOperator) = showall(A)
 
 # size(jo)
-size(A::joAbstractLinearOperatorInplace) = A.m,A.n
+size(A::joAbstractFosterLinearOperator) = A.m,A.n
 
 # size(jo,1/2)
-function size(A::joAbstractLinearOperatorInplace,ind::Integer)
+function size(A::joAbstractFosterLinearOperator,ind::Integer)
     if ind==1
 		return A.m
 	elseif ind==2
 		return A.n
 	else
-		throw(joAbstractLinearOperatorInplaceException("invalid index"))
+		throw(joAbstractFosterLinearOperatorException("invalid index"))
 	end
 end
 
 # length(jo)
-length(A::joAbstractLinearOperatorInplace) = A.m*A.n
+length(A::joAbstractFosterLinearOperator) = A.m*A.n
 
 # full(jo)
 
@@ -53,7 +53,7 @@ length(A::joAbstractLinearOperatorInplace) = A.m*A.n
 # ctranspose(jo)
 
 # isreal(jo)
-isreal{DDT,RDT}(A :: joAbstractLinearOperatorInplace{DDT,RDT}) = (DDT<:Real && RDT<:Real)
+isreal{DDT,RDT}(A :: joAbstractFosterLinearOperator{DDT,RDT}) = (DDT<:Real && RDT<:Real)
 
 # issymmetric(jo)
 

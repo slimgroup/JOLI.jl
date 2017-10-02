@@ -37,6 +37,7 @@ import InplaceOps.mul!, InplaceOps.ldiv!
 # extra exported methods
 export deltype, reltype
 export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint
+export joLoosen
 
 # constants
 export joTol
@@ -48,6 +49,7 @@ include("joMiscTypesFunctions.jl")
 include("joUtils.jl")
 include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
+include("joAbstractFosterLinearOperator.jl")
 include("joAbstractLinearOperatorInplace.jl")
 include("joLinearOperator.jl")
 include("joMatrix.jl")
