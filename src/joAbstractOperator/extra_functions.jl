@@ -2,26 +2,26 @@
 ## joAbstractOperator - extra functions
 
 # elements(jo)
-elements(A::joAbstractOperator)  = throw(joAbstractOperatorException("elements(jo) not implemented"))
+elements(A::joAbstractOperator)  = jo_method_error(A,"elements(jo) not implemented")
 
 # hasinverse(jo)
-hasinverse(A::joAbstractOperator) = throw(joAbstractOperatorException("hasinverse(jo) not implemented"))
+hasinverse(A::joAbstractOperator) = jo_method_error(A,"hasinverse(jo) not implemented")
 
 # issquare(jo)
-issquare(A :: joAbstractOperator) = throw(joAbstractOperatorException("issquare(jo) not implemented"))
+issquare(A::joAbstractOperator) = jo_method_error(A,"issquare(jo) not implemented")
 
 # istall(jo)
-istall(A :: joAbstractOperator) = throw(joAbstractOperatorException("istall(jo) not implemented"))
+istall(A::joAbstractOperator) = jo_method_error(A,"istall(jo) not implemented")
 
 # iswide(jo)
-iswide(A :: joAbstractOperator) = throw(joAbstractOperatorException("iswide(jo) not implemented"))
+iswide(A::joAbstractOperator) = jo_method_error(A,"iswide(jo) not implemented")
 
 # iscomplex(jo)
-iscomplex(A :: joAbstractOperator) = throw(joAbstractOperatorException("iscomplex(jo) not implemented"))
+iscomplex(A::joAbstractOperator) = jo_method_error(A,"iscomplex(jo) not implemented")
 
 # islinear(jo)
-islinear(A::joAbstractOperator) = throw(joAbstractOperatorException("islinear(jo) not implemented"))
+islinear(A::joAbstractOperator) = jo_method_error(A,"islinear(jo) not implemented")
 
 # isadjoint(jo)
-isadjoint(A::joAbstractOperator) = throw(joAbstractOperatorException("isadjoint(jo) not implemented"))
+isadjoint(A::joAbstractOperator) = jo_method_error(A,"isadjoint(jo) not implemented")
 

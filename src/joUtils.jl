@@ -8,6 +8,39 @@ end
 
 
 ############################################################
+## jo_method_error #########################################
+function jo_method_error(O::joAbstractOperator,s::String)
+    t=typeof(O)
+    n=O.name
+    info("Method error for JOLI operator";prefix="JOLI: ")
+    info("  named $n of type $t";prefix="JOLI: ")
+    error(s)
+end
+function jo_method_error(L,R,s::String)
+    lt=typeof(L)
+    ln=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
+    rt=typeof(R)
+    rn=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
+    info("Method error for input combination:";prefix="JOLI: ")
+    info("  Left variable:  named $ln of type $lt";prefix="JOLI: ")
+    info("  Right variable: named $rn of type $rt";prefix="JOLI: ")
+    error(s)
+end
+function jo_method_error(L,M,R,s::String)
+    lt=typeof(L)
+    ln=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
+    mt=typeof(M)
+    mn=typeof(M)<:joAbstractOperator ? M.name : "non-JOLI"
+    rt=typeof(R)
+    rn=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
+    info("Method error for input combination:";prefix="JOLI: ")
+    info("  Left variable:  named $ln of type $lt";prefix="JOLI: ")
+    info("  Mid variable:   named $mn of type $mt";prefix="JOLI: ")
+    info("  Right variable: named $rn of type $rt";prefix="JOLI: ")
+    error(s)
+end
+
+############################################################
 ## type tree ###############################################
 function type_tree(top::DataType=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
     super ? println(bl,top," <: ",supertype(top)) : println(bl,top)

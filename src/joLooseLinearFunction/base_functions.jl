@@ -258,15 +258,26 @@ end
 ## overloaded Base.LinAlg functions
 
 # A_mul_B!(...,jo,...)
+A_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A * x
+A_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A * x
 
 # At_mul_B!(...,jo,...)
+At_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A.' * x
+At_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A.' * x
 
 # Ac_mul_B!(...,jo,...)
+Ac_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A' * x
+Ac_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A' * x
 
 # A_ldiv_B!(...,jo,...)
+A_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A \ x
+A_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A \ x
 
 # At_ldiv_B!(...,jo,...)
+At_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A.' \ x
+At_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A.' \ x
 
 # Ac_ldiv_B!(...,jo,...)
-
+Ac_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A' \ x
+Ac_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A' \ x
 

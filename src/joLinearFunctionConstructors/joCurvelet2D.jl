@@ -7,7 +7,7 @@ function apply_fdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Inte
     ccall((:jl_fdct_wrapping_real,:libdfdct_wrapping),Void,
         (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Cdouble}}),
         n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
-    C= jo_convert(rdt,C,false)
+    C=jo_convert(rdt,C,false)
     return C
 end
 function apply_ifdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
