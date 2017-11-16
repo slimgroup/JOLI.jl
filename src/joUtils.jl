@@ -59,7 +59,7 @@ export joInt, joFloat, joComplex
 global joInt=Int64
 global joFloat=Float64
 global joComplex=Complex{Float64}
-export jo_joInt_set, jo_joFloat_set, jo_joComplex_set, jo_jo32bit_set, jo_jo64bit_set
+export jo_joInt_set, jo_joFloat_set, jo_joComplex_set, jo_jo32bit_set, jo_jo64bit_set, jo_joTypes_get
 """
 set default integer type joInt
 
@@ -91,7 +91,7 @@ function jo_joComplex_set(DT::DataType=joComplex)
     return joComplex
 end
 """
-set default typa joInt, joFloat, joComplex to 32 bit
+set default type joInt, joFloat, joComplex to 32 bit
 
     function jo_jo32bit_set()
 
@@ -104,7 +104,7 @@ function jo_jo32bit_set()
     return joInt, joFloat, joComplex
 end
 """
-set default typa joInt, joFloat, joComplex to 64 bit
+set default type joInt, joFloat, joComplex to 64 bit
 
     function jo_jo64bit_set()
 
@@ -116,6 +116,14 @@ function jo_jo64bit_set()
     global joTol=sqrt(eps(Float64))
     return joInt, joFloat, joComplex
 end
+
+"""
+get default types joInt, joFloat, joComplex
+
+    function jo_joTypes_get()
+
+"""
+jo_joTypes_get() = (joInt, joFloat, joComplex)
 
 ############################################################
 ## macros ##################################################
