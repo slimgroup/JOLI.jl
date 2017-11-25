@@ -1,59 +1,64 @@
 # DCT operators: joDCT
 
-## planned
-function apply_dct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
-    l::Integer=length(ms)
-    mp::Integer=prod(ms)
-    lv::Integer=length(v)
-    lvmp::Integer=lv/mp
-    vs=collect(ms)
-    if lvmp>1 push!(vs,lvmp) end
-    rv=reshape(v,vs...)
-    rv=pln*rv
-    lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
-    rv=jo_convert(rdt,rv,false)
-    return rv
+## helper module
+module joDCT_etc
+    using JOLI: jo_convert
+    ### planned
+    function apply_dct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+        l::Integer=length(ms)
+        mp::Integer=prod(ms)
+        lv::Integer=length(v)
+        lvmp::Integer=lv/mp
+        vs=collect(ms)
+        if lvmp>1 push!(vs,lvmp) end
+        rv=reshape(v,vs...)
+        rv=pln*rv
+        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_idct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+        l::Integer=length(ms)
+        mp::Integer=prod(ms)
+        lv::Integer=length(v)
+        lvmp::Integer=lv/mp
+        vs=collect(ms)
+        if lvmp>1 push!(vs,lvmp) end
+        rv=reshape(v,vs...)
+        rv=pln*rv
+        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    ### not planned
+    function apply_dct(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+        l::Integer=length(ms)
+        mp::Integer=prod(ms)
+        lv::Integer=length(v)
+        lvmp::Integer=lv/mp
+        vs=collect(ms)
+        if lvmp>1 push!(vs,lvmp) end
+        rv=reshape(v,vs...)
+        rv=dct(rv,1:l)
+        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_idct(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+        l::Integer=length(ms)
+        mp::Integer=prod(ms)
+        lv::Integer=length(v)
+        lvmp::Integer=lv/mp
+        vs=collect(ms)
+        if lvmp>1 push!(vs,lvmp) end
+        rv=reshape(v,vs...)
+        rv=idct(rv,1:l)
+        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
 end
-function apply_idct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
-    l::Integer=length(ms)
-    mp::Integer=prod(ms)
-    lv::Integer=length(v)
-    lvmp::Integer=lv/mp
-    vs=collect(ms)
-    if lvmp>1 push!(vs,lvmp) end
-    rv=reshape(v,vs...)
-    rv=pln*rv
-    lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
-    rv=jo_convert(rdt,rv,false)
-    return rv
-end
-## not planned
-function apply_dct(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
-    l::Integer=length(ms)
-    mp::Integer=prod(ms)
-    lv::Integer=length(v)
-    lvmp::Integer=lv/mp
-    vs=collect(ms)
-    if lvmp>1 push!(vs,lvmp) end
-    rv=reshape(v,vs...)
-    rv=dct(rv,1:l)
-    lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
-    rv=jo_convert(rdt,rv,false)
-    return rv
-end
-function apply_idct(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
-    l::Integer=length(ms)
-    mp::Integer=prod(ms)
-    lv::Integer=length(v)
-    lvmp::Integer=lv/mp
-    vs=collect(ms)
-    if lvmp>1 push!(vs,lvmp) end
-    rv=reshape(v,vs...)
-    rv=idct(rv,1:l)
-    lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
-    rv=jo_convert(rdt,rv,false)
-    return rv
-end
+using .joDCT_etc
 
 export joDCT
 """
@@ -77,19 +82,19 @@ function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::Data
     pf=plan_dct(zeros(ms))
     ipf=plan_idct(zeros(ms))
     return joLinearFunctionCT(prod(ms),prod(ms),
-        v1->apply_dct(pf,v1,ms,RDT),
-        v2->apply_idct(ipf,v2,ms,DDT),
-        v3->apply_idct(ipf,v3,ms,DDT),
-        v4->apply_dct(pf,v4,ms,RDT),
+        v1->joDCT_etc.apply_dct(pf,v1,ms,RDT),
+        v2->joDCT_etc.apply_idct(ipf,v2,ms,DDT),
+        v3->joDCT_etc.apply_idct(ipf,v3,ms,DDT),
+        v4->joDCT_etc.apply_dct(pf,v4,ms,RDT),
         DDT,RDT;
-        name="joDCT"
+        name="joDCTp"
         )
     else
     return joLinearFunctionCT(prod(ms),prod(ms),
-        v1->apply_dct(v1,ms,RDT),
-        v2->apply_idct(v2,ms,DDT),
-        v3->apply_idct(v3,ms,DDT),
-        v4->apply_dct(v4,ms,RDT),
+        v1->joDCT_etc.apply_dct(v1,ms,RDT),
+        v2->joDCT_etc.apply_idct(v2,ms,DDT),
+        v3->joDCT_etc.apply_idct(v3,ms,DDT),
+        v4->joDCT_etc.apply_dct(v4,ms,RDT),
         DDT,RDT;
         name="joDCT")
     end

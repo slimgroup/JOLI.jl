@@ -1,44 +1,49 @@
 # 2D Curevelt operators: joCurvelet2DnoFFT
 
-function apply_fdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-    C=Vector{Cdouble}(m)
-    X=jo_convert(Complex{Cdouble},v,false)
-    ccall((:jl_fdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
-        (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Cdouble}}),
-        n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
-    C=jo_convert(rdt,C,false)
-    return C
+## helper module
+module joCurvelet2DnoFFT_etc
+    using JOLI: jo_convert, jo_complex_eltype
+    function apply_fdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+        C=Vector{Cdouble}(m)
+        X=jo_convert(Complex{Cdouble},v,false)
+        ccall((:jl_fdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Cdouble}}),
+            n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
+        C=jo_convert(rdt,C,false)
+        return C
+    end
+    function apply_ifdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+        X=Vector{Complex{Cdouble}}(n1*n2)
+        eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2DnoFFT: input vector must be real for real transform"))
+        C=jo_convert(Cdouble,v,false)
+        ccall((:jl_ifdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Complex{Cdouble}}}),
+            n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
+        X=jo_convert(rdt,X,false)
+        return X
+    end
+    function apply_fdct2DnoFFTwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+        C=Vector{Complex{Cdouble}}(m)
+        X=jo_convert(Complex{Cdouble},v,false)
+        ccall((:jl_fdct_wrapping_cpx_nofft,:libdfdct_wrapping),Void,
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
+            n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
+        elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
+        C=jo_convert(rdt,C,false)
+        return C
+    end
+    function apply_ifdct2DnoFFTwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+        X=Vector{Complex{Cdouble}}(n1*n2)
+        C=jo_convert(Complex{Cdouble},v,false)
+        ccall((:jl_ifdct_wrapping_cpx_nofft,:libdfdct_wrapping),Void,
+            (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
+            n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
+        elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
+        X=jo_convert(rdt,X,false)
+        return X
+    end
 end
-function apply_ifdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-    X=Vector{Complex{Cdouble}}(n1*n2)
-    eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2DnoFFT: input vector must be real for real transform"))
-    C=jo_convert(Cdouble,v,false)
-    ccall((:jl_ifdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
-        (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Complex{Cdouble}}}),
-        n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
-    X=jo_convert(rdt,X,false)
-    return X
-end
-function apply_fdct2DnoFFTwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-    C=Vector{Complex{Cdouble}}(m)
-    X=jo_convert(Complex{Cdouble},v,false)
-    ccall((:jl_fdct_wrapping_cpx_nofft,:libdfdct_wrapping),Void,
-        (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
-        n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
-    elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
-    C=jo_convert(rdt,C,false)
-    return C
-end
-function apply_ifdct2DnoFFTwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Integer,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-    X=Vector{Complex{Cdouble}}(n1*n2)
-    C=jo_convert(Complex{Cdouble},v,false)
-    ccall((:jl_ifdct_wrapping_cpx_nofft,:libdfdct_wrapping),Void,
-        (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
-        n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
-    elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
-    X=jo_convert(rdt,X,false)
-    return X
-end
+using .joCurvelet2DnoFFT_etc
 
 export joCurvelet2DnoFFT
 """
@@ -94,13 +99,13 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::Da
     dtp= DDT<:Complex ? DDT : Complex{DDT}
     if real_crvlts
         rtp=RDT
-        apply_fdct2DnoFFTwrap=apply_fdct2DnoFFTwrap_real
-        apply_ifdct2DnoFFTwrap=apply_ifdct2DnoFFTwrap_real
+        apply_fdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_fdct2DnoFFTwrap_real
+        apply_ifdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_ifdct2DnoFFTwrap_real
         myname="joCurvelt2DnoFFTwrapReal"
     else
         rtp= RDT<:Complex ? RDT : Complex{RDT}
-        apply_fdct2DnoFFTwrap=apply_fdct2DnoFFTwrap_cplx
-        apply_ifdct2DnoFFTwrap=apply_ifdct2DnoFFTwrap_cplx
+        apply_fdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_fdct2DnoFFTwrap_cplx
+        apply_ifdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_ifdct2DnoFFTwrap_cplx
         myname="joCurvelt2DnoFFTwrapCplx"
     end
     cfmap_size=ccall((:jl_fdct_sizes_map_size,:libdfdct_wrapping),Cint,
