@@ -84,29 +84,37 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
     (pad_upper>=0 && pad_upper<=n) || error("joExtend: invalid pad_upper size; should be 0<= pad_upper <=n")
     (pad_lower>=0 && pad_lower<=n) || error("joExtend: invalid pad_lower size; should be 0<= pad_lower <=n")
     if pad_type==:zeros
-        return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,
+        return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 v2->joExtend_etc.zeros_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v2->joExtend_etc.zeros_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;#fMVok=true,
-                                name="joExtend")
+                                name="joExtend(zeros)")
     elseif pad_type==:border
-        return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,
+        return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.border_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 v2->joExtend_etc.border_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v2->joExtend_etc.border_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v1->joExtend_etc.border_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;#fMVok=true,
-                                name="joExtend")
+                                name="joExtend(border)")
     elseif pad_type==:mirror
-        return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,
+        return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.mirror_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 v2->joExtend_etc.mirror_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v2->joExtend_etc.mirror_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v1->joExtend_etc.mirror_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;#fMVok=true,
-                                name="joExtend")
+                                name="joExtend(mirror)")
     elseif pad_type==:periodic
-        return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,
+        return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.periodic_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 v2->joExtend_etc.periodic_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v2->joExtend_etc.periodic_tran(v2,n,pad_upper,pad_lower,DDT),
+                                v1->joExtend_etc.periodic_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;#fMVok=true,
-                                name="joExtend")
+                                name="joExtend(periodic)")
     else
         error("joExtend: unknown extension type.")
     end
