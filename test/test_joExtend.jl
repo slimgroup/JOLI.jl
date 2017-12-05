@@ -1,9 +1,8 @@
 T=9
-
 tsname="joExtend"
 @testset "$tsname" begin
 for t=1:T # start test loop
-    n=8*T
+    n=8*t
     l=rand(0:n)
     u=rand(0:n)
     m=n+l+u
