@@ -64,6 +64,7 @@ end
 """
 function joExtension{T<:Integer}(n::T, pad_type::EXT_TYPE; pad_upper::T=0,pad_lower::T=0,DDT::DataType=joFloat,RDT::DataType=DDT)
     
+    warn("joExtension is deprecated. Use joExtend and pay attention to syntax changes.";once=true, key="joExtension")
     return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,
                                 v1->apply_pad(v1,n,pad_type,pad_upper,pad_lower,forw_mode=true),
                                 v2->apply_pad(v2,n,pad_type,pad_upper,pad_lower,forw_mode=false),DDT,RDT;
