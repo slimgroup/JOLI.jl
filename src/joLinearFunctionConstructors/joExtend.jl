@@ -61,22 +61,22 @@ export joExtend
    - :border - pad signal with values at the edge of the domain
    - :mirror - mirror extension of the signal
    - :periodic - periodic extension of the signal
-- pad_lower : number of points to pad on the low end index (keyword arg, default=0)
-- pad_upper : number of points to pad on the upper index (keyword arg, default=0)
+- pad_lower : number of points to pad on the lower index end (keyword arg, default=0)
+- pad_upper : number of points to pad on the upper index end (keyword arg, default=0)
 
 # Examples
 - joExtend(n,:zeros,pad_lower=10,pad_upper=10)
   - extends a n-length vector with 10 zeros on either side
 
 - joExtend(n,:border,pad_upper=10)
-  - extends a n-length vector so that x[n+1:n+10] = x[n]
+  - appends, to a n-length vector, so that x[n+1:n+10] = x[n]
 
 - joExtend(n,:mirror,pad_lower=10)
-  - extends a n-length vector by its mirror extension
+  - prepends, to a n-length vector, its mirror extension
   - y=[reverse(x[1:10]);x]
 
 - joExtend(n,:periodic,pad_upper=10)
-  - extends a n-length vector by its periodic extension
+  - appends, to a n-length vector, its periodic extension
   - y=[x;x[1:10]]
 
 """
