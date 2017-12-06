@@ -8,8 +8,16 @@ module joExtend_etc
         w = [zeros(VT,pad_lower); v; zeros(VT,pad_upper)]
         return jo_convert(rdt,w,false)
     end
+    function zeros_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = [zeros(VT,pad_lower,size(v,2)); v; zeros(VT,pad_upper,size(v,2))]
+        return jo_convert(rdt,w,false)
+    end
     function zeros_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
         w = v[pad_lower+1:n+pad_lower]
+        return jo_convert(rdt,w,false)
+    end
+    function zeros_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = v[pad_lower+1:n+pad_lower,:]
         return jo_convert(rdt,w,false)
     end
     ### border
@@ -17,10 +25,20 @@ module joExtend_etc
         w = [repmat([v[1]],pad_lower); v; repmat([v[end]],pad_upper)]
         return jo_convert(rdt,w,false)
     end
+    function border_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = [repmat(v[1:1,:],pad_lower,1); v; repmat(v[end:end,:],pad_upper,1)]
+        return jo_convert(rdt,w,false)
+    end
     function border_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
         w = v[pad_lower+1:end-pad_upper]
-        w[1] = w[1] + sum(v[1:pad_lower])
-        w[end] = w[end] + sum(v[end-pad_upper+1:end])
+        w[1] += sum(v[1:pad_lower])
+        w[end] += sum(v[end-pad_upper+1:end])
+        return jo_convert(rdt,w,false)
+    end
+    function border_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = v[pad_lower+1:end-pad_upper,:]
+        w[1:1,:] += sum(v[1:pad_lower,:],1)
+        w[end:end,:] += sum(v[end-pad_upper+1:end,:],1)
         return jo_convert(rdt,w,false)
     end
     ### mirror
@@ -28,10 +46,20 @@ module joExtend_etc
         w = [reverse(v[1:pad_lower]); v; reverse(v[end-pad_upper+1:end])]
         return jo_convert(rdt,w,false)
     end
+    function mirror_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = [flipdim(v[1:pad_lower,:],1); v; flipdim(v[end-pad_upper+1:end,:],1)]
+        return jo_convert(rdt,w,false)
+    end
     function mirror_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
         w = v[pad_lower+1:end-pad_upper]
-        w[1:pad_lower] = w[1:pad_lower] + reverse(v[1:pad_lower])
-        w[end-pad_upper+1:end] = w[end-pad_upper+1:end] + reverse(v[end-pad_upper+1:end])
+        w[1:pad_lower] += reverse(v[1:pad_lower])
+        w[end-pad_upper+1:end] += reverse(v[end-pad_upper+1:end])
+        return jo_convert(rdt,w,false)
+    end
+    function mirror_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = v[pad_lower+1:end-pad_upper,:]
+        w[1:pad_lower,:] += flipdim(v[1:pad_lower,:],1)
+        w[end-pad_upper+1:end,:] += flipdim(v[end-pad_upper+1:end,:],1)
         return jo_convert(rdt,w,false)
     end
     ### periodic
@@ -39,10 +67,20 @@ module joExtend_etc
         w = [v[end-pad_lower+1:end]; v; v[1:pad_upper]]
         return jo_convert(rdt,w,false)
     end
+    function periodic_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = [v[end-pad_lower+1:end,:]; v; v[1:pad_upper,:]]
+        return jo_convert(rdt,w,false)
+    end
     function periodic_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
         w = v[pad_lower+1:end-pad_upper]
-        w[1:pad_upper] = w[1:pad_upper] + v[end-pad_upper+1:end]
-        w[end-pad_lower+1:end] = w[end-pad_lower+1:end] + v[1:pad_lower]
+        w[1:pad_upper] += v[end-pad_upper+1:end]
+        w[end-pad_lower+1:end] += v[1:pad_lower]
+        return jo_convert(rdt,w,false)
+    end
+    function periodic_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+        w = v[pad_lower+1:end-pad_upper,:]
+        w[1:pad_upper,:] += v[end-pad_upper+1:end,:]
+        w[end-pad_lower+1:end,:] += v[1:pad_lower,:]
         return jo_convert(rdt,w,false)
     end
 end
@@ -89,7 +127,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.zeros_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v2->joExtend_etc.zeros_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
-                                DDT,RDT;#fMVok=true,
+                                DDT,RDT;fMVok=true,
                                 name="joExtend(zeros)")
     elseif pad_type==:border
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
@@ -97,7 +135,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.border_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v2->joExtend_etc.border_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.border_fwd(v1,n,pad_upper,pad_lower,RDT),
-                                DDT,RDT;#fMVok=true,
+                                DDT,RDT;fMVok=true,
                                 name="joExtend(border)")
     elseif pad_type==:mirror
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
@@ -105,7 +143,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.mirror_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v2->joExtend_etc.mirror_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.mirror_fwd(v1,n,pad_upper,pad_lower,RDT),
-                                DDT,RDT;#fMVok=true,
+                                DDT,RDT;fMVok=true,
                                 name="joExtend(mirror)")
     elseif pad_type==:periodic
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
@@ -113,7 +151,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.periodic_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v2->joExtend_etc.periodic_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.periodic_fwd(v1,n,pad_upper,pad_lower,RDT),
-                                DDT,RDT;#fMVok=true,
+                                DDT,RDT;fMVok=true,
                                 name="joExtend(periodic)")
     else
         error("joExtend: unknown extension type.")
