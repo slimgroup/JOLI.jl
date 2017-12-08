@@ -90,9 +90,10 @@ export joExtend
 """
 1D extension operator
 
-   joExtend(n,pad_type; pad_lower=0,pad_upper=0,DDT=joFloat,RDT=DDT)
+    joExtend(n,pad_type; pad_lower=0,pad_upper=0,DDT=joFloat,RDT=DDT)
 
 # Arguments
+
 - n : size of input vector
 - pad_type : one of the symbols
    - :zeros - pad signal with zeros
@@ -103,19 +104,22 @@ export joExtend
 - pad_upper : number of points to pad on the upper index end (keyword arg, default=0)
 
 # Examples
-- joExtend(n,:zeros,pad_lower=10,pad_upper=10)
-  - extends a n-length vector with 10 zeros on either side
 
-- joExtend(n,:border,pad_upper=10)
-  - appends, to a n-length vector, so that x[n+1:n+10] = x[n]
+extend a n-length vector with 10 zeros on either side
 
-- joExtend(n,:mirror,pad_lower=10)
-  - prepends, to a n-length vector, its mirror extension
-  - y=[reverse(x[1:10]);x]
+    joExtend(n,:zeros,pad_lower=10,pad_upper=10)
 
-- joExtend(n,:periodic,pad_upper=10)
-  - appends, to a n-length vector, its periodic extension
-  - y=[x;x[1:10]]
+append, to a n-length vector, so that x[n+1:n+10] = x[n]
+
+    joExtend(n,:border,pad_upper=10)
+
+prepend, to a n-length vector, its mirror extension: y=[reverse(x[1:10]);x]
+
+    joExtend(n,:mirror,pad_lower=10)
+
+append, to a n-length vector, its periodic extension: y=[x;x[1:10]]
+
+    joExtend(n,:periodic,pad_upper=10)
 
 """
 function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::Integer=0,DDT::DataType=joFloat,RDT::DataType=DDT)

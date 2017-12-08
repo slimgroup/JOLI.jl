@@ -67,6 +67,7 @@ Multi-dimensional DCT transform over fast dimension(s)
     joDCT(m[,n[, ...]] [;planned::Bool=true,DDT=joFloat,RDT=DDT])
 
 # Examples
+
 - joDCT(m) - 1D DCT
 - joDCT(m; planned=false) - 1D FFT without the precomputed plan
 - joDCT(m,n) - 2D DCT
@@ -74,6 +75,7 @@ Multi-dimensional DCT transform over fast dimension(s)
 - joDCT(m; DDT=Float32,RDT=Float64) - 1D DCT for 32-bit input and 64-bit output
 
 # Notes
+
 - if you intend to use joDCT in remote* calls, you have to either set planned=false or create the operator on the worker
 
 """

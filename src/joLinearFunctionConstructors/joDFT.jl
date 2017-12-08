@@ -133,6 +133,7 @@ Multi-dimensional FFT transform over fast dimension(s)
 - joDFT(m; DDT=Float32,RDT=Complex{Float64}) - 1D FFT for 32-bit input and 64-bit output
 
 # Notes
+
 - if DDT:<Real then imaginary part will be neglected for transpose/ctranspose
 - if you intend to use joDFT in remote* calls, you have to either set planned=false or create the operator on the worker
 

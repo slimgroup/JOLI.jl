@@ -43,6 +43,7 @@ end
    joExtension(n,pad_type; pad_lower=0,pad_upper=0,DDT=joFloat,RDT=DDT)
 
 # Arguments
+
 - n : size of input vector
 - pad_type : one of EXT_TYPE 
    - pad_zeros - pad signal with zeros

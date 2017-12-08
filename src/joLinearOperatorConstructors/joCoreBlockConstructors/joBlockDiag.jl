@@ -18,6 +18,7 @@ Block-diagonal operator composed from different square JOLI operators
         weights::AbstractVector,name::String)
 
 # Example
+
     a=rand(Complex{Float64},4,4);
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
     b=rand(Complex{Float64},8,8);
@@ -29,6 +30,7 @@ Block-diagonal operator composed from different square JOLI operators
     BD=joBlockDiag(A,B,C;weights=w) # weighted block diagonal
 
 # Notes
+
 - all operators must be square (M(i)==N(i))
 - all given operators must have same domain/range types
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
@@ -86,6 +88,7 @@ Block-diagonal operator composed from l-times replicated square JOLI operator
     joBlockDiag(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
 
 # Example
+
     a=rand(Complex{Float64},4,4);
     w=rand(Complex{Float64},3)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
@@ -93,6 +96,7 @@ Block-diagonal operator composed from l-times replicated square JOLI operator
     BD=joBlockDiag(3,A;weights=w) # weighted block diagonal
 
 # Notes
+
 - all given operators must have same domain/range types
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 

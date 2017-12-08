@@ -49,11 +49,11 @@ export joCurvelet2DnoFFT
 """
 2D Curvelet transform (wrapping) over fast dimensions without FFT
 
-    joCurvelet2DnoFFT(n1,n2
-                [;DDT=joComplex,RDT=DDT,
-                 nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
+    joCurvelet2DnoFFT(n1,n2 [;DDT=joComplex,RDT=DDT,
+        nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
 
 # Arguments
+
 - n1,n2 - image sizes
 - nbscales - # of scales (requires #>=default; defaults to max(1,ceil(log2(min(n1,n2))-3)))
 - nbangles_coarse - # of angles at coarse scale (requires #%4==0, #>=8; defaults to 16)
@@ -62,6 +62,7 @@ export joCurvelet2DnoFFT
 - zero_finest - zero out finnest scales (defaults to false)
 
 # Examples
+
 - joCurvelet2DnoFFT(32,32) - real transform (64-bit)
 - joCurvelet2DnoFFT(32,32;real_crvlts=false) - complex transform (64-bit)
 - joCurvelet2DnoFFT(32,32;all_crvlts=true) - real transform with curevelts at the finnest scales (64-bit)
@@ -71,6 +72,7 @@ export joCurvelet2DnoFFT
 - joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=Complex{Float64},real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
 
 # Notes
+
 - real joCurvelet2DnoFFT passed adjoint test while either combined with joDFT, or with isadjont flag userange=true
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 

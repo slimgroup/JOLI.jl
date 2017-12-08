@@ -18,6 +18,7 @@ Dictionary operator composed from different square JOLI operators
         weights::AbstractVector,name::String)
 
 # Example
+
     a=rand(Complex{Float64},4,4);
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
     b=rand(Complex{Float64},4,8);
@@ -32,6 +33,7 @@ Dictionary operator composed from different square JOLI operators
     D=joDict(A,B,C;weights=w) # weighted dictionary
 
 # Notes
+
 - all operators must have the same # of rows (M)
 - all given operators must have same domain/range types
 - the domain/range types of joDict are equal to domain/range types of the given operators
@@ -89,6 +91,7 @@ Dictionary operator composed from l-times replicated square JOLI operator
         weights::AbstractVector,name::String)
 
 # Example
+
     a=rand(Complex{Float64},4,4);
     w=rand(Complex{Float64},3)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
@@ -96,6 +99,7 @@ Dictionary operator composed from l-times replicated square JOLI operator
     D=joDict(3,A;weights=w) # weighted dictionary
 
 # Notes
+
 - all operators must have the same # of rows (M)
 - all given operators must have same domain/range types
 - the domain/range types of joDict are equal to domain/range types of the given operators

@@ -18,6 +18,7 @@ Block operator composed from different square JOLI operators
         weights::AbstractVector,name::String)
 
 # Example
+
     a=rand(Complex{Float64},4,4);
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
     b=rand(Complex{Float64},4,8);
@@ -34,6 +35,7 @@ Block operator composed from different square JOLI operators
     S=joBlock(A,B,C;weights=w) # weighted block
 
 # Notes
+
 - operators are to be given in row-major order
 - all operators in a row must have the same # of rows (M)
 - sum of Ns for operators in each row must be the same

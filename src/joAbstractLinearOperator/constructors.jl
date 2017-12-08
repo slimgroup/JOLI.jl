@@ -13,6 +13,7 @@ Create joLinearOperator with added solver for \(jo,[m]vec),
 same for each form of the operator
 
 # Example (for all forms of O)
+    
     O=joAddSolverAny(O,(s,x)->my_solver(s,x))
 
 """
@@ -37,16 +38,19 @@ Create joLinearOperator with added specific solver(s) for \(jo,[m]vec),
 distinct for each form of the operator.
 
 # Examples
+
     O=joAddSolverAll(O,
         (s,x)->my_solver(s,x),
         (s,x)->my_solver_T(s,x),
         (s,x)->my_solver_CT(s,x),
         (s,x)->my_solver_C(s,x))
+
     O=joAddSolverAll(O,
         (s,x)->my_solver(s,x),
         @joNF,
         (s,x)->my_solver_CT(s,x),
         @joNF)
+
     O=joAddSolverAll(O,
         (s,x)->my_solver(s,x),
         @joNF,
