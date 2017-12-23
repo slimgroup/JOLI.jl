@@ -1,13 +1,13 @@
 module joDAdistributor_etc
-    function jo_balanced_partition(part::Tuple{Vararg{<:Integer}},dsize::Integer)
+    function balanced_partition(part::Tuple{Vararg{<:Integer}},dsize::Integer)
         vpart=collect(part)
         nlabs=length(vpart)
-        @assert sum(vpart)==dsize "FATAL SURPRISE: failed to properly partition $dsize to $nlabs workers"
+        @assert sum(vpart)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
         idxs = Vector{Int}(nlabs+1)
         for i=0:nlabs idxs[i+1]=sum(vpart[1:i])+1 end
         return idxs
     end
-    function jo_balanced_partition(nlabs::Integer,dsize::Integer)
+    function balanced_partition(nlabs::Integer,dsize::Integer)
         if dsize>=nlabs
             part = Vector{Int}(nlabs)
             idxs = Vector{Int}(nlabs+1)
@@ -16,7 +16,7 @@ module joDAdistributor_etc
             f::Int = floor(Int,dsize/nlabs)
             part[1:r]       = c
             part[r+1:nlabs] = f
-            @assert sum(part)==dsize "FATAL SURPRISE: failed to properly partition $dsize to $nlabs workers"
+            @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
             for i=0:nlabs idxs[i+1]=sum(part[1:i])+1 end
         else
             idxs = [[1:(dsize+1);], zeros(Int, nlabs-dsize);]
@@ -24,7 +24,7 @@ module joDAdistributor_etc
         return idxs
     end
 
-    function jo_default_distribution(dims::Dims,pids::Vector{<:Integer})
+    function default_distribution(dims::Dims,pids::Vector{<:Integer})
         chunks = ones(Int, length(dims))
         np = length(pids)
             nd = length(dims)
@@ -37,8 +37,8 @@ module joDAdistributor_etc
         return chunks
     end
 
-    function jo_idxs_cuts(dims::Dims, chunks::Vector{<:Integer})
-        cuts = map(jo_balanced_partition, chunks, dims)
+    function idxs_cuts(dims::Dims, chunks::Vector{<:Integer})
+        cuts = map(balanced_partition, chunks, dims)
         n = length(dims)
         idxs = Array{NTuple{n,UnitRange{Int}}}(chunks...)
         for cidx in CartesianRange(tuple(chunks...))
@@ -46,9 +46,9 @@ module joDAdistributor_etc
         end
         return (idxs, cuts)
     end
-    function jo_idxs_cuts(dims::Dims, parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}})
+    function idxs_cuts(dims::Dims, parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}})
         chunks=length.(parts)
-        cuts = [map(jo_balanced_partition, parts, dims)...]
+        cuts = [map(balanced_partition, parts, dims)...]
         n = length(dims)
         idxs = Array{NTuple{n,UnitRange{Int}}}(chunks...)
         for cidx in CartesianRange(tuple(chunks...))
@@ -70,9 +70,9 @@ struct joDAdistributor
 end
 function joDAdistributor(dims::Dims,
         procs::Vector{<:Integer}=workers(),
-        parts::Vector{<:Integer}=joDAdistributor_etc.jo_default_distribution(dims,procs);
+        parts::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
         DT::DataType=Float64)
-    idxs,cuts = joDAdistributor_etc.jo_idxs_cuts(dims,parts)
+    idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
     return joDAdistributor(dims,procs,parts,idxs,cuts,DT)
 end
 function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
@@ -81,8 +81,23 @@ function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
     cdims=convert(Dims,(sum.([parts...])...))
     cparts=[length.([parts...])...]
     nparts=prod(cparts); nprocs=length(procs)
-    @assert nparts==nprocs "FATAL SURPRISE: mismatch between # of partitions ($nparts) and workers ($nprocs)"
-    idxs,cuts = joDAdistributor_etc.jo_idxs_cuts(cdims,parts)
+    @assert nparts==nprocs "FATAL ERROR: mismatch between # of partitions ($nparts) and workers ($nprocs)"
+    idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
+    return joDAdistributor(cdims,procs,cparts,idxs,cuts,DT)
+end
+function joDAdistributor(dims::Dims,
+        ddim::Integer,dparts::Union{Vector{<:Integer},Dims},
+        procs::Vector{<:Integer}=workers();
+        DT::DataType=Float64)
+    nd=length(dims)
+    @assert sum(dparts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
+    @assert ddim<=nd "FATAL ERROR: distributed dimension ($ddim) > # of dimensions ($nd)"
+    parts=([i==ddim?(dparts...):tuple(dims[i]) for i=1:nd]...)
+    cdims=convert(Dims,(sum.([parts...])...))
+    cparts=[length.([parts...])...]
+    nparts=prod(cparts); nprocs=length(procs)
+    @assert nparts==nprocs "FATAL ERROR: mismatch between # of partitions ($nparts) and workers ($nprocs)"
+    idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
     return joDAdistributor(cdims,procs,cparts,idxs,cuts,DT)
 end
 joDAdistributor(dims::Integer...;DT::DataType=Float64) = joDAdistributor(convert(Dims,dims);DT=DT)
