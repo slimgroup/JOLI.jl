@@ -104,11 +104,20 @@ joDAdistributor(dims::Integer...;DT::DataType=Float64) = joDAdistributor(convert
 
 export dalloc
 """
-     dalloc(dims, ...)
+# dalloc(dims, ...)
 
 Construct and allocate a distributed array without assigment of any value.
+
 Use it to allocate quicker the array that will have all elements overwritten.
-Trailing arguments are the same as those accepted by `DArray`.
+
+# SIGNATURE
+
+     dalloc(dims::Dims, ...)
+
+# WHERE
+
+- trailing arguments are the same as those accepted by `DArray`.
+
 """
 dalloc(dims::Dims, args...) = DArray(I->Array{Float64}(map(length,I)), dims, args...)
 dalloc{T}(::Type{T}, dims::Dims, args...) = DArray(I->Array{T}(map(length,I)), dims, args...)
@@ -116,6 +125,23 @@ dalloc{T}(::Type{T}, d1::Integer, drest::Integer...) = dalloc(T, convert(Dims, t
 dalloc(d1::Integer, drest::Integer...) = dalloc(Float64, convert(Dims, tuple(d1, drest...)))
 dalloc(d::Dims) = dalloc(Float64, d)
 #dalloc(d::joDAdistributor) = dalloc(d.DT, d.dims, d.procs, d.parts)
+"""
+# dalloc(d; DT)
+
+Construct and allocate a distributed array without assigment of any value.
+
+Use it to allocate quicker the array that will have all elements overwritten.
+
+## SIGNATURE
+
+     dalloc(d::joDAdistributor;DT::DataType=d.DT)
+
+## WHERE
+
+- d: see help for joDAdistributor
+- DT: keyword argument to overwrite the type in joDAdistributor
+
+"""
 function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->Array{DT}(map(length,I))
@@ -123,6 +149,21 @@ function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+"""
+# dzeros(d; DT)
+
+Construct and allocate a distributed array filled with zeros.
+
+## SIGNATURE
+
+     dzeros(d::joDAdistributor;DT::DataType=d.DT)
+
+## WHERE
+
+- d: see help for joDAdistributor
+- DT: keyword argument to overwrite the type in joDAdistributor
+
+"""
 function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->zeros(DT,map(length,I))
@@ -130,6 +171,21 @@ function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+"""
+# dones(d; DT)
+
+Construct and allocate a distributed array filled with ones.
+
+## SIGNATURE
+
+     dones(d::joDAdistributor;DT::DataType=d.DT)
+
+## WHERE
+
+- d: see help for joDAdistributor
+- DT: keyword argument to overwrite the type in joDAdistributor
+
+"""
 function dones(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->ones(DT,map(length,I))
@@ -137,6 +193,21 @@ function dones(d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+"""
+# dfill(x, d; DT)
+
+Construct and allocate a distributed array filled with x.
+
+## SIGNATURE
+
+     dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
+
+## WHERE
+
+- d: see help for joDAdistributor
+- DT: keyword argument to overwrite the type in joDAdistributor
+
+"""
 function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     X=DT(x)
@@ -145,18 +216,54 @@ function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
-function drand(d::joDAdistributor;DT::DataType=d.DT,rng=RandomDevice())
+"""
+# drand(d; DT, RNG)
+
+Construct and allocate a distributed array filled using built-in rand.
+
+## SIGNATURE
+
+     drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+
+## WHERE
+
+- d: see help for joDAdistributor
+- DT: keyword argument to overwrite the type in joDAdistributor
+- RNG: random-number generator function (see help for rand/randn)
+
+"""
+function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     id=DistributedArrays.next_did()
-    init=I->rand(rng,DT,map(length,I))
+    init=I->rand(RNG,DT,map(length,I))
     np = prod(d.parts)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
-function drandn(d::joDAdistributor;DT::DataType=d.DT,rng=RandomDevice())
+"""
+# drandn(d; DT, RNG)
+
+Construct and allocate a distributed array filled using built-in randn.
+
+## SIGNATURE
+
+     drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+
+## WHERE
+
+- d: see help for joDAdistributor
+- DT: keyword argument to overwrite the type in joDAdistributor
+- RNG: random-number generator function (see help for rand/randn)
+
+# NOTES
+
+- only float type are supported by randn (see help for randn)
+
+"""
+function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     DT<:Integer && warn("Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor"; once=true, key="JOLI:drandn:Integer")
     DT= (DT<:Integer) ? Float64 : DT
     id=DistributedArrays.next_did()
-    init=I->randn(rng,DT,map(length,I))
+    init=I->randn(RNG,DT,map(length,I))
     np = prod(d.parts)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
