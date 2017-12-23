@@ -104,7 +104,7 @@ joDAdistributor(dims::Integer...;DT::DataType=Float64) = joDAdistributor(convert
 
 export dalloc
 """
-# dalloc(dims, ...)
+    dalloc(dims, ...)
 
 Construct and allocate a distributed array without assigment of any value.
 
@@ -112,7 +112,7 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 # SIGNATURE
 
-     dalloc(dims::Dims, ...)
+    dalloc(dims::Dims, ...)
 
 # WHERE
 
@@ -126,17 +126,17 @@ dalloc(d1::Integer, drest::Integer...) = dalloc(Float64, convert(Dims, tuple(d1,
 dalloc(d::Dims) = dalloc(Float64, d)
 #dalloc(d::joDAdistributor) = dalloc(d.DT, d.dims, d.procs, d.parts)
 """
-# dalloc(d; DT)
+    dalloc(d; DT)
 
 Construct and allocate a distributed array without assigment of any value.
 
 Use it to allocate quicker the array that will have all elements overwritten.
 
-## SIGNATURE
+# SIGNATURE
 
-     dalloc(d::joDAdistributor;DT::DataType=d.DT)
+    dalloc(d::joDAdistributor;DT::DataType=d.DT)
 
-## WHERE
+# WHERE
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -150,15 +150,15 @@ function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 """
-# dzeros(d; DT)
+    dzeros(d; DT)
 
 Construct and allocate a distributed array filled with zeros.
 
-## SIGNATURE
+# SIGNATURE
 
-     dzeros(d::joDAdistributor;DT::DataType=d.DT)
+    dzeros(d::joDAdistributor;DT::DataType=d.DT)
 
-## WHERE
+# WHERE
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -172,15 +172,15 @@ function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 """
-# dones(d; DT)
+    dones(d; DT)
 
 Construct and allocate a distributed array filled with ones.
 
-## SIGNATURE
+# SIGNATURE
 
-     dones(d::joDAdistributor;DT::DataType=d.DT)
+    dones(d::joDAdistributor;DT::DataType=d.DT)
 
-## WHERE
+# WHERE
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -194,15 +194,15 @@ function dones(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 """
-# dfill(x, d; DT)
+    dfill(x, d; DT)
 
 Construct and allocate a distributed array filled with x.
 
-## SIGNATURE
+# SIGNATURE
 
-     dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
+    dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
 
-## WHERE
+# WHERE
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -217,15 +217,15 @@ function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 """
-# drand(d; DT, RNG)
+    drand(d; DT, RNG)
 
 Construct and allocate a distributed array filled using built-in rand.
 
-## SIGNATURE
+# SIGNATURE
 
-     drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+    drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
 
-## WHERE
+# WHERE
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -240,15 +240,15 @@ function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 """
-# drandn(d; DT, RNG)
+    drandn(d; DT, RNG)
 
 Construct and allocate a distributed array filled using built-in randn.
 
-## SIGNATURE
+# SIGNATURE
 
-     drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+    drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
 
-## WHERE
+# WHERE
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
