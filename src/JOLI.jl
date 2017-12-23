@@ -5,6 +5,7 @@
 module JOLI
 
 # what's being used
+using DistributedArrays
 using IterativeSolvers
 using InplaceOps
 using NFFT
@@ -24,6 +25,9 @@ import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
 import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
 import Base.A_ldiv_B!, Base.At_ldiv_B!, Base.Ac_ldiv_B!
+
+# what's imported from DistributedArrays
+import DistributedArrays: dzeros, dones, dfill, drand, drandn
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype
