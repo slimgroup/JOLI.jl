@@ -110,11 +110,11 @@ Construct and allocate a distributed array without assigment of any value.
 
 Use it to allocate quicker the array that will have all elements overwritten.
 
-# SIGNATURE
+# Signature
 
     dalloc(dims::Dims, ...)
 
-# WHERE
+# Arguments
 
 - trailing arguments are the same as those accepted by `DArray`.
 
@@ -132,11 +132,11 @@ Construct and allocate a distributed array without assigment of any value.
 
 Use it to allocate quicker the array that will have all elements overwritten.
 
-# SIGNATURE
+# Signature
 
     dalloc(d::joDAdistributor;DT::DataType=d.DT)
 
-# WHERE
+# Arguments
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -154,11 +154,11 @@ end
 
 Construct and allocate a distributed array filled with zeros.
 
-# SIGNATURE
+# Signature
 
     dzeros(d::joDAdistributor;DT::DataType=d.DT)
 
-# WHERE
+# Arguments
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -176,11 +176,11 @@ end
 
 Construct and allocate a distributed array filled with ones.
 
-# SIGNATURE
+# Signature
 
     dones(d::joDAdistributor;DT::DataType=d.DT)
 
-# WHERE
+# Arguments
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -198,11 +198,11 @@ end
 
 Construct and allocate a distributed array filled with x.
 
-# SIGNATURE
+# Signature
 
     dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
 
-# WHERE
+# Arguments
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -221,11 +221,11 @@ end
 
 Construct and allocate a distributed array filled using built-in rand.
 
-# SIGNATURE
+# Signature
 
     drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
 
-# WHERE
+# Arguments
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
@@ -244,17 +244,17 @@ end
 
 Construct and allocate a distributed array filled using built-in randn.
 
-# SIGNATURE
+# Signature
 
     drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
 
-# WHERE
+# Arguments
 
 - d: see help for joDAdistributor
 - DT: keyword argument to overwrite the type in joDAdistributor
 - RNG: random-number generator function (see help for rand/randn)
 
-# NOTES
+# Notes
 
 - only float type are supported by randn (see help for randn)
 
