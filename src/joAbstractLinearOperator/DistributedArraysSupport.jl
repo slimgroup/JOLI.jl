@@ -1,3 +1,5 @@
+export joDAdistributor, dalloc
+
 module joDAdistributor_etc
     function balanced_partition(part::Tuple{Vararg{<:Integer}},dsize::Integer)
         vpart=collect(part)
@@ -59,7 +61,6 @@ module joDAdistributor_etc
 end
 using .joDAdistributor_etc
 
-export joDAdistributor
 struct joDAdistributor
     dims::Dims
     procs::Vector{Int}
@@ -102,9 +103,8 @@ function joDAdistributor(dims::Dims,
 end
 joDAdistributor(dims::Integer...;DT::DataType=Float64) = joDAdistributor(convert(Dims,dims);DT=DT)
 
-export dalloc
 """
-    dalloc(dims, ...)
+    julia> dalloc(dims, [...])
 
 Allocates a DistributedArrays.DArray without value assigment.
 
@@ -112,11 +112,11 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 # Signature
 
-    dalloc(dims::Dims, ...)
+    dalloc(dims::Dims, [...])
 
 # Arguments
 
-- trailing arguments are the same as those accepted by `DArray`.
+- optional trailing arguments are the same as those accepted by `DArray`.
 
 """
 dalloc(dims::Dims, args...) = DArray(I->Array{Float64}(map(length,I)), dims, args...)
@@ -124,9 +124,9 @@ dalloc{T}(::Type{T}, dims::Dims, args...) = DArray(I->Array{T}(map(length,I)), d
 dalloc{T}(::Type{T}, d1::Integer, drest::Integer...) = dalloc(T, convert(Dims, tuple(d1, drest...)))
 dalloc(d1::Integer, drest::Integer...) = dalloc(Float64, convert(Dims, tuple(d1, drest...)))
 dalloc(d::Dims) = dalloc(Float64, d)
-#dalloc(d::joDAdistributor) = dalloc(d.DT, d.dims, d.procs, d.parts)
+
 """
-    dalloc(d; DT)
+    julia> dalloc(d; [DT])
 
 Allocates a DistributedArrays.DArray without value assigment.
 
@@ -149,8 +149,9 @@ function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+
 """
-    dzeros(d; DT)
+    julia> dzeros(d; [DT])
 
 Constructs a DistributedArrays.DArray filled with zeros.
 
@@ -171,8 +172,9 @@ function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+
 """
-    dones(d; DT)
+    julia> dones(d; [DT])
 
 Constructs a DistributedArrays.DArray filled with ones.
 
@@ -193,8 +195,9 @@ function dones(d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+
 """
-    dfill(x, d; DT)
+    julia> dfill(x, d; [DT])
 
 Constructs a DistributedArrays.DArray filled with x.
 
@@ -216,8 +219,9 @@ function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+
 """
-    drand(d; DT, RNG)
+    julia> drand(d; [DT], [RNG])
 
 Constructs a DistributedArrays.DArray filled using built-in rand.
 
@@ -239,8 +243,9 @@ function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     procs = reshape(d.procs[1:np], ntuple(i->d.parts[i], length(d.parts)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+
 """
-    drandn(d; DT, RNG)
+    julia> drandn(d; [DT], [RNG])
 
 Constructs a DistributedArrays.DArray filled using built-in randn.
 
