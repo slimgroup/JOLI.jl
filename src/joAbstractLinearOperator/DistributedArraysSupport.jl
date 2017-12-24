@@ -106,7 +106,7 @@ export dalloc
 """
     dalloc(dims, ...)
 
-Construct and allocate a distributed array without assigment of any value.
+Allocates a DistributedArrays.DArray without value assigment.
 
 Use it to allocate quicker the array that will have all elements overwritten.
 
@@ -128,7 +128,7 @@ dalloc(d::Dims) = dalloc(Float64, d)
 """
     dalloc(d; DT)
 
-Construct and allocate a distributed array without assigment of any value.
+Allocates a DistributedArrays.DArray without value assigment.
 
 Use it to allocate quicker the array that will have all elements overwritten.
 
@@ -152,7 +152,7 @@ end
 """
     dzeros(d; DT)
 
-Construct and allocate a distributed array filled with zeros.
+Constructs a DistributedArrays.DArray filled with zeros.
 
 # Signature
 
@@ -174,7 +174,7 @@ end
 """
     dones(d; DT)
 
-Construct and allocate a distributed array filled with ones.
+Constructs a DistributedArrays.DArray filled with ones.
 
 # Signature
 
@@ -196,7 +196,7 @@ end
 """
     dfill(x, d; DT)
 
-Construct and allocate a distributed array filled with x.
+Constructs a DistributedArrays.DArray filled with x.
 
 # Signature
 
@@ -219,7 +219,7 @@ end
 """
     drand(d; DT, RNG)
 
-Construct and allocate a distributed array filled using built-in rand.
+Constructs a DistributedArrays.DArray filled using built-in rand.
 
 # Signature
 
@@ -242,7 +242,7 @@ end
 """
     drandn(d; DT, RNG)
 
-Construct and allocate a distributed array filled using built-in randn.
+Constructs a DistributedArrays.DArray filled using built-in randn.
 
 # Signature
 
