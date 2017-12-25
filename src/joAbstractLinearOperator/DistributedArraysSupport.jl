@@ -72,13 +72,13 @@ end
 function joDAdistributor(dims::Dims,
         procs::Vector{<:Integer}=workers(),
         parts::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
-        DT::DataType=Float64)
+        DT::DataType=joFloat)
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
     return joDAdistributor(dims,procs,parts,idxs,cuts,DT)
 end
 function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
         procs::Vector{<:Integer}=workers();
-        DT::DataType=Float64)
+        DT::DataType=joFloat)
     cdims=convert(Dims,(sum.([parts...])...))
     cparts=[length.([parts...])...]
     nparts=prod(cparts); nprocs=length(procs)
@@ -89,7 +89,7 @@ end
 function joDAdistributor(dims::Dims,
         ddim::Integer,dparts::Union{Vector{<:Integer},Dims},
         procs::Vector{<:Integer}=workers();
-        DT::DataType=Float64)
+        DT::DataType=joFloat)
     nd=length(dims)
     @assert sum(dparts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
     @assert ddim<=nd "FATAL ERROR: distributed dimension ($ddim) > # of dimensions ($nd)"
@@ -101,7 +101,7 @@ function joDAdistributor(dims::Dims,
     idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
     return joDAdistributor(cdims,procs,cparts,idxs,cuts,DT)
 end
-joDAdistributor(dims::Integer...;DT::DataType=Float64) = joDAdistributor(convert(Dims,dims);DT=DT)
+joDAdistributor(dims::Integer...;DT::DataType=joFloat) = joDAdistributor(convert(Dims,dims);DT=DT)
 
 """
     julia> dalloc(dims, [...])
@@ -119,11 +119,11 @@ Use it to allocate quicker the array that will have all elements overwritten.
 - optional trailing arguments are the same as those accepted by `DArray`.
 
 """
-dalloc(dims::Dims, args...) = DArray(I->Array{Float64}(map(length,I)), dims, args...)
+dalloc(dims::Dims, args...) = DArray(I->Array{joFloat}(map(length,I)), dims, args...)
 dalloc{T}(::Type{T}, dims::Dims, args...) = DArray(I->Array{T}(map(length,I)), dims, args...)
 dalloc{T}(::Type{T}, d1::Integer, drest::Integer...) = dalloc(T, convert(Dims, tuple(d1, drest...)))
-dalloc(d1::Integer, drest::Integer...) = dalloc(Float64, convert(Dims, tuple(d1, drest...)))
-dalloc(d::Dims) = dalloc(Float64, d)
+dalloc(d1::Integer, drest::Integer...) = dalloc(joFloat, convert(Dims, tuple(d1, drest...)))
+dalloc(d::Dims) = dalloc(joFloat, d)
 
 """
     julia> dalloc(d; [DT])
@@ -266,7 +266,7 @@ Constructs a DistributedArrays.DArray filled using built-in randn.
 """
 function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     DT<:Integer && warn("Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor"; once=true, key="JOLI:drandn:Integer")
-    DT= (DT<:Integer) ? Float64 : DT
+    DT= (DT<:Integer) ? joFloat : DT
     id=DistributedArrays.next_did()
     init=I->randn(RNG,DT,map(length,I))
     np = prod(d.parts)
