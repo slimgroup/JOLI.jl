@@ -49,8 +49,9 @@ global joTol = sqrt(eps())
 
 # package for each operator code goes here
 include("joTypes.jl")
-include("joMiscTypesFunctions.jl")
+include("joTypesMiscConstructors.jl")
 include("joUtils.jl")
+include("joExternalPackages.jl")
 include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")

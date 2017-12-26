@@ -4,6 +4,8 @@
 
 ############################################################
 # includes
+include("joTypes/joNumber.jl")
+include("joTypes/joDAdistributor.jl")
 include("joTypes/joAbstractOperator.jl")
 include("joTypes/joAbstractFosterLinearOperator.jl")
 include("joTypes/joAbstractLinearOperatorInplace.jl")
@@ -19,4 +21,3 @@ include("joTypes/joLinearFunctionInplace.jl")
 include("joTypes/joLooseLinearFunctionInplace.jl")
 include("joTypes/joCoreBlock.jl")
 include("joTypes/joKron.jl")
-include("joTypes/joNumber.jl")
