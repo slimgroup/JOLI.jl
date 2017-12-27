@@ -4,5 +4,5 @@
 
 ############################################################
 # includes
-include("joTypesMiscConstructors/joNumber.jl")
-include("joTypesMiscConstructors/joDAdistributor.jl")
+include("joTypesMiscMethods/joNumber.jl")
+include("joTypesMiscMethods/joDAdistributor.jl")

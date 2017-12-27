@@ -1,9 +1,8 @@
 ############################################################
-# Misc Types Functions #####################################
+# joNumber methods #########################################
 ############################################################
 
-############################################################
-## joNumber
+## constructors
 """
 joNumber outer constructor
 
@@ -23,7 +22,8 @@ Create joNumber with types matching the given operator.
 """
 joNumber{NT<:Number,DDT,RDT}(num::NT,A::joAbstractLinearOperator{DDT,RDT}) =
     joNumber{DDT,RDT}(jo_convert(DDT,num),jo_convert(RDT,num))
-# other functions
+
+## other functions
 -{DDT,RDT}(n::joNumber{DDT,RDT}) = joNumber{DDT,RDT}(-n.ddt,-n.rdt)
 inv{DDT,RDT}(n::joNumber{DDT,RDT}) = joNumber{DDT,RDT}(inv(n.ddt),inv(n.rdt))
 

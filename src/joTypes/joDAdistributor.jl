@@ -1,4 +1,16 @@
+############################################################
+## joDAdistributor
+############################################################
+
 export joDAdistributor
+
+# type definition
+"""
+joDAdistributor type
+
+See help for outer constructors for joDAdistributor.
+
+"""
 struct joDAdistributor
     dims::Dims          # dimensions of the array
     procs::Vector{Int}  # ids of workers to use

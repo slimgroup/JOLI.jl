@@ -1,3 +1,8 @@
+############################################################
+# joDAdistributor methods ##################################
+############################################################
+
+# helper module
 module joDAdistributor_etc
     function balanced_partition(parts::Tuple{Vararg{<:Integer}},dsize::Integer)
         vpart=collect(parts)
@@ -59,6 +64,31 @@ module joDAdistributor_etc
 end
 using .joDAdistributor_etc
 
+# constructors
+"""
+    julia> joDAdistributor(dims,procs,chunks;DT)
+
+Creates joDAdistributor type
+
+# Signature
+
+    joDAdistributor(dims::Dims,
+        procs::Vector{<:Integer}=workers(),
+        chunks::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
+        DT::DataType=joFloat)
+
+# Arguments
+
+- dims - tuple with array's dimensions
+- procs - vector of workers' ids
+- chunks - vector of number of parts in each dimension
+- DT - DataType of array's elements
+
+# Examples
+
+- joDAdistributor((3,40,5),workers(),[1,4,1];DT=Int8) - distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
+
+"""
 function joDAdistributor(dims::Dims,
         procs::Vector{<:Integer}=workers(),
         chunks::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
@@ -66,6 +96,28 @@ function joDAdistributor(dims::Dims,
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,chunks)
     return joDAdistributor(dims,procs,chunks,idxs,cuts,DT)
 end
+"""
+    julia> joDAdistributor(parts,procs;DT)
+
+Creates joDAdistributor type
+
+# Signature
+
+    joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
+        procs::Vector{<:Integer}=workers();
+        DT::DataType=joFloat)
+
+# Arguments
+
+- parts - tuple of tuples with part's size on each worker
+- procs - vector of workers' ids
+- DT - DataType of array's elements
+
+# Examples
+
+- joDAdistributor(((3,),(10,10,10,10),(5,));DT=Int8) - distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
+
+"""
 function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
         procs::Vector{<:Integer}=workers();
         DT::DataType=joFloat)
@@ -76,6 +128,31 @@ function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
     idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
     return joDAdistributor(cdims,procs,chunks,idxs,cuts,DT)
 end
+"""
+    julia> joDAdistributor(dims,ddim,dparts,procs;DT)
+
+Creates joDAdistributor type
+
+# Signature
+
+    function joDAdistributor(dims::Dims,
+        ddim::Integer,dparts::Union{Vector{<:Integer},Dims},
+        procs::Vector{<:Integer}=workers();
+        DT::DataType=joFloat)
+
+# Arguments
+
+- dims - tuple with array's dimensions
+- ddim - dimansion to distribute over
+- dparts - tupe/vector of the part's size on each worker
+- procs - vector of workers' ids
+- DT - DataType of array's elements
+
+# Examples
+
+- joDAdistributor((3,40,5),2,(10,10,10,10);DT=Int8) - distribute 2nd dimension over 4 workers
+
+"""
 function joDAdistributor(dims::Dims,
         ddim::Integer,dparts::Union{Vector{<:Integer},Dims},
         procs::Vector{<:Integer}=workers();
@@ -91,5 +168,28 @@ function joDAdistributor(dims::Dims,
     idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
     return joDAdistributor(cdims,procs,chunks,idxs,cuts,DT)
 end
+"""
+    julia> joDAdistributor(m[,n[...]];DT)
+
+Creates joDAdistributor type
+
+# Signature
+
+    joDAdistributor(dims::Integer...;DT::DataType=joFloat)
+
+# Arguments
+
+- m[,n[...]]: dimensions of distributed array
+
+# Notes
+
+- distributes over last non-singleton (worker-wise) dimension
+- one of the dimensions must be large enough to have at least one index
+
+# Examples
+
+- joDAdistributor(20,30,4;DT=Int8) - distributes over 3rd dimension if nworkers <=4, or 2nd dimension if 4< nworkers <=30
+
+"""
 joDAdistributor(dims::Integer...;DT::DataType=joFloat) = joDAdistributor(convert(Dims,dims);DT=DT)
 

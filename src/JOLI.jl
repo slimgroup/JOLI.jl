@@ -49,7 +49,7 @@ global joTol = sqrt(eps())
 
 # package for each operator code goes here
 include("joTypes.jl")
-include("joTypesMiscConstructors.jl")
+include("joTypesMiscMethods.jl")
 include("joUtils.jl")
 include("joExternalPackages.jl")
 include("joAbstractOperator.jl")

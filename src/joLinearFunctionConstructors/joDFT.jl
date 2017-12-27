@@ -116,6 +116,7 @@ module joDFT_etc
 end
 using .joDFT_etc
 
+# constructors
 export joDFT
 """
 Multi-dimensional FFT transform over fast dimension(s)
