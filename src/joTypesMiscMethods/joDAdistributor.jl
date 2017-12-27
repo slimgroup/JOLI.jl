@@ -66,7 +66,7 @@ using .joDAdistributor_etc
 
 # constructors
 """
-    julia> joDAdistributor(dims,procs,chunks;DT)
+    julia> joDAdistributor(dims[,procs[,chunks]];[DT])
 
 Creates joDAdistributor type
 
@@ -97,7 +97,7 @@ function joDAdistributor(dims::Dims,
     return joDAdistributor(dims,procs,chunks,idxs,cuts,DT)
 end
 """
-    julia> joDAdistributor(parts,procs;DT)
+    julia> joDAdistributor(parts[,procs];[DT])
 
 Creates joDAdistributor type
 
@@ -129,7 +129,7 @@ function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
     return joDAdistributor(cdims,procs,chunks,idxs,cuts,DT)
 end
 """
-    julia> joDAdistributor(dims,ddim,dparts,procs;DT)
+    julia> joDAdistributor(dims,ddim,dparts[,procs];[DT])
 
 Creates joDAdistributor type
 
