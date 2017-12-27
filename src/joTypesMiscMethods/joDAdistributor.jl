@@ -184,7 +184,7 @@ Creates joDAdistributor type
 # Notes
 
 - distributes over last non-singleton (worker-wise) dimension
-- one of the dimensions must be large enough to have at least one index
+- one of the dimensions must be large enough to hold at least one element
 
 # Examples
 
