@@ -169,7 +169,7 @@ function joDAdistributor(dims::Dims,
     return joDAdistributor(cdims,procs,chunks,idxs,cuts,DT)
 end
 """
-    julia> joDAdistributor(m[,n[...]];DT)
+    julia> joDAdistributor(m[,n[...]];[DT])
 
 Creates joDAdistributor type
 
