@@ -35,8 +35,8 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 # Arguments
 
-- d: see help for joDAdistributor
-- DT: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
 
 """
 function dalloc(d::joDAdistributor;DT::DataType=d.DT)
@@ -58,8 +58,8 @@ Constructs a DistributedArrays.DArray filled with zeros.
 
 # Arguments
 
-- d: see help for joDAdistributor
-- DT: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
 
 """
 function dzeros(d::joDAdistributor;DT::DataType=d.DT)
@@ -81,8 +81,8 @@ Constructs a DistributedArrays.DArray filled with ones.
 
 # Arguments
 
-- d: see help for joDAdistributor
-- DT: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
 
 """
 function dones(d::joDAdistributor;DT::DataType=d.DT)
@@ -104,8 +104,8 @@ Constructs a DistributedArrays.DArray filled with x.
 
 # Arguments
 
-- d: see help for joDAdistributor
-- DT: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
 
 """
 function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
@@ -128,9 +128,9 @@ Constructs a DistributedArrays.DArray filled using built-in rand.
 
 # Arguments
 
-- d: see help for joDAdistributor
-- DT: keyword argument to overwrite the type in joDAdistributor
-- RNG: random-number generator function (see help for rand/randn)
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `RNG`: random-number generator function (see help for rand/randn)
 
 """
 function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
@@ -152,9 +152,9 @@ Constructs a DistributedArrays.DArray filled using built-in randn.
 
 # Arguments
 
-- d: see help for joDAdistributor
-- DT: keyword argument to overwrite the type in joDAdistributor
-- RNG: random-number generator function (see help for rand/randn)
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `RNG`: random-number generator function (see help for rand/randn)
 
 # Notes
 

@@ -79,14 +79,14 @@ Creates joDAdistributor type
 
 # Arguments
 
-- dims - tuple with array's dimensions
-- procs - vector of workers' ids
-- chunks - vector of number of parts in each dimension
-- DT - DataType of array's elements
+- `dims`: tuple with array's dimensions
+- `procs`: vector of workers' ids
+- `chunks`: vector of number of parts in each dimension
+- `DT`: DataType of array's elements
 
 # Examples
 
-- joDAdistributor((3,40,5),workers(),[1,4,1];DT=Int8) - distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
+- `joDAdistributor((3,40,5),workers(),[1,4,1];DT=Int8)`: distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
 
 """
 function joDAdistributor(dims::Dims,
@@ -109,13 +109,13 @@ Creates joDAdistributor type
 
 # Arguments
 
-- parts - tuple of tuples with part's size on each worker
-- procs - vector of workers' ids
-- DT - DataType of array's elements
+- `parts`: tuple of tuples with part's size on each worker
+- `procs`: vector of workers' ids
+- `DT`: DataType of array's elements
 
 # Examples
 
-- joDAdistributor(((3,),(10,10,10,10),(5,));DT=Int8) - distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
+- `joDAdistributor(((3,),(10,10,10,10),(5,));DT=Int8)`: distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
 
 """
 function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
@@ -142,15 +142,15 @@ Creates joDAdistributor type
 
 # Arguments
 
-- dims - tuple with array's dimensions
-- ddim - dimansion to distribute over
-- dparts - tupe/vector of the part's size on each worker
-- procs - vector of workers' ids
-- DT - DataType of array's elements
+- `dims`: tuple with array's dimensions
+- `ddim`: dimansion to distribute over
+- `dparts`: tupe/vector of the part's size on each worker
+- `procs`: vector of workers' ids
+- `DT`: DataType of array's elements
 
 # Examples
 
-- joDAdistributor((3,40,5),2,(10,10,10,10);DT=Int8) - distribute 2nd dimension over 4 workers
+- `joDAdistributor((3,40,5),2,(10,10,10,10);DT=Int8)`: distribute 2nd dimension over 4 workers
 
 """
 function joDAdistributor(dims::Dims,
@@ -179,7 +179,7 @@ Creates joDAdistributor type
 
 # Arguments
 
-- m[,n[...]]: dimensions of distributed array
+- `m[,n[...]]`: dimensions of distributed array
 
 # Notes
 
@@ -188,7 +188,7 @@ Creates joDAdistributor type
 
 # Examples
 
-- joDAdistributor(20,30,4;DT=Int8) - distributes over 3rd dimension if nworkers <=4, or 2nd dimension if 4< nworkers <=30
+- `joDAdistributor(20,30,4;DT=Int8)`: distributes over 3rd dimension if nworkers <=4, or 2nd dimension if 4< nworkers <=30
 
 """
 joDAdistributor(dims::Integer...;DT::DataType=joFloat) = joDAdistributor(convert(Dims,dims);DT=DT)
