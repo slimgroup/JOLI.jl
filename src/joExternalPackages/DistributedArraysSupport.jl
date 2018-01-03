@@ -42,8 +42,7 @@ Use it to allocate quicker the array that will have all elements overwritten.
 function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->Array{DT}(map(length,I))
-    np = prod(d.chunks)
-    procs = reshape(d.procs[1:np], ntuple(i->d.chunks[i], length(d.chunks)))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
@@ -65,8 +64,7 @@ Constructs a DistributedArrays.DArray filled with zeros.
 function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->zeros(DT,map(length,I))
-    np = prod(d.chunks)
-    procs = reshape(d.procs[1:np], ntuple(i->d.chunks[i], length(d.chunks)))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
@@ -88,8 +86,7 @@ Constructs a DistributedArrays.DArray filled with ones.
 function dones(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->ones(DT,map(length,I))
-    np = prod(d.chunks)
-    procs = reshape(d.procs[1:np], ntuple(i->d.chunks[i], length(d.chunks)))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
@@ -112,8 +109,7 @@ function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     X=DT(x)
     init=I->fill(X,map(length,I))
-    np = prod(d.chunks)
-    procs = reshape(d.procs[1:np], ntuple(i->d.chunks[i], length(d.chunks)))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
@@ -136,8 +132,7 @@ Constructs a DistributedArrays.DArray filled using built-in rand.
 function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     id=DistributedArrays.next_did()
     init=I->rand(RNG,DT,map(length,I))
-    np = prod(d.chunks)
-    procs = reshape(d.procs[1:np], ntuple(i->d.chunks[i], length(d.chunks)))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
@@ -166,8 +161,43 @@ function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     DT= (DT<:Integer) ? joFloat : DT
     id=DistributedArrays.next_did()
     init=I->randn(RNG,DT,map(length,I))
-    np = prod(d.chunks)
-    procs = reshape(d.procs[1:np], ntuple(i->d.chunks[i], length(d.chunks)))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
+end
+
+"""
+    julia> distribute(A,d)
+
+Distributes array according to given joDAdistributor.
+
+# Signature
+
+    distribute(a::AbstractArray,d::joDAdistributor)
+
+# Arguments
+
+- `A`: array to ditribute
+- `d`: see help for joDAdistributor
+
+# Notes
+
+- the type in joDAdistributor is ignored here
+- distributes over last non-singleton (worker-wise) dimension
+- one of the dimensions must be large enough to hold at least one element on each worker
+
+# Examples
+
+- distribute(A,joDAdistributor(size(A)...))
+
+"""
+function distribute(A::AbstractArray,d::joDAdistributor)
+    @assert size(A)==d.dims "FATAL ERROR: array size does not match dims of joDAdistributor"
+    id=DistributedArrays.next_did()
+    s = DistributedArrays.verified_destination_serializer(reshape(d.procs, size(d.idxs)), size(d.idxs)) do pididx
+        A[d.idxs[pididx]...]
+    end
+    init = I->DistributedArrays.localpart(s)
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
+    return DArray(id, I->localpart(s), d.dims, procs, d.idxs, d.cuts)
 end
 

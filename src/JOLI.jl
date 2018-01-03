@@ -27,7 +27,7 @@ import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
 import Base.A_ldiv_B!, Base.At_ldiv_B!, Base.Ac_ldiv_B!
 
 # what's imported from DistributedArrays
-import DistributedArrays: dzeros, dones, dfill, drand, drandn
+import DistributedArrays: DArray, distribute, dzeros, dones, dfill, drand, drandn
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype

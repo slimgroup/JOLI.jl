@@ -93,6 +93,8 @@ function joDAdistributor(dims::Dims,
         procs::Vector{<:Integer}=workers(),
         chunks::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
         DT::DataType=joFloat)
+    nparts=prod(chunks); nprocs=length(procs)
+    @assert length(procs)==prod(chunks) "FATAL ERROR: mismatch between # of partitions ($nparts) and workers ($nprocs)"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,chunks)
     return joDAdistributor(dims,procs,chunks,idxs,cuts,DT)
 end
@@ -184,7 +186,7 @@ Creates joDAdistributor type
 # Notes
 
 - distributes over last non-singleton (worker-wise) dimension
-- one of the dimensions must be large enough to hold at least one element
+- one of the dimensions must be large enough to hold at least one element on each worker
 
 # Examples
 
