@@ -93,8 +93,8 @@ function joDAdistributor(dims::Dims,
         procs::Vector{<:Integer}=workers(),
         chunks::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
         DT::DataType=joFloat)
-    nparts=prod(chunks); nprocs=length(procs)
-    @assert length(procs)==prod(chunks) "FATAL ERROR: mismatch between # of partitions ($nparts) and workers ($nprocs)"
+    @assert length(dims)==length(chunks) "FATAL ERROR: mismatch between # of dimensions $(length(dims)) and chunks $(length(chunks))"
+    @assert length(procs)==prod(chunks) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,chunks)
     return joDAdistributor(dims,procs,chunks,idxs,cuts,DT)
 end
@@ -123,12 +123,11 @@ Creates joDAdistributor type
 function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
         procs::Vector{<:Integer}=workers();
         DT::DataType=joFloat)
-    cdims=convert(Dims,(sum.([parts...])...))
+    dims=convert(Dims,(sum.([parts...])...))
     chunks=[length.([parts...])...]
-    nparts=prod(chunks); nprocs=length(procs)
-    @assert nparts==nprocs "FATAL ERROR: mismatch between # of partitions ($nparts) and workers ($nprocs)"
-    idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
-    return joDAdistributor(cdims,procs,chunks,idxs,cuts,DT)
+    @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
+    idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
+    return joDAdistributor(dims,procs,chunks,idxs,cuts,DT)
 end
 """
     julia> joDAdistributor(dims,ddim,dparts[,procs];[DT])
@@ -160,13 +159,13 @@ function joDAdistributor(dims::Dims,
         procs::Vector{<:Integer}=workers();
         DT::DataType=joFloat)
     nd=length(dims)
-    @assert sum(dparts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
     @assert ddim<=nd "FATAL ERROR: distributed dimension ($ddim) > # of dimensions ($nd)"
+    @assert sum(dparts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
     parts=([i==ddim?(dparts...):tuple(dims[i]) for i=1:nd]...)
     cdims=convert(Dims,(sum.([parts...])...))
+    @assert dims==cdims "FATAL ERROR: something terrible happened in partition calculations - seek help from developer"
     chunks=[length.([parts...])...]
-    nparts=prod(chunks); nprocs=length(procs)
-    @assert nparts==nprocs "FATAL ERROR: mismatch between # of partitions ($nparts) and workers ($nprocs)"
+    @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
     return joDAdistributor(cdims,procs,chunks,idxs,cuts,DT)
 end
