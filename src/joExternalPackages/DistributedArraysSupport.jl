@@ -25,7 +25,7 @@ dalloc(d::Dims) = dalloc(joFloat, d)
 """
     julia> dfill(F, d; [DT])
 
-Constructs a DistributedArrays.DArray filled with elements provided by anonymous function F.
+Constructs a DistributedArrays.DArray, according to given distributor, filled with elements provided by anonymous function F.
 
 # Signature
 
@@ -39,11 +39,12 @@ Constructs a DistributedArrays.DArray filled with elements provided by anonymous
 
 # Notes
 
-- function F will be passed via `map(length,I)` the tuple dimensions of local part
+- function F will be passed via `map(length,I)` the tuple with dimensions of local part
+- one has to pass array type manualy to F
 
-# Example
+# Examples
 
-- `dfill(I->ones(dst.DT,map(length,I)),dst)`: fill a distributed array with ones
+- `dfill(I->ones(d.DT,map(length,I)),d)`: fill a distributed array with ones of type d.DT
 
 """
 function dfill(F::Function,d::joDAdistributor;DT::DataType=d.DT)
@@ -55,7 +56,7 @@ end
 """
     julia> dfill(x, d; [DT])
 
-Constructs a DistributedArrays.DArray filled with x.
+Constructs a DistributedArrays.DArray, according to given distributor, filled with x.
 
 # Signature
 
@@ -65,6 +66,11 @@ Constructs a DistributedArrays.DArray filled with x.
 
 - `d`: see help for joDAdistributor
 - `DT`: keyword argument to overwrite the type in joDAdistributor
+
+# Examples
+
+- `dfill(3.,d)`: fill a distributed array with d.DT(3.)
+- `dfill(3.,d;DT=Float32)`: fill a distributed array with Float32(3.)
 
 """
 function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
@@ -78,7 +84,7 @@ end
 """
     julia> dalloc(d; [DT])
 
-Allocates a DistributedArrays.DArray without value assigment.
+Allocates a DistributedArrays.DArray, according to given distributor, without value assigment.
 
 Use it to allocate quicker the array that will have all elements overwritten.
 
@@ -91,6 +97,11 @@ Use it to allocate quicker the array that will have all elements overwritten.
 - `d`: see help for joDAdistributor
 - `DT`: keyword argument to overwrite the type in joDAdistributor
 
+# Examples
+
+- `dalloc(d)`: allocate an array
+- `dalloc(d,DT=Float32)`: allocate array and overwite d.DT with Float32
+
 """
 function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
@@ -102,7 +113,7 @@ end
 """
     julia> dzeros(d; [DT])
 
-Constructs a DistributedArrays.DArray filled with zeros.
+Constructs a DistributedArrays.DArray, according to given distributor, filled with zeros.
 
 # Signature
 
@@ -112,6 +123,11 @@ Constructs a DistributedArrays.DArray filled with zeros.
 
 - `d`: see help for joDAdistributor
 - `DT`: keyword argument to overwrite the type in joDAdistributor
+
+# Examples
+
+- `dzeros(d)`: allocate an array of zeros
+- `dzeros(d,DT=Float32)`: allocate array of Float32 zeros
 
 """
 function dzeros(d::joDAdistributor;DT::DataType=d.DT)
@@ -124,7 +140,7 @@ end
 """
     julia> dones(d; [DT])
 
-Constructs a DistributedArrays.DArray filled with ones.
+Constructs a DistributedArrays.DArray, according to given distributor, filled with ones.
 
 # Signature
 
@@ -134,6 +150,11 @@ Constructs a DistributedArrays.DArray filled with ones.
 
 - `d`: see help for joDAdistributor
 - `DT`: keyword argument to overwrite the type in joDAdistributor
+
+# Examples
+
+- `dones(d)`: allocate an array of ones
+- `dones(d,DT=Float32)`: allocate array of Float32 ones
 
 """
 function dones(d::joDAdistributor;DT::DataType=d.DT)
@@ -146,7 +167,7 @@ end
 """
     julia> drand(d; [DT], [RNG])
 
-Constructs a DistributedArrays.DArray filled using built-in rand.
+Constructs a DistributedArrays.DArray, according to given distributor, filled using built-in rand.
 
 # Signature
 
@@ -157,6 +178,12 @@ Constructs a DistributedArrays.DArray filled using built-in rand.
 - `d`: see help for joDAdistributor
 - `DT`: keyword argument to overwrite the type in joDAdistributor
 - `RNG`: random-number generator function (see help for rand/randn)
+
+# Examples
+
+- `drand(d)`: allocate an array with rand
+- `drand(d,DT=Float32)`: allocate array with rand of Float32
+- `drand(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with rand of Float32 using MersenneTwister() random device
 
 """
 function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
@@ -169,7 +196,7 @@ end
 """
     julia> drandn(d; [DT], [RNG])
 
-Constructs a DistributedArrays.DArray filled using built-in randn.
+Constructs a DistributedArrays.DArray, according to given distributor, filled using built-in randn.
 
 # Signature
 
@@ -184,6 +211,12 @@ Constructs a DistributedArrays.DArray filled using built-in randn.
 # Notes
 
 - only float type are supported by randn (see help for randn)
+
+# Examples
+
+- `drandn(d)`: allocate an array with randn
+- `drandn(d,DT=Float32)`: allocate array with randn of Float32
+- `drandn(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with randn of Float32 using MersenneTwister() random device
 
 """
 function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
@@ -217,7 +250,8 @@ Distributes array according to given joDAdistributor.
 
 # Examples
 
-- distribute(A,joDAdistributor(size(A)...))
+- `distribute(A,d)`: distribute A using given distributor
+- `distribute(A,joDAdistributor(size(A)...))`: distribute A using default distributor settings
 
 """
 function distribute(A::AbstractArray,d::joDAdistributor)
