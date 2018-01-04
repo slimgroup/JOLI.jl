@@ -23,6 +23,59 @@ dalloc(d1::Integer, drest::Integer...) = dalloc(joFloat, convert(Dims, tuple(d1,
 dalloc(d::Dims) = dalloc(joFloat, d)
 
 """
+    julia> dfill(F, d; [DT])
+
+Constructs a DistributedArrays.DArray filled with elements provided by anonymous function F.
+
+# Signature
+
+    dfill(F::Function,d::joDAdistributor;DT::DataType=d.DT)
+
+# Arguments
+
+- `F`: anonymous function of the form `I->f(...,map(length,I)))`
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
+
+# Notes
+
+- function F will be passed via `map(length,I)` the tuple dimensions of local part
+
+# Example
+
+- `dfill(I->ones(dst.DT,map(length,I)),dst)`: fill a distributed array with ones
+
+"""
+function dfill(F::Function,d::joDAdistributor;DT::DataType=d.DT)
+    id=DistributedArrays.next_did()
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
+    return DArray(id, F, d.dims, procs, d.idxs, d.cuts)
+end
+
+"""
+    julia> dfill(x, d; [DT])
+
+Constructs a DistributedArrays.DArray filled with x.
+
+# Signature
+
+    dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
+
+# Arguments
+
+- `d`: see help for joDAdistributor
+- `DT`: keyword argument to overwrite the type in joDAdistributor
+
+"""
+function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
+    id=DistributedArrays.next_did()
+    X=DT(x)
+    init=I->fill(X,map(length,I))
+    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
+    return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
+end
+
+"""
     julia> dalloc(d; [DT])
 
 Allocates a DistributedArrays.DArray without value assigment.
@@ -86,29 +139,6 @@ Constructs a DistributedArrays.DArray filled with ones.
 function dones(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->ones(DT,map(length,I))
-    procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
-    return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
-end
-
-"""
-    julia> dfill(x, d; [DT])
-
-Constructs a DistributedArrays.DArray filled with x.
-
-# Signature
-
-    dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
-
-# Arguments
-
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
-
-"""
-function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
-    id=DistributedArrays.next_did()
-    X=DT(x)
-    init=I->fill(X,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
