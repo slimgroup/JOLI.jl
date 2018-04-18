@@ -103,7 +103,7 @@ joLinearFunction outer constructor
         fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
-        name::String="joLinearFunctionAll")
+        name::String="joLinearFunctionFwd")
 
 Look up argument names in help to joLinearFunction type.
 
@@ -115,7 +115,7 @@ joLinearFunctionFwd(m::Integer,n::Integer,
     fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
-    name::String="joLinearFunctionAll") =
+    name::String="joLinearFunctionFwd") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,fop_T,fop_CT,fop_C,fMVok,
             @joNF, @joNF, @joNF, @joNF, false
