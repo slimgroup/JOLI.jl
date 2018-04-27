@@ -6,6 +6,10 @@ os:
 julia:
   - 0.6
 #  - nightly
+branches:
+  only:
+  - master
+  - henryk
 notifications:
   email: false
 # uncomment the following lines to override the default test script
