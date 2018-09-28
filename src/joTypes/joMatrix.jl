@@ -41,7 +41,7 @@ struct joMatrix{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
 end
 
 # type exception
-type joMatrixException <: Exception
+struct joMatrixException <: Exception
     msg :: String
 end
 

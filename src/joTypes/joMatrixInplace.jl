@@ -37,7 +37,7 @@ struct joMatrixInplace{DDT<:Number,RDT<:Number} <: joAbstractLinearOperatorInpla
 end
 
 # type exception
-type joMatrixInplaceException <: Exception
+struct joMatrixInplaceException <: Exception
     msg :: String
 end
 

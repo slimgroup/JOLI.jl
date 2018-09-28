@@ -4,7 +4,7 @@
 
 export joBlockDiag, joBlockDiagException
 
-type joBlockDiagException <: Exception
+struct joBlockDiagException <: Exception
     msg :: String
 end
 

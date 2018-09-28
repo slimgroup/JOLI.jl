@@ -45,7 +45,7 @@ struct joLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT
 end
 
 # type exception
-type joLinearFunctionException <: Exception
+struct joLinearFunctionException <: Exception
     msg :: String
 end
 

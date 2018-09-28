@@ -8,7 +8,7 @@ export joAbstractLinearOperatorInplace, joAbstractLinearOperatorInplaceException
 abstract type joAbstractLinearOperatorInplace{DDT<:Number,RDT<:Number} <: joAbstractFosterLinearOperator{DDT,RDT} end
 
 # type exception
-type joAbstractLinearOperatorInplaceException <: Exception
+struct joAbstractLinearOperatorInplaceException <: Exception
     msg :: String
 end
 

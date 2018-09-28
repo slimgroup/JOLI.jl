@@ -24,7 +24,7 @@ struct joKron{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
 end
 
 # type exception
-type joKronException <: Exception
+struct joKronException <: Exception
     msg :: String
 end
 

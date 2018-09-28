@@ -8,7 +8,7 @@ export joAbstractOperator, joAbstractOperatorException
 abstract type joAbstractOperator end
 
 # type exception
-type joAbstractOperatorException <: Exception
+struct joAbstractOperatorException <: Exception
     msg :: String
 end
 

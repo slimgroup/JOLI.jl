@@ -26,7 +26,7 @@ struct joCoreBlock{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
 end
 
 # type exception
-type joCoreBlockException <: Exception
+struct joCoreBlockException <: Exception
     msg :: String
 end
 

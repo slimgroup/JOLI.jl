@@ -4,7 +4,7 @@
 
 export joBlock, joBlockException
 
-type joBlockException <: Exception
+struct joBlockException <: Exception
     msg :: String
 end
 

@@ -45,7 +45,7 @@ struct joLooseLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractFosterLinearO
 end
 
 # type exceptions
-type joLooseLinearFunctionException <: Exception
+struct joLooseLinearFunctionException <: Exception
     msg :: String
 end
 

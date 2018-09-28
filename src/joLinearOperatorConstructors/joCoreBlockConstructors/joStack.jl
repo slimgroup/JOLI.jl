@@ -4,7 +4,7 @@
 
 export joStack, joStackException
 
-type joStackException <: Exception
+struct joStackException <: Exception
     msg :: String
 end
 

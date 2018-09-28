@@ -41,7 +41,7 @@ struct joLooseMatrix{DDT<:Number,RDT<:Number} <: joAbstractFosterLinearOperator{
 end
 
 # type exception
-type joLooseMatrixException <: Exception
+struct joLooseMatrixException <: Exception
     msg :: String
 end
 

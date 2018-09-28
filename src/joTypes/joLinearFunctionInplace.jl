@@ -37,7 +37,7 @@ struct joLinearFunctionInplace{DDT<:Number,RDT<:Number} <: joAbstractLinearOpera
 end
 
 # type exceptions
-type joLinearFunctionInplaceException <: Exception
+struct joLinearFunctionInplaceException <: Exception
     msg :: String
 end
 

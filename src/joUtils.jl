@@ -2,7 +2,7 @@
 # Utilities ################################################
 ############################################################
 
-type joUtilsException <: Exception
+struct joUtilsException <: Exception
     msg :: String
 end
 

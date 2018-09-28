@@ -4,7 +4,7 @@
 
 export joDict, joDictException
 
-type joDictException <: Exception
+struct joDictException <: Exception
     msg :: String
 end
 
