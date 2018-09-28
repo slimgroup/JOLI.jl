@@ -3,4 +3,5 @@ Nullables
 DistributedArrays
 IterativeSolvers
 InplaceOps
+FFTW
 NFFT

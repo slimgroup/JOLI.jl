@@ -3,8 +3,9 @@
 ## helper module
 module joDCT_etc
     using JOLI: jo_convert
+    using FFTW
     ### planned
-    function apply_dct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_dct(pln::FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -17,7 +18,7 @@ module joDCT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_idct(pln::FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)

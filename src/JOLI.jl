@@ -10,6 +10,7 @@ using Printf
 using DistributedArrays
 using IterativeSolvers
 using InplaceOps
+using FFTW
 using NFFT
 
 # what's imported from Base
