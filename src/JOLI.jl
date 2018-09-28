@@ -5,6 +5,8 @@
 module JOLI
 
 # what's being used
+using Nullables
+using Printf
 using DistributedArrays
 using IterativeSolvers
 using InplaceOps
