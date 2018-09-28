@@ -89,25 +89,25 @@ ishermitian(A::joAbstractOperator) = jo_method_error(A,"ishermitian(jo) not impl
 ## overloaded Base \(...jo...)
 
 # \(jo,jo)
-\(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,"\(jo,jo) not implemented or type mismatch")
+\(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,"\\(jo,jo) not implemented or type mismatch")
 
 # \(jo,mvec)
-\(A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(A,mv,"\(jo,mvec) not implemented or type mismatch")
+\(A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(A,mv,"\\(jo,mvec) not implemented or type mismatch")
 
 # \(mvec,jo)
-\(mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(mv,A,"\(mvec,jo) not implemented or type mismatch")
+\(mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(mv,A,"\\(mvec,jo) not implemented or type mismatch")
 
 # \(jo,vec)
-\(A::joAbstractOperator,v::AbstractVector) = jo_method_error(A,v,"\(jo,vec) not implemented or type mismatch")
+\(A::joAbstractOperator,v::AbstractVector) = jo_method_error(A,v,"\\(jo,vec) not implemented or type mismatch")
 
 # \(vec,jo)
-\(v::AbstractVector,A::joAbstractOperator) = jo_method_error(v,A,"\(vec,jo) not implemented or type mismatch")
+\(v::AbstractVector,A::joAbstractOperator) = jo_method_error(v,A,"\\(vec,jo) not implemented or type mismatch")
 
 # \(num,jo)
-\(a,A::joAbstractOperator) = jo_method_error(a,A,"\(any,jo) not implemented or type mismatch")
+\(a,A::joAbstractOperator) = jo_method_error(a,A,"\\(any,jo) not implemented or type mismatch")
 
 # \(jo,num)
-\(A::joAbstractOperator,a) = jo_method_error(A,a,"\(jo,any) not implemented or type mismatch")
+\(A::joAbstractOperator,a) = jo_method_error(A,a,"\\(jo,any) not implemented or type mismatch")
 
 ############################################################
 ## overloaded Base +(...jo...)

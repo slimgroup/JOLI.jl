@@ -118,7 +118,7 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvD
         MV=get(A.iop)(mv)
         jo_check_type_match(ADDT,eltype(MV),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     else
-        throw(joMatrixException("\(jo,Vector) not supplied"))
+        throw(joMatrixException("\\(jo,Vector) not supplied"))
     end
     return MV
 end
@@ -133,7 +133,7 @@ function \{ADDT,ARDT,vDT<:Number}(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT})
         V=get(A.iop)(v)
         jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     else
-        throw(joMatrixException("\(jo,Vector) not supplied"))
+        throw(joMatrixException("\\(jo,Vector) not supplied"))
     end
     return V
 end

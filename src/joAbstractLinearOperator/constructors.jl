@@ -9,7 +9,7 @@ joAddSolver outer constructor
 
     joAddSolverAny(A::joAbstractLinearOperator{DDT,RDT},solver::Function)
 
-Create joLinearOperator with added solver for \(jo,[m]vec),
+Create joLinearOperator with added solver for \\(jo,[m]vec),
 same for each form of the operator
 
 # Example (for all forms of O)
@@ -34,7 +34,7 @@ joAddSolver outer constructor
     joAddSolverAll(A::joAbstractLinearOperator{DDT,RDT},
         solver::Function,solver_T::Function,solver_CT::Function,solver_C::Function)
 
-Create joLinearOperator with added specific solver(s) for \(jo,[m]vec),
+Create joLinearOperator with added specific solver(s) for \\(jo,[m]vec),
 distinct for each form of the operator.
 
 # Examples

@@ -184,14 +184,14 @@ end
 
 # A_ldiv_B!(...,jo,...)
 function A_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractVector{XDT})
-    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\(jo,Vector) not supplied"))
+    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     get(A.iop)(y,x)
     return nothing
 end
 function A_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT})
-    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\(jo,Vector) not supplied"))
+    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
@@ -201,14 +201,14 @@ end
 
 # At_ldiv_B!(...,jo,...)
 function At_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractVector{XDT})
-    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\(jo,Vector) not supplied"))
+    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     get(A.iop_T)(y,x)
     return nothing
 end
 function At_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT})
-    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\(jo,Vector) not supplied"))
+    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
@@ -218,14 +218,14 @@ end
 
 # Ac_ldiv_B!(...,jo,...)
 function Ac_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractVector{XDT})
-    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\(jo,Vector) not supplied"))
+    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     get(A.iop_CT)(y,x)
     return nothing
 end
 function Ac_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT})
-    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\(jo,Vector) not supplied"))
+    hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))

@@ -152,7 +152,7 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLooseLinearFunction{ADDT,ARDT},mv::Abstr
             MV[:,i]=V
         end
     else
-        throw(joLooseLinearFunctionException("\(jo,MultiVector) not supplied"))
+        throw(joLooseLinearFunctionException("\\(jo,MultiVector) not supplied"))
     end
     return MV
 end
@@ -171,7 +171,7 @@ function \{ADDT,ARDT,vDT<:Number}(A::joLooseLinearFunction{ADDT,ARDT},v::Abstrac
     elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
         V=jo_convert(ADDT,jo_iterative_solver4wide(A,v))
     else
-        throw(joLooseLinearFunctionException("\(jo,Vector) not supplied"))
+        throw(joLooseLinearFunctionException("\\(jo,Vector) not supplied"))
     end
     return V
 end

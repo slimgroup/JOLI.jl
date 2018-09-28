@@ -112,7 +112,7 @@ function \{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatri
     if hasinverse(A)
         MV=get(A.iop)(mv)
     else
-        throw(joLooseMatrixException("\(jo,Vector) not supplied"))
+        throw(joLooseMatrixException("\\(jo,Vector) not supplied"))
     end
     return MV
 end
@@ -125,7 +125,7 @@ function \{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{
     if hasinverse(A)
         V=get(A.iop)(v)
     else
-        throw(joLooseMatrixException("\(jo,Vector) not supplied"))
+        throw(joLooseMatrixException("\\(jo,Vector) not supplied"))
     end
     return V
 end

@@ -150,7 +150,7 @@ end
 global jo_iterative_solver4square = (A,v)->gmres(A,v)
 export jo_iterative_solver4square_set
 """
-Set default iterative solver for \(jo,vec) and square jo
+Set default iterative solver for \\(jo,vec) and square jo
 
     jo_iterative_solver4square_set(f::Function)
 
@@ -170,7 +170,7 @@ end
 global jo_iterative_solver4tall = @joNF
 export jo_iterative_solver4tall_set
 """
-Set default iterative solver for \(jo,vec) and tall jo
+Set default iterative solver for \\(jo,vec) and tall jo
 
     jo_iterative_solver4tall_set(f::Function)
 
@@ -190,7 +190,7 @@ end
 global jo_iterative_solver4wide = @joNF
 export jo_iterative_solver4wide_set
 """
-Set default iterative solver for \(jo,vec) and wide jo
+Set default iterative solver for \\(jo,vec) and wide jo
 
     jo_iterative_solver4wide_set(f::Function)
 
