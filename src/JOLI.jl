@@ -7,6 +7,7 @@ module JOLI
 # what's being used
 using Nullables
 using Printf
+using LinearAlgebra
 using DistributedArrays
 using IterativeSolvers
 using InplaceOps
@@ -18,16 +19,17 @@ import Base.eltype
 import Base.show, Base.showall, Base.display
 import Base.size, Base.length
 import Base.full
-import Base.norm, Base.vecnorm
 import Base.real, Base.imag, Base.conj
 import Base.transpose, Base.ctranspose
-import Base.isreal, Base.issymmetric, Base.ishermitian
+import Base.isreal
 import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
-import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
-import Base.A_ldiv_B!, Base.At_ldiv_B!, Base.Ac_ldiv_B!
+import LinearAlgebra.norm, LinearAlgebra.vecnorm
+import LinearAlgebra.issymmetric, LinearAlgebra.ishermitian
+import LinearAlgebra.A_mul_B!, LinearAlgebra.At_mul_B!, LinearAlgebra.Ac_mul_B!
+import LinearAlgebra.A_ldiv_B!, LinearAlgebra.At_ldiv_B!, LinearAlgebra.Ac_ldiv_B!
 
 # what's imported from DistributedArrays
 import DistributedArrays: DArray, distribute, dzeros, dones, dfill, drand, drandn
