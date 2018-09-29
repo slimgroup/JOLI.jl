@@ -39,8 +39,8 @@ Dictionary operator composed from different square JOLI operators
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
 """
-function joDict{WDT<:Number}(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joDict")
+function joDict(ops::joAbstractLinearOperator...;
+           weights::AbstractVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
     isempty(ops) && throw(joDictException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -105,8 +105,8 @@ Dictionary operator composed from l-times replicated square JOLI operator
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
 """
-function joDict{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joDict")
+function joDict(l::Integer,op::joAbstractLinearOperator;
+           weights::AbstractVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
     (length(weights)==l || length(weights)==0) || throw(joDictException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
     ms=zeros(Int,l)

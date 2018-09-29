@@ -2,13 +2,13 @@
 ## joAbstractFosterLinearOperator - overloaded Base functions
 
 # eltype(jo)
-eltype{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = promote_type(DDT,RDT)
+eltype(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = promote_type(DDT,RDT)
 
 # deltype(jo)
-deltype{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = DDT
+deltype(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 
 # reltype(jo)
-reltype{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = RDT
+reltype(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
 show(A::joAbstractFosterLinearOperator) = println((typeof(A),A.name,A.m,A.n))
@@ -53,7 +53,7 @@ length(A::joAbstractFosterLinearOperator) = A.m*A.n
 # ctranspose(jo)
 
 # isreal(jo)
-isreal{DDT,RDT}(A :: joAbstractFosterLinearOperator{DDT,RDT}) = (DDT<:Real && RDT<:Real)
+isreal(A :: joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && RDT<:Real)
 
 # issymmetric(jo)
 

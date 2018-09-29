@@ -22,8 +22,8 @@ Look up argument names in help to joLooseMatrixInplace type.
 - if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 """
-function joLooseMatrixInplace{EDT}(array::AbstractMatrix{EDT};
-    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrixInplace")
+function joLooseMatrixInplace(array::AbstractMatrix{EDT};
+    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrixInplace") where {EDT}
         farray=factorize(array)
         return joLooseMatrixInplace{DDT,RDT}(name,size(array,1),size(array,2),
             (y1,x1)->A_mul_B!(y1,array,x1),

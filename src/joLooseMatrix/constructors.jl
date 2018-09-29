@@ -22,8 +22,8 @@ Look up argument names in help to joLooseMatrix type.
 - if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 """
-joLooseMatrix{EDT}(array::AbstractMatrix{EDT};
-    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrix") =
+joLooseMatrix(array::AbstractMatrix{EDT};
+    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrix") where {EDT} =
         joLooseMatrix{DDT,RDT}(name,size(array,1),size(array,2),
             v1->jo_convert(RDT,array*v1,false),
             v2->jo_convert(DDT,array.'*v2,false),
@@ -35,7 +35,7 @@ joLooseMatrix{EDT}(array::AbstractMatrix{EDT};
             v8->jo_convert(DDT,conj(array)\v8,false)
             )
 
-joLoosen{DDT,RDT}(A::joMatrix{DDT,RDT}) =
+joLoosen(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{DDT,RDT}("joLoosen("*A.name*")",A.m,A.n,
         v1->A.fop(v1),
         v2->A.fop_T(v2),

@@ -215,7 +215,7 @@ Type of the real number or element type of complex number.
 - jo_precision_type(1.)
 - jo_precision_type(1+im*3.)
 """
-jo_precision_type{ITx<:Number, Tx<:Union{Complex{ITx}, ITx}}(x::Tx) = ITx
+jo_precision_type(x::Tx) where {ITx<:Number, Tx<:Union{Complex{ITx}, ITx}} = ITx
 
 ############################################################
 ## complex precision type ##################################
@@ -230,7 +230,7 @@ Type of element of complex scalar
 - jo_complex_eltype(zero(Complex{Float64}))
 
 """
-jo_complex_eltype{T}(a::Complex{T}) = T
+jo_complex_eltype(a::Complex{T}) where {T} = T
 """
 Type of element of complex data type
 
@@ -335,7 +335,7 @@ Convert vector to new type
 - jo_convert(Complex{Float32},rand(3))
 
 """
-function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
+function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:Integer}
     DT==VT && return vin
     #println("jo_convert{VT<:Integer}")
     if DT<:Integer
@@ -349,7 +349,7 @@ function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT},warning::Bo
     end
     return vout
 end
-function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
+function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:AbstractFloat}
     DT==VT && return vin
     #println("jo_convert{VT<:AbstractFloat}")
     if !(DT<:Integer)
@@ -359,7 +359,7 @@ function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT},warni
     end
     return vout
 end
-function jo_convert{VT<:Complex}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
+function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:Complex}
     DT==VT && return vin
     #println("jo_convert{VT<:Complex}")
     if DT<:Complex
@@ -387,7 +387,7 @@ Convert number to new type
 - jo_convert(Complex{Float32},rand())
 
 """
-function jo_convert{NT<:Integer}(DT::DataType,nin::NT,warning::Bool=true)
+function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:Integer}
     DT==NT && return nin
     #println("jo_convert{NT<:Integer}")
     if DT<:Integer
@@ -401,7 +401,7 @@ function jo_convert{NT<:Integer}(DT::DataType,nin::NT,warning::Bool=true)
     end
     return nout
 end
-function jo_convert{NT<:AbstractFloat}(DT::DataType,nin::NT,warning::Bool=true)
+function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:AbstractFloat}
     DT==NT && return nin
     #println("jo_convert{NT<:AbstractFloat}")
     if !(DT<:Integer)
@@ -411,7 +411,7 @@ function jo_convert{NT<:AbstractFloat}(DT::DataType,nin::NT,warning::Bool=true)
     end
     return nout
 end
-function jo_convert{NT<:Complex}(DT::DataType,nin::NT,warning::Bool=true)
+function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:Complex}
     DT==NT && return nin
     #println("jo_convert{NT<:Complex}")
     if DT<:Complex

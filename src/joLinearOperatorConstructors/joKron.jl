@@ -71,28 +71,28 @@ function showall(A::joKron)
 end
 
 # conj(jo)
-conj{DDT,RDT}(A::joKron{DDT,RDT}) =
+conj(A::joKron{DDT,RDT}) where {DDT,RDT} =
     joKron{DDT,RDT}("(conj("*A.name*"))",
         A.m,A.n,A.l,A.ms,A.ns,A.flip,
         A.fop_C,A.fop_CT,A.fop_T,A.fop,
         A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joKron{DDT,RDT}) =
+transpose(A::joKron{DDT,RDT}) where {DDT,RDT} =
     joKron{RDT,DDT}("("*A.name*".')",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joKron{DDT,RDT}) =
+ctranspose(A::joKron{DDT,RDT}) where {DDT,RDT} =
     joKron{RDT,DDT}("("*A.name*"')",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,
         A.iop_CT,A.iop_C,A.iop,A.iop_T)
 
 # *(jo,vec)
-function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT})
+function *(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
     size(A,2) == size(v,1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
     V=reshape(v,ksz...)
@@ -122,7 +122,7 @@ function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT})
 end
 
 # *(jo,mvec)
-function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT})
+function *(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT}) where {ADDT,ARDT}
     size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
     MV=Matrix{ARDT}(A.m,size(mv,2))
     for i=1:size(mv,2)
@@ -132,7 +132,7 @@ function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT})
 end
 
 # -(jo)
-function -{DDT,RDT}(A::joKron{DDT,RDT})
+function -(A::joKron{DDT,RDT}) where {DDT,RDT}
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)

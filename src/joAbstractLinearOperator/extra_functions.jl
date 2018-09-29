@@ -2,25 +2,25 @@
 ## joAbstractLinearOperator - extra functions
 
 # elements(jo)
-elements{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = A*eye(DDT,A.n)
+elements(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = A*eye(DDT,A.n)
 
 # hasinverse(jo)
-hasinverse{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = !isnull(A.iop)
+hasinverse(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !isnull(A.iop)
 
 # issquare(jo)
-issquare{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = (A.m == A.n)
+issquare(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m == A.n)
 
 # istall(jo)
-istall{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = (A.m > A.n)
+istall(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m > A.n)
 
 # iswide(jo)
-iswide{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = (A.m < A.n)
+iswide(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m < A.n)
 
 # iscomplex(jo)
-iscomplex{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}) = !(DDT<:Real && RDT<:Real)
+iscomplex(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !(DDT<:Real && RDT<:Real)
 
 # islinear(jo)
-function islinear{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,verbose::Bool=false)
+function islinear(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,verbose::Bool=false) where {DDT,RDT}
     Test=true
     TEST=Array{Bool,1}(0)
     MYTOL=Array{Float64,1}(0)
@@ -44,7 +44,7 @@ function islinear{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::F
 end
 
 # isadjoint(jo)
-function isadjoint{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false)
+function isadjoint(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false) where {DDT,RDT}
     Test=true
     TEST=Array{Bool,1}(0)
     MYTOL=Array{Float64,1}(0)

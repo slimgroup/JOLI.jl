@@ -36,8 +36,8 @@ Block-diagonal operator composed from different square JOLI operators
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 
 """
-function joBlockDiag{WDT<:Number}(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag")
+function joBlockDiag(ops::joAbstractLinearOperator...;
+           weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
     isempty(ops) && throw(joBlockDiagException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -101,8 +101,8 @@ Block-diagonal operator composed from l-times replicated square JOLI operator
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 
 """
-function joBlockDiag{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag")
+function joBlockDiag(l::Integer,op::joAbstractLinearOperator;
+           weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
     op.m==op.n || throw(joBlockDiagException("non-square operator"))
     (length(weights)==l || length(weights)==0) || throw(joBlockDiagException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)

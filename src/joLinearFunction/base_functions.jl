@@ -30,7 +30,7 @@
 # imag(jo)
 
 # conj(jo)
-conj{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
+conj(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{DDT,RDT}("conj("*A.name*")",A.m,A.n,
         get(A.fop_C),
         A.fop_CT,
@@ -45,7 +45,7 @@ conj{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         )
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
+transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{RDT,DDT}(""*A.name*".'",A.n,A.m,
         get(A.fop_T),
         A.fop,
@@ -60,7 +60,7 @@ transpose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
         )
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
+ctranspose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{RDT,DDT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
@@ -86,7 +86,7 @@ ctranspose{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+function *(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joLinearFunction("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if A.fMVok
@@ -106,7 +106,7 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
+function *(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
@@ -126,7 +126,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \{ADDT,ARDT,mvDT<:Number}(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+function \(A::joLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
     jo_check_type_match(ARDT,mvDT,join(["RDT for \\(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if hasinverse(A)
@@ -170,7 +170,7 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \{ADDT,ARDT,vDT<:Number}(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT})
+function \(A::joLinearFunction{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
     jo_check_type_match(ARDT,vDT,join(["RDT for \\(jo,vec):",A.name,typeof(A),vDT]," / "))
     if hasinverse(A)
@@ -217,7 +217,7 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
+-(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-get(A.fop_T)(v2),

@@ -176,7 +176,7 @@ joLooseLinearFunctionFwdCT(m::Integer,n::Integer,
             @joNF, @joNF, @joNF, @joNF, false
             )
 
-joLoosen{DDT,RDT}(A::joLinearFunction{DDT,RDT}) =
+joLoosen(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLooseLinearFunction{DDT,RDT}("joLoosen("*A.name*")",A.m,A.n,
         v1->A.fop(v1),
         v2->get(A.fop_T)(v2),

@@ -37,8 +37,8 @@ Stack operator composed from different square JOLI operators
 - the domain/range types of joStack are equal to domain/range types of the given operators
 
 """
-function joStack{WDT<:Number}(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joStack")
+function joStack(ops::joAbstractLinearOperator...;
+           weights::AbstractVector{WDT}=zeros(0),name::String="joStack") where {WDT<:Number}
     isempty(ops) && throw(joStackException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -101,8 +101,8 @@ Stack operator composed from l-times replicated square JOLI operator
 - the domain/range types of joStack are equal to domain/range types of the given operators
 
 """
-function joStack{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joStack")
+function joStack(l::Integer,op::joAbstractLinearOperator;
+           weights::AbstractVector{WDT}=zeros(0),name::String="joStack") where {WDT<:Number}
     (length(weights)==l || length(weights)==0) || throw(joStackException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
     ms=zeros(Int,l)

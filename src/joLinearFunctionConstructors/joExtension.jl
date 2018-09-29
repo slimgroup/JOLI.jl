@@ -2,7 +2,7 @@ export joExtension, EXT_TYPE
 
 @enum EXT_TYPE pad_zeros pad_border pad_periodic
 
-function apply_pad{T<:Integer,DDT<:Number}(v::Array{DDT,1},n::T,pad_type::EXT_TYPE,pad_upper::T,pad_lower::T; forw_mode::Bool=true)
+function apply_pad(v::Array{DDT,1},n::T,pad_type::EXT_TYPE,pad_upper::T,pad_lower::T; forw_mode::Bool=true) where {T<:Integer,DDT<:Number}
     nbdry_pts::T = pad_lower+pad_upper
     next::T = n+nbdry_pts
     lenv::T = length(v)   
@@ -63,7 +63,7 @@ end
   - extends a n-length vector so that x[n+1:n+10] = x[n]
 
 """
-function joExtension{T<:Integer}(n::T, pad_type::EXT_TYPE; pad_upper::T=0,pad_lower::T=0,DDT::DataType=joFloat,RDT::DataType=DDT)
+function joExtension(n::T, pad_type::EXT_TYPE; pad_upper::T=0,pad_lower::T=0,DDT::DataType=joFloat,RDT::DataType=DDT) where {T<:Integer}
     
     warn("joExtension is deprecated. Use joExtend and pay attention to syntax changes.";once=true, key="joExtension")
     return joLinearFunctionFwdT(n+pad_lower+pad_upper,n,

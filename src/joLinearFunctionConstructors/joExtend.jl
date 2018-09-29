@@ -4,80 +4,80 @@
 module joExtend_etc
     using JOLI: jo_convert
     ### zeros
-    function zeros_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_fwd(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [zeros(VT,pad_lower); v; zeros(VT,pad_upper)]
         return jo_convert(rdt,w,false)
     end
-    function zeros_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_fwd(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [zeros(VT,pad_lower,size(v,2)); v; zeros(VT,pad_upper,size(v,2))]
         return jo_convert(rdt,w,false)
     end
-    function zeros_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_tran(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:n+pad_lower]
         return jo_convert(rdt,w,false)
     end
-    function zeros_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_tran(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:n+pad_lower,:]
         return jo_convert(rdt,w,false)
     end
     ### border
-    function border_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function border_fwd(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [repmat([v[1]],pad_lower); v; repmat([v[end]],pad_upper)]
         return jo_convert(rdt,w,false)
     end
-    function border_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function border_fwd(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [repmat(v[1:1,:],pad_lower,1); v; repmat(v[end:end,:],pad_upper,1)]
         return jo_convert(rdt,w,false)
     end
-    function border_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function border_tran(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper]
         w[1] += sum(v[1:pad_lower])
         w[end] += sum(v[end-pad_upper+1:end])
         return jo_convert(rdt,w,false)
     end
-    function border_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function border_tran(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
         w[1:1,:] += sum(v[1:pad_lower,:],1)
         w[end:end,:] += sum(v[end-pad_upper+1:end,:],1)
         return jo_convert(rdt,w,false)
     end
     ### mirror
-    function mirror_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_fwd(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [reverse(v[1:pad_lower]); v; reverse(v[end-pad_upper+1:end])]
         return jo_convert(rdt,w,false)
     end
-    function mirror_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_fwd(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [flipdim(v[1:pad_lower,:],1); v; flipdim(v[end-pad_upper+1:end,:],1)]
         return jo_convert(rdt,w,false)
     end
-    function mirror_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_tran(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper]
         w[1:pad_lower] += reverse(v[1:pad_lower])
         w[end-pad_upper+1:end] += reverse(v[end-pad_upper+1:end])
         return jo_convert(rdt,w,false)
     end
-    function mirror_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_tran(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
         w[1:pad_lower,:] += flipdim(v[1:pad_lower,:],1)
         w[end-pad_upper+1:end,:] += flipdim(v[end-pad_upper+1:end,:],1)
         return jo_convert(rdt,w,false)
     end
     ### periodic
-    function periodic_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_fwd(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [v[end-pad_lower+1:end]; v; v[1:pad_upper]]
         return jo_convert(rdt,w,false)
     end
-    function periodic_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_fwd(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [v[end-pad_lower+1:end,:]; v; v[1:pad_upper,:]]
         return jo_convert(rdt,w,false)
     end
-    function periodic_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_tran(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper]
         w[1:pad_upper] += v[end-pad_upper+1:end]
         w[end-pad_lower+1:end] += v[1:pad_lower]
         return jo_convert(rdt,w,false)
     end
-    function periodic_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_tran(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
         w[1:pad_upper,:] += v[end-pad_upper+1:end,:]
         w[end-pad_lower+1:end,:] += v[1:pad_lower,:]

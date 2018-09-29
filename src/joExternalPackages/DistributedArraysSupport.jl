@@ -17,8 +17,8 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 """
 dalloc(dims::Dims, args...) = DArray(I->Array{joFloat}(map(length,I)), dims, args...)
-dalloc{T}(::Type{T}, dims::Dims, args...) = DArray(I->Array{T}(map(length,I)), dims, args...)
-dalloc{T}(::Type{T}, d1::Integer, drest::Integer...) = dalloc(T, convert(Dims, tuple(d1, drest...)))
+dalloc(::Type{T}, dims::Dims, args...) where {T} = DArray(I->Array{T}(map(length,I)), dims, args...)
+dalloc(::Type{T}, d1::Integer, drest::Integer...) where {T} = dalloc(T, convert(Dims, tuple(d1, drest...)))
 dalloc(d1::Integer, drest::Integer...) = dalloc(joFloat, convert(Dims, tuple(d1, drest...)))
 dalloc(d::Dims) = dalloc(joFloat, d)
 

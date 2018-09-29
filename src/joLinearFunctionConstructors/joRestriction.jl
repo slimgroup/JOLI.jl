@@ -16,7 +16,7 @@ Restriction operator
 - A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joRestriction{VDT<:Integer}(n::Integer,idx::Vector{VDT};DDT::DataType=joFloat,RDT::DataType=DDT,makecopy::Bool=true)
+function joRestriction(n::Integer,idx::Vector{VDT};DDT::DataType=joFloat,RDT::DataType=DDT,makecopy::Bool=true) where {VDT<:Integer}
     m::Int=length(idx)
     n>=m || throw(joLinearFunctionException("joRestriction: length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joRestriction: max(idx) must be <= n"))

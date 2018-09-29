@@ -17,7 +17,7 @@ same for each form of the operator
     O=joAddSolverAny(O,(s,x)->my_solver(s,x))
 
 """
-joAddSolverAny{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},slvr::Function) =
+joAddSolverAny(A::joAbstractLinearOperator{DDT,RDT},slvr::Function) where {DDT,RDT} =
         joLinearOperator{DDT,RDT}("("*A.name*"+solver)",A.m,A.n,
             v1->A*v1,
             v2->A.'*v2,
@@ -58,8 +58,8 @@ distinct for each form of the operator.
         @joNF)
 
 """
-joAddSolverAll{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT},
-    slvr::Function,slvr_T::Function,slvr_CT::Function,slvr_C::Function) =
+joAddSolverAll(A::joAbstractLinearOperator{DDT,RDT},
+    slvr::Function,slvr_T::Function,slvr_CT::Function,slvr_C::Function) where {DDT,RDT} =
         joLinearOperator{DDT,RDT}("("*A.name*"+solver)",A.m,A.n,
             v1->A*v1,
             v2->A.'*v2,

@@ -133,28 +133,28 @@ function showall(A::joCoreBlock)
 end
 
 # conj(jo)
-conj{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
+conj(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
     joCoreBlock{DDT,RDT}("(conj("*A.name*"))",
         A.m,A.n,A.l,A.ms,A.ns,A.mo,A.no,A.ws,
         A.fop_C,A.fop_CT,A.fop_T,A.fop,
         A.iop_C,A.iop_CT,A.iop_T,A.iop)
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
+transpose(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
     joCoreBlock{RDT,DDT}("("*A.name*".')",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joCoreBlock{DDT,RDT}) =
+ctranspose(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
     joCoreBlock{RDT,DDT}("("*A.name*"')",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,
         A.iop_CT,A.iop_C,A.iop,A.iop_T)
 
 # *(jo,vec)
-function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT})
+function *(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
     size(A,2) == size(v,1) || throw(joCoreBlockException("shape mismatch"))
     V=zeros(ARDT,A.m) # must be preallocated with zeros
     for i=1:1:A.l
@@ -168,7 +168,7 @@ function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT})
 end
 
 # *(jo,mvec)
-function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT})
+function *(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT}) where {ADDT,ARDT}
     size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
     MV=zeros(ARDT,size(A,1),size(mv,2)) # must be preallocated with zeros
     for i=1:1:A.l
@@ -182,7 +182,7 @@ function *{ADDT,ARDT}(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT})
 end
 
 # -(jo)
-function -{DDT,RDT}(A::joCoreBlock{DDT,RDT})
+function -(A::joCoreBlock{DDT,RDT}) where {DDT,RDT}
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
     fops_CT=Vector{joAbstractLinearOperator}(0)

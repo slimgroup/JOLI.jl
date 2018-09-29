@@ -30,7 +30,7 @@
 # imag(jo)
 
 # conj(jo)
-conj{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+conj(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{DDT,RDT}("conj("*A.name*")",A.m,A.n,
         A.fop_C,
         A.fop_CT,
@@ -43,7 +43,7 @@ conj{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
         )
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+transpose(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{RDT,DDT}(""*A.name*".'",A.n,A.m,
         A.fop_T,
         A.fop,
@@ -56,7 +56,7 @@ transpose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
         )
 
 # ctranspose(jo)
-ctranspose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+ctranspose(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{RDT,DDT}(""*A.name*"'",A.n,A.m,
         A.fop_CT,
         A.fop_C,
@@ -80,7 +80,7 @@ ctranspose{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+function *(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joLooseMatrixException("shape mismatch"))
     MV = A.fop(mv)
     return MV
@@ -89,7 +89,7 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT})
+function *(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joLooseMatrixException("shape mismatch"))
     V=A.fop(v)
     return V
@@ -107,7 +107,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \{ADDT,ARDT,mvDT<:Number}(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT})
+function \(A::joLooseMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.m == size(mv,1) || throw(joLooseMatrixException("shape mismatch"))
     if hasinverse(A)
         MV=get(A.iop)(mv)
@@ -120,7 +120,7 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \{ADDT,ARDT,vDT<:Number}(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT})
+function \(A::joLooseMatrix{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.m == size(v,1) || throw(joLooseMatrixException("shape mismatch"))
     if hasinverse(A)
         V=get(A.iop)(v)
@@ -159,7 +159,7 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
--{DDT,RDT}(A::joLooseMatrix{DDT,RDT}) =
+-(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-A.fop_T(v2),
@@ -210,26 +210,26 @@ end
 ## overloaded Base.LinAlg functions
 
 # A_mul_B!(...,jo,...)
-A_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A * x
-A_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A * x
+A_mul_B!(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A * x
+A_mul_B!(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A * x
 
 # At_mul_B!(...,jo,...)
-At_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A.' * x
-At_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A.' * x
+At_mul_B!(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A.' * x
+At_mul_B!(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A.' * x
 
 # Ac_mul_B!(...,jo,...)
-Ac_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A' * x
-Ac_mul_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A' * x
+Ac_mul_B!(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A' * x
+Ac_mul_B!(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A' * x
 
 # A_ldiv_B!(...,jo,...)
-A_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A \ x
-A_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A \ x
+A_ldiv_B!(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A \ x
+A_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A \ x
 
 # At_ldiv_B!(...,jo,...)
-At_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A.' \ x
-At_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A.' \ x
+At_ldiv_B!(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A.' \ x
+At_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A.' \ x
 
 # Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) = y[:] = A' \ x
-Ac_ldiv_B!{DDT,RDT,YDT<:Number,XDT<:Number}(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) = y[:,:] = A' \ x
+Ac_ldiv_B!(y::AbstractVector{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A' \ x
+Ac_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseMatrix{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A' \ x
 
