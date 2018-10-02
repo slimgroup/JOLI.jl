@@ -140,7 +140,7 @@ Multi-dimensional FFT transform over fast dimension(s)
 - if you intend to use joDFT in remote* calls, you have to either set planned=false or create the operator on the worker
 
 """
-function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataType=joFloat,RDT::DataType=(DDT<:Real?Complex{DDT}:DDT))
+function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataType=joFloat,RDT::DataType=(DDT<:Real ? Complex{DDT} : DDT))
     if planned
         pf=plan_fft(zeros(ms))
         ipf=plan_ifft(zeros(ms))
