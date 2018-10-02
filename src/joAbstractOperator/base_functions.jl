@@ -47,10 +47,10 @@ imag(A::joAbstractOperator) = jo_method_error(A,"imag(jo) not implemented")
 conj(A::joAbstractOperator) = jo_method_error(A,"conj(jo) not implemented")
 
 # transpose(jo)
-transpose(A::joAbstractOperator) = jo_method_error(A,"jo.' not implemented")
+transpose(A::joAbstractOperator) = jo_method_error(A,"transpose(jo) not implemented")
 
 # adjoint(jo)
-adjoint(A::joAbstractOperator) = jo_method_error(A,"jo' not implemented")
+adjoint(A::joAbstractOperator) = jo_method_error(A,"adjoint(jo) not implemented")
 
 # isreal(jo)
 isreal(A::joAbstractOperator) = jo_method_error(A,"isreal(jo) not implemented")
@@ -161,7 +161,7 @@ ishermitian(A::joAbstractOperator) = jo_method_error(A,"ishermitian(jo) not impl
 -(A::joAbstractOperator,b) = jo_method_error(A,b,"-(jo,any) not implemented or type mismatch")
 
 # -(num,jo)
--(b,A::joAbstractOperator) = jo_method_error(b,A,"-(any,jo).' not implemented or type mismatch")
+-(b,A::joAbstractOperator) = jo_method_error(b,A,"-(any,jo) not implemented or type mismatch")
 
 ############################################################
 ## overloaded Base .*(...jo...)
@@ -261,20 +261,20 @@ ishermitian(A::joAbstractOperator) = jo_method_error(A,"ishermitian(jo) not impl
 ##.-(A::joAbstractOperator,b) = jo_method_error(,".-(jo,any) not implemented")
 
 # .-(num,jo)
-##.-(b,A::joAbstractOperator) = jo_method_error(,".-(any,jo).' not implemented")
+##.-(b,A::joAbstractOperator) = jo_method_error(,".-(any,jo) not implemented")
 
 ############################################################
 ## overloaded Base block methods
 
 # hcat(...jo...)
-hcat(ops::joAbstractOperator...) = jo_method_error(ops[1],"hcat(jo...).' not implemented")
+hcat(ops::joAbstractOperator...) = jo_method_error(ops[1],"hcat(jo...) not implemented")
 
 
 # vcat(...jo...)
-vcat(ops::joAbstractOperator...) = jo_method_error(ops[1],"vcat(jo...).' not implemented")
+vcat(ops::joAbstractOperator...) = jo_method_error(ops[1],"vcat(jo...) not implemented")
 
 # hvcat(...jo...)
-hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractOperator...) = jo_method_error(ops[1],"hvcat(jo...).' not implemented")
+hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractOperator...) = jo_method_error(ops[1],"hvcat(jo...) not implemented")
 
 ############################################################
 ## overloaded Base.LinAlg functions

@@ -69,13 +69,13 @@ function joStack(ops::joAbstractLinearOperator...;
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
-            push!(fops_T,ws[i]*ops[i].')
-            push!(fops_CT,conj(ws[i])*ops[i]')
+            push!(fops_T,ws[i]*transpose(ops[i]))
+            push!(fops_CT,conj(ws[i])*adjoint(ops[i]))
             push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
-            push!(fops_T,ops[i].')
-            push!(fops_CT,ops[i]')
+            push!(fops_T,transpose(ops[i]))
+            push!(fops_CT,adjoint(ops[i]))
             push!(fops_C,conj(ops[i]))
         end
     end
@@ -126,13 +126,13 @@ function joStack(l::Integer,op::joAbstractLinearOperator;
     for i=1:l
         if weighted
             push!(fops,ws[i]*op)
-            push!(fops_T,ws[i]*op.')
-            push!(fops_CT,conj(ws[i])*op')
+            push!(fops_T,ws[i]*transpose(op))
+            push!(fops_CT,conj(ws[i])*adjoint(op))
             push!(fops_C,conj(ws[i])*conj(op))
         else
             push!(fops,op)
-            push!(fops_T,op.')
-            push!(fops_CT,op')
+            push!(fops_T,transpose(op))
+            push!(fops_CT,adjoint(op))
             push!(fops_C,conj(op))
         end
     end

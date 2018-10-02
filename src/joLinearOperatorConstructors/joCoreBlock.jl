@@ -98,13 +98,13 @@ function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
-            push!(fops_T,ws[i]*ops[i].')
-            push!(fops_CT,conj(ws[i])*ops[i]')
+            push!(fops_T,ws[i]*transpose(ops[i]))
+            push!(fops_CT,conj(ws[i])*adjoint(ops[i]))
             push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
-            push!(fops_T,ops[i].')
-            push!(fops_CT,ops[i]')
+            push!(fops_T,transpose(ops[i]))
+            push!(fops_CT,adjoint(ops[i]))
             push!(fops_C,conj(ops[i]))
         end
     end
@@ -141,14 +141,14 @@ conj(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
 
 # transpose(jo)
 transpose(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
-    joCoreBlock{RDT,DDT}("("*A.name*".')",
+    joCoreBlock{RDT,DDT}("(transpose("*A.name*"))",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # adjoint(jo)
 adjoint(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
-    joCoreBlock{RDT,DDT}("("*A.name*"')",
+    joCoreBlock{RDT,DDT}("(adjoint("*A.name*"))",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,
         A.iop_CT,A.iop_C,A.iop,A.iop_T)

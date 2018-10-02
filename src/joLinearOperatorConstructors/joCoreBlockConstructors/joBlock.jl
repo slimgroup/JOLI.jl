@@ -99,13 +99,13 @@ function joBlock(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
-            push!(fops_T,ws[i]*ops[i].')
-            push!(fops_CT,conj(ws[i])*ops[i]')
+            push!(fops_T,ws[i]*transpose(ops[i]))
+            push!(fops_CT,conj(ws[i])*adjoint(ops[i]))
             push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
-            push!(fops_T,ops[i].')
-            push!(fops_CT,ops[i]')
+            push!(fops_T,transpose(ops[i]))
+            push!(fops_CT,adjoint(ops[i]))
             push!(fops_C,conj(ops[i]))
         end
     end

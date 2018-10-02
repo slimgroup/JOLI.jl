@@ -44,8 +44,8 @@ function joKron(ops::joAbstractLinearOperator...)
     n=prod(ns)
     for i=1:l
         push!(fops,ops[i])
-        push!(fops_T,ops[i].')
-        push!(fops_CT,ops[i]')
+        push!(fops_T,transpose(ops[i]))
+        push!(fops_CT,adjoint(ops[i]))
         push!(fops_C,conj(ops[i]))
     end
     return joKron{deltype(fops[l]),reltype(fops[1])}("joKron($l)",m,n,l,ms,ns,false,
@@ -79,14 +79,14 @@ conj(A::joKron{DDT,RDT}) where {DDT,RDT} =
 
 # transpose(jo)
 transpose(A::joKron{DDT,RDT}) where {DDT,RDT} =
-    joKron{RDT,DDT}("("*A.name*".')",
+    joKron{RDT,DDT}("(transpose("*A.name*"))",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
 # adjoint(jo)
 adjoint(A::joKron{DDT,RDT}) where {DDT,RDT} =
-    joKron{RDT,DDT}("("*A.name*"')",
+    joKron{RDT,DDT}("(adjoint("*A.name*"))",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,
         A.iop_CT,A.iop_C,A.iop,A.iop_T)

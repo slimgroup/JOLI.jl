@@ -71,11 +71,11 @@ isreal(A :: joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && R
 
 # issymmetric(jo)
 issymmetric(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} =
-    (A.m == A.n && (vecnorm(elements(A)-elements(A.')) < joTol))
+    (A.m == A.n && (vecnorm(elements(A)-elements(transpose(A))) < joTol))
 
 # ishermitian(jo)
 ishermitian(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} =
-    (A.m == A.n && (vecnorm(elements(A)-elements(A')) < joTol))
+    (A.m == A.n && (vecnorm(elements(A)-elements(adjoint(A))) < joTol))
 
 ############################################################
 ## overloaded Base *(...jo...)
@@ -85,8 +85,8 @@ function *(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLinearOperator{BDD
     size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
     return joLinearOperator{BDDT,ARDT}("("*A.name*"*"*B.name*")",size(A,1),size(B,2),
         v1->A*(B*v1),
-        v2->B.'*(A.'*v2),
-        v3->B'*(A'*v3),
+        v2->transpose(B)*(transpose(A)*v2),
+        v3->adjoint(B)*(adjoint(A)*v3),
         v4->conj(A)*(conj(B)*v4),
         @joNF, @joNF, @joNF, @joNF
         )
@@ -104,8 +104,8 @@ end
 function *(a::Number,A::joAbstractLinearOperator{ADDT,ARDT}) where {ADDT,ARDT}
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->jo_convert(ARDT,a*(A*v1),false),
-        v2->jo_convert(ADDT,a*(A.'*v2),false),
-        v3->jo_convert(ADDT,conj(a)*(A'*v3),false),
+        v2->jo_convert(ADDT,a*(transpose(A)*v2),false),
+        v3->jo_convert(ADDT,conj(a)*(adjoint(A)*v3),false),
         v4->jo_convert(ARDT,conj(a)*(conj(A)*v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
@@ -113,8 +113,8 @@ end
 function *(a::joNumber{ADDT,ARDT},A::joAbstractLinearOperator{ADDT,ARDT}) where {ADDT,ARDT}
     return joLinearOperator{ADDT,ARDT}("(N*"*A.name*")",A.m,A.n,
         v1->jo_convert(ARDT,a.rdt*(A*v1),false),
-        v2->jo_convert(ADDT,a.ddt*(A.'*v2),false),
-        v3->jo_convert(ADDT,conj(a.ddt)*(A'*v3),false),
+        v2->jo_convert(ADDT,a.ddt*(transpose(A)*v2),false),
+        v3->jo_convert(ADDT,conj(a.ddt)*(adjoint(A)*v3),false),
         v4->jo_convert(ARDT,conj(a.rdt)*(conj(A)*v4),false),
         @joNF, @joNF, @joNF, @joNF
         )
@@ -154,8 +154,8 @@ function +(A::joAbstractLinearOperator{DDT,RDT},B::joAbstractLinearOperator{DDT,
     size(A) == size(B) || throw(joAbstractLinearOperatorException("shape mismatch"))
     return joLinearOperator{DDT,RDT}("("*A.name*"+"*B.name*")",size(A,1),size(B,2),
         v1->A*v1+B*v1,
-        v2->A.'*v2+B.'*v2,
-        v3->A'*v3+B'*v3,
+        v2->transpose(A)*v2+transpose(B)*v2,
+        v3->adjoint(A)*v3+adjoint(B)*v3,
         v4->conj(A)*v4+conj(B)*v4,
         @joNF, @joNF, @joNF, @joNF
         )
@@ -173,8 +173,8 @@ end
 function +(A::joAbstractLinearOperator{ADDT,ARDT},b::Number) where {ADDT,ARDT}
     return joLinearOperator{ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
         v1->A*v1+joConstants(A.m,A.n,b;DDT=ADDT,RDT=ARDT)*v1,
-        v2->A.'*v2+joConstants(A.n,A.m,b;DDT=ARDT,RDT=ADDT)*v2,
-        v3->A'*v3+joConstants(A.n,A.m,conj(b);DDT=ARDT,RDT=ADDT)*v3,
+        v2->transpose(A)*v2+joConstants(A.n,A.m,b;DDT=ARDT,RDT=ADDT)*v2,
+        v3->adjoint(A)*v3+joConstants(A.n,A.m,conj(b);DDT=ARDT,RDT=ADDT)*v3,
         v4->conj(A)*v4+joConstants(A.m,A.n,conj(b);DDT=ADDT,RDT=ARDT)*v4,
         @joNF, @joNF, @joNF, @joNF
         )
@@ -182,8 +182,8 @@ end
 function +(A::joAbstractLinearOperator{ADDT,ARDT},b::joNumber{ADDT,ARDT}) where {ADDT,ARDT}
     return joLinearOperator{ADDT,ARDT}("("*A.name*"+N)",size(A,1),size(A,2),
         v1->A*v1+joConstants(A.m,A.n,b.rdt;DDT=ADDT,RDT=ARDT)*v1,
-        v2->A.'*v2+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
-        v3->A'*v3+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
+        v2->transpose(A)*v2+joConstants(A.n,A.m,b.ddt;DDT=ARDT,RDT=ADDT)*v2,
+        v3->adjoint(A)*v3+joConstants(A.n,A.m,conj(b.ddt);DDT=ARDT,RDT=ADDT)*v3,
         v4->conj(A)*v4+joConstants(A.m,A.n,conj(b.rdt);DDT=ADDT,RDT=ARDT)*v4,
         @joNF, @joNF, @joNF, @joNF
         )
@@ -249,22 +249,22 @@ A_mul_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::Abstract
 A_mul_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
 
 # At_mul_B!(...,jo,...)
-At_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A.' * x
-At_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A.' * x
+At_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = transpose(A) * x
+At_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = transpose(A) * x
 
 # Ac_mul_B!(...,jo,...)
-Ac_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A' * x
-Ac_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A' * x
+Ac_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = adjoint(A) * x
+Ac_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = adjoint(A) * x
 
 # A_ldiv_B!(...,jo,...)
 A_ldiv_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A \ x
 A_ldiv_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A \ x
 
 # At_ldiv_B!(...,jo,...)
-At_ldiv_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A.' \ x
-At_ldiv_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A.' \ x
+At_ldiv_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = transpose(A) \ x
+At_ldiv_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = transpose(A) \ x
 
 # Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A' \ x
-Ac_ldiv_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A' \ x
+Ac_ldiv_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = adjoint(A) \ x
+Ac_ldiv_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = adjoint(A) \ x
 

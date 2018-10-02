@@ -20,12 +20,12 @@ same for each form of the operator
 joAddSolverAny(A::joAbstractLinearOperator{DDT,RDT},slvr::Function) where {DDT,RDT} =
         joLinearOperator{DDT,RDT}("("*A.name*"+solver)",A.m,A.n,
             v1->A*v1,
-            v2->A.'*v2,
-            v3->A'*v3,
+            v2->transpose(A)*v2,
+            v3->adjoint(A)*v3,
             v4->conj(A)*v4,
             v5->slvr(A,v5),
-            v6->slvr(A.',v6),
-            v7->slvr(A',v7),
+            v6->slvr(transpose(A),v6),
+            v7->slvr(adjoint(A),v7),
             v8->slvr(conj(A),v8)
             )
 """
@@ -62,12 +62,12 @@ joAddSolverAll(A::joAbstractLinearOperator{DDT,RDT},
     slvr::Function,slvr_T::Function,slvr_CT::Function,slvr_C::Function) where {DDT,RDT} =
         joLinearOperator{DDT,RDT}("("*A.name*"+solver)",A.m,A.n,
             v1->A*v1,
-            v2->A.'*v2,
-            v3->A'*v3,
+            v2->transpose(A)*v2,
+            v3->adjoint(A)*v3,
             v4->conj(A)*v4,
             v5->slvr(A,v5),
-            v6->slvr_T(A.',v6),
-            v7->slvr_CT(A',v7),
+            v6->slvr_T(transpose(A),v6),
+            v7->slvr_CT(adjoint(A),v7),
             v8->slvr_C(conj(A),v8)
             )
 

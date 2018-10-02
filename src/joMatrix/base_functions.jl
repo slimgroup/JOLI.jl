@@ -44,7 +44,7 @@ conj(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
 
 # transpose(jo)
 transpose(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
-    joMatrix{RDT,DDT}(""*A.name*".'",A.n,A.m,
+    joMatrix{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
         A.fop_T,
         A.fop,
         A.fop_C,
@@ -57,7 +57,7 @@ transpose(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
 
 # adjoint(jo)
 adjoint(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
-    joMatrix{RDT,DDT}(""*A.name*"'",A.n,A.m,
+    joMatrix{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
         A.fop_CT,
         A.fop_C,
         A.fop,

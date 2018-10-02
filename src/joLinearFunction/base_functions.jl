@@ -46,7 +46,7 @@ conj(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
 
 # transpose(jo)
 transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
-    joLinearFunction{RDT,DDT}(""*A.name*".'",A.n,A.m,
+    joLinearFunction{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
         get(A.fop_T),
         A.fop,
         A.fop_C,
@@ -61,7 +61,7 @@ transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
 
 # adjoint(jo)
 adjoint(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
-    joLinearFunction{RDT,DDT}(""*A.name*"'",A.n,A.m,
+    joLinearFunction{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,
         A.fop,
