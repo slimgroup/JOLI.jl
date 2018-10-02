@@ -8,6 +8,7 @@ module JOLI
 using Nullables
 using Printf
 using LinearAlgebra
+using SparseArrays
 using DistributedArrays
 using IterativeSolvers
 using InplaceOps

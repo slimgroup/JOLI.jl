@@ -1,6 +1,7 @@
 using Test
 using JOLI
 using LinearAlgebra
+using SparseArrays
 using InplaceOps
 
 jo_type_mismatch_error_set(false)
