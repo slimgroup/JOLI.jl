@@ -3,13 +3,14 @@ using JOLI
 using LinearAlgebra
 using SparseArrays
 using InplaceOps
+using FFTW
 
 jo_type_mismatch_error_set(false)
 #JOLI.jo_type_mismatch_warn_set(false)
 verbose=false
 
 # write your own tests here
-tic()
+stime=time()
 include("test_joMatrixSingle.jl")
 include("test_joMatrixProduct.jl")
 include("test_joMatrixSum.jl")
@@ -34,4 +35,6 @@ include("test_joDCT.jl")
 include("test_joCurvelet2D.jl")
 include("test_joCurvelet2DnoFFT.jl")
 include("test_joExtend.jl")
-println("\nTest Total elapsed time: ",round(toq(),1),"s")
+etime=time()
+dtime=etime-stime
+println("\nTest Total elapsed time: ",round(dtime,digits=1),"s")
