@@ -72,7 +72,7 @@ export joCurvelet2D
 
 # Notes
 
-- if DDT:<Real for complex transform then imaginary part will be neglected for transpose/ctranspose
+- if DDT:<Real for complex transform then imaginary part will be neglected for transpose/adjoint
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 """

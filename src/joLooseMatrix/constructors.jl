@@ -18,7 +18,7 @@ Look up argument names in help to joLooseMatrix type.
 - joLooseMatrix(rand(4,3);name="my matrix") # adding name
 
 # Notes
-- if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/conjugated-transpose operator
+- if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/adjoint operator
 - if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 """

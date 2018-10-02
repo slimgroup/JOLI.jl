@@ -21,7 +21,7 @@ import Base.show, Base.showall, Base.display
 import Base.size, Base.length
 import Base.full
 import Base.real, Base.imag, Base.conj
-import Base.transpose, Base.ctranspose
+import Base.transpose, Base.adjoint
 import Base.isreal
 import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
@@ -40,7 +40,7 @@ import IterativeSolvers.Adivtype
 # discarded IterativeSolvers.Amultype
 
 # what's imported from InplaceOps
-import InplaceOps.op_transpose, InplaceOps.op_ctranspose
+import InplaceOps.op_transpose, InplaceOps.op_adjoint
 import InplaceOps.Transpose, InplaceOps.CTranspose
 import InplaceOps.mul!, InplaceOps.ldiv!
 

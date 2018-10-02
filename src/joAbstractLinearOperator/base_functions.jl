@@ -64,7 +64,7 @@ joConj(A::joAbstractLinearOperator) = conj(A)
 
 # transpose(jo)
 
-# ctranspose(jo)
+# adjoint(jo)
 
 # isreal(jo)
 isreal(A :: joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && RDT<:Real)

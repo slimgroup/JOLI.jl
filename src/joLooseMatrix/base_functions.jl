@@ -55,8 +55,8 @@ transpose(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
         A.iop_CT
         )
 
-# ctranspose(jo)
-ctranspose(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
+# adjoint(jo)
+adjoint(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{RDT,DDT}(""*A.name*"'",A.n,A.m,
         A.fop_CT,
         A.fop_C,

@@ -136,7 +136,7 @@ Multi-dimensional FFT transform over fast dimension(s)
 
 # Notes
 
-- if DDT:<Real then imaginary part will be neglected for transpose/ctranspose
+- if DDT:<Real then imaginary part will be neglected for transpose/adjoint
 - if you intend to use joDFT in remote* calls, you have to either set planned=false or create the operator on the worker
 
 """

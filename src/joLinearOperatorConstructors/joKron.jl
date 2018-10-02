@@ -84,8 +84,8 @@ transpose(A::joKron{DDT,RDT}) where {DDT,RDT} =
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
-# ctranspose(jo)
-ctranspose(A::joKron{DDT,RDT}) where {DDT,RDT} =
+# adjoint(jo)
+adjoint(A::joKron{DDT,RDT}) where {DDT,RDT} =
     joKron{RDT,DDT}("("*A.name*"')",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,

@@ -50,7 +50,7 @@ length(A::joAbstractFosterLinearOperator) = A.m*A.n
 
 # transpose(jo)
 
-# ctranspose(jo)
+# adjoint(jo)
 
 # isreal(jo)
 isreal(A :: joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && RDT<:Real)

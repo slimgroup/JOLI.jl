@@ -49,8 +49,8 @@ conj(A::joAbstractOperator) = jo_method_error(A,"conj(jo) not implemented")
 # transpose(jo)
 transpose(A::joAbstractOperator) = jo_method_error(A,"jo.' not implemented")
 
-# ctranspose(jo)
-ctranspose(A::joAbstractOperator) = jo_method_error(A,"jo' not implemented")
+# adjoint(jo)
+adjoint(A::joAbstractOperator) = jo_method_error(A,"jo' not implemented")
 
 # isreal(jo)
 isreal(A::joAbstractOperator) = jo_method_error(A,"isreal(jo) not implemented")

@@ -55,8 +55,8 @@ transpose(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
         A.iop_CT
         )
 
-# ctranspose(jo)
-ctranspose(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
+# adjoint(jo)
+adjoint(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
     joLinearOperator{RDT,DDT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,

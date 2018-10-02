@@ -59,8 +59,8 @@ transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
         A.iMVok
         )
 
-# ctranspose(jo)
-ctranspose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
+# adjoint(jo)
+adjoint(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{RDT,DDT}(""*A.name*"'",A.n,A.m,
         get(A.fop_CT),
         A.fop_C,

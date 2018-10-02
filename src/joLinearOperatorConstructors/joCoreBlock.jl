@@ -146,8 +146,8 @@ transpose(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
         A.fop_T,A.fop,A.fop_C,A.fop_CT,
         A.iop_T,A.iop,A.iop_C,A.iop_CT)
 
-# ctranspose(jo)
-ctranspose(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
+# adjoint(jo)
+adjoint(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
     joCoreBlock{RDT,DDT}("("*A.name*"')",
         A.n,A.m,A.l,A.ns,A.ms,A.no,A.mo,A.ws,
         A.fop_CT,A.fop_C,A.fop,A.fop_T,

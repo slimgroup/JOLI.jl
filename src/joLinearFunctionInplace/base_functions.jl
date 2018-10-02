@@ -33,7 +33,7 @@
 
 # transpose(jo)
 
-# ctranspose(jo)
+# adjoint(jo)
 
 # isreal(jo)
 

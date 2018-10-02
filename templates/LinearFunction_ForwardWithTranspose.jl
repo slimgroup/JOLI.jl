@@ -22,7 +22,7 @@ a=rand(Complex{Float32},3,3)
 
 # define JOLI operator with desired domain and range using
 # using joLinearFunctionFwdT constructor
-# note forced dropping imaginary part for (c)transpose operators
+# note forced dropping imaginary part for transpose/adjoint operators
 A=joLinearFunctionFwdT(3,3,
     v->fwd(a,v,Complex{Float64}),v->fwdT(a,v,Float32),
     Float32,Complex{Float64};name="my_A")
@@ -36,9 +36,9 @@ println("forward: A")
 show(A); display(elements(A)); println()
 println("transpose: A.'")
 show(A.'); display(elements(A.')); println()
-println("ctranspose: A'")
+println("adjoint: A'")
 show(A'); display(elements(A')); println()
-println("conjugated transpose: conj(A)")
+println("conjugate: conj(A)")
 show(conj(A)); display(elements(conj(A))); println()
 
 # multiply by vector

@@ -267,7 +267,7 @@ joCurvelet2D(n1,n2 [;DDT=joFloat,RDT=DDT,
 
 **Notes**
 
-  * if DDT:<Real for complex transform then imaginary part will be neglected for transpose/ctranspose
+  * if DDT:<Real for complex transform then imaginary part will be neglected for transpose/adjoint
   * isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 
@@ -361,7 +361,7 @@ joDFT(m[,n[, ...]]
 
 **Notes**
 
-  * if DDT:<Real then imaginary part will be neglected for transpose/ctranspose
+  * if DDT:<Real then imaginary part will be neglected for transpose/adjoint
   * if you intend to use joDFT in remote* calls, you have to either set planned=false or create the operator on the worker
 
 
@@ -1998,7 +1998,7 @@ Look up argument names in help to joLooseMatrix type.
 
 **Notes**
 
-  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/conjugated-transpose operator
+  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/adjoint operator
   * if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 
@@ -2056,7 +2056,7 @@ Look up argument names in help to joLooseMatrixInplace type.
 
 **Notes**
 
-  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/conjugated-transpose operator
+  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/adjoint operator
   * if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 
@@ -2116,7 +2116,7 @@ Look up argument names in help to joMatrix type.
 
 **Notes**
 
-  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/conjugated-transpose operator
+  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/adjoint operator
   * if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 
@@ -2174,7 +2174,7 @@ Look up argument names in help to joMatrixInplace type.
 
 **Notes**
 
-  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/conjugated-transpose operator
+  * if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/adjoint operator
   * if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 
