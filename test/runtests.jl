@@ -1,5 +1,6 @@
 using Test
 using JOLI
+using LinearAlgebra
 using InplaceOps
 
 jo_type_mismatch_error_set(false)
