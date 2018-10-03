@@ -23,51 +23,51 @@ for t=1:T # start test loop
     @testset "$m x $n" begin
 
     @test norm(elements(joZeros(m,n))-zeros(m,n)) < joTol
-    @test norm(elements(joZeros(m,n).')-zeros(m,n).') < joTol
-    @test norm(elements(joZeros(m,n)')-zeros(m,n)') < joTol
+    @test norm(elements(transpose(joZeros(m,n)))-transpose(zeros(m,n))) < joTol
+    @test norm(elements(adjoint(joZeros(m,n)))-adjoint(zeros(m,n))) < joTol
     @test norm(elements(conj(joZeros(m,n)))-conj(zeros(m,n))) < joTol
 
     @test norm(elements(joOnes(m,n))-ones(m,n)) < joTol
-    @test norm(elements(joOnes(m,n).')-ones(m,n).') < joTol
-    @test norm(elements(joOnes(m,n)')-ones(m,n)') < joTol
+    @test norm(elements(transpose(joOnes(m,n)))-transpose(ones(m,n))) < joTol
+    @test norm(elements(adjoint(joOnes(m,n)))-adjoint(ones(m,n))) < joTol
     @test norm(elements(conj(joOnes(m,n)))-conj(ones(m,n))) < joTol
 
     @test norm(elements(joConstants(m,n,a))-(a*ones(m,n))) < joTol
-    @test norm(elements(joConstants(m,n,a).')-(a*ones(m,n)).') < joTol
-    @test norm(elements(joConstants(m,n,a)')-(a*ones(m,n))') < joTol
+    @test norm(elements(transpose(joConstants(m,n,a)))-transpose(a*ones(m,n))) < joTol
+    @test norm(elements(adjoint(joConstants(m,n,a)))-adjoint(a*ones(m,n))) < joTol
     @test norm(elements(conj(joConstants(m,n,a)))-(conj(a*ones(m,n)))) < joTol
 
     @test norm(elements(joDirac(m))-eye(m)) < joTol
-    @test norm(elements(joDirac(m).')-eye(m).') < joTol
-    @test norm(elements(joDirac(m)')-eye(m)') < joTol
+    @test norm(elements(transpose(joDirac(m)))-transpose(eye(m))) < joTol
+    @test norm(elements(adjoint(joDirac(m)))-adjoint(eye(m))) < joTol
     @test norm(elements(conj(joDirac(m)))-conj(eye(m))) < joTol
 
     @test norm(elements(joEye(m,n))-eye(m,n)) < joTol
-    @test norm(elements(joEye(m,n).')-eye(m,n).') < joTol
-    @test norm(elements(joEye(m,n)')-eye(m,n)') < joTol
+    @test norm(elements(transpose(joEye(m,n)))-transpose(eye(m,n))) < joTol
+    @test norm(elements(adjoint(joEye(m,n)))-adjoint(eye(m,n))) < joTol
     @test norm(elements(conj(joEye(m,n)))-conj(eye(m,n))) < joTol
 
     @test norm(elements(joDiag(v))-diagm(v)) < joTol
-    @test norm(elements(joDiag(v).')-diagm(v).') < joTol
-    @test norm(elements(joDiag(v)')-diagm(v)') < joTol
+    @test norm(elements(transpose(joDiag(v)))-transpose(diagm(v))) < joTol
+    @test norm(elements(adjoint(joDiag(v)))-adjoint(diagm(v))) < joTol
     @test norm(elements(conj(joDiag(v)))-conj(diagm(v))) < joTol
 
     #joVecConvert.jl
     if t%2==0
 
         @test norm(joReal(n)*v-real(v)) < joTol
-        @test norm(joReal(n).'*real(v)-complex.(real(v))) < joTol
-        @test norm(joReal(n)'*real(v)-complex.(real(v))) < joTol
+        @test norm(transpose(joReal(n))*real(v)-complex.(real(v))) < joTol
+        @test norm(adjoint(joReal(n))*real(v)-complex.(real(v))) < joTol
         @test norm(conj(joReal(n))*v-real(v)) < joTol
 
         @test norm(joImag(n)*v-imag(v)) < joTol
-        @test norm(joImag(n).'*imag(v)-complex.(0.,imag(v))) < joTol
-        @test norm(joImag(n)'*imag(v)-complex.(0.,-imag(v))) < joTol
+        @test norm(transpose(joImag(n))*imag(v)-complex.(0.,imag(v))) < joTol
+        @test norm(adjoint(joImag(n))*imag(v)-complex.(0.,-imag(v))) < joTol
         @test norm(conj(joImag(n))*v-imag(-v)) < joTol
 
         @test norm(joConj(n)*v-conj(v)) < joTol
-        @test norm(joConj(n).'*v-conj(v)) < joTol
-        @test norm(joConj(n)'*v-conj(v)) < joTol
+        @test norm(transpose(joConj(n))*v-conj(v)) < joTol
+        @test norm(adjoint(joConj(n))*v-conj(v)) < joTol
         @test norm(conj(joConj(n))*v-conj(v)) < joTol
 
     end

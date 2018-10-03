@@ -15,14 +15,14 @@ for t=1:T # start test loop
         @test islinear(joDCT(m))[1]
         @test norm(A1*v1-dct(v1))<joTol
         @test norm(A1\v1-idct(v1))<joTol
-        @test norm(A1'*v1-idct(v1))<joTol
-        @test norm((A1'*A1)*v1-v1)<joTol
+        @test norm(adjoint(A1)*v1-idct(v1))<joTol
+        @test norm((adjoint(A1)*A1)*v1-v1)<joTol
         @test isadjoint(joDCT(m,m))[1]
         @test islinear(joDCT(m,m))[1]
         @test norm(A2*vv2-vec(dct(v2)))<joTol
         @test norm(A2\vv2-vec(idct(v2)))<joTol
-        @test norm(A2'*vv2-vec(idct(v2)))<joTol
-        @test norm((A2'*A2)*vv2-vv2)<joTol
+        @test norm(adjoint(A2)*vv2-vec(idct(v2)))<joTol
+        @test norm((adjoint(A2)*A2)*vv2-vv2)<joTol
     end
 
     A1=joDCT(m;planned=false)
@@ -33,14 +33,14 @@ for t=1:T # start test loop
         @test islinear(joDCT(m;planned=false))[1]
         @test norm(A1*v1-dct(v1))<joTol
         @test norm(A1\v1-idct(v1))<joTol
-        @test norm(A1'*v1-idct(v1))<joTol
-        @test norm((A1'*A1)*v1-v1)<joTol
+        @test norm(adjoint(A1)*v1-idct(v1))<joTol
+        @test norm((adjoint(A1)*A1)*v1-v1)<joTol
         @test isadjoint(joDCT(m,m;planned=false))[1]
         @test islinear(joDCT(m,m;planned=false))[1]
         @test norm(A2*vv2-vec(dct(v2)))<joTol
         @test norm(A2\vv2-vec(idct(v2)))<joTol
-        @test norm(A2'*vv2-vec(idct(v2)))<joTol
-        @test norm((A2'*A2)*vv2-vv2)<joTol
+        @test norm(adjoint(A2)*vv2-vec(idct(v2)))<joTol
+        @test norm((adjoint(A2)*A2)*vv2-vv2)<joTol
     end
     
 end # end test loop

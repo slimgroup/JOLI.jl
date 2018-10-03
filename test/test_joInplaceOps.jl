@@ -25,18 +25,18 @@ verbose && println("$tsname - Regular ($mn,$mn)")
     Y=zeros(DDT,mn)
     MY=zeros(DDT,mn,mn)
 
-    y=A.'*x
-    my=A.'*mx
-    @into! Y=A.'*x
+    y=transpose(A)*x
+    my=transpose(A)*mx
+    @into! Y=transpose(A)*x
     @test Y≈y
-    @into! MY=A.'*mx
+    @into! MY=transpose(A)*mx
     @test MY≈my
 
-    y=A'*x
-    my=A'*mx
-    @into! Y=A'*x
+    y=adjoint(A)*x
+    my=adjoint(A)*mx
+    @into! Y=adjoint(A)*x
     @test Y≈y
-    @into! MY=A'*mx
+    @into! MY=adjoint(A)*mx
     @test MY≈my
 
     x=rand(RDT,mn)
@@ -56,18 +56,18 @@ verbose && println("$tsname - Regular ($mn,$mn)")
     Y=zeros(RDT,mn)
     MY=zeros(RDT,mn,mn)
 
-    y=A.'\x
-    my=A.'\mx
-    @into! Y=A.'\x
+    y=transpose(A)\x
+    my=transpose(A)\mx
+    @into! Y=transpose(A)\x
     @test Y≈y
-    @into! MY=A.'\mx
+    @into! MY=transpose(A)\mx
     @test MY≈my
 
-    y=A'\x
-    my=A'\mx
-    @into! Y=A'\x
+    y=adjoint(A)\x
+    my=adjoint(A)\mx
+    @into! Y=adjoint(A)\x
     @test Y≈y
-    @into! MY=A'\mx
+    @into! MY=adjoint(A)\mx
     @test MY≈my
 end
 
@@ -96,18 +96,18 @@ verbose && println("$tsname - joMatrixInplace ($mn,$mn)")
     Y=zeros(DDT,mn)
     MY=zeros(DDT,mn,mn)
 
-    y=A.'*x
-    my=A.'*mx
-    @into! Y=AI.'*x
+    y=transpose(A)*x
+    my=transpose(A)*mx
+    @into! Y=transpose(AI)*x
     @test Y≈y
-    @into! MY=AI.'*mx
+    @into! MY=transpose(AI)*mx
     @test MY≈my
 
-    y=A'*x
-    my=A'*mx
-    @into! Y=AI'*x
+    y=adjoint(A)*x
+    my=adjoint(A)*mx
+    @into! Y=adjoint(AI)*x
     @test Y≈y
-    @into! MY=AI'*mx
+    @into! MY=adjoint(AI)*mx
     @test MY≈my
 
     x=rand(RDT,mn)
@@ -127,18 +127,18 @@ verbose && println("$tsname - joMatrixInplace ($mn,$mn)")
     Y=zeros(RDT,mn)
     MY=zeros(RDT,mn,mn)
 
-    y=A.'\x
-    my=A.'\mx
-    @into! Y=AI.'\x
+    y=transpose(A)\x
+    my=transpose(A)\mx
+    @into! Y=transpose(AI)\x
     @test Y≈y
-    @into! MY=AI.'\mx
+    @into! MY=transpose(AI)\mx
     @test MY≈my
 
-    y=A'\x
-    my=A'\mx
-    @into! Y=AI'\x
+    y=adjoint(A)\x
+    my=adjoint(A)\mx
+    @into! Y=adjoint(AI)\x
     @test Y≈y
-    @into! MY=AI'\mx
+    @into! MY=adjoint(AI)\mx
     @test MY≈my
 end
 
@@ -167,18 +167,18 @@ verbose && println("$tsname - joLooseMatrixInplace ($mn,$mn)")
     Y=zeros(DDT,mn)
     MY=zeros(DDT,mn,mn)
 
-    y=A.'*x
-    my=A.'*mx
-    @into! Y=AI.'*x
+    y=transpose(A)*x
+    my=transpose(A)*mx
+    @into! Y=transpose(AI)*x
     @test Y≈y
-    @into! MY=AI.'*mx
+    @into! MY=transpose(AI)*mx
     @test MY≈my
 
-    y=A'*x
-    my=A'*mx
-    @into! Y=AI'*x
+    y=adjoint(A)*x
+    my=adjoint(A)*mx
+    @into! Y=adjoint(AI)*x
     @test Y≈y
-    @into! MY=AI'*mx
+    @into! MY=adjoint(AI)*mx
     @test MY≈my
 
     x=rand(RDT,mn)
@@ -198,18 +198,18 @@ verbose && println("$tsname - joLooseMatrixInplace ($mn,$mn)")
     Y=zeros(RDT,mn)
     MY=zeros(RDT,mn,mn)
 
-    y=A.'\x
-    my=A.'\mx
-    @into! Y=AI.'\x
+    y=transpose(A)\x
+    my=transpose(A)\mx
+    @into! Y=transpose(AI)\x
     @test Y≈y
-    @into! MY=AI.'\mx
+    @into! MY=transpose(AI)\mx
     @test MY≈my
 
-    y=A'\x
-    my=A'\mx
-    @into! Y=AI'\x
+    y=adjoint(A)\x
+    my=adjoint(A)\mx
+    @into! Y=adjoint(AI)\x
     @test Y≈y
-    @into! MY=AI'\mx
+    @into! MY=adjoint(AI)\mx
     @test MY≈my
 end
 
@@ -246,18 +246,18 @@ verbose && println("$tsname - joLinearFunctionInplace ($mn,$mn)")
     Y=zeros(DDT,mn)
     MY=zeros(DDT,mn,mn)
 
-    y=A.'*x
-    my=A.'*mx
-    @into! Y=AI.'*x
+    y=transpose(A)*x
+    my=transpose(A)*mx
+    @into! Y=transpose(AI)*x
     @test Y≈y
-    @into! MY=AI.'*mx
+    @into! MY=transpose(AI)*mx
     @test MY≈my
 
-    y=A'*x
-    my=A'*mx
-    @into! Y=AI'*x
+    y=adjoint(A)*x
+    my=adjoint(A)*mx
+    @into! Y=adjoint(AI)*x
     @test Y≈y
-    @into! MY=AI'*mx
+    @into! MY=adjoint(AI)*mx
     @test MY≈my
 
     x=rand(RDT,mn)
@@ -277,18 +277,18 @@ verbose && println("$tsname - joLinearFunctionInplace ($mn,$mn)")
     Y=zeros(RDT,mn)
     MY=zeros(RDT,mn,mn)
 
-    y=A.'\x
-    my=A.'\mx
-    @into! Y=AI.'\x
+    y=transpose(A)\x
+    my=transpose(A)\mx
+    @into! Y=transpose(AI)\x
     @test Y≈y
-    @into! MY=AI.'\mx
+    @into! MY=transpose(AI)\mx
     @test MY≈my
 
-    y=A'\x
-    my=A'\mx
-    @into! Y=AI'\x
+    y=adjoint(A)\x
+    my=adjoint(A)\mx
+    @into! Y=adjoint(AI)\x
     @test Y≈y
-    @into! MY=AI'\mx
+    @into! MY=adjoint(AI)\mx
     @test MY≈my
 end
 
@@ -325,18 +325,18 @@ verbose && println("$tsname - joLooseLinearFunctionInplace ($mn,$mn)")
     Y=zeros(DDT,mn)
     MY=zeros(DDT,mn,mn)
 
-    y=A.'*x
-    my=A.'*mx
-    @into! Y=AI.'*x
+    y=transpose(A)*x
+    my=transpose(A)*mx
+    @into! Y=transpose(AI)*x
     @test Y≈y
-    @into! MY=AI.'*mx
+    @into! MY=transpose(AI)*mx
     @test MY≈my
 
-    y=A'*x
-    my=A'*mx
-    @into! Y=AI'*x
+    y=adjoint(A)*x
+    my=adjoint(A)*mx
+    @into! Y=adjoint(AI)*x
     @test Y≈y
-    @into! MY=AI'*mx
+    @into! MY=adjoint(AI)*mx
     @test MY≈my
 
     x=rand(RDT,mn)
@@ -356,18 +356,18 @@ verbose && println("$tsname - joLooseLinearFunctionInplace ($mn,$mn)")
     Y=zeros(RDT,mn)
     MY=zeros(RDT,mn,mn)
 
-    y=A.'\x
-    my=A.'\mx
-    @into! Y=AI.'\x
+    y=transpose(A)\x
+    my=transpose(A)\mx
+    @into! Y=transpose(AI)\x
     @test Y≈y
-    @into! MY=AI.'\mx
+    @into! MY=transpose(AI)\mx
     @test MY≈my
 
-    y=A'\x
-    my=A'\mx
-    @into! Y=AI'\x
+    y=adjoint(A)\x
+    my=adjoint(A)\mx
+    @into! Y=adjoint(AI)\x
     @test Y≈y
-    @into! MY=AI'\mx
+    @into! MY=adjoint(AI)\mx
     @test MY≈my
 end
 

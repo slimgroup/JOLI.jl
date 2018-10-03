@@ -28,8 +28,8 @@ else
 end
 A=joMatrix(a)
 B=joMatrix(b)
-c=a*b'
-C=A*B'
+c=a*adjoint(b)
+C=A*adjoint(B)
 
 verbose && println("$tsname $tname")
     @testset "$tname A*B" begin
@@ -47,31 +47,31 @@ verbose && println("$tsname $tname")
             @test vecnorm(C,i)-vecnorm(c,i)<joTol
         end
         @test vecnorm(C,Inf)-vecnorm(c,Inf)<joTol
-        @test norm(elements(C')-c')<joTol
-        @test norm(elements(C.')-c.')<joTol
+        @test norm(elements(adjoint(C))-adjoint(c))<joTol
+        @test norm(elements(transpose(C))-transpose(c))<joTol
         @test norm(elements(+C)-(+c))<joTol
         @test norm(elements(-C)-(-c))<joTol
         @test norm(C*vm-c*vm)<joTol
         @test norm(C*mvm-c*mvm)<joTol
-        @test norm(C'*vm-c'*vm)<joTol
-        @test norm(C'*mvm-c'*mvm)<joTol
-        @test norm(C.'*vm-c.'*vm)<joTol
-        @test norm(C.'*mvm-c.'*mvm)<joTol
-        @test norm((C.')'*vm-(c.')'*vm)<joTol
-        @test norm((C.')'*mvm-(c.')'*mvm)<joTol
-        @test norm((C').'*vm-(c').'*vm)<joTol
-        @test norm((C').'*mvm-(c').'*mvm)<joTol
-        @test norm(elements(C.'*C)-(c.'*c))<joTol
-        @test norm(elements(C*C.')-(c*c.'))<joTol
-        @test norm(elements(C'*C)-(c'*c))<joTol
-        @test norm(elements(C*C')-(c*c'))<joTol
+        @test norm(adjoint(C)*vm-adjoint(c)*vm)<joTol
+        @test norm(adjoint(C)*mvm-adjoint(c)*mvm)<joTol
+        @test norm(transpose(C)*vm-transpose(c)*vm)<joTol
+        @test norm(transpose(C)*mvm-transpose(c)*mvm)<joTol
+        @test norm(adjoint(transpose(C))*vm-adjoint(transpose(c))*vm)<joTol
+        @test norm(adjoint(transpose(C))*mvm-adjoint(transpose(c))*mvm)<joTol
+        @test norm(transpose(adjoint(C))*vm-transpose(adjoint(c))*vm)<joTol
+        @test norm(transpose(adjoint(C))*mvm-transpose(adjoint(c))*mvm)<joTol
+        @test norm(elements(transpose(C)*C)-(transpose(c)*c))<joTol
+        @test norm(elements(C*transpose(C))-(c*transpose(c)))<joTol
+        @test norm(elements(adjoint(C)*C)-(adjoint(c)*c))<joTol
+        @test norm(elements(C*adjoint(C))-(c*adjoint(c)))<joTol
         if (issquare(C) && m==n)
             @test norm(C\vm-c\vm)<joTol^(2/3)
             @test norm(C\mvm-c\mvm)<joTol^(2/3)
-            @test norm(C'\vm-c'\vm)<joTol^(2/3)
-            @test norm(C'\mvm-c'\mvm)<joTol^(2/3)
-            @test norm(C.'\vn-c.'\vn)<joTol^(2/3)
-            @test norm(C.'\mvn-c.'\mvn)<joTol^(2/3)
+            @test norm(adjoint(C)\vm-adjoint(c)\vm)<joTol^(2/3)
+            @test norm(adjoint(C)\mvm-adjoint(c)\mvm)<joTol^(2/3)
+            @test norm(transpose(C)\vn-transpose(c)\vn)<joTol^(2/3)
+            @test norm(transpose(C)\mvn-transpose(c)\mvn)<joTol^(2/3)
         end
     end
 

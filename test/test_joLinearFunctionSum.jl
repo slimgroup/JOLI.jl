@@ -17,8 +17,8 @@ if t%2==1
     mvn=rand(n,2)
     vm=rand(m)
     mvm=rand(m,2)
-    A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
-    B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm))
+    A=joLinearFunctionAll(m,n,v->a*v,v->transpose(a)*v,v->adjoint(a)*v,v->conj(a)*v,v->a\v,v->transpose(a)\v,v->adjoint(a)\v,v->conj(a)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
+    B=joLinearFunctionAll(m,n,v->b*v,v->transpose(b)*v,v->adjoint(b)*v,v->conj(b)*v,v->b\v,v->transpose(b)\v,v->adjoint(b)\v,v->conj(b)\v,eltype(vn),eltype(vm))
 else
     tname="loop $t for complex($m,$n)"
     a=rand(Complex{Float64},m,n)
@@ -27,8 +27,8 @@ else
     mvn=rand(Complex{Float64},n,2)
     vm=rand(Complex{Float64},m)
     mvm=rand(Complex{Float64},m,2)
-    A=joLinearFunctionAll(m,n,v->a*v,v->a.'*v,v->a'*v,v->conj(a)*v,v->a\v,v->a.'\v,v->a'\v,v->conj(a)\v,eltype(vn),eltype(vm))
-    B=joLinearFunctionAll(m,n,v->b*v,v->b.'*v,v->b'*v,v->conj(b)*v,v->b\v,v->b.'\v,v->b'\v,v->conj(b)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
+    A=joLinearFunctionAll(m,n,v->a*v,v->transpose(a)*v,v->adjoint(a)*v,v->conj(a)*v,v->a\v,v->transpose(a)\v,v->adjoint(a)\v,v->conj(a)\v,eltype(vn),eltype(vm))
+    B=joLinearFunctionAll(m,n,v->b*v,v->transpose(b)*v,v->adjoint(b)*v,v->conj(b)*v,v->b\v,v->transpose(b)\v,v->adjoint(b)\v,v->conj(b)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
 end
 c=a+b
 C=A+B
@@ -49,31 +49,31 @@ verbose && println("$tsname $tname")
             @test vecnorm(C,i)-vecnorm(c,i)<joTol
         end
         @test vecnorm(C,Inf)-vecnorm(c,Inf)<joTol
-        @test norm(elements(C')-c')<joTol
-        @test norm(elements(C.')-c.')<joTol
+        @test norm(elements(adjoint(C))-adjoint(c))<joTol
+        @test norm(elements(transpose(C))-transpose(c))<joTol
         @test norm(elements(+C)-(+c))<joTol
         @test norm(elements(-C)-(-c))<joTol
         @test norm(C*vn-c*vn)<joTol
         @test norm(C*mvn-c*mvn)<joTol
-        @test norm(C'*vm-c'*vm)<joTol
-        @test norm(C'*mvm-c'*mvm)<joTol
-        @test norm(C.'*vm-c.'*vm)<joTol
-        @test norm(C.'*mvm-c.'*mvm)<joTol
-        @test norm((C.')'*vn-(c.')'*vn)<joTol
-        @test norm((C.')'*mvn-(c.')'*mvn)<joTol
-        @test norm((C').'*vn-(c').'*vn)<joTol
-        @test norm((C').'*mvn-(c').'*mvn)<joTol
-        @test norm(elements(C.'*C)-(c.'*c))<joTol
-        @test norm(elements(C*C.')-(c*c.'))<joTol
-        @test norm(elements(C'*C)-(c'*c))<joTol
-        @test norm(elements(C*C')-(c*c'))<joTol
+        @test norm(adjoint(C)*vm-adjoint(c)*vm)<joTol
+        @test norm(adjoint(C)*mvm-adjoint(c)*mvm)<joTol
+        @test norm(transpose(C)*vm-transpose(c)*vm)<joTol
+        @test norm(transpose(C)*mvm-transpose(c)*mvm)<joTol
+        @test norm(adjoint(transpose(C))*vn-adjoint(transpose(c))*vn)<joTol
+        @test norm(adjoint(transpose(C))*mvn-adjoint(transpose(c))*mvn)<joTol
+        @test norm(transpose(adjoint(C))*vn-transpose(adjoint(c))*vn)<joTol
+        @test norm(transpose(adjoint(C))*mvn-transpose(adjoint(c))*mvn)<joTol
+        @test norm(elements(transpose(C)*C)-(transpose(c)*c))<joTol
+        @test norm(elements(C*transpose(C))-(c*transpose(c)))<joTol
+        @test norm(elements(adjoint(C)*C)-(adjoint(c)*c))<joTol
+        @test norm(elements(C*adjoint(C))-(c*adjoint(c)))<joTol
         if issquare(C)
             @test norm(C\vn-c\vn)<joTol
             @test norm(C\mvn-c\mvn)<joTol
-            @test norm(C'\vm-c'\vm)<joTol
-            @test norm(C'\mvm-c'\mvm)<joTol
-            @test norm(C.'\vm-c.'\vm)<joTol
-            @test norm(C.'\mvm-c.'\mvm)<joTol
+            @test norm(adjoint(C)\vm-adjoint(c)\vm)<joTol
+            @test norm(adjoint(C)\mvm-adjoint(c)\mvm)<joTol
+            @test norm(transpose(C)\vm-transpose(c)\vm)<joTol
+            @test norm(transpose(C)\mvm-transpose(c)\mvm)<joTol
         end
     end
 
