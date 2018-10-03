@@ -22,11 +22,11 @@ module joExtend_etc
     end
     ### border
     function border_fwd(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
-        w = [repmat([v[1]],pad_lower); v; repmat([v[end]],pad_upper)]
+        w = [repeat([v[1]],pad_lower); v; repeat([v[end]],pad_upper)]
         return jo_convert(rdt,w,false)
     end
     function border_fwd(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
-        w = [repmat(v[1:1,:],pad_lower,1); v; repmat(v[end:end,:],pad_upper,1)]
+        w = [repeat(v[1:1,:],pad_lower,1); v; repeat(v[end:end,:],pad_upper,1)]
         return jo_convert(rdt,w,false)
     end
     function border_tran(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}

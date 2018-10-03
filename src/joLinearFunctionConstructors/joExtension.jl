@@ -17,7 +17,7 @@ function apply_pad(v::Array{DDT,1},n::T,pad_type::EXT_TYPE,pad_upper::T,pad_lowe
         end
     elseif pad_type==pad_border
         if forw_mode
-            w = [repmat(v[1,:],pad_lower,1); v; repmat(v[end,:],pad_upper,1) ]
+            w = [repeat(v[1,:],pad_lower,1); v; repeat(v[end,:],pad_upper,1) ]
         else
             w = w[pad_lower+1:end-pad_upper,:]
             w[1,:] = w[1,:] + sum(v[1:pad_lower,:],1)
