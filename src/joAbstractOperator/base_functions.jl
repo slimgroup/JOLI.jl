@@ -34,9 +34,6 @@ full(A::joAbstractOperator) = jo_method_error(A,"full(jo) not implemented")
 # norm(jo)
 norm(A::joAbstractOperator,p) = jo_method_error(A,"norm(jo) not implemented")
 
-# vecnorm(jo)
-vecnorm(A::joAbstractOperator,p) = jo_method_error(A,"vecnorm(jo) not implemented")
-
 # real(jo)
 real(A::joAbstractOperator) = jo_method_error(A,"real(jo) not implemented")
 

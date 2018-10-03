@@ -32,10 +32,10 @@ function islinear(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.
         y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
         Axy=A*(x+y)
         AxAy=(A*x+A*y)
-        dif=vecnorm(Axy-AxAy); push!(DIF,dif)
-        rer=abs(dif/vecnorm(Axy)); push!(RER,rer)
-        rto=abs(vecnorm(AxAy)/vecnorm(Axy)); push!(RTO,rto)
-        mytol=(tol>0 ? tol : sqrt(max(eps(vecnorm(Axy)),eps(vecnorm(AxAy))))); push!(MYTOL,mytol)
+        dif=norm(Axy-AxAy); push!(DIF,dif)
+        rer=abs(dif/norm(Axy)); push!(RER,rer)
+        rto=abs(norm(AxAy)/norm(Axy)); push!(RTO,rto)
+        mytol=(tol>0 ? tol : sqrt(max(eps(norm(Axy)),eps(norm(AxAy))))); push!(MYTOL,mytol)
         test=(dif < mytol); push!(TEST,test); Test=Test&&test
         result = test ? "passed" : "failed"
         if verbose println("Linear test [$s] $result with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end

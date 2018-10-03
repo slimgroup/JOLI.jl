@@ -44,11 +44,11 @@ verbose && println("$tsname $tname")
             @test norm(A,i)==norm(a,i)
         end
         @test norm(A,Inf)==norm(a,Inf)
-        @test vecnorm(A)==vecnorm(a)
+        @test norm(A)==norm(a)
         for i=1:2
-            @test vecnorm(A,i)==vecnorm(a,i)
+            @test norm(A,i)==norm(a,i)
         end
-        @test vecnorm(A,Inf)==vecnorm(a,Inf)
+        @test norm(A,Inf)==norm(a,Inf)
         @test elements(adjoint(A))==adjoint(a)
         @test elements(transpose(A))==transpose(a)
         @test elements(conj(A))==conj(a)

@@ -42,9 +42,6 @@ full(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = A*eye(DDT,A.n)
 # norm(jo)
 norm(A::joAbstractLinearOperator,p::Real=2) = norm(elements(A),p)
 
-# vecnorm(jo)
-vecnorm(A::joAbstractLinearOperator,p::Real=2) = vecnorm(elements(A),p)
-
 # real(jo)
 #real{DDT<:Real,RDT<:Real}(A::joAbstractLinearOperator{DDT,RDT}) = A
 function real(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT}
@@ -71,11 +68,11 @@ isreal(A :: joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && R
 
 # issymmetric(jo)
 issymmetric(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} =
-    (A.m == A.n && (vecnorm(elements(A)-elements(transpose(A))) < joTol))
+    (A.m == A.n && (norm(elements(A)-elements(transpose(A))) < joTol))
 
 # ishermitian(jo)
 ishermitian(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} =
-    (A.m == A.n && (vecnorm(elements(A)-elements(adjoint(A))) < joTol))
+    (A.m == A.n && (norm(elements(A)-elements(adjoint(A))) < joTol))
 
 ############################################################
 ## overloaded Base *(...jo...)

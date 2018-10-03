@@ -23,8 +23,6 @@
 
 # norm(jo)
 
-# vecnorm(jo)
-
 # real(jo)
 
 # imag(jo)

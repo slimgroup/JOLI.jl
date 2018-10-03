@@ -48,11 +48,11 @@ verbose && println("$tsname $tname")
             @test norm(C,i)-norm(c,i)<joTol
         end
         @test norm(C,Inf)-norm(c,Inf)<joTol
-        @test vecnorm(C)-vecnorm(c)<joTol
+        @test norm(C)-norm(c)<joTol
         for i=1:2
-            @test vecnorm(C,i)-vecnorm(c,i)<joTol
+            @test norm(C,i)-norm(c,i)<joTol
         end
-        @test vecnorm(C,Inf)-vecnorm(c,Inf)<joTol
+        @test norm(C,Inf)-norm(c,Inf)<joTol
         @test norm(elements(adjoint(C))-adjoint(c))<joTol
         @test norm(elements(transpose(C))-transpose(c))<joTol
         @test norm(elements(+C)-(+c))<joTol

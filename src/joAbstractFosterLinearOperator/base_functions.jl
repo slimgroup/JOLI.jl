@@ -40,8 +40,6 @@ length(A::joAbstractFosterLinearOperator) = A.m*A.n
 
 # norm(jo)
 
-# vecnorm(jo)
-
 # real(jo)
 
 # imag(jo)

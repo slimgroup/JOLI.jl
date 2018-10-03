@@ -27,7 +27,7 @@ import Base.*, Base.\, Base.+, Base.-
 import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
-import LinearAlgebra.norm, LinearAlgebra.vecnorm
+import LinearAlgebra.norm
 import LinearAlgebra.issymmetric, LinearAlgebra.ishermitian
 import LinearAlgebra.A_mul_B!, LinearAlgebra.At_mul_B!, LinearAlgebra.Ac_mul_B!
 import LinearAlgebra.A_ldiv_B!, LinearAlgebra.At_ldiv_B!, LinearAlgebra.Ac_ldiv_B!
