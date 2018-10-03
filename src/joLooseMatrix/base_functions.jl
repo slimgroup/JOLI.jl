@@ -33,11 +33,11 @@
 conj(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{DDT,RDT}("conj("*A.name*")",A.m,A.n,
         A.fop_C,
-        A.fop_CT,
+        A.fop_A,
         A.fop_T,
         A.fop,
         A.iop_C,
-        A.iop_CT,
+        A.iop_A,
         A.iop_T,
         A.iop
         )
@@ -48,21 +48,21 @@ transpose(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
         A.fop_T,
         A.fop,
         A.fop_C,
-        A.fop_CT,
+        A.fop_A,
         A.iop_T,
         A.iop,
         A.iop_C,
-        A.iop_CT
+        A.iop_A
         )
 
 # adjoint(jo)
 adjoint(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        A.fop_CT,
+        A.fop_A,
         A.fop_C,
         A.fop,
         A.fop_T,
-        A.iop_CT,
+        A.iop_A,
         A.iop_C,
         A.iop,
         A.iop_T
@@ -163,11 +163,11 @@ end
     joLooseMatrix{DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-A.fop_T(v2),
-        v3->-A.fop_CT(v3),
+        v3->-A.fop_A(v3),
         v4->-A.fop_C(v4),
         v5->-get(A.iop)(v5),
         v6->-get(A.iop_T)(v6),
-        v7->-get(A.iop_CT)(v7),
+        v7->-get(A.iop_A)(v7),
         v8->-get(A.iop_C)(v8)
         )
 

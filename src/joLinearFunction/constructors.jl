@@ -10,8 +10,8 @@ export joLinearFunctionAll, joLinearFunctionT, joLinearFunctionCT,
 joLinearFunction outer constructor
 
     joLinearFunctionAll(m::Integer,n::Integer,
-        fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
-        iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
+        fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
+        iop::Function,iop_T::Function,iop_A::Function,iop_C::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
         name::String="joLinearFunctionAll")
@@ -23,14 +23,14 @@ Look up argument names in help to joLinearFunction type.
 
 """
 joLinearFunctionAll(m::Integer,n::Integer,
-    fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
-    iop::Function,iop_T::Function,iop_CT::Function,iop_C::Function,
+    fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
+    iop::Function,iop_T::Function,iop_A::Function,iop_C::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
     name::String="joLinearFunctionAll") =
         joLinearFunction{DDT,RDT}(name,m,n,
-            fop,fop_T,fop_CT,fop_C,fMVok,
-            iop,iop_T,iop_CT,iop_C,iMVok
+            fop,fop_T,fop_A,fop_C,fMVok,
+            iop,iop_T,iop_A,iop_C,iMVok
             )
 """
 joLinearFunction outer constructor
@@ -68,7 +68,7 @@ joLinearFunctionT(m::Integer,n::Integer,
 joLinearFunction outer constructor
 
     joLinearFunctionCT(m::Integer,n::Integer,
-        fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
+        fop::Function,fop_A::Function, iop::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
         name::String="joLinearFunctionCT")
@@ -80,19 +80,19 @@ Look up argument names in help to joLinearFunction type.
 
 """
 joLinearFunctionCT(m::Integer,n::Integer,
-    fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
+    fop::Function,fop_A::Function, iop::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
     name::String="joLinearFunctionCT") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
-            v2->conj(fop_CT(conj(v2))),
-            fop_CT,
+            v2->conj(fop_A(conj(v2))),
+            fop_A,
             v4->conj(fop(conj(v4))),
             fMVok,
             iop,
-            v6->conj(iop_CT(conj(v6))),
-            iop_CT,
+            v6->conj(iop_A(conj(v6))),
+            iop_A,
             v8->conj(iop(conj(v8))),
             iMVok
             )
@@ -100,7 +100,7 @@ joLinearFunctionCT(m::Integer,n::Integer,
 joLinearFunction outer constructor
 
     joLinearFunctionFwd(m::Integer,n::Integer,
-        fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+        fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
         name::String="joLinearFunctionFwd")
@@ -112,12 +112,12 @@ Look up argument names in help to joLinearFunction type.
 
 """
 joLinearFunctionFwd(m::Integer,n::Integer,
-    fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+    fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
     name::String="joLinearFunctionFwd") =
         joLinearFunction{DDT,RDT}(name,m,n,
-            fop,fop_T,fop_CT,fop_C,fMVok,
+            fop,fop_T,fop_A,fop_C,fMVok,
             @joNF, @joNF, @joNF, @joNF, false
             )
 """
@@ -152,7 +152,7 @@ joLinearFunctionFwdT(m::Integer,n::Integer,
 joLinearFunction outer constructor
 
     joLinearFunctionFwdCT(m::Integer,n::Integer,
-        fop::Function,fop_CT::Function,
+        fop::Function,fop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
         name::String="joLinearFunctionFwdCT")
@@ -164,14 +164,14 @@ Look up argument names in help to joLinearFunction type.
 
 """
 joLinearFunctionFwdCT(m::Integer,n::Integer,
-    fop::Function,fop_CT::Function,
+    fop::Function,fop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
     name::String="joLinearFunctionFwdCT") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
-            v2->conj(fop_CT(conj(v2))),
-            fop_CT,
+            v2->conj(fop_A(conj(v2))),
+            fop_A,
             v4->conj(fop(conj(v4))),
             fMVok,
             @joNF, @joNF, @joNF, @joNF, false

@@ -18,11 +18,11 @@ struct joLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT
     n::Integer
     fop::Function              # forward
     fop_T::Nullable{Function}  # transpose
-    fop_CT::Nullable{Function} # adjoint
+    fop_A::Nullable{Function}  # adjoint
     fop_C::Nullable{Function}  # conj
     iop::Nullable{Function}
     iop_T::Nullable{Function}
-    iop_CT::Nullable{Function}
+    iop_A::Nullable{Function}
     iop_C::Nullable{Function}
 end
 

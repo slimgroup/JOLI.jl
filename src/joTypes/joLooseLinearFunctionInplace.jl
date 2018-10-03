@@ -18,10 +18,10 @@ joLooseLinearFunctionInplace type
 - n::Integer : # of columns
 - fop::Function : forward function
 - fop_T::Nullable{Function} : transpose function
-- fop_CT::Nullable{Function} : adjoint function
+- fop_A::Nullable{Function} : adjoint function
 - iop::Nullable{Function} : inverse for fop
 - iop_T::Nullable{Function} : inverse for fop_T
-- iop_CT::Nullable{Function} : inverse for fop_CT
+- iop_A::Nullable{Function} : inverse for fop_A
 
 """
 struct joLooseLinearFunctionInplace{DDT<:Number,RDT<:Number} <: joAbstractLinearOperatorInplace{DDT,RDT}
@@ -30,10 +30,10 @@ struct joLooseLinearFunctionInplace{DDT<:Number,RDT<:Number} <: joAbstractLinear
     n::Integer
     fop::Function              # forward
     fop_T::Nullable{Function}  # transpose
-    fop_CT::Nullable{Function} # adjoint
+    fop_A::Nullable{Function}  # adjoint
     iop::Nullable{Function}
     iop_T::Nullable{Function}
-    iop_CT::Nullable{Function}
+    iop_A::Nullable{Function}
 end
 
 # type exceptions

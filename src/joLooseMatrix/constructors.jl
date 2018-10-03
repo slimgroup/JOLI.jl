@@ -39,10 +39,10 @@ joLoosen(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{DDT,RDT}("joLoosen("*A.name*")",A.m,A.n,
         v1->A.fop(v1),
         v2->A.fop_T(v2),
-        v3->A.fop_CT(v3),
+        v3->A.fop_A(v3),
         v4->A.fop_C(v4),
         v5->get(A.iop)(v5),
         v6->get(A.iop_T)(v6),
-        v7->get(A.iop_CT)(v7),
+        v7->get(A.iop_A)(v7),
         v8->get(A.iop_C)(v8)
         )

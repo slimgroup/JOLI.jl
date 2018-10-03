@@ -64,23 +64,23 @@ function joStack(ops::joAbstractLinearOperator...;
     weighted=(length(ws)==l)
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
+    fops_A=Vector{joAbstractLinearOperator}(0)
     fops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
             push!(fops_T,ws[i]*transpose(ops[i]))
-            push!(fops_CT,conj(ws[i])*adjoint(ops[i]))
+            push!(fops_A,conj(ws[i])*adjoint(ops[i]))
             push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
             push!(fops_T,transpose(ops[i]))
-            push!(fops_CT,adjoint(ops[i]))
+            push!(fops_A,adjoint(ops[i]))
             push!(fops_C,conj(ops[i]))
         end
     end
     return joCoreBlock{deltype(fops[1]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
+                      fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 """
 Stack operator composed from l-times replicated square JOLI operator
@@ -121,22 +121,22 @@ function joStack(l::Integer,op::joAbstractLinearOperator;
     weighted=(length(weights)==l)
     fops=Vector{joAbstractLinearOperator}(0)
     fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
+    fops_A=Vector{joAbstractLinearOperator}(0)
     fops_C=Vector{joAbstractLinearOperator}(0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*op)
             push!(fops_T,ws[i]*transpose(op))
-            push!(fops_CT,conj(ws[i])*adjoint(op))
+            push!(fops_A,conj(ws[i])*adjoint(op))
             push!(fops_C,conj(ws[i])*conj(op))
         else
             push!(fops,op)
             push!(fops_T,transpose(op))
-            push!(fops_CT,adjoint(op))
+            push!(fops_A,adjoint(op))
             push!(fops_C,conj(op))
         end
     end
     return joCoreBlock{deltype(op),reltype(op)}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
+                      fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 

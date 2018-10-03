@@ -33,12 +33,12 @@
 conj(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{DDT,RDT}("conj("*A.name*")",A.m,A.n,
         get(A.fop_C),
-        A.fop_CT,
+        A.fop_A,
         A.fop_T,
         A.fop,
         A.fMVok,
         A.iop_C,
-        A.iop_CT,
+        A.iop_A,
         A.iop_T,
         A.iop,
         A.iMVok
@@ -50,24 +50,24 @@ transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
         get(A.fop_T),
         A.fop,
         A.fop_C,
-        A.fop_CT,
+        A.fop_A,
         A.fMVok,
         A.iop_T,
         A.iop,
         A.iop_C,
-        A.iop_CT,
+        A.iop_A,
         A.iMVok
         )
 
 # adjoint(jo)
 adjoint(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        get(A.fop_CT),
+        get(A.fop_A),
         A.fop_C,
         A.fop,
         A.fop_T,
         A.fMVok,
-        A.iop_CT,
+        A.iop_A,
         A.iop_C,
         A.iop,
         A.iop_T,
@@ -221,12 +221,12 @@ end
     joLinearFunction{DDT,RDT}("(-"*A.name*")",A.m,A.n,
         v1->-A.fop(v1),
         v2->-get(A.fop_T)(v2),
-        v3->-get(A.fop_CT)(v3),
+        v3->-get(A.fop_A)(v3),
         v4->-get(A.fop_C)(v4),
         A.fMVok,
         v5->-get(A.iop)(v5),
         v6->-get(A.iop_T)(v6),
-        v7->-get(A.iop_CT)(v7),
+        v7->-get(A.iop_A)(v7),
         v8->-get(A.iop_C)(v8),
         A.iMVok
         )

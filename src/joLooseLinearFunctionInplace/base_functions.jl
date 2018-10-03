@@ -171,14 +171,14 @@ end
 function Ac_mul_B!(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     A.m == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
-    get(A.fop_CT)(y,x)
+    get(A.fop_A)(y,x)
     return nothing
 end
 function Ac_mul_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
-    get(A.fop_CT)(y,x)
+    get(A.fop_A)(y,x)
     return nothing
 end
 
@@ -221,7 +221,7 @@ function Ac_ldiv_B!(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,R
     hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
-    get(A.iop_CT)(y,x)
+    get(A.iop_A)(y,x)
     return nothing
 end
 function Ac_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
@@ -229,7 +229,7 @@ function Ac_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,R
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
-    get(A.iop_CT)(y,x)
+    get(A.iop_A)(y,x)
     return nothing
 end
 

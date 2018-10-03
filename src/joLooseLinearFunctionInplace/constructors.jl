@@ -9,8 +9,8 @@ export joLooseLinearFunctionInplaceAll, joLooseLinearFunctionInplaceT, joLooseLi
 joLooseLinearFunctionInplace outer constructor
 
     joLooseLinearFunctionInplaceAll(m::Integer,n::Integer,
-        fop::Function,fop_T::Function,fop_CT::Function,
-        iop::Function,iop_T::Function,iop_CT::Function,
+        fop::Function,fop_T::Function,fop_A::Function,
+        iop::Function,iop_T::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLooseLinearFunctionInplaceAll")
 
@@ -21,13 +21,13 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 
 """
 joLooseLinearFunctionInplaceAll(m::Integer,n::Integer,
-    fop::Function,fop_T::Function,fop_CT::Function,
-    iop::Function,iop_T::Function,iop_CT::Function,
+    fop::Function,fop_T::Function,fop_A::Function,
+    iop::Function,iop_T::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     name::String="joLooseLinearFunctionInplaceAll") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
-            fop,fop_T,fop_CT,
-            iop,iop_T,iop_CT
+            fop,fop_T,fop_A,
+            iop,iop_T,iop_A
             )
 """
 joLooseLinearFunctionInplace outer constructor
@@ -59,7 +59,7 @@ joLooseLinearFunctionInplaceT(m::Integer,n::Integer,
 joLooseLinearFunctionInplace outer constructor
 
     joLooseLinearFunctionInplaceCT(m::Integer,n::Integer,
-        fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
+        fop::Function,fop_A::Function, iop::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLooseLinearFunctionInplaceCT")
 
@@ -70,22 +70,22 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 
 """
 joLooseLinearFunctionInplaceCT(m::Integer,n::Integer,
-    fop::Function,fop_CT::Function, iop::Function,iop_CT::Function,
+    fop::Function,fop_A::Function, iop::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     name::String="joLooseLinearFunctionInplaceCT") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop,
             @joNF,
-            fop_CT,
+            fop_A,
             iop,
             @joNF,
-            iop_CT
+            iop_A
             )
 """
 joLooseLinearFunctionInplace outer constructor
 
     joLooseLinearFunctionInplaceFwd(m::Integer,n::Integer,
-        fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+        fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLooseLinearFunctionInplaceAll")
 
@@ -96,11 +96,11 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 
 """
 joLooseLinearFunctionInplaceFwd(m::Integer,n::Integer,
-    fop::Function,fop_T::Function,fop_CT::Function,fop_C::Function,
+    fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
     DDT::DataType,RDT::DataType=DDT;
     name::String="joLooseLinearFunctionInplaceAll") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
-            fop,fop_T,fop_CT,
+            fop,fop_T,fop_A,
             @joNF, @joNF, @joNF
             )
 """
@@ -131,7 +131,7 @@ joLooseLinearFunctionInplaceFwdT(m::Integer,n::Integer,
 joLooseLinearFunctionInplace outer constructor
 
     joLooseLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
-        fop::Function,fop_CT::Function,
+        fop::Function,fop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         name::String="joLooseLinearFunctionInplaceFwdCT")
 
@@ -142,13 +142,13 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 
 """
 joLooseLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
-    fop::Function,fop_CT::Function,
+    fop::Function,fop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     name::String="joLooseLinearFunctionInplaceFwdCT") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop,
             @joNF,
-            fop_CT,
+            fop_A,
             @joNF, @joNF, @joNF
             )
 

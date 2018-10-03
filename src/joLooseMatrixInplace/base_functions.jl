@@ -171,14 +171,14 @@ end
 function Ac_mul_B!(y::AbstractVector{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     A.m == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
-    A.fop_CT(y,x)
+    A.fop_A(y,x)
     return nothing
 end
 function Ac_mul_B!(y::AbstractMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     size(y,2) == size(x,2) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.m == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
-    A.fop_CT(y,x)
+    A.fop_A(y,x)
     return nothing
 end
 
@@ -216,14 +216,14 @@ end
 function Ac_ldiv_B!(y::AbstractVector{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     A.n == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
-    get(A.iop_CT)(y,x)
+    get(A.iop_A)(y,x)
     return nothing
 end
 function Ac_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     size(y,2) == size(x,2) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
-    get(A.iop_CT)(y,x)
+    get(A.iop_A)(y,x)
     return nothing
 end
 

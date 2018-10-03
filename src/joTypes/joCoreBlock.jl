@@ -17,11 +17,11 @@ struct joCoreBlock{DDT,RDT} <: joAbstractLinearOperator{DDT,RDT}
     ws::Vector{Number}
     fop::Vector{joAbstractLinearOperator}
     fop_T::Vector{joAbstractLinearOperator}
-    fop_CT::Vector{joAbstractLinearOperator}
+    fop_A::Vector{joAbstractLinearOperator}
     fop_C::Vector{joAbstractLinearOperator}
     iop::Nullable{Function}
     iop_T::Nullable{Function}
-    iop_CT::Nullable{Function}
+    iop_A::Nullable{Function}
     iop_C::Nullable{Function}
 end
 
