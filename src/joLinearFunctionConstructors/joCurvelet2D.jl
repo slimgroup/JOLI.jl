@@ -4,7 +4,7 @@
 module joCurvelet2D_etc
     using JOLI: jo_convert
     function apply_fdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        C=Vector{Cdouble}(m)
+        C=Vector{Cdouble}(undef,m)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
         X=jo_convert(Cdouble,v,false)
         ccall((:jl_fdct_wrapping_real,:libdfdct_wrapping),Nothing,
@@ -14,7 +14,7 @@ module joCurvelet2D_etc
         return C
     end
     function apply_ifdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        X=Vector{Cdouble}(n1*n2)
+        X=Vector{Cdouble}(undef,n1*n2)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
         C=jo_convert(Cdouble,v,false)
         ccall((:jl_ifdct_wrapping_real,:libdfdct_wrapping),Nothing,
@@ -24,7 +24,7 @@ module joCurvelet2D_etc
         return X
     end
     function apply_fdct2Dwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        C=Vector{Complex{Cdouble}}(m)
+        C=Vector{Complex{Cdouble}}(undef,m)
         X=jo_convert(Complex{Cdouble},v,false)
         ccall((:jl_fdct_wrapping_cpx,:libdfdct_wrapping),Nothing,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
@@ -33,7 +33,7 @@ module joCurvelet2D_etc
         return C
     end
     function apply_ifdct2Dwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        X=Vector{Complex{Cdouble}}(n1*n2)
+        X=Vector{Complex{Cdouble}}(undef,n1*n2)
         C=jo_convert(Complex{Cdouble},v,false)
         ccall((:jl_ifdct_wrapping_cpx,:libdfdct_wrapping),Nothing,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
@@ -112,7 +112,7 @@ function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataTyp
     end
     cfmap_size=ccall((:jl_fdct_sizes_map_size,:libdfdct_wrapping),Cint,
         (Cint,Cint,Cint),nbs,nbac,all_crvlts)
-    cfmap=Vector{Cint}(cfmap_size)
+    cfmap=Vector{Cint}(undef,cfmap_size)
     m=Ref{Csize_t}(0)
     ccall((:jl_fdct_sizes,:libdfdct_wrapping),Nothing,
         (Cint,Cint,Cint,Cint,Cint,Ptr{Array{Cint}},Ref{Csize_t}),

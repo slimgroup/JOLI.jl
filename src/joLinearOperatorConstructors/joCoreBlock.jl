@@ -91,10 +91,10 @@ function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
     m+=ME
     n+=NE
     weighted=(length(ws)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
@@ -183,10 +183,10 @@ end
 
 # -(jo)
 function -(A::joCoreBlock{DDT,RDT}) where {DDT,RDT}
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:A.l
         push!(fops,-A.fop[i])
         push!(fops_T,-A.fop_T[i])

@@ -32,10 +32,10 @@ function joKron(ops::joAbstractLinearOperator...)
     end
     ms=zeros(Int,l)
     ns=zeros(Int,l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         ms[i]=ops[i].m
         ns[i]=ops[i].n
@@ -124,7 +124,7 @@ end
 # *(jo,mvec)
 function *(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT}) where {ADDT,ARDT}
     size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    MV=Matrix{ARDT}(A.m,size(mv,2))
+    MV=Matrix{ARDT}(undef,A.m,size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A*mv[:,i]
     end
@@ -133,10 +133,10 @@ end
 
 # -(jo)
 function -(A::joKron{DDT,RDT}) where {DDT,RDT}
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:A.l
         push!(fops,-A.fop[i])
         push!(fops_T,-A.fop_T[i])

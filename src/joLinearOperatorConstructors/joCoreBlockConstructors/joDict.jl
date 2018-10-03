@@ -64,10 +64,10 @@ function joDict(ops::joAbstractLinearOperator...;
     m=ops[1].m
     n=sum(ns)
     weighted=(length(ws)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
@@ -123,10 +123,10 @@ function joDict(l::Integer,op::joAbstractLinearOperator;
     m=op.m
     n=l*op.n
     weighted=(length(weights)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*op)

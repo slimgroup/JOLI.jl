@@ -8,14 +8,14 @@ module joDAdistributor_etc
         vpart=collect(parts)
         nlabs=length(vpart)
         @assert sum(vpart)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
-        idxs = Vector{Int}(nlabs+1)
+        idxs = Vector{Int}(undef,nlabs+1)
         for i=0:nlabs idxs[i+1]=sum(vpart[1:i])+1 end
         return idxs
     end
     function balanced_partition(nlabs::Integer,dsize::Integer)
         if dsize>=nlabs
-            part = Vector{Int}(nlabs)
-            idxs = Vector{Int}(nlabs+1)
+            part = Vector{Int}(undef,nlabs)
+            idxs = Vector{Int}(undef,nlabs+1)
             r::Int = rem(dsize,nlabs)
             c::Int = ceil(Int,dsize/nlabs)
             f::Int = floor(Int,dsize/nlabs)

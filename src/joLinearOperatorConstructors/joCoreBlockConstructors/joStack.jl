@@ -62,10 +62,10 @@ function joStack(ops::joAbstractLinearOperator...;
     m=sum(ms)
     n=ops[1].n
     weighted=(length(ws)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
@@ -119,10 +119,10 @@ function joStack(l::Integer,op::joAbstractLinearOperator;
     m=l*op.m
     n=op.n
     weighted=(length(weights)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*op)

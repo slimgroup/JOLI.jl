@@ -92,10 +92,10 @@ function joBlock(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
     m=sum(rm)
     n=rn[1]
     weighted=(length(ws)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_A=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])

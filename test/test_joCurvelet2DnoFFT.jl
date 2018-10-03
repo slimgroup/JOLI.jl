@@ -1,8 +1,8 @@
 T=0
 try
-    h=Base.Libdl.dlopen(:libdfdct_wrapping)
-    T=3
-    Base.Libdl.dlclose(h)
+    h=dlopen(:libdfdct_wrapping)
+    global T=3
+    dlclose(h)
 catch
     warn("Skipping joCurvelet2DnoFFT tests - libdfdct_wrapping not found")
 end

@@ -3,6 +3,7 @@ using JOLI
 using LinearAlgebra
 using SparseArrays
 using InplaceOps
+using Libdl
 using FFTW
 
 jo_type_mismatch_error_set(false)

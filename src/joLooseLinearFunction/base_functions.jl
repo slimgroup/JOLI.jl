@@ -89,7 +89,7 @@ function *(A::joLooseLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {
     if A.fMVok
         MV=A.fop(mv)
     else
-        MV=Matrix{ARDT}(A.m,size(mv,2))
+        MV=Matrix{ARDT}(undef,A.m,size(mv,2))
         for i=1:size(mv,2)
             V=A.fop(mv[:,i])
             MV[:,i]=V
@@ -125,26 +125,26 @@ function \(A::joLooseLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {
         if A.iMVok
             MV = get(A.iop)(mv)
         else
-            MV=Matrix{ADDT}(A.n,size(mv,2))
+            MV=Matrix{ADDT}(undef,A.n,size(mv,2))
             for i=1:size(mv,2)
                 V=get(A.iop)(mv[:,i])
                 MV[:,i]=V
             end
         end
     elseif issquare(A)
-        MV=Matrix{ADDT}(A.n,size(mv,2))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4square(A,mv[:,i]))
             MV[:,i]=V
         end
     elseif (istall(A) && !isnull(jo_iterative_solver4tall))
-        MV=Matrix{ADDT}(A.n,size(mv,2))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4tall(A,mv[:,i]))
             MV[:,i]=V
         end
     elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
-        MV=Matrix{ADDT}(A.n,size(mv,2))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
         for i=1:size(mv,2)
             V=jo_convert(ADDT,jo_iterative_solver4wide(A,mv[:,i]))
             MV[:,i]=V

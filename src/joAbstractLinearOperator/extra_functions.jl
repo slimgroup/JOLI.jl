@@ -22,11 +22,11 @@ iscomplex(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !(DDT<:Real &&
 # islinear(jo)
 function islinear(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,verbose::Bool=false) where {DDT,RDT}
     Test=true
-    TEST=Array{Bool,1}(0)
-    MYTOL=Array{Float64,1}(0)
-    DIF=Array{Float64,1}(0)
-    RER=Array{Float64,1}(0)
-    RTO=Array{Float64,1}(0)
+    TEST=Array{Bool,1}(undef,0)
+    MYTOL=Array{Float64,1}(undef,0)
+    DIF=Array{Float64,1}(undef,0)
+    RER=Array{Float64,1}(undef,0)
+    RTO=Array{Float64,1}(undef,0)
     for s=1:samples
         x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
         y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
@@ -46,11 +46,11 @@ end
 # isadjoint(jo)
 function isadjoint(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false) where {DDT,RDT}
     Test=true
-    TEST=Array{Bool,1}(0)
-    MYTOL=Array{Float64,1}(0)
-    DIF=Array{Float64,1}(0)
-    RER=Array{Float64,1}(0)
-    RTO=Array{Float64,1}(0)
+    TEST=Array{Bool,1}(undef,0)
+    MYTOL=Array{Float64,1}(undef,0)
+    DIF=Array{Float64,1}(undef,0)
+    RER=Array{Float64,1}(undef,0)
+    RTO=Array{Float64,1}(undef,0)
     for s=1:samples
         if userange
             x= RDT<:Real ? jo_convert(RDT,randn(A.m)) : jo_convert(RDT,complex.(randn(A.m),randn(A.m)))
