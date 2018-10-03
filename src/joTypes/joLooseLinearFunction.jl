@@ -18,7 +18,7 @@ joLooseLinearFunction type
 - n::Integer : # of columns
 - fop::Function : forward function
 - fop_T::Nullable{Function} : transpose function
-- fop_CT::Nullable{Function} : conj transpose function
+- fop_CT::Nullable{Function} : adjoint function
 - fop_C::Nullable{Function} : conj function
 - fMVok : whether fops are rady to handle mvec
 - iop::Nullable{Function} : inverse for fop
@@ -34,7 +34,7 @@ struct joLooseLinearFunction{DDT<:Number,RDT<:Number} <: joAbstractFosterLinearO
     n::Integer
     fop::Function              # forward
     fop_T::Nullable{Function}  # transpose
-    fop_CT::Nullable{Function} # conj transpose
+    fop_CT::Nullable{Function} # adjoint
     fop_C::Nullable{Function}  # conj
     fMVok::Bool                # forward can do mvec
     iop::Nullable{Function}

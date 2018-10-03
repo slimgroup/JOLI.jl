@@ -18,7 +18,7 @@ joLinearFunctionInplace type
 - n::Integer : # of columns
 - fop::Function : forward function
 - fop_T::Nullable{Function} : transpose function
-- fop_CT::Nullable{Function} : conj transpose function
+- fop_CT::Nullable{Function} : adjoint function
 - iop::Nullable{Function} : inverse for fop
 - iop_T::Nullable{Function} : inverse for fop_T
 - iop_CT::Nullable{Function} : inverse for fop_CT
@@ -30,7 +30,7 @@ struct joLinearFunctionInplace{DDT<:Number,RDT<:Number} <: joAbstractLinearOpera
     n::Integer
     fop::Function              # forward
     fop_T::Nullable{Function}  # transpose
-    fop_CT::Nullable{Function} # conj transpose
+    fop_CT::Nullable{Function} # adjoint
     iop::Nullable{Function}
     iop_T::Nullable{Function}
     iop_CT::Nullable{Function}

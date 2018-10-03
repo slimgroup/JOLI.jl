@@ -18,7 +18,7 @@ joMatrix type
 - n::Integer : # of columns
 - fop::Function : forward matrix
 - fop_T::Function : transpose matrix
-- fop_CT::Function : conj transpose matrix
+- fop_CT::Function : adjoint matrix
 - fop_C::Function : conj matrix
 - iop::Nullable{Function} : inverse for fop
 - iop_T::Nullable{Function} : inverse for fop_T
@@ -32,7 +32,7 @@ struct joMatrix{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     n::Integer
     fop::Function    # forward
     fop_T::Function  # transpose
-    fop_CT::Function # conj transpose
+    fop_CT::Function # adjoint
     fop_C::Function  # conj
     iop::Nullable{Function}
     iop_T::Nullable{Function}
