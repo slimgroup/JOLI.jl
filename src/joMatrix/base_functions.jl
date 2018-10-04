@@ -19,7 +19,7 @@
 
 # length(jo)
 
-# full(jo)
+# jo_full(jo)
 
 # norm(jo)
 

@@ -8,6 +8,35 @@ end
 
 
 ############################################################
+## jo_eye/speye/full #######################################
+export jo_eye, jo_speye, jo_full
+"""
+return identity array
+
+    jo_eye(m::Integer,n::Integer=m)
+    jo_eye(DT::DataType,m::Integer,n::Integer=m)
+
+"""
+@inline jo_eye(m::Integer,n::Integer=m) = Matrix{Float64}(LinearAlgebra.I,m,n)
+@inline jo_eye(DT::DataType,m::Integer,n::Integer=m) = Matrix{DT}(LinearAlgebra.I,m,n)
+"""
+return sparse identity array
+
+    jo_speye(m::Integer,n::Integer=m)
+    jo_speye(DT::DataType,m::Integer,n::Integer=m)
+
+"""
+@inline jo_speye(m::Integer,n::Integer=m) = sparse(one(Float64)*LinearAlgebra.I,m,n)
+@inline jo_speye(DT::DataType,m::Integer,n::Integer=m) = sparse(one(DT)*LinearAlgebra.I,m,n)
+"""
+return full array
+
+    jo_full(A::AbstractArray)
+
+"""
+@inline jo_full(A::AbstractArray) = Array(A)
+
+############################################################
 ## jo_method_error #########################################
 function jo_method_error(O::joAbstractOperator,s::String)
     t=typeof(O)

@@ -2,7 +2,7 @@
 ## joMatrix - extra functions
 
 # elements(jo)
-elements(A::joMatrix{DDT,RDT}) where {DDT,RDT} = A*speye(DDT,A.n)
+elements(A::joMatrix{DDT,RDT}) where {DDT,RDT} = A*jo_speye(DDT,A.n)
 
 # hasinverse(jo)
 

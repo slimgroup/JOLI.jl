@@ -36,7 +36,7 @@ end
 # length(jo)
 length(A::joAbstractFosterLinearOperator) = A.m*A.n
 
-# full(jo)
+# jo_full(jo)
 
 # norm(jo)
 

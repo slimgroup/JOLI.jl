@@ -2,7 +2,7 @@
 ## joAbstractLinearOperator - extra functions
 
 # elements(jo)
-elements(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = A*eye(DDT,A.n)
+elements(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = A*jo_eye(DDT,A.n)
 
 # hasinverse(jo)
 hasinverse(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !isnull(A.iop)

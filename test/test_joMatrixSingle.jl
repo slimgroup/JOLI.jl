@@ -37,7 +37,7 @@ verbose && println("$tsname $tname")
     @testset "$tname A" begin
         @test size(A)==size(a)
         @test length(A)==length(a)
-        @test full(A)==a
+        @test jo_full(A)==a
         @test elements(A)==a
         @test norm(A)==norm(a)
         for i=1:2

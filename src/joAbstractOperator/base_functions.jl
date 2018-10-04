@@ -28,8 +28,8 @@ size(A::joAbstractOperator,ind) = jo_method_error(A,"size(jo,1/2) not implemente
 # length(jo)
 length(A::joAbstractOperator) = jo_method_error(A,"length(jo) not implemented")
 
-# full(jo)
-full(A::joAbstractOperator) = jo_method_error(A,"full(jo) not implemented")
+# jo_full(jo)
+jo_full(A::joAbstractOperator) = jo_method_error(A,"jo_full(jo) not implemented")
 
 # norm(jo)
 norm(A::joAbstractOperator,p) = jo_method_error(A,"norm(jo) not implemented")

@@ -2,7 +2,7 @@
 ## joLooseLinearFunction - extra functions
 
 # elements(jo)
-elements(A::joLooseLinearFunction{DDT,RDT}) where {DDT,RDT} = A*eye(DDT,A.n)
+elements(A::joLooseLinearFunction{DDT,RDT}) where {DDT,RDT} = A*jo_eye(DDT,A.n)
 
 # hasinverse(jo)
 

@@ -41,7 +41,7 @@ verbose && println("$tsname $tname")
     @testset "$tname A*B" begin
         @test size(C)==size(c)
         @test length(C)==length(c)
-        @test norm(full(C)-c)<joTol
+        @test norm(jo_full(C)-c)<joTol
         @test norm(elements(C)-c)<joTol
         @test norm(C)-norm(c)<joTol
         for i=1:2

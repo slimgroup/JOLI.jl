@@ -37,15 +37,15 @@ for t=1:T # start test loop
     @test norm(elements(adjoint(joConstants(m,n,a)))-adjoint(a*ones(m,n))) < joTol
     @test norm(elements(conj(joConstants(m,n,a)))-(conj(a*ones(m,n)))) < joTol
 
-    @test norm(elements(joDirac(m))-eye(m)) < joTol
-    @test norm(elements(transpose(joDirac(m)))-transpose(eye(m))) < joTol
-    @test norm(elements(adjoint(joDirac(m)))-adjoint(eye(m))) < joTol
-    @test norm(elements(conj(joDirac(m)))-conj(eye(m))) < joTol
+    @test norm(elements(joDirac(m))-jo_eye(m)) < joTol
+    @test norm(elements(transpose(joDirac(m)))-transpose(jo_eye(m))) < joTol
+    @test norm(elements(adjoint(joDirac(m)))-adjoint(jo_eye(m))) < joTol
+    @test norm(elements(conj(joDirac(m)))-conj(jo_eye(m))) < joTol
 
-    @test norm(elements(joEye(m,n))-eye(m,n)) < joTol
-    @test norm(elements(transpose(joEye(m,n)))-transpose(eye(m,n))) < joTol
-    @test norm(elements(adjoint(joEye(m,n)))-adjoint(eye(m,n))) < joTol
-    @test norm(elements(conj(joEye(m,n)))-conj(eye(m,n))) < joTol
+    @test norm(elements(joEye(m,n))-jo_eye(m,n)) < joTol
+    @test norm(elements(transpose(joEye(m,n)))-transpose(jo_eye(m,n))) < joTol
+    @test norm(elements(adjoint(joEye(m,n)))-adjoint(jo_eye(m,n))) < joTol
+    @test norm(elements(conj(joEye(m,n)))-conj(jo_eye(m,n))) < joTol
 
     @test norm(elements(joDiag(v))-diagm(v)) < joTol
     @test norm(elements(transpose(joDiag(v)))-transpose(diagm(v))) < joTol

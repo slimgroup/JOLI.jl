@@ -36,8 +36,8 @@ end
 # length(jo)
 length(A::joAbstractLinearOperator) = A.m*A.n
 
-# full(jo)
-full(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = A*eye(DDT,A.n)
+# jo_full(jo)
+jo_full(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = A*jo_eye(DDT,A.n)
 
 # norm(jo)
 norm(A::joAbstractLinearOperator,p::Real=2) = norm(elements(A),p)
