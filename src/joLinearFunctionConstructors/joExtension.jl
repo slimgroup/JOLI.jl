@@ -20,8 +20,8 @@ function apply_pad(v::Array{DDT,1},n::T,pad_type::EXT_TYPE,pad_upper::T,pad_lowe
             w = [repeat(v[1,:],pad_lower,1); v; repeat(v[end,:],pad_upper,1) ]
         else
             w = w[pad_lower+1:end-pad_upper,:]
-            w[1,:] = w[1,:] + sum(v[1:pad_lower,:],1)
-            w[end,:] = w[end,:] + sum(v[end-pad_upper+1:end,:],1)
+            w[1,:] = w[1,:] + sum(v[1:pad_lower,:],dims=1)
+            w[end,:] = w[end,:] + sum(v[end-pad_upper+1:end,:],dims=1)
         end
     elseif pad_type==pad_periodic
         if forw_mode

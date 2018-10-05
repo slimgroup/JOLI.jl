@@ -37,8 +37,8 @@ module joExtend_etc
     end
     function border_tran(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
-        w[1:1,:] += sum(v[1:pad_lower,:],1)
-        w[end:end,:] += sum(v[end-pad_upper+1:end,:],1)
+        w[1:1,:] += sum(v[1:pad_lower,:],dims=1)
+        w[end:end,:] += sum(v[end-pad_upper+1:end,:],dims=1)
         return jo_convert(rdt,w,false)
     end
     ### mirror
