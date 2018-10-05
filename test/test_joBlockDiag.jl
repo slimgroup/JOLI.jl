@@ -11,7 +11,7 @@ for t=1:T # start test loop
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
     c=rand(Complex{Float64},s[3],s[3])
     C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64})
-    bd=cat([1 2],a,b,c)
+    bd=cat(a,b,c,dims=[1 2])
     BD=joBlockDiag(A,B,C)
     BDm=BD.m
     BDn=BD.n
@@ -48,7 +48,7 @@ for t=1:T # start test loop
     B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
     c=rand(Complex{Float64},s[3],s[3])
     C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64})
-    bd=cat([1 2],w[1]*a,w[2]*b,w[3]*c)
+    bd=cat(w[1]*a,w[2]*b,w[3]*c,dims=[1 2])
     BD=joBlockDiag(A,B,C;weights=w)
     BDm=BD.m
     BDn=BD.n
@@ -82,7 +82,7 @@ for t=1:T # start test loop
     w=rand(Complex{Float64},l)
     a=rand(Complex{Float64},s,s)
     A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64})
-    bd=cat([1 2],w[1]*a,w[2]*a,w[3]*a)
+    bd=cat(w[1]*a,w[2]*a,w[3]*a,dims=[1 2])
     BD=joBlockDiag(l,A;weights=w)
     BDm=BD.m
     BDn=BD.n
