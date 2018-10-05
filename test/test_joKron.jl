@@ -15,6 +15,7 @@ for t=1:T # start test loop
     Km=K.m
     Kn=K.n
 
+    exp_exp=(1.)/(3.)
     verbose && println("$tsname ($Km,$Kn)")
     @testset "$Km x $Kn" begin
         sn=prod(s[:,2])
@@ -23,16 +24,16 @@ for t=1:T # start test loop
         vm=rand(Complex{Float64},sm);
         mvn=rand(Complex{Float64},sn,2);
         mvm=rand(Complex{Float64},sm,2);
-        @test norm(k*vn-K*vn)<eps(norm(k*vn))^(1./3.)
-        @test norm(k*mvn-K*mvn)<eps(norm(k*mvn))^(1./3.)
-        @test norm(transpose(k)*vm-transpose(K)*vm)<eps(norm(transpose(k)*vm))^(1./3.)
-        @test norm(transpose(k)*mvm-transpose(K)*mvm)<eps(norm(transpose(k)*mvm))^(1./3.)
-        @test norm(adjoint(k)*vm-adjoint(K)*vm)<eps(norm(adjoint(k)*vm))^(1./3.)
-        @test norm(adjoint(k)*mvm-adjoint(K)*mvm)<eps(norm(adjoint(k)*mvm))^(1./3.)
-        @test norm(conj(k)*vn-conj(K)*vn)<eps(norm(conj(k)*vn))^(1./3.)
-        @test norm(conj(k)*mvn-conj(K)*mvn)<eps(norm(conj(k)*mvn))^(1./3.)
-        @test norm((-k)*vn-(-K)*vn)<eps(norm((-k)*vn))^(1./3.)
-        @test norm((-k)*mvn-(-K)*mvn)<eps(norm((-k)*mvn))^(1./3.)
+        @test norm(k*vn-K*vn)<eps(norm(k*vn))^exp_exp
+        @test norm(k*mvn-K*mvn)<eps(norm(k*mvn))^exp_exp
+        @test norm(transpose(k)*vm-transpose(K)*vm)<eps(norm(transpose(k)*vm))^exp_exp
+        @test norm(transpose(k)*mvm-transpose(K)*mvm)<eps(norm(transpose(k)*mvm))^exp_exp
+        @test norm(adjoint(k)*vm-adjoint(K)*vm)<eps(norm(adjoint(k)*vm))^exp_exp
+        @test norm(adjoint(k)*mvm-adjoint(K)*mvm)<eps(norm(adjoint(k)*mvm))^exp_exp
+        @test norm(conj(k)*vn-conj(K)*vn)<eps(norm(conj(k)*vn))^exp_exp
+        @test norm(conj(k)*mvn-conj(K)*mvn)<eps(norm(conj(k)*mvn))^exp_exp
+        @test norm((-k)*vn-(-K)*vn)<eps(norm((-k)*vn))^exp_exp
+        @test norm((-k)*mvn-(-K)*mvn)<eps(norm((-k)*mvn))^exp_exp
     end
 
 end # end test loop
