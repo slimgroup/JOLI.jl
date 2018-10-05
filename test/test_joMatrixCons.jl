@@ -47,10 +47,10 @@ for t=1:T # start test loop
     @test norm(elements(adjoint(joEye(m,n)))-adjoint(jo_eye(m,n))) < joTol
     @test norm(elements(conj(joEye(m,n)))-conj(jo_eye(m,n))) < joTol
 
-    @test norm(elements(joDiag(v))-diagm(v)) < joTol
-    @test norm(elements(transpose(joDiag(v)))-transpose(diagm(v))) < joTol
-    @test norm(elements(adjoint(joDiag(v)))-adjoint(diagm(v))) < joTol
-    @test norm(elements(conj(joDiag(v)))-conj(diagm(v))) < joTol
+    @test norm(elements(joDiag(v))-diagm(0=>v)) < joTol
+    @test norm(elements(transpose(joDiag(v)))-transpose(diagm(0=>v))) < joTol
+    @test norm(elements(adjoint(joDiag(v)))-adjoint(diagm(0=>v))) < joTol
+    @test norm(elements(conj(joDiag(v)))-conj(diagm(0=>v))) < joTol
 
     #joVecConvert.jl
     if t%2==0
