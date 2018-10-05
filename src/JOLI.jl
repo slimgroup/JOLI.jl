@@ -40,9 +40,9 @@ import IterativeSolvers.Adivtype
 # discarded IterativeSolvers.Amultype
 
 # what's imported from InplaceOps
-#import InplaceOps.op_transpose, InplaceOps.op_adjoint
-#import InplaceOps.Transpose, InplaceOps.CTranspose
-#import InplaceOps.mul!, InplaceOps.ldiv!
+import InplaceOps.op_transpose, InplaceOps.op_adjoint
+import InplaceOps.Transpose, InplaceOps.CTranspose
+import InplaceOps.mul!, InplaceOps.ldiv!
 
 # extra exported methods
 export deltype, reltype
