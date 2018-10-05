@@ -92,22 +92,22 @@ verbose && println("$tsname $tname")
         @test norm(elements(transpose(A)*Mfac)-(transpose(a)*mfac))<joTol
         @test norm(elements(adjoint(A)*Mfac)-(adjoint(a)*mfac))<joTol
         @test norm(elements(conj(A)*Mfac)-(conj(a)*mfac))<joTol
-        @test norm(elements(A+afac)-(a+afac))<joTol
-        @test norm(elements(transpose(A)+afac)-(transpose(a)+afac))<joTol
-        @test norm(elements(adjoint(A)+afac)-(adjoint(a)+afac))<joTol
-        @test norm(elements(conj(A)+afac)-(conj(a)+afac))<joTol
-        @test norm(elements(afac+A)-(afac+a))<joTol
-        @test norm(elements(afac+transpose(A))-(afac+transpose(a)))<joTol
-        @test norm(elements(afac+adjoint(A))-(afac+adjoint(a)))<joTol
-        @test norm(elements(afac+conj(A))-(afac+conj(a)))<joTol
-        @test norm(elements(A+Afac)-(a+afac))<joTol
-        @test norm(elements(transpose(A)+Afac)-(transpose(a)+afac))<joTol
-        @test norm(elements(adjoint(A)+Afac)-(adjoint(a)+afac))<joTol
-        @test norm(elements(conj(A)+Afac)-(conj(a)+afac))<joTol
-        @test norm(elements(Afac+A)-(afac+a))<joTol
-        @test norm(elements(Afac+transpose(A))-(afac+transpose(a)))<joTol
-        @test norm(elements(Afac+adjoint(A))-(afac+adjoint(a)))<joTol
-        @test norm(elements(Afac+conj(A))-(afac+conj(a)))<joTol
+        @test norm(elements(A+afac)-(a.+afac))<joTol
+        @test norm(elements(transpose(A)+afac)-(transpose(a).+afac))<joTol
+        @test norm(elements(adjoint(A)+afac)-(adjoint(a).+afac))<joTol
+        @test norm(elements(conj(A)+afac)-(conj(a).+afac))<joTol
+        @test norm(elements(afac+A)-(afac.+a))<joTol
+        @test norm(elements(afac+transpose(A))-(afac.+transpose(a)))<joTol
+        @test norm(elements(afac+adjoint(A))-(afac.+adjoint(a)))<joTol
+        @test norm(elements(afac+conj(A))-(afac.+conj(a)))<joTol
+        @test norm(elements(A+Afac)-(a.+afac))<joTol
+        @test norm(elements(transpose(A)+Afac)-(transpose(a).+afac))<joTol
+        @test norm(elements(adjoint(A)+Afac)-(adjoint(a).+afac))<joTol
+        @test norm(elements(conj(A)+Afac)-(conj(a).+afac))<joTol
+        @test norm(elements(Afac+A)-(afac.+a))<joTol
+        @test norm(elements(Afac+transpose(A))-(afac.+transpose(a)))<joTol
+        @test norm(elements(Afac+adjoint(A))-(afac.+adjoint(a)))<joTol
+        @test norm(elements(Afac+conj(A))-(afac.+conj(a)))<joTol
     end
 
 end # end test loop
