@@ -1,4 +1,5 @@
 T=3
+eps_exp=(1.)/(3.)
 tsname="joBlock - basic"
 @testset "$tsname" begin
 for t=1:T # start test loop
@@ -34,16 +35,16 @@ for t=1:T # start test loop
         vm=rand(Complex{Float64},BDm);
         mvn=rand(Complex{Float32},BDn,2);
         mvm=rand(Complex{Float64},BDm,2);
-        @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^(1./3.)
-        @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^(1./3.)
-        @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^(1./3.)
-        @test norm(transpose(bd)*mvm-transpose(BD)*mvm)<eps(norm(transpose(bd)*mvm))^(1./3.)
-        @test norm(adjoint(bd)*vm-adjoint(BD)*vm)<eps(norm(adjoint(bd)*vm))^(1./3.)
-        @test norm(adjoint(bd)*mvm-adjoint(BD)*mvm)<eps(norm(adjoint(bd)*mvm))^(1./3.)
-        @test norm(conj(bd)*vn-conj(BD)*vn)<eps(norm(conj(bd)*vn))^(1./3.)
-        @test norm(conj(bd)*mvn-conj(BD)*mvn)<eps(norm(conj(bd)*mvn))^(1./3.)
-        @test norm((-bd)*vn-(-BD)*vn)<eps(norm((-bd)*vn))^(1./3.)
-        @test norm((-bd)*mvn-(-BD)*mvn)<eps(norm((-bd)*mvn))^(1./3.)
+        @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^eps_exp
+        @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^eps_exp
+        @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^eps_exp
+        @test norm(transpose(bd)*mvm-transpose(BD)*mvm)<eps(norm(transpose(bd)*mvm))^eps_exp
+        @test norm(adjoint(bd)*vm-adjoint(BD)*vm)<eps(norm(adjoint(bd)*vm))^eps_exp
+        @test norm(adjoint(bd)*mvm-adjoint(BD)*mvm)<eps(norm(adjoint(bd)*mvm))^eps_exp
+        @test norm(conj(bd)*vn-conj(BD)*vn)<eps(norm(conj(bd)*vn))^eps_exp
+        @test norm(conj(bd)*mvn-conj(BD)*mvn)<eps(norm(conj(bd)*mvn))^eps_exp
+        @test norm((-bd)*vn-(-BD)*vn)<eps(norm((-bd)*vn))^eps_exp
+        @test norm((-bd)*mvn-(-BD)*mvn)<eps(norm((-bd)*mvn))^eps_exp
     end
 
 end # end test loop
@@ -84,16 +85,16 @@ for t=1:T # start test loop
         vm=rand(Complex{Float64},BDm);
         mvn=rand(Complex{Float32},BDn,2);
         mvm=rand(Complex{Float64},BDm,2);
-        @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^(1./3.)
-        @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^(1./3.)
-        @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^(1./3.)
-        @test norm(transpose(bd)*mvm-transpose(BD)*mvm)<eps(norm(transpose(bd)*mvm))^(1./3.)
-        @test norm(adjoint(bd)*vm-adjoint(BD)*vm)<eps(norm(adjoint(bd)*vm))^(1./3.)
-        @test norm(adjoint(bd)*mvm-adjoint(BD)*mvm)<eps(norm(adjoint(bd)*mvm))^(1./3.)
-        @test norm(conj(bd)*vn-conj(BD)*vn)<eps(norm(conj(bd)*vn))^(1./3.)
-        @test norm(conj(bd)*mvn-conj(BD)*mvn)<eps(norm(conj(bd)*mvn))^(1./3.)
-        @test norm((-bd)*vn-(-BD)*vn)<eps(norm((-bd)*vn))^(1./3.)
-        @test norm((-bd)*mvn-(-BD)*mvn)<eps(norm((-bd)*mvn))^(1./3.)
+        @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^eps_exp
+        @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^eps_exp
+        @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^eps_exp
+        @test norm(transpose(bd)*mvm-transpose(BD)*mvm)<eps(norm(transpose(bd)*mvm))^eps_exp
+        @test norm(adjoint(bd)*vm-adjoint(BD)*vm)<eps(norm(adjoint(bd)*vm))^eps_exp
+        @test norm(adjoint(bd)*mvm-adjoint(BD)*mvm)<eps(norm(adjoint(bd)*mvm))^eps_exp
+        @test norm(conj(bd)*vn-conj(BD)*vn)<eps(norm(conj(bd)*vn))^eps_exp
+        @test norm(conj(bd)*mvn-conj(BD)*mvn)<eps(norm(conj(bd)*mvn))^eps_exp
+        @test norm((-bd)*vn-(-BD)*vn)<eps(norm((-bd)*vn))^eps_exp
+        @test norm((-bd)*mvn-(-BD)*mvn)<eps(norm((-bd)*mvn))^eps_exp
     end
 
 end # end test loop

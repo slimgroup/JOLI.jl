@@ -1,4 +1,5 @@
 T=3
+eps_exp=(1.)/(3.)
 tsname="joCoreBlock - basic"
 @testset "$tsname" begin
 for t=1:T # start test loop
@@ -29,16 +30,16 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=c
         vm=rand(Complex{Float64},CBm);
         mvn=rand(Complex{Float32},CBn,2);
         mvm=rand(Complex{Float64},CBm,2);
-        @test norm(bm*vn-CB*vn)<eps(norm(bm*vn))^(1./3.)
-        @test norm(bm*mvn-CB*mvn)<eps(norm(bm*mvn))^(1./3.)
-        @test norm(transpose(bm)*vm-transpose(CB)*vm)<eps(norm(transpose(bm)*vm))^(1./3.)
-        @test norm(transpose(bm)*mvm-transpose(CB)*mvm)<eps(norm(transpose(bm)*mvm))^(1./3.)
-        @test norm(adjoint(bm)*vm-adjoint(CB)*vm)<eps(norm(adjoint(bm)*vm))^(1./3.)
-        @test norm(adjoint(bm)*mvm-adjoint(CB)*mvm)<eps(norm(adjoint(bm)*mvm))^(1./3.)
-        @test norm(conj(bm)*vn-conj(CB)*vn)<eps(norm(conj(bm)*vn))^(1./3.)
-        @test norm(conj(bm)*mvn-conj(CB)*mvn)<eps(norm(conj(bm)*mvn))^(1./3.)
-        @test norm((-bm)*vn-(-CB)*vn)<eps(norm((-bm)*vn))^(1./3.)
-        @test norm((-bm)*mvn-(-CB)*mvn)<eps(norm((-bm)*mvn))^(1./3.)
+        @test norm(bm*vn-CB*vn)<eps(norm(bm*vn))^eps_exp
+        @test norm(bm*mvn-CB*mvn)<eps(norm(bm*mvn))^eps_exp
+        @test norm(transpose(bm)*vm-transpose(CB)*vm)<eps(norm(transpose(bm)*vm))^eps_exp
+        @test norm(transpose(bm)*mvm-transpose(CB)*mvm)<eps(norm(transpose(bm)*mvm))^eps_exp
+        @test norm(adjoint(bm)*vm-adjoint(CB)*vm)<eps(norm(adjoint(bm)*vm))^eps_exp
+        @test norm(adjoint(bm)*mvm-adjoint(CB)*mvm)<eps(norm(adjoint(bm)*mvm))^eps_exp
+        @test norm(conj(bm)*vn-conj(CB)*vn)<eps(norm(conj(bm)*vn))^eps_exp
+        @test norm(conj(bm)*mvn-conj(CB)*mvn)<eps(norm(conj(bm)*mvn))^eps_exp
+        @test norm((-bm)*vn-(-CB)*vn)<eps(norm((-bm)*vn))^eps_exp
+        @test norm((-bm)*mvn-(-CB)*mvn)<eps(norm((-bm)*mvn))^eps_exp
     end
 
 end # end test loop
@@ -74,16 +75,16 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=w[3]*c
         vm=rand(Complex{Float64},CBm);
         mvn=rand(Complex{Float32},CBn,2);
         mvm=rand(Complex{Float64},CBm,2);
-        @test norm(bm*vn-CB*vn)<eps(norm(bm*vn))^(1./3.)
-        @test norm(bm*mvn-CB*mvn)<eps(norm(bm*mvn))^(1./3.)
-        @test norm(transpose(bm)*vm-transpose(CB)*vm)<eps(norm(transpose(bm)*vm))^(1./3.)
-        @test norm(transpose(bm)*mvm-transpose(CB)*mvm)<eps(norm(transpose(bm)*mvm))^(1./3.)
-        @test norm(adjoint(bm)*vm-adjoint(CB)*vm)<eps(norm(adjoint(bm)*vm))^(1./3.)
-        @test norm(adjoint(bm)*mvm-adjoint(CB)*mvm)<eps(norm(adjoint(bm)*mvm))^(1./3.)
-        @test norm(conj(bm)*vn-conj(CB)*vn)<eps(norm(conj(bm)*vn))^(1./3.)
-        @test norm(conj(bm)*mvn-conj(CB)*mvn)<eps(norm(conj(bm)*mvn))^(1./3.)
-        @test norm((-bm)*vn-(-CB)*vn)<eps(norm((-bm)*vn))^(1./3.)
-        @test norm((-bm)*mvn-(-CB)*mvn)<eps(norm((-bm)*mvn))^(1./3.)
+        @test norm(bm*vn-CB*vn)<eps(norm(bm*vn))^eps_exp
+        @test norm(bm*mvn-CB*mvn)<eps(norm(bm*mvn))^eps_exp
+        @test norm(transpose(bm)*vm-transpose(CB)*vm)<eps(norm(transpose(bm)*vm))^eps_exp
+        @test norm(transpose(bm)*mvm-transpose(CB)*mvm)<eps(norm(transpose(bm)*mvm))^eps_exp
+        @test norm(adjoint(bm)*vm-adjoint(CB)*vm)<eps(norm(adjoint(bm)*vm))^eps_exp
+        @test norm(adjoint(bm)*mvm-adjoint(CB)*mvm)<eps(norm(adjoint(bm)*mvm))^eps_exp
+        @test norm(conj(bm)*vn-conj(CB)*vn)<eps(norm(conj(bm)*vn))^eps_exp
+        @test norm(conj(bm)*mvn-conj(CB)*mvn)<eps(norm(conj(bm)*mvn))^eps_exp
+        @test norm((-bm)*vn-(-CB)*vn)<eps(norm((-bm)*vn))^eps_exp
+        @test norm((-bm)*mvn-(-CB)*mvn)<eps(norm((-bm)*mvn))^eps_exp
     end
 
 end # end test loop
