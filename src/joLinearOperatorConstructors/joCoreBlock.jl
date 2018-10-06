@@ -9,7 +9,8 @@
 Universal (Core) block operator composed from different JOLI operators
 
     joCoreBlock(ops::joAbstractLinearOperator...;
-        moffsets::Vector{Integer},noffsets::Vector{Integer},weights::AbstractVector,name::String)
+        moffsets::Vector{Integer},noffsets::Vector{Integer},
+        weights::AbstractVector,mextend::Integer,nextend::Integer,name::String)
 
 # Example
     a=rand(Complex{Float64},4,5);
@@ -21,7 +22,7 @@ Universal (Core) block operator composed from different JOLI operators
     moff=[0;5;13]
     noff=[0;6;15]
     BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff) # sparse blocks
-    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff,ME=5,NE=5) # sparse blocks with zero extansion of (ME,NE) size
+    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff,mextend=5,nextend=5) # sparse blocks with zero extansion of (mextend,nextend) size
     BD=joCoreBlock(A,B,C) # basic diagonal-corners adjacent blocks
     w=rand(Complex{Float64},3)
     BD=joCoreBlock(A,B,C;weights=w) # weighted basic diagonal-corners adjacent blocks
@@ -31,34 +32,24 @@ Universal (Core) block operator composed from different JOLI operators
 - the domain/range types of joCoreBlock are equal to domain/range types of the given operators
 
 """
-function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
-           #moffsets::AbstractVector{MNDT}=zeros(Int,0),noffsets::AbstractVector{MNDT}=zeros(Int,0),weights::AbstractVector{WDT}=zeros(0),name::String="joCoreBlock")
+function joCoreBlock(ops::joAbstractLinearOperator...;
+        moffsets::AbstractVector{OT}=zeros(Int,0),noffsets::AbstractVector{OT}=zeros(Int,0),
+        weights::AbstractVector{WT}=zeros(0),mextend::Integer=0,nextend::Integer=0,
+        name::String="joCoreBlock") where {OT<:Integer,WT<:Number}
     isempty(ops) && throw(joCoreBlockException("empty argument list"))
     l=length(ops)
     for i=1:l
         deltype(ops[i])==deltype(ops[1]) || throw(joCoreBlockException("domain type mismatch for $i operator"))
         reltype(ops[i])==reltype(ops[1]) || throw(joCoreBlockException("range type mismatch for $i operator"))
     end
-    mykws=Dict(kwargs[i][1]=>kwargs[i][2] for i in 1:length(kwargs))
-    mo=Base.deepcopy(get(mykws, :moffsets, zeros(Int,0)))
-    typeof(mo)<:AbstractVector || throw(joCoreBlockException("moffsets must be a vector"))
-    eltype(mo)<:Integer || throw(joCoreBlockException("moffsets vector must have integer elements"))
+    mo=Base.deepcopy(moffsets)
     (length(mo)==l || length(mo)==0) || throw(joCoreBlockException("lenght of moffsets vector does not match number of operators"))
-    no=Base.deepcopy(get(mykws, :noffsets, zeros(Int,0)))
-    typeof(no)<:AbstractVector || throw(joCoreBlockException("noffsets must be a vector"))
-    eltype(no)<:Integer || throw(joCoreBlockException("noffsets vector must have integer elements"))
+    no=Base.deepcopy(noffsets)
     (length(no)==l || length(no)==0) || throw(joCoreBlockException("lenght of noffsets vector does not match number of operators"))
-    ws=Base.deepcopy(get(mykws, :weights, zeros(0)))
-    typeof(ws)<:AbstractVector || throw(joCoreBlockException("weights must be a vector"))
+    ws=Base.deepcopy(weights)
     (length(ws)==l || length(ws)==0) || throw(joCoreBlockException("lenght of weights vector does not match number of operators"))
-    name=get(mykws, :name, "joCoreBlock")
-    typeof(name)<:String || throw(joCoreBlockException("name must be a string"))
-    ME=get(mykws, :ME, 0)
-    typeof(ME)<:Integer || throw(joCoreBlockException("ME must be Integer"))
-    ME>=0 || throw(joCoreBlockException("ME must be >=0"))
-    NE=get(mykws, :NE, 0)
-    typeof(NE)<:Integer || throw(joCoreBlockException("NE must be Integer"))
-    NE>=0 || throw(joCoreBlockException("NE must be >=0"))
+    mextend>=0 || throw(joCoreBlockException("mextend must be >=0"))
+    nextend>=0 || throw(joCoreBlockException("nextend must be >=0"))
     ms=zeros(Int,l)
     ns=zeros(Int,l)
     for i=1:l
@@ -88,8 +79,8 @@ function joCoreBlock(ops::joAbstractLinearOperator...;kwargs...)
         m=max((mo+ms)...)
         n=max((no+ns)...)
     end
-    m+=ME
-    n+=NE
+    m+=mextend
+    n+=nextend
     weighted=(length(ws)==l)
     fops=Vector{joAbstractLinearOperator}(undef,0)
     fops_T=Vector{joAbstractLinearOperator}(undef,0)
