@@ -13,9 +13,6 @@ reltype(A::joAbstractOperator) = jo_method_error(A,"reltype(jo) not implemented"
 # show(jo)
 show(A::joAbstractOperator) = jo_method_error(A,"show(jo) not implemented")
 
-# showall(jo)
-showall(A::joAbstractOperator) = jo_method_error(A,"showall(jo) not implemented")
-
 # display(jo)
 display(A::joAbstractOperator) = jo_method_error(A,"display(jo) not implemented")
 

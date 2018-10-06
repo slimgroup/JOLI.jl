@@ -13,11 +13,8 @@ reltype(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 # show(jo)
 show(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
-# showall(jo)
-showall(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
-
 # display(jo)
-display(A::joAbstractLinearOperator) = showall(A)
+display(A::joAbstractLinearOperator) = show(A)
 
 # size(jo)
 size(A::joAbstractLinearOperator) = A.m,A.n

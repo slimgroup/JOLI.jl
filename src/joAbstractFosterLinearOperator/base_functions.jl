@@ -13,11 +13,8 @@ reltype(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 # show(jo)
 show(A::joAbstractFosterLinearOperator) = println((typeof(A),A.name,A.m,A.n))
 
-# showall(jo)
-showall(A::joAbstractFosterLinearOperator) = println((typeof(A),A.name,A.m,A.n))
-
 # display(jo)
-display(A::joAbstractFosterLinearOperator) = showall(A)
+display(A::joAbstractFosterLinearOperator) = show(A)
 
 # size(jo)
 size(A::joAbstractFosterLinearOperator) = A.m,A.n

@@ -24,7 +24,6 @@ module joDAdistributor_etc
             @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
             for i=0:nlabs idxs[i+1]=sum(part[1:i])+1 end
         else
-            #idxs = [[1:(dsize+1);], zeros(Int, nlabs-dsize);] # 0.6->0.7 ?
             idxs = [[1:(dsize+1);], zeros(Int, nlabs-dsize)]
         end
         return idxs
@@ -73,8 +72,7 @@ function show(d::joDAdistributor)
     println(" Workers : ",d.procs)
     println(" DataType: ",d.DT)
 end
-display(d::joDAdistributor) = show(d)
-function showall(d::joDAdistributor)
+function display(d::joDAdistributor)
     println("joDAdistributor: ",d.name)
     println(" Dims    : ",d.dims)
     println(" Chunks  : ",d.chunks)

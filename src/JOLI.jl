@@ -17,14 +17,13 @@ using NFFT
 
 # what's imported from Base
 import Base.eltype
-import Base.show, Base.showall, Base.display
+import Base.show, Base.display
 import Base.size, Base.length
-import Base.full
 import Base.real, Base.imag, Base.conj
 import Base.transpose, Base.adjoint
 import Base.isreal
 import Base.*, Base.\, Base.+, Base.-
-import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
+#import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
 import LinearAlgebra.norm

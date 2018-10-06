@@ -55,8 +55,8 @@ end
 ############################
 ## overloaded Base functions
 
-# showall(jo)
-function showall(A::joKron)
+# display(jo)
+function display(A::joKron)
     println("# joKron")
     println("-     name: ",A.name)
     println("-     type: ",typeof(A))

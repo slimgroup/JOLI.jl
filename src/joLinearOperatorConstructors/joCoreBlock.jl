@@ -115,8 +115,8 @@ end
 ############################
 ## overloaded Base functions
 
-# showall(jo)
-function showall(A::joCoreBlock)
+# display(jo)
+function display(A::joCoreBlock)
     println("# joCoreBlock")
     println("-      name: ",A.name)
     println("-      type: ",typeof(A))

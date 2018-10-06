@@ -9,8 +9,6 @@
 
 # show(jo)
 
-# showall(jo)
-
 # display(jo)
 
 # size(jo)
