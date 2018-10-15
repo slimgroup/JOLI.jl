@@ -31,9 +31,11 @@ struct joLooseMatrixInplace{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator
     fop::Function    # forward
     fop_T::Function  # transpose
     fop_A::Function  # adjoint
+    fop_C::Function  # conj
     iop::Nullable{Function}
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
+    iop_C::Nullable{Function}
 end
 
 # type exception

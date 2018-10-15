@@ -236,7 +236,11 @@ vcat(ops::joAbstractLinearOperator...) = joStack(ops...)
 hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(collect(rows),ops...)
 
 ############################################################
-## overloaded Base.LinAlg functions
+## overloaded LinearAlgebra functions
+
+# mul!(...,jo,...)
+mul!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A * x
+mul!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
 
 # A_mul_B!(...,jo,...)
 A_mul_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A * x
@@ -249,6 +253,10 @@ At_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::Abstrac
 # Ac_mul_B!(...,jo,...)
 Ac_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = adjoint(A) * x
 Ac_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = adjoint(A) * x
+
+# ldiv!(...,jo,...)
+ldiv!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A \ x
+ldiv!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A \ x
 
 # A_ldiv_B!(...,jo,...)
 A_ldiv_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A \ x

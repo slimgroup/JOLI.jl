@@ -148,13 +148,17 @@ isreal(A :: joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Rea
 # hvcat(...jo...)
 
 ############################################################
-## overloaded Base.LinAlg functions
+## overloaded LinearAlgebra functions
+
+# mul!(...,jo,...)
 
 # A_mul_B!(...,jo,...)
 
 # At_mul_B!(...,jo,...)
 
 # Ac_mul_B!(...,jo,...)
+
+# ldiv!(...,jo,...)
 
 # A_ldiv_B!(...,jo,...)
 

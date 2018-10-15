@@ -31,9 +31,11 @@ struct joLooseLinearFunctionInplace{DDT<:Number,RDT<:Number} <: joAbstractLinear
     fop::Function              # forward
     fop_T::Nullable{Function}  # transpose
     fop_A::Nullable{Function}  # adjoint
+    fop_C::Nullable{Function}  # conj
     iop::Nullable{Function}
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
+    iop_C::Nullable{Function}
 end
 
 # type exceptions

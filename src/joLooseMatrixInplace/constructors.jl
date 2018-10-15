@@ -26,12 +26,14 @@ function joLooseMatrixInplace(array::AbstractMatrix{EDT};
     DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrixInplace") where {EDT}
         farray=factorize(array)
         return joLooseMatrixInplace{DDT,RDT}(name,size(array,1),size(array,2),
-            (y1,x1)->A_mul_B!(y1,array,x1),
-            (y2,x2)->At_mul_B!(y2,array,x2),
-            (y3,x3)->Ac_mul_B!(y3,array,x3),
-            (y5,x5)->A_ldiv_B!(y5,farray,x5),
-            (y6,x6)->At_ldiv_B!(y6,farray,x6),
-            (y7,x7)->Ac_ldiv_B!(y7,farray,x7),
+            (y1,x1)->mul!(y1,array,x1),
+            (y2,x2)->mul!(y2,transpose(array),x2),
+            (y3,x3)->mul!(y3,adjoint(array),x3),
+            (y4,x4)->mul!(y4,conj(array),x4),
+            (y5,x5)->ldiv!(y5,farray,x5),
+            (y6,x6)->ldiv!(y6,transpose(farray),x6),
+            (y7,x7)->ldiv!(y7,adjoint(farray),x7),
+            (y8,x8)->ldiv!(y8,farray,x8),
             )
 end
 
