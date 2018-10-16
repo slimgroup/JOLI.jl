@@ -28,6 +28,13 @@
     - `joLooseLinearFunctionInplaceFwdT` -> `joLooseLinearFunctionInplaceFwd_T`
     - `joLooseLinearFunctionInplaceFwdCT` -> `joLooseLinearFunctionInplaceFwd_A`
 
+# Syntax changes
+
+1. joSincInterp
+
+    - from `joSincInterp(xin,xout;r=0,DomainT=...,RangeT=...)`
+    - to `joSincInterp(xin,xout;r=0,DDT=...,RDT=...)`
+
 # Internal fuctions in operators' `Struct` Types #
 
 1. `fop_CT` replaced with `fop_A`
@@ -42,13 +49,15 @@
 
 1. In-place `*_ldiv_*!` functions are gone and replaced with `ldiv!`
 
-# Changes following from Julia syntax changes #
+# Changes following from Julia's syntax changes #
 
 1. `showall` is gone, and `display` now provides the same functionality
 
 1. `op.'` short-hand notation for transpose(op) is gone
 
 1. ctranspose(op) replaced by adjoint(op) in Julia
+
+1. `jo_full`/`jo_eye`/`jo_speye` replacement for deprecated Julia's `full`/`eye`/`speye`
 
 1. `tic`/`toc`/`toq` are gone; use `@time` or `time`
 
