@@ -88,12 +88,12 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::Da
     nbs=convert(Cint,max(nbs,nbscales))
     nbs > 1 || throw(joLinearFunctionException("joCurvelt2DnoFFT: not enough elements in one of dimensions"))
     if nbscales!=0 && nbs>nbscales
-        warn("Adjusted number of scales to required $nbs")
+        @warn "Adjusted number of scales to required $nbs"
     end
     nbac=convert(Cint,max(8,nbangles_coarse))
     nbac%4==0 || throw(joLinearFunctionException("joCurvelt2DnoFFT: nbangles_coarse must be multiple of 4"))
     if nbangles_coarse < 8
-        warn("Adjusted number of coarse angles to required $nbac")
+        @warn "Adjusted number of coarse angles to required $nbac"
     end
     actl=convert(Cint,all_crvlts)
     rctl=convert(Cint,real_crvlts)

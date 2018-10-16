@@ -123,8 +123,8 @@ append, to a n-length vector, its periodic extension: y=[x;x[1:10]]
 
 """
 function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::Integer=0,DDT::DataType=joFloat,RDT::DataType=DDT)
-    (pad_upper>=0 && pad_upper<=n) || error("joExtend: invalid pad_upper size; should be 0<= pad_upper <=n")
-    (pad_lower>=0 && pad_lower<=n) || error("joExtend: invalid pad_lower size; should be 0<= pad_lower <=n")
+    (pad_upper>=0 && pad_upper<=n) || @error "joExtend: invalid pad_upper size; should be 0<= pad_upper <=n"
+    (pad_lower>=0 && pad_lower<=n) || @error "joExtend: invalid pad_lower size; should be 0<= pad_lower <=n"
     if pad_type==:zeros
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
@@ -158,7 +158,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 DDT,RDT;fMVok=true,
                                 name="joExtend(periodic)")
     else
-        error("joExtend: unknown extension type.")
+        @error "joExtend: unknown extension type."
     end
     return nothing
 end

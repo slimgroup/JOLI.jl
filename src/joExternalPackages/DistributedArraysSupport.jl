@@ -220,7 +220,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 """
 function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
-    DT<:Integer && warn("Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor.\n\t Falling back to joFloat!"; once=true, key="JOLI:drandn:Integer")
+    DT<:Integer && @warn "Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor.\n\t Falling back to joFloat!" key="JOLI:drandn:Integer" maxlog=1
     DT= (DT<:Integer) ? joFloat : DT
     id=DistributedArrays.next_did()
     init=I->randn(RNG,DT,map(length,I))

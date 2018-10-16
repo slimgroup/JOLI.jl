@@ -39,34 +39,28 @@ return full array
 ############################################################
 ## jo_method_error #########################################
 function jo_method_error(O::joAbstractOperator,s::String)
-    t=typeof(O)
-    n=O.name
-    info("Method error for JOLI operator";prefix="JOLI: ")
-    info("  named $n of type $t";prefix="JOLI: ")
-    error(s)
+    op_type=typeof(O)
+    op_name=O.name
+    @info "JOLI method error for operator:" op_name op_type
+    @error s
 end
 function jo_method_error(L,R,s::String)
-    lt=typeof(L)
-    ln=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
-    rt=typeof(R)
-    rn=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
-    info("Method error for input combination:";prefix="JOLI: ")
-    info("  Left variable:  named $ln of type $lt";prefix="JOLI: ")
-    info("  Right variable: named $rn of type $rt";prefix="JOLI: ")
-    error(s)
+    left_type=typeof(L)
+    left_name=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
+    right_type=typeof(R)
+    right_name=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
+    @info "JOLI method error for combination:" left_name left_type right_name right_type
+    @error s
 end
 function jo_method_error(L,M,R,s::String)
-    lt=typeof(L)
-    ln=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
-    mt=typeof(M)
-    mn=typeof(M)<:joAbstractOperator ? M.name : "non-JOLI"
-    rt=typeof(R)
-    rn=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
-    info("Method error for input combination:";prefix="JOLI: ")
-    info("  Left variable:  named $ln of type $lt";prefix="JOLI: ")
-    info("  Mid variable:   named $mn of type $mt";prefix="JOLI: ")
-    info("  Right variable: named $rn of type $rt";prefix="JOLI: ")
-    error(s)
+    left_type=typeof(L)
+    left_name=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
+    mid_type=typeof(M)
+    mid_name=typeof(M)<:joAbstractOperator ? M.name : "non-JOLI"
+    right_type=typeof(R)
+    right_name=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
+    @info "JOLI method error for combination:" left_name left_type mid_name mid_type right_name right_type
+    @error s
 end
 
 ############################################################
@@ -304,8 +298,8 @@ function jo_type_mismatch_error_set(flag::Bool)
 end
 function jo_type_mismatch_warn_set(flag::Bool)
     global jo_type_mismatch_warn
-    warn("Very, very bad idea! You are a sneaky fellow.")
-    warn("Function jo_type_mismatch_warn_set is deprecated and will be removed in the future.")
+    @warn "Very, very bad idea! You are a sneaky fellow."
+    @warn "Function jo_type_mismatch_warn_set is deprecated and will be removed in the future."
     jo_type_mismatch_warn=flag
     return
 end
@@ -394,7 +388,7 @@ function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) wher
     if DT<:Complex
         vout=convert(AbstractArray{DT},vin)
     elseif DT<:AbstractFloat
-        (warning && jo_convert_warn) && warn("jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part.")
+        (warning && jo_convert_warn) && @warn "jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part."
         vout=convert(AbstractArray{DT},real(vin))
     else
         throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
@@ -446,7 +440,7 @@ function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:Complex}
     if DT<:Complex
         nout=convert(DT,nin)
     elseif DT<:AbstractFloat
-        (warning && jo_convert_warn) && warn("jo_convert: Inexact conversion from $NT to $DT. Dropping imaginary part.")
+        (warning && jo_convert_warn) && @warn "jo_convert: Inexact conversion from $NT to $DT. Dropping imaginary part."
         nout=convert(DT,real(nin))
     else
         throw(joUtilsException("jo_convert: Refused conversion from $NT to $DT."))
