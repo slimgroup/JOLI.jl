@@ -267,17 +267,5 @@ end
 
 # mul!(...,jo,...)
 
-# A_mul_B!(...,jo,...)
-
-# At_mul_B!(...,jo,...)
-
-# Ac_mul_B!(...,jo,...)
-
 # ldiv!(...,jo,...)
-
-# A_ldiv_B!(...,jo,...)
-
-# At_ldiv_B!(...,jo,...)
-
-# Ac_ldiv_B!(...,jo,...)
 

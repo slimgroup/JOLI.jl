@@ -257,31 +257,7 @@ end
 mul!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A * x
 mul!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A * x
 
-# A_mul_B!(...,jo,...)
-A_mul_B!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A * x
-A_mul_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A * x
-
-# At_mul_B!(...,jo,...)
-At_mul_B!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = transpose(A) * x
-At_mul_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = transpose(A) * x
-
-# Ac_mul_B!(...,jo,...)
-Ac_mul_B!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = adjoint(A) * x
-Ac_mul_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = adjoint(A) * x
-
 # ldiv!(...,jo,...)
 ldiv!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A \ x
 ldiv!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A \ x
-
-# A_ldiv_B!(...,jo,...)
-A_ldiv_B!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A \ x
-A_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A \ x
-
-# At_ldiv_B!(...,jo,...)
-At_ldiv_B!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = transpose(A) \ x
-At_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = transpose(A) \ x
-
-# Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = adjoint(A) \ x
-Ac_ldiv_B!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = adjoint(A) \ x
 

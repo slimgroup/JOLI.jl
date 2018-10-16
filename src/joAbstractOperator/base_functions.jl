@@ -277,31 +277,7 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractOperator...) = jo_method_error(op
 mul!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"mul!(vec,jo,vec) not implemented or type mismatch")
 mul!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"mul!(mat,jo,mat) not implemented or type mismatch")
 
-# A_mul_B!(...,jo,...)
-A_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"A_mul_B!(vec,jo,vec) not implemented or type mismatch")
-A_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"A_mul_B!(mat,jo,mat) not implemented or type mismatch")
-
-# At_mul_B!(...,jo,...)
-At_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"At_mul_B!(vec,jo,vec) not implemented or type mismatch")
-At_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"At_mul_B!(mat,jo,mat) not implemented or type mismatch")
-
-# Ac_mul_B!(...,jo,...)
-Ac_mul_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"Ac_mul_B!(vec,jo,vec) not implemented or type mismatch")
-Ac_mul_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"Ac_mul_B!(mat,jo,mat) not implemented or type mismatch")
-
 # ldiv!(...,jo,...)
 ldiv!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"ldiv!(vec,jo,vec) not implemented or type mismatch")
 ldiv!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"ldiv!(mat,jo,mat) not implemented or type mismatch")
-
-# A_ldiv_B!(...,jo,...)
-A_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"A_ldiv_B!(vec,jo,vec) not implemented or type mismatch")
-A_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"A_ldiv_B!(mat,jo,mat) not implemented or type mismatch")
-
-# At_ldiv_B!(...,jo,...)
-At_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"At_ldiv_B!(vec,jo,vec) not implemented or type mismatch")
-At_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"At_ldiv_B!(mat,jo,mat) not implemented or type mismatch")
-
-# Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!(y::AbstractVector,A::joAbstractOperator,x::AbstractVector)=jo_method_error(y,A,x,"Ac_ldiv_B!(vec,jo,vec) not implemented or type mismatch")
-Ac_ldiv_B!(y::AbstractMatrix,A::joAbstractOperator,x::AbstractMatrix)=jo_method_error(y,A,x,"Ac_ldiv_B!(mat,jo,mat) not implemented or type mismatch")
 

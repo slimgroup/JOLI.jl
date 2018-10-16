@@ -31,8 +31,6 @@ import Base.inv
 # what's imported from LinearAlgebra
 import LinearAlgebra.norm
 import LinearAlgebra.issymmetric, LinearAlgebra.ishermitian
-import LinearAlgebra.A_mul_B!, LinearAlgebra.At_mul_B!, LinearAlgebra.Ac_mul_B!
-import LinearAlgebra.A_ldiv_B!, LinearAlgebra.At_ldiv_B!, LinearAlgebra.Ac_ldiv_B!
 import LinearAlgebra.mul!, LinearAlgebra.ldiv!
 
 # what's imported from DistributedArrays

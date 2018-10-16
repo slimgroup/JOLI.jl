@@ -242,31 +242,7 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(coll
 mul!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A * x
 mul!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
 
-# A_mul_B!(...,jo,...)
-A_mul_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A * x
-A_mul_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
-
-# At_mul_B!(...,jo,...)
-At_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = transpose(A) * x
-At_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = transpose(A) * x
-
-# Ac_mul_B!(...,jo,...)
-Ac_mul_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = adjoint(A) * x
-Ac_mul_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = adjoint(A) * x
-
 # ldiv!(...,jo,...)
 ldiv!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A \ x
 ldiv!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A \ x
-
-# A_ldiv_B!(...,jo,...)
-A_ldiv_B!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A \ x
-A_ldiv_B!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A \ x
-
-# At_ldiv_B!(...,jo,...)
-At_ldiv_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = transpose(A) \ x
-At_ldiv_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = transpose(A) \ x
-
-# Ac_ldiv_B!(...,jo,...)
-Ac_ldiv_B!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = adjoint(A) \ x
-Ac_ldiv_B!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = adjoint(A) \ x
 
