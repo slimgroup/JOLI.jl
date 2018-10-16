@@ -1,8 +1,8 @@
 ############################################################
 ## joLinearFunctionInplace - outer constructors
 
-export joLinearFunctionInplaceAll, joLinearFunctionInplaceT, joLinearFunctionInplaceCT,
-       joLinearFunctionInplaceFwd, joLinearFunctionInplaceFwdT, joLinearFunctionInplaceFwdCT
+export joLinearFunctionInplaceAll, joLinearFunctionInplace_T, joLinearFunctionInplace_A,
+       joLinearFunctionInplaceFwd, joLinearFunctionInplaceFwd_T, joLinearFunctionInplaceFwd_A
 
 
 """
@@ -32,10 +32,10 @@ joLinearFunctionInplaceAll(m::Integer,n::Integer,
 """
 joLinearFunctionInplace outer constructor
 
-    joLinearFunctionInplaceT(m::Integer,n::Integer,
+    joLinearFunctionInplace_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function, iop::Function,iop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLinearFunctionInplaceT")
+        name::String="joLinearFunctionInplace_T")
 
 Look up argument names in help to joLinearFunctionInplace type.
 
@@ -43,10 +43,10 @@ Look up argument names in help to joLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLinearFunctionInplaceT(m::Integer,n::Integer,
+joLinearFunctionInplace_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLinearFunctionInplaceT") =
+    name::String="joLinearFunctionInplace_T") =
         joLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, fop_T, @joNF, @joNF,
             iop, iop_T, @joNF, @joNF
@@ -54,10 +54,10 @@ joLinearFunctionInplaceT(m::Integer,n::Integer,
 """
 joLinearFunctionInplace outer constructor
 
-    joLinearFunctionInplaceCT(m::Integer,n::Integer,
+    joLinearFunctionInplace_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function, iop::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLinearFunctionInplaceCT")
+        name::String="joLinearFunctionInplace_A")
 
 Look up argument names in help to joLinearFunctionInplace type.
 
@@ -65,10 +65,10 @@ Look up argument names in help to joLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLinearFunctionInplaceCT(m::Integer,n::Integer,
+joLinearFunctionInplace_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function, iop::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLinearFunctionInplaceCT") =
+    name::String="joLinearFunctionInplace_A") =
         joLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, @joNF, fop_A, @joNF,
             iop, @joNF, iop_A, @joNF
@@ -98,10 +98,10 @@ joLinearFunctionInplaceFwd(m::Integer,n::Integer,
 """
 joLinearFunctionInplace outer constructor
 
-    joLinearFunctionInplaceFwdT(m::Integer,n::Integer,
+    joLinearFunctionInplaceFwd_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLinearFunctionInplaceFwdT")
+        name::String="joLinearFunctionInplaceFwd_T")
 
 Look up argument names in help to joLinearFunctionInplace type.
 
@@ -109,10 +109,10 @@ Look up argument names in help to joLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLinearFunctionInplaceFwdT(m::Integer,n::Integer,
+joLinearFunctionInplaceFwd_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLinearFunctionInplaceFwdT") =
+    name::String="joLinearFunctionInplaceFwd_T") =
         joLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, fop_T, @joNF, @joNF,
             @joNF, @joNF, @joNF, @joNF
@@ -120,10 +120,10 @@ joLinearFunctionInplaceFwdT(m::Integer,n::Integer,
 """
 joLinearFunctionInplace outer constructor
 
-    joLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
+    joLinearFunctionInplaceFwd_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLinearFunctionInplaceFwdCT")
+        name::String="joLinearFunctionInplaceFwd_A")
 
 Look up argument names in help to joLinearFunctionInplace type.
 
@@ -131,10 +131,10 @@ Look up argument names in help to joLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
+joLinearFunctionInplaceFwd_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLinearFunctionInplaceFwdCT") =
+    name::String="joLinearFunctionInplaceFwd_A") =
         joLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, @joNF, fop_A, @joNF,
             @joNF, @joNF, @joNF, @joNF

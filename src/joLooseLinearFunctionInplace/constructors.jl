@@ -1,8 +1,8 @@
 ############################################################
 ## joLooseLinearFunctionInplace - outer constructors
 
-export joLooseLinearFunctionInplaceAll, joLooseLinearFunctionInplaceT, joLooseLinearFunctionInplaceCT,
-       joLooseLinearFunctionInplaceFwd, joLooseLinearFunctionInplaceFwdT, joLooseLinearFunctionInplaceFwdCT
+export joLooseLinearFunctionInplaceAll, joLooseLinearFunctionInplace_T, joLooseLinearFunctionInplace_A,
+       joLooseLinearFunctionInplaceFwd, joLooseLinearFunctionInplaceFwd_T, joLooseLinearFunctionInplaceFwd_A
 
 
 """
@@ -32,10 +32,10 @@ joLooseLinearFunctionInplaceAll(m::Integer,n::Integer,
 """
 joLooseLinearFunctionInplace outer constructor
 
-    joLooseLinearFunctionInplaceT(m::Integer,n::Integer,
+    joLooseLinearFunctionInplace_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function, iop::Function,iop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLooseLinearFunctionInplaceT")
+        name::String="joLooseLinearFunctionInplace_T")
 
 Look up argument names in help to joLooseLinearFunctionInplace type.
 
@@ -43,10 +43,10 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLooseLinearFunctionInplaceT(m::Integer,n::Integer,
+joLooseLinearFunctionInplace_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLooseLinearFunctionInplaceT") =
+    name::String="joLooseLinearFunctionInplace_T") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, fop_T, @joNF, @joNF,
             iop, iop_T, @joNF, @joNF
@@ -54,10 +54,10 @@ joLooseLinearFunctionInplaceT(m::Integer,n::Integer,
 """
 joLooseLinearFunctionInplace outer constructor
 
-    joLooseLinearFunctionInplaceCT(m::Integer,n::Integer,
+    joLooseLinearFunctionInplace_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function, iop::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLooseLinearFunctionInplaceCT")
+        name::String="joLooseLinearFunctionInplace_A")
 
 Look up argument names in help to joLooseLinearFunctionInplace type.
 
@@ -65,10 +65,10 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLooseLinearFunctionInplaceCT(m::Integer,n::Integer,
+joLooseLinearFunctionInplace_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function, iop::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLooseLinearFunctionInplaceCT") =
+    name::String="joLooseLinearFunctionInplace_A") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, @joNF, fop_A, @joNF,
             iop, @joNF, iop_A, @joNF
@@ -98,10 +98,10 @@ joLooseLinearFunctionInplaceFwd(m::Integer,n::Integer,
 """
 joLooseLinearFunctionInplace outer constructor
 
-    joLooseLinearFunctionInplaceFwdT(m::Integer,n::Integer,
+    joLooseLinearFunctionInplaceFwd_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLooseLinearFunctionInplaceFwdT")
+        name::String="joLooseLinearFunctionInplaceFwd_T")
 
 Look up argument names in help to joLooseLinearFunctionInplace type.
 
@@ -109,10 +109,10 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLooseLinearFunctionInplaceFwdT(m::Integer,n::Integer,
+joLooseLinearFunctionInplaceFwd_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLooseLinearFunctionInplaceFwdT") =
+    name::String="joLooseLinearFunctionInplaceFwd_T") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, fop_T, @joNF, @joNF,
             @joNF, @joNF, @joNF, @joNF
@@ -120,10 +120,10 @@ joLooseLinearFunctionInplaceFwdT(m::Integer,n::Integer,
 """
 joLooseLinearFunctionInplace outer constructor
 
-    joLooseLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
+    joLooseLinearFunctionInplaceFwd_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
-        name::String="joLooseLinearFunctionInplaceFwdCT")
+        name::String="joLooseLinearFunctionInplaceFwd_A")
 
 Look up argument names in help to joLooseLinearFunctionInplace type.
 
@@ -131,10 +131,10 @@ Look up argument names in help to joLooseLinearFunctionInplace type.
 - the developer is responsible for ensuring that used functions provide correct DDT & RDT
 
 """
-joLooseLinearFunctionInplaceFwdCT(m::Integer,n::Integer,
+joLooseLinearFunctionInplaceFwd_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
-    name::String="joLooseLinearFunctionInplaceFwdCT") =
+    name::String="joLooseLinearFunctionInplaceFwd_A") =
         joLooseLinearFunctionInplace{DDT,RDT}(name,m,n,
             fop, @joNF, fop_A, @joNF,
             @joNF, @joNF, @joNF, @joNF

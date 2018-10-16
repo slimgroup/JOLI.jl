@@ -1,8 +1,8 @@
 ############################################################
 ## joLooseLinearFunction - outer constructors
 
-export joLooseLinearFunctionAll, joLooseLinearFunctionT, joLooseLinearFunctionCT,
-       joLooseLinearFunctionFwd, joLooseLinearFunctionFwdT, joLooseLinearFunctionFwdCT
+export joLooseLinearFunctionAll, joLooseLinearFunction_T, joLooseLinearFunction_A,
+       joLooseLinearFunctionFwd, joLooseLinearFunctionFwd_T, joLooseLinearFunctionFwd_A
 
 
 """
@@ -34,11 +34,11 @@ joLooseLinearFunctionAll(m::Integer,n::Integer,
 """
 joLooseLinearFunction outer constructor
 
-    joLooseLinearFunctionT(m::Integer,n::Integer,
+    joLooseLinearFunction_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function, iop::Function,iop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
-        name::String="joLooseLinearFunctionT")
+        name::String="joLooseLinearFunction_T")
 
 Look up argument names in help to joLooseLinearFunction type.
 
@@ -46,11 +46,11 @@ Look up argument names in help to joLooseLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLooseLinearFunctionT(m::Integer,n::Integer,
+joLooseLinearFunction_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
-    name::String="joLooseLinearFunctionT") =
+    name::String="joLooseLinearFunction_T") =
         joLooseLinearFunction{DDT,RDT}(name,m,n,
             fop,
             fop_T,
@@ -66,11 +66,11 @@ joLooseLinearFunctionT(m::Integer,n::Integer,
 """
 joLooseLinearFunction outer constructor
 
-    joLooseLinearFunctionCT(m::Integer,n::Integer,
+    joLooseLinearFunction_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function, iop::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
-        name::String="joLooseLinearFunctionCT")
+        name::String="joLooseLinearFunction_A")
 
 Look up argument names in help to joLooseLinearFunction type.
 
@@ -78,11 +78,11 @@ Look up argument names in help to joLooseLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLooseLinearFunctionCT(m::Integer,n::Integer,
+joLooseLinearFunction_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function, iop::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
-    name::String="joLooseLinearFunctionCT") =
+    name::String="joLooseLinearFunction_A") =
         joLooseLinearFunction{DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_A(conj(v2))),
@@ -122,11 +122,11 @@ joLooseLinearFunctionFwd(m::Integer,n::Integer,
 """
 joLooseLinearFunction outer constructor
 
-    joLooseLinearFunctionFwdT(m::Integer,n::Integer,
+    joLooseLinearFunctionFwd_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
-        name::String="joLooseLinearFunctionFwdT")
+        name::String="joLooseLinearFunctionFwd_T")
 
 Look up argument names in help to joLooseLinearFunction type.
 
@@ -134,11 +134,11 @@ Look up argument names in help to joLooseLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLooseLinearFunctionFwdT(m::Integer,n::Integer,
+joLooseLinearFunctionFwd_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
-    name::String="joLooseLinearFunctionFwdT") =
+    name::String="joLooseLinearFunctionFwd_T") =
         joLooseLinearFunction{DDT,RDT}(name,m,n,
             fop,
             fop_T,
@@ -150,11 +150,11 @@ joLooseLinearFunctionFwdT(m::Integer,n::Integer,
 """
 joLooseLinearFunction outer constructor
 
-    joLooseLinearFunctionFwdCT(m::Integer,n::Integer,
+    joLooseLinearFunctionFwd_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
-        name::String="joLooseLinearFunctionFwdCT")
+        name::String="joLooseLinearFunctionFwd_A")
 
 Look up argument names in help to joLooseLinearFunction type.
 
@@ -162,11 +162,11 @@ Look up argument names in help to joLooseLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLooseLinearFunctionFwdCT(m::Integer,n::Integer,
+joLooseLinearFunctionFwd_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
-    name::String="joLooseLinearFunctionFwdCT") =
+    name::String="joLooseLinearFunctionFwd_A") =
         joLooseLinearFunction{DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_A(conj(v2))),

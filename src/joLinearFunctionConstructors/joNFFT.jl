@@ -50,14 +50,14 @@ function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bes
     M=length(pos)
     p=NFFTPlan(pos,N,m,sigma,window,K)
     if centered
-        return joLinearFunctionFwdCT(M,N,
+        return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft_centered(p,N,v1,RDT),
             v2->joNFFT_etc.apply_infft_centered(p,N,v2,DDT),
             DDT,RDT;
             name="joNFFTc"
             )
     else
-        return joLinearFunctionFwdCT(M,N,
+        return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft(p,N,v1,RDT),
             v2->joNFFT_etc.apply_infft(p,N,v2,DDT),
             DDT,RDT;

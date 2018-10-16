@@ -119,7 +119,7 @@ function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataTyp
         nbs,nbac,actl,n1,n2,cfmap,m)
     m=convert(Int128,m[])
 
-    return joLinearFunctionCT(m,n1*n2,
+    return joLinearFunction_A(m,n1*n2,
         v1->apply_fdct2Dwrap(v1,n1,n2,m,rtp,nbs,nbac,actl,rctl,zfin),
         v2->apply_ifdct2Dwrap(v2,n1,n2,m,dtp,nbs,nbac,actl,rctl,zfin),
         v3->apply_ifdct2Dwrap(v3,n1,n2,m,dtp,nbs,nbac,actl,rctl,zfin),

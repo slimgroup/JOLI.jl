@@ -1,8 +1,8 @@
 ############################################################
 ## joLinearFunction - outer constructors
 
-export joLinearFunctionAll, joLinearFunctionT, joLinearFunctionCT,
-       joLinearFunctionFwd, joLinearFunctionFwdT, joLinearFunctionFwdCT
+export joLinearFunctionAll, joLinearFunction_T, joLinearFunction_A,
+       joLinearFunctionFwd, joLinearFunctionFwd_T, joLinearFunctionFwd_A
 
 # outer constructors
 
@@ -35,11 +35,11 @@ joLinearFunctionAll(m::Integer,n::Integer,
 """
 joLinearFunction outer constructor
 
-    joLinearFunctionT(m::Integer,n::Integer,
+    joLinearFunction_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function, iop::Function,iop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
-        name::String="joLinearFunctionT")
+        name::String="joLinearFunction_T")
 
 Look up argument names in help to joLinearFunction type.
 
@@ -47,11 +47,11 @@ Look up argument names in help to joLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLinearFunctionT(m::Integer,n::Integer,
+joLinearFunction_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function, iop::Function,iop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
-    name::String="joLinearFunctionT") =
+    name::String="joLinearFunction_T") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             fop_T,
@@ -67,11 +67,11 @@ joLinearFunctionT(m::Integer,n::Integer,
 """
 joLinearFunction outer constructor
 
-    joLinearFunctionCT(m::Integer,n::Integer,
+    joLinearFunction_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function, iop::Function,iop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,iMVok::Bool=false,
-        name::String="joLinearFunctionCT")
+        name::String="joLinearFunction_A")
 
 Look up argument names in help to joLinearFunction type.
 
@@ -79,11 +79,11 @@ Look up argument names in help to joLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLinearFunctionCT(m::Integer,n::Integer,
+joLinearFunction_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function, iop::Function,iop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,iMVok::Bool=false,
-    name::String="joLinearFunctionCT") =
+    name::String="joLinearFunction_A") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_A(conj(v2))),
@@ -123,11 +123,11 @@ joLinearFunctionFwd(m::Integer,n::Integer,
 """
 joLinearFunction outer constructor
 
-    joLinearFunctionFwdT(m::Integer,n::Integer,
+    joLinearFunctionFwd_T(m::Integer,n::Integer,
         fop::Function,fop_T::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
-        name::String="joLinearFunctionFwdT")
+        name::String="joLinearFunctionFwd_T")
 
 Look up argument names in help to joLinearFunction type.
 
@@ -135,11 +135,11 @@ Look up argument names in help to joLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLinearFunctionFwdT(m::Integer,n::Integer,
+joLinearFunctionFwd_T(m::Integer,n::Integer,
     fop::Function,fop_T::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
-    name::String="joLinearFunctionFwdT") =
+    name::String="joLinearFunctionFwd_T") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             fop_T,
@@ -151,11 +151,11 @@ joLinearFunctionFwdT(m::Integer,n::Integer,
 """
 joLinearFunction outer constructor
 
-    joLinearFunctionFwdCT(m::Integer,n::Integer,
+    joLinearFunctionFwd_A(m::Integer,n::Integer,
         fop::Function,fop_A::Function,
         DDT::DataType,RDT::DataType=DDT;
         fMVok::Bool=false,
-        name::String="joLinearFunctionFwdCT")
+        name::String="joLinearFunctionFwd_A")
 
 Look up argument names in help to joLinearFunction type.
 
@@ -163,11 +163,11 @@ Look up argument names in help to joLinearFunction type.
 - the developer is responsible for ensuring that used functions take/return correct DDT/RDT
 
 """
-joLinearFunctionFwdCT(m::Integer,n::Integer,
+joLinearFunctionFwd_A(m::Integer,n::Integer,
     fop::Function,fop_A::Function,
     DDT::DataType,RDT::DataType=DDT;
     fMVok::Bool=false,
-    name::String="joLinearFunctionFwdCT") =
+    name::String="joLinearFunctionFwd_A") =
         joLinearFunction{DDT,RDT}(name,m,n,
             fop,
             v2->conj(fop_A(conj(v2))),

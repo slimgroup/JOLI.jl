@@ -145,7 +145,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
         pf=plan_fft(zeros(ms))
         ipf=plan_ifft(zeros(ms))
         if centered
-            return joLinearFunctionCT(prod(ms),prod(ms),
+            return joLinearFunction_A(prod(ms),prod(ms),
                 v1->joDFT_etc.apply_fft_centered(pf,v1,ms,RDT),
                 v2->joDFT_etc.apply_ifft_centered(ipf,v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft_centered(ipf,v3,ms,DDT),
@@ -154,7 +154,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 name="joDFTpc"
                 )
         else
-            return joLinearFunctionCT(prod(ms),prod(ms),
+            return joLinearFunction_A(prod(ms),prod(ms),
                 v1->joDFT_etc.apply_fft(pf,v1,ms,RDT),
                 v2->joDFT_etc.apply_ifft(ipf,v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft(ipf,v3,ms,DDT),
@@ -165,7 +165,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
         end
     else
         if centered
-            return joLinearFunctionCT(prod(ms),prod(ms),
+            return joLinearFunction_A(prod(ms),prod(ms),
                 v1->joDFT_etc.apply_fft_centered(v1,ms,RDT),
                 v2->joDFT_etc.apply_ifft_centered(v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft_centered(v3,ms,DDT),
@@ -174,7 +174,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 name="joDFTc"
                 )
         else
-            return joLinearFunctionCT(prod(ms),prod(ms),
+            return joLinearFunction_A(prod(ms),prod(ms),
                 v1->joDFT_etc.apply_fft(v1,ms,RDT),
                 v2->joDFT_etc.apply_ifft(v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft(v3,ms,DDT),
