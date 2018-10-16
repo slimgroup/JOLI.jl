@@ -39,10 +39,6 @@ import DistributedArrays: DArray, distribute, dzeros, dones, dfill, drand, drand
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype
 
-# what's imported from InplaceOps
-#import InplaceOps.op_transpose, InplaceOps.op_adjoint
-#import InplaceOps.Transpose, InplaceOps.CTranspose
-
 # extra exported methods
 export deltype, reltype
 export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint
