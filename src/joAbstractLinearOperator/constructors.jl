@@ -32,7 +32,7 @@ joAddSolverAny(A::joAbstractLinearOperator{DDT,RDT},slvr::Function) where {DDT,R
 joAddSolver outer constructor
 
     joAddSolverAll(A::joAbstractLinearOperator{DDT,RDT},
-        solver::Function,solver_T::Function,solver_CT::Function,solver_C::Function)
+        solver::Function,solver_T::Function,solver_A::Function,solver_C::Function)
 
 Create joLinearOperator with added specific solver(s) for \\(jo,[m]vec),
 distinct for each form of the operator.
@@ -42,13 +42,13 @@ distinct for each form of the operator.
     O=joAddSolverAll(O,
         (s,x)->my_solver(s,x),
         (s,x)->my_solver_T(s,x),
-        (s,x)->my_solver_CT(s,x),
+        (s,x)->my_solver_A(s,x),
         (s,x)->my_solver_C(s,x))
 
     O=joAddSolverAll(O,
         (s,x)->my_solver(s,x),
         @joNF,
-        (s,x)->my_solver_CT(s,x),
+        (s,x)->my_solver_A(s,x),
         @joNF)
 
     O=joAddSolverAll(O,
@@ -59,7 +59,7 @@ distinct for each form of the operator.
 
 """
 joAddSolverAll(A::joAbstractLinearOperator{DDT,RDT},
-    slvr::Function,slvr_T::Function,slvr_CT::Function,slvr_C::Function) where {DDT,RDT} =
+    slvr::Function,slvr_T::Function,slvr_A::Function,slvr_C::Function) where {DDT,RDT} =
         joLinearOperator{DDT,RDT}("("*A.name*"+solver)",A.m,A.n,
             v1->A*v1,
             v2->transpose(A)*v2,
@@ -67,7 +67,7 @@ joAddSolverAll(A::joAbstractLinearOperator{DDT,RDT},
             v4->conj(A)*v4,
             v5->slvr(A,v5),
             v6->slvr_T(transpose(A),v6),
-            v7->slvr_CT(adjoint(A),v7),
+            v7->slvr_A(adjoint(A),v7),
             v8->slvr_C(conj(A),v8)
             )
 
