@@ -9,7 +9,6 @@ julia:
 branches:
   only:
   - master
-  - henryk
 #notifications:
 #  email: false
 # uncomment the following lines to override the default test script
