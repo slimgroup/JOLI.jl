@@ -129,14 +129,38 @@ isreal(A :: joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Rea
 ############################################################
 ## overloaded Base .*(...jo...)
 
+# .*(num,jo)
+Base.Broadcast.broadcasted(::typeof(*),a::Number,A::joAbstractFosterLinearOperator) = a*A
+Base.Broadcast.broadcasted(::typeof(*),a::joNumber,A::joAbstractFosterLinearOperator) = a*A
+
+# .*(jo,num)
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractFosterLinearOperator,a::Number) = a*A
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractFosterLinearOperator,a::joNumber) = a*A
+
 ############################################################
 ## overloaded Base .\(...jo...)
 
 ############################################################
 ## overloaded Base .+(...jo...)
 
+# .+(jo,num)
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractFosterLinearOperator,b::Number) = A+b
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractFosterLinearOperator,b::joNumber) = A+b
+
+# .+(num,jo)
+Base.Broadcast.broadcasted(::typeof(+),b::Number,A::joAbstractFosterLinearOperator) = A+b
+Base.Broadcast.broadcasted(::typeof(+),b::joNumber,A::joAbstractFosterLinearOperator) = A+b
+
 ############################################################
 ## overloaded Base .-(...jo...)
+
+# .-(jo,num)
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractFosterLinearOperator,b::Number) = A+(-b)
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractFosterLinearOperator,b::joNumber) = A+(-b)
+
+# .-(num,jo)
+Base.Broadcast.broadcasted(::typeof(-),b::Number,A::joAbstractFosterLinearOperator) = -A+b
+Base.Broadcast.broadcasted(::typeof(-),b::joNumber,A::joAbstractFosterLinearOperator) = -A+b
 
 ############################################################
 ## overloaded Base block methods
