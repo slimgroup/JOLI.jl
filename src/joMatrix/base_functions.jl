@@ -76,11 +76,6 @@ adjoint(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{ADDT}) where {ADDT,ARDT}
-    A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
-    MV = A.fop(mv)
-    return MV
-end
 function *(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
@@ -92,11 +87,6 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *(A::joMatrix{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
-    A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
-    V=A.fop(v)
-    return V
-end
 function *(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
