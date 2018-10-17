@@ -159,103 +159,103 @@ ishermitian(A::joAbstractOperator) = jo_method_error(A,"ishermitian(jo) not impl
 
 ############################################################
 ## overloaded Base .*(...jo...)
-## function Base.broadcast(::typeof(*), ...)
+## function Base.Broadcast.broadcasted(::typeof(*), ...)
 
 # .*(jo,jo)
-##.*(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(,".*(jo,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,".*(jo,jo) not implemented")
 
 # .*(jo,mvec)
-##.*(A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(,".*(jo,mvec) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(A,mv,".*(jo,mvec) not implemented")
 
 # .*(mvec,jo)
-##.*(mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(,".*(mvec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(mv,A,".*(mvec,jo) not implemented")
 
 # .*(jo,vec)
-##.*(A::joAbstractOperator,v::AbstractVector) = jo_method_error(,".*(jo,vec) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractOperator,v::AbstractVector) = jo_method_error(A,v,".*(jo,vec) not implemented")
 
 # .*(vec,jo)
-##.*(v::AbstractVector,A::joAbstractOperator) = jo_method_error(,".*(vec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),v::AbstractVector,A::joAbstractOperator) = jo_method_error(v,A,".*(vec,jo) not implemented")
 
 # .*(num,jo)
-##.*(a,A::joAbstractOperator) = jo_method_error(,".*(any,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),a,A::joAbstractOperator) = jo_method_error(a,A,".*(any,jo) not implemented")
 
 # .*(jo,num)
-##.*(A::joAbstractOperator,a) = jo_method_error(,".*(jo,any) not implemented")
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractOperator,a) = jo_method_error(A,a,".*(jo,any) not implemented")
 
 ############################################################
 ## overloaded Base .\(...jo...)
-## function Base.broadcast(::typeof(\), ...)
+## function Base.Broadcast.broadcasted(::typeof(\), ...)
 
 # .\(jo,jo)
-##.\(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(,".\(jo,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,".(jo,jo) not implemented")
 
 # .\(jo,mvec)
-##.\(A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(,".\(jo,mvec) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(A,mv,".(jo,mvec) not implemented")
 
 # .\(mvec,jo)
-##.\(mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(,".\(mvec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(mv,A,".(mvec,jo) not implemented")
 
 # .\(jo,vec)
-##.\(A::joAbstractOperator,v::AbstractVector) = jo_method_error(,".\(jo,vec) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),A::joAbstractOperator,v::AbstractVector) = jo_method_error(A,v,".(jo,vec) not implemented")
 
 # .\(vec,jo)
-##.\(v::AbstractVector,A::joAbstractOperator) = jo_method_error(,".\(vec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),v::AbstractVector,A::joAbstractOperator) = jo_method_error(v,A,".(vec,jo) not implemented")
 
 # .\(num,jo)
-##.\(a,A::joAbstractOperator) = jo_method_error(,".\(any,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),a,A::joAbstractOperator) = jo_method_error(a,A,".(any,jo) not implemented")
 
 # .\(jo,num)
-##.\(A::joAbstractOperator,a) = jo_method_error(,".\(jo,any) not implemented")
+Base.Broadcast.broadcasted(::typeof(\),A::joAbstractOperator,a) = jo_method_error(A,a,".(jo,any) not implemented")
 
 ############################################################
 ## overloaded Base .+(...jo...)
-## function Base.broadcast(::typeof(+), ...)
+## function Base.Broadcast.broadcasted(::typeof(+), ...)
 
 # .+(jo,jo)
-##.+(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(,".+(jo,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,".+(jo,jo) not implemented")
 
 # .+(jo,mvec)
-##.+(A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(,".+(jo,mvec) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(A,mv,".+(jo,mvec) not implemented")
 
 # .+(mvec,jo)
-##.+(mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(,".+(mvec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(mv,A,".+(mvec,jo) not implemented")
 
 # .+(jo,vec)
-##.+(A::joAbstractOperator,v::AbstractVector) = jo_method_error(,".+(jo,vec) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractOperator,v::AbstractVector) = jo_method_error(A,v,".+(jo,vec) not implemented")
 
 # .+(vec,jo)
-##.+(v::AbstractVector,A::joAbstractOperator) = jo_method_error(,".+(vec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),v::AbstractVector,A::joAbstractOperator) = jo_method_error(v,A,".+(vec,jo) not implemented")
 
 # .+(jo,num)
-##.+(A::joAbstractOperator,b) = jo_method_error(,".+(jo,any) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractOperator,b) = jo_method_error(A,b,".+(jo,any) not implemented")
 
 # .+(num,jo)
-##.+(b,A::joAbstractOperator) = jo_method_error(,".+(any,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(+),b,A::joAbstractOperator) = jo_method_error(b,A,".+(any,jo) not implemented")
 
 ############################################################
 ## overloaded Base .-(...jo...)
-## function Base.broadcast(::typeof(-), ...)
+## function Base.Broadcast.broadcasted(::typeof(-), ...)
 
 # .-(jo,jo)
-##.-(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(,".-(jo,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,".-(jo,jo) not implemented")
 
 # .-(jo,mvec)
-##.-(A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(,".-(jo,mvec) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractOperator,mv::AbstractMatrix) = jo_method_error(A,mv,".-(jo,mvec) not implemented")
 
 # .-(mvec,jo)
-##.-(mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(,".-(mvec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),mv::AbstractMatrix,A::joAbstractOperator) = jo_method_error(mv,A,".-(mvec,jo) not implemented")
 
 # .-(jo,vec)
-##.-(A::joAbstractOperator,v::AbstractVector) = jo_method_error(,".-(jo,vec) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractOperator,v::AbstractVector) = jo_method_error(A,v,".-(jo,vec) not implemented")
 
 # .-(vec,jo)
-##.-(v::AbstractVector,A::joAbstractOperator) = jo_method_error(,".-(vec,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),v::AbstractVector,A::joAbstractOperator) = jo_method_error(v,A,".-(vec,jo) not implemented")
 
 # .-(jo,num)
-##.-(A::joAbstractOperator,b) = jo_method_error(,".-(jo,any) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractOperator,b) = jo_method_error(A,b,".-(jo,any) not implemented")
 
 # .-(num,jo)
-##.-(b,A::joAbstractOperator) = jo_method_error(,".-(any,jo) not implemented")
+Base.Broadcast.broadcasted(::typeof(-),b,A::joAbstractOperator) = jo_method_error(b,A,".-(any,jo) not implemented")
 
 ############################################################
 ## overloaded Base block methods

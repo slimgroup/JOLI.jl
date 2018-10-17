@@ -24,7 +24,7 @@ import Base.real, Base.imag, Base.conj
 import Base.transpose, Base.adjoint
 import Base.isreal
 import Base.*, Base.\, Base.+, Base.-
-#import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
+import Base.Broadcast.broadcasted # Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
 

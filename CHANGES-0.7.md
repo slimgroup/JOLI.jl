@@ -63,6 +63,8 @@
 
 1. `warn`/`info`/`error` converted to macros `@warn`/`@info`/`@error`
 
+1. added `.*`/`.+`/`.-` brodcasts for fusing JOLI operators with numbers for compatibility with Julia notation
+
 # Removed JOLI deprecations #
 
 1. removed deprecated `joExtension`; use `joExtend`

@@ -214,14 +214,38 @@ end
 ############################################################
 ## overloaded Base .*(...jo...)
 
+# .*(num,jo)
+Base.Broadcast.broadcasted(::typeof(*),a::Number,A::joAbstractLinearOperator) = a*A
+Base.Broadcast.broadcasted(::typeof(*),a::joNumber,A::joAbstractLinearOperator) = a*A
+
+# .*(jo,num)
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractLinearOperator,a::Number) = a*A
+Base.Broadcast.broadcasted(::typeof(*),A::joAbstractLinearOperator,a::joNumber) = a*A
+
 ############################################################
 ## overloaded Base .\(...jo...)
 
 ############################################################
 ## overloaded Base .+(...jo...)
 
+# .+(jo,num)
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractLinearOperator,b::Number) = A+b
+Base.Broadcast.broadcasted(::typeof(+),A::joAbstractLinearOperator,b::joNumber) = A+b
+
+# .+(num,jo)
+Base.Broadcast.broadcasted(::typeof(+),b::Number,A::joAbstractLinearOperator) = A+b
+Base.Broadcast.broadcasted(::typeof(+),b::joNumber,A::joAbstractLinearOperator) = A+b
+
 ############################################################
 ## overloaded Base .-(...jo...)
+
+# .-(jo,num)
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractLinearOperator,b::Number) = A+(-b)
+Base.Broadcast.broadcasted(::typeof(-),A::joAbstractLinearOperator,b::joNumber) = A+(-b)
+
+# .-(num,jo)
+Base.Broadcast.broadcasted(::typeof(-),b::Number,A::joAbstractLinearOperator) = -A+b
+Base.Broadcast.broadcasted(::typeof(-),b::joNumber,A::joAbstractLinearOperator) = -A+b
 
 ############################################################
 ## overloaded Base block methods
