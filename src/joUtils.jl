@@ -81,7 +81,7 @@ end
 export joInt, joFloat, joComplex
 global joInt=Int64
 global joFloat=Float64
-global joComplex=Complex{Float64}
+global joComplex=ComplexF64
 export jo_joInt_set, jo_joFloat_set, jo_joComplex_set, jo_jo32bit_set, jo_jo64bit_set, jo_joTypes_get
 """
 set default integer type joInt
@@ -122,7 +122,7 @@ set default type joInt, joFloat, joComplex to 32 bit
 function jo_jo32bit_set()
     global joInt=Int32
     global joFloat=Float32
-    global joComplex=Complex{Float32}
+    global joComplex=ComplexF32
     global joTol=sqrt(eps(Float32))
     return joInt, joFloat, joComplex
 end
@@ -135,7 +135,7 @@ set default type joInt, joFloat, joComplex to 64 bit
 function jo_jo64bit_set()
     global joInt=Int64
     global joFloat=Float64
-    global joComplex=Complex{Float64}
+    global joComplex=ComplexF64
     global joTol=sqrt(eps(Float64))
     return joInt, joFloat, joComplex
 end
@@ -250,7 +250,7 @@ Type of element of complex scalar
 
 # Example
 - jo_complex_eltype(1.+im*1.)
-- jo_complex_eltype(zero(Complex{Float64}))
+- jo_complex_eltype(zero(ComplexF64))
 
 """
 jo_complex_eltype(a::Complex{T}) where {T} = T
@@ -260,7 +260,7 @@ Type of element of complex data type
     jo_complex_eltype(DT::DataType)
 
 # Example
-- jo_complex_eltype(Complex{Float32})
+- jo_complex_eltype(ComplexF32)
 
 """
 function jo_complex_eltype(DT::DataType)
@@ -355,7 +355,7 @@ Convert vector to new type
   use jo_convert_warn_set(false) to turn off the warning
 
 # Example
-- jo_convert(Complex{Float32},rand(3))
+- jo_convert(ComplexF32,rand(3))
 
 """
 function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:Integer}
@@ -407,7 +407,7 @@ Convert number to new type
   use jo_convert_warn_set(false) to turn off the warning
 
 # Example
-- jo_convert(Complex{Float32},rand())
+- jo_convert(ComplexF32,rand())
 
 """
 function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:Integer}

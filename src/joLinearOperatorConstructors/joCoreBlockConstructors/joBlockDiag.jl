@@ -19,14 +19,14 @@ Block-diagonal operator composed from different square JOLI operators
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},8,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,6);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,8,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
     BD=joBlockDiag(A,B,C) # basic block diagonal
-    w=rand(Complex{Float64},3)
+    w=rand(ComplexF64,3)
     BD=joBlockDiag(A,B,C;weights=w) # weighted block diagonal
 
 # Notes
@@ -89,9 +89,9 @@ Block-diagonal operator composed from l-times replicated square JOLI operator
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    w=rand(Complex{Float64},3)
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
+    a=rand(ComplexF64,4,4);
+    w=rand(ComplexF64,3)
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
     BD=joBlockDiag(3,A) # basic block diagonal
     BD=joBlockDiag(3,A;weights=w) # weighted block diagonal
 

@@ -15,8 +15,8 @@ for t=1:T # start test loop
         v=rand(n)
     else
         tname="loop $t for complex($m,$n)"
-        a=rand(Complex{Float64})
-        v=rand(Complex{Float64},n)
+        a=rand(ComplexF64)
+        v=rand(ComplexF64,n)
     end
 
     verbose && println("$tsname $tname")

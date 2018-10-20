@@ -5,12 +5,12 @@ tsname="joStack - basic"
 for t=1:T # start test loop
 
     s=rand(3:9,3)
-    a=rand(Complex{Float64},s[1],s[1])
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64})
-    b=rand(Complex{Float64},s[2],s[1])
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
-    c=rand(Complex{Float64},s[3],s[1])
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64})
+    a=rand(ComplexF64,s[1],s[1])
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64)
+    b=rand(ComplexF64,s[2],s[1])
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64)
+    c=rand(ComplexF64,s[3],s[1])
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64)
     bd=cat(a,b,c,dims=1)
     BD=joStack(A,B,C)
     BDm=BD.m
@@ -18,10 +18,10 @@ for t=1:T # start test loop
 
     verbose && println("$tsname ($BDm,$BDn)")
     @testset "$BDm x $BDn" begin
-        vn=rand(Complex{Float32},BDn);
-        vm=rand(Complex{Float64},BDm);
-        mvn=rand(Complex{Float32},BDn,2);
-        mvm=rand(Complex{Float64},BDm,2);
+        vn=rand(ComplexF32,BDn);
+        vm=rand(ComplexF64,BDm);
+        mvn=rand(ComplexF32,BDn,2);
+        mvm=rand(ComplexF64,BDm,2);
         @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^eps_exp
         @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^eps_exp
         @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^eps_exp
@@ -41,13 +41,13 @@ tsname="joStack - weighted"
 for t=1:T # start test loop
 
     s=rand(3:9,3)
-    w=rand(Complex{Float64},3)
-    a=rand(Complex{Float64},s[1],s[1])
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64})
-    b=rand(Complex{Float64},s[2],s[1])
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
-    c=rand(Complex{Float64},s[3],s[1])
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64})
+    w=rand(ComplexF64,3)
+    a=rand(ComplexF64,s[1],s[1])
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64)
+    b=rand(ComplexF64,s[2],s[1])
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64)
+    c=rand(ComplexF64,s[3],s[1])
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64)
     bd=cat(w[1]*a,w[2]*b,w[3]*c,dims=1)
     BD=joStack(A,B,C;weights=w)
     BDm=BD.m
@@ -55,10 +55,10 @@ for t=1:T # start test loop
 
     verbose && println("$tsname ($BDm,$BDn)")
     @testset "$BDm x $BDn" begin
-        vn=rand(Complex{Float32},BDn);
-        vm=rand(Complex{Float64},BDm);
-        mvn=rand(Complex{Float32},BDn,2);
-        mvm=rand(Complex{Float64},BDm,2);
+        vn=rand(ComplexF32,BDn);
+        vm=rand(ComplexF64,BDm);
+        mvn=rand(ComplexF32,BDn,2);
+        mvm=rand(ComplexF64,BDm,2);
         @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^eps_exp
         @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^eps_exp
         @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^eps_exp
@@ -79,9 +79,9 @@ for t=1:T # start test loop
 
     s=rand(3:9)
     l=3
-    w=rand(Complex{Float64},l)
-    a=rand(Complex{Float64},s,s)
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64})
+    w=rand(ComplexF64,l)
+    a=rand(ComplexF64,s,s)
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64)
     bd=cat(w[1]*a,w[2]*a,w[3]*a,dims=1)
     BD=joStack(l,A;weights=w)
     BDm=BD.m
@@ -89,10 +89,10 @@ for t=1:T # start test loop
 
     verbose && println("$tsname ($BDm,$BDn)")
     @testset "$BDm x $BDn" begin
-        vn=rand(Complex{Float32},BDn);
-        vm=rand(Complex{Float64},BDm);
-        mvn=rand(Complex{Float32},BDn,2);
-        mvm=rand(Complex{Float64},BDm,2);
+        vn=rand(ComplexF32,BDn);
+        vm=rand(ComplexF64,BDm);
+        mvn=rand(ComplexF32,BDn,2);
+        mvm=rand(ComplexF64,BDm,2);
         @test norm(bd*vn-BD*vn)<eps(norm(bd*vn))^eps_exp
         @test norm(bd*mvn-BD*mvn)<eps(norm(bd*mvn))^eps_exp
         @test norm(transpose(bd)*vm-transpose(BD)*vm)<eps(norm(transpose(bd)*vm))^eps_exp

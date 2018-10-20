@@ -68,7 +68,7 @@ export joCurvelet2D
 - joCurvelet2D(32,32;zero_finest=true) - real transform with zeros at the finnest scales (64-bit)
 - joCurvelet2D(32,32;DDT=Float64,real_crvlts=false) - complex transform with real 64-bit input for forward
 - joCurvelet2D(32,32;DDT=Float32,RDT=Float64,real_crvlts=false) - complex transform with just precision specification for curvelets
-- joCurvelet2D(32,32;DDT=Float32,RDT=Complex{Float64},real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
+- joCurvelet2D(32,32;DDT=Float32,RDT=ComplexF64,real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
 
 # Notes
 

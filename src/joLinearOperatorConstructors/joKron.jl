@@ -11,12 +11,12 @@
 Kronecker product
 
 # Example
-    a=rand(Complex{Float64},6,4);
+    a=rand(ComplexF64,6,4);
     A=joMatrix(a;name="A")
-    b=rand(Complex{Float64},6,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,4);
-    C=joMatrix(c;DDT=Complex{Float64},RDT=Complex{Float32},name="C")
+    b=rand(ComplexF64,6,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,4);
+    C=joMatrix(c;DDT=ComplexF64,RDT=ComplexF32,name="C")
     K=joKron(A,B,C)
 
 # Notes

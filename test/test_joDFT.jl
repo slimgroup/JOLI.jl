@@ -3,12 +3,12 @@ tsname="joDFT"
 @testset "$tsname" begin
 for t=1:T # start test loop
     m=4^t
-    v1=rand(Complex{Float64},m)
-    v2=rand(Complex{Float64},m,m)
+    v1=rand(ComplexF64,m)
+    v2=rand(ComplexF64,m,m)
     vv2=vec(v2)
 
-    A1=joDFT(m;DDT=Complex{Float64})
-    A2=joDFT(m,m;DDT=Complex{Float64})
+    A1=joDFT(m;DDT=ComplexF64)
+    A2=joDFT(m,m;DDT=ComplexF64)
     verbose && println("$tsname ($m,$m) - planned")
     @testset "$m x $m" begin
         @test isadjoint(joDFT(m))[1]
@@ -29,8 +29,8 @@ for t=1:T # start test loop
         @test norm((adjoint(A2)*A2)*vv2-vv2)<joTol
     end
 
-    A1=joDFT(m;planned=false,DDT=Complex{Float64})
-    A2=joDFT(m,m;planned=false,DDT=Complex{Float64})
+    A1=joDFT(m;planned=false,DDT=ComplexF64)
+    A2=joDFT(m,m;planned=false,DDT=ComplexF64)
     verbose && println("$tsname ($m,$m) - not planned")
     @testset "$m x $m" begin
         @test isadjoint(joDFT(m;planned=false))[1]

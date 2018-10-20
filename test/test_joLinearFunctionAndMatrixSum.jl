@@ -21,12 +21,12 @@ if t%2==1
     B=joLinearFunctionAll(m,n,v->b*v,v->transpose(b)*v,v->adjoint(b)*v,v->conj(b)*v,v->b\v,v->transpose(b)\v,v->adjoint(b)\v,v->conj(b)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
 else
     tname="loop $t for complex($m,$n)"
-    a=rand(Complex{Float64},m,n)
-    b=rand(Complex{Float64},m,n)
-    vn=rand(Complex{Float64},n)
-    mvn=rand(Complex{Float64},n,2)
-    vm=rand(Complex{Float64},m)
-    mvm=rand(Complex{Float64},m,2)
+    a=rand(ComplexF64,m,n)
+    b=rand(ComplexF64,m,n)
+    vn=rand(ComplexF64,n)
+    mvn=rand(ComplexF64,n,2)
+    vm=rand(ComplexF64,m)
+    mvm=rand(ComplexF64,m,2)
     # needed to be reversed in 0.5.1 (see below) / OK again in 0.6
     A=joLinearFunctionAll(m,n,v->a*v,v->transpose(a)*v,v->adjoint(a)*v,v->conj(a)*v,v->a\v,v->transpose(a)\v,v->adjoint(a)\v,v->conj(a)\v,eltype(vn),eltype(vm);fMVok=true,iMVok=true)
     B=joMatrix(b)

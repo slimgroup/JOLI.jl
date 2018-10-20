@@ -19,12 +19,12 @@ if t%2==1
     mvm=rand(m,2)
 else
     tname="loop $t for complex($m,$n)"
-    a=rand(Complex{Float64},m,n)
-    b=rand(Complex{Float64},m,n)
-    vn=rand(Complex{Float64},n)
-    mvn=rand(Complex{Float64},n,2)
-    vm=rand(Complex{Float64},m)
-    mvm=rand(Complex{Float64},m,2)
+    a=rand(ComplexF64,m,n)
+    b=rand(ComplexF64,m,n)
+    vn=rand(ComplexF64,n)
+    mvn=rand(ComplexF64,n,2)
+    vm=rand(ComplexF64,m)
+    mvm=rand(ComplexF64,m,2)
 end
 A=joMatrix(a)
 B=joMatrix(b)

@@ -18,14 +18,14 @@ function fwdT(A::AbstractMatrix,vin::AbstractVector,RDT::DataType)
 end
 
 # define matrix for mapping functions
-a=rand(Complex{Float32},3,3)
+a=rand(ComplexF32,3,3)
 
 # define JOLI operator with desired domain and range using
 # using joLinearFunctionFwdT constructor
 # note forced dropping imaginary part for transpose/adjoint operators
 A=joLinearFunctionFwdT(3,3,
-    v->fwd(a,v,Complex{Float64}),v->fwdT(a,v,Float32),
-    Float32,Complex{Float64};name="my_A")
+    v->fwd(a,v,ComplexF64),v->fwdT(a,v,Float32),
+    Float32,ComplexF64;name="my_A")
 show(A)
 
 # disable warining for implicit inacurate conversions - use only after debugging your code

@@ -19,17 +19,17 @@ Dictionary operator composed from different square JOLI operators
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},4,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},4,6);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,4,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,4,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
     # either
         D=joDict(A,B,C) # basic dictionary in function syntax
     #or
         D=[A B C] # basic dictionary in [] syntax
-    w=rand(Complex{Float64},3)
+    w=rand(ComplexF64,3)
     D=joDict(A,B,C;weights=w) # weighted dictionary
 
 # Notes
@@ -92,9 +92,9 @@ Dictionary operator composed from l-times replicated square JOLI operator
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    w=rand(Complex{Float64},3)
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
+    a=rand(ComplexF64,4,4);
+    w=rand(ComplexF64,3)
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
     D=joDict(3,A) # basic dictionary
     D=joDict(3,A;weights=w) # weighted dictionary
 

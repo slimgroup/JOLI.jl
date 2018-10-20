@@ -19,19 +19,19 @@ Block operator composed from different square JOLI operators
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},4,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,6);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
-    d=rand(Complex{Float64},6,6);
-    D=joMatrix(d;DDT=Complex{Float32},RDT=Complex{Float64},name="D")
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,4,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
+    d=rand(ComplexF64,6,6);
+    D=joMatrix(d;DDT=ComplexF32,RDT=ComplexF64,name="D")
     # either
         S=joBlock([2,2],A,B,C,D) # basic block in function syntax
     # or
         S=[A B; C D] # basic block in [] syntax
-    w=rand(Complex{Float64},4)
+    w=rand(ComplexF64,4)
     S=joBlock(A,B,C;weights=w) # weighted block
 
 # Notes

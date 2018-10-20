@@ -4,8 +4,8 @@ tsname="InplaceOps"
 
 verbose && println("$tsname - Regular ($mn,$mn)")
 @testset "Regular" begin
-    DDT=Complex{Float64}
-    RDT=Complex{Float64}
+    DDT=ComplexF64
+    RDT=ComplexF64
     A=joMatrix(rand(DDT,mn,mn),DDT=DDT,RDT=RDT)
 
     x=rand(DDT,mn)
@@ -87,8 +87,8 @@ end
 
 verbose && println("$tsname - joMatrixInplace ($mn,$mn)")
 @testset "joMatrixInplace" begin
-    DDT=Complex{Float64}
-    RDT=Complex{Float64}
+    DDT=ComplexF64
+    RDT=ComplexF64
     a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     AI=joMatrixInplace(a,DDT=DDT,RDT=RDT)
@@ -172,8 +172,8 @@ end
 
 verbose && println("$tsname - joLooseMatrixInplace ($mn,$mn)")
 @testset "joLooseMatrixInplace" begin
-    DDT=Complex{Float64}
-    RDT=Complex{Float64}
+    DDT=ComplexF64
+    RDT=ComplexF64
     a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     AI=joLooseMatrixInplace(a,DDT=DDT,RDT=RDT)
@@ -257,8 +257,8 @@ end
 
 verbose && println("$tsname - joLinearFunctionInplace ($mn,$mn)")
 @testset "joLinearFunctionInplace" begin
-    DDT=Complex{Float64}
-    RDT=Complex{Float64}
+    DDT=ComplexF64
+    RDT=ComplexF64
     a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     fa=factorize(a)
@@ -352,8 +352,8 @@ end
 
 verbose && println("$tsname - joLooseLinearFunctionInplace ($mn,$mn)")
 @testset "joLooseLinearFunctionInplace" begin
-    DDT=Complex{Float64}
-    RDT=Complex{Float64}
+    DDT=ComplexF64
+    RDT=ComplexF64
     a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     fa=factorize(a)

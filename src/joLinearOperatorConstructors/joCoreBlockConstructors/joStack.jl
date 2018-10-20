@@ -18,17 +18,17 @@ Stack operator composed from different square JOLI operators
         weights::AbstractVector,name::String)
 
 # Example
-    a=rand(Complex{Float64},4,4);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},8,4);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,4);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,8,4);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,4);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
     # either
         S=joStack(A,B,C) # basic stack in function syntax
     # or
         S=[A; B; C] # basic stack in [] syntax
-    w=rand(Complex{Float64},3)
+    w=rand(ComplexF64,3)
     S=joStack(A,B,C;weights=w) # weighted stack
 
 # Notes
@@ -89,9 +89,9 @@ Stack operator composed from l-times replicated square JOLI operator
         weights::AbstractVector,name::String)
 
 # Example
-    a=rand(Complex{Float64},4,4);
-    w=rand(Complex{Float64},3)
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
+    a=rand(ComplexF64,4,4);
+    w=rand(ComplexF64,3)
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
     S=joStack(3,A) # basic stack
     S=joStack(3,A;weights=w) # weighted stack
 

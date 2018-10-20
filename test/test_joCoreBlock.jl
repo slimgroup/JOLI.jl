@@ -10,13 +10,13 @@ mo=vec([0 rand(0:u[1]) u[1]]) #rand(0:9,3)
 no=vec([0 rand(0:u[2]) u[2]]) #rand(0:9,3)
 m=max((mo+s)...)
 n=max((no+circshift(s,-1))...)
-    a=rand(Complex{Float64},s[1],s[2])
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64})
-    b=rand(Complex{Float64},s[2],s[3])
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
-    c=rand(Complex{Float64},s[3],s[1])
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64})
-bm=zeros(Complex{Float64},m,n)
+    a=rand(ComplexF64,s[1],s[2])
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64)
+    b=rand(ComplexF64,s[2],s[3])
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64)
+    c=rand(ComplexF64,s[3],s[1])
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64)
+bm=zeros(ComplexF64,m,n)
 bm[(mo[1]+1):(mo[1]+s[1]),(no[1]+1):(no[1]+s[2])]+=a
 bm[(mo[2]+1):(mo[2]+s[2]),(no[2]+1):(no[2]+s[3])]+=b
 bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=c
@@ -26,10 +26,10 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=c
 
     verbose && println("$tsname ($CBm,$CBn)")
     @testset "$CBm x $CBn" begin
-        vn=rand(Complex{Float32},CBn);
-        vm=rand(Complex{Float64},CBm);
-        mvn=rand(Complex{Float32},CBn,2);
-        mvm=rand(Complex{Float64},CBm,2);
+        vn=rand(ComplexF32,CBn);
+        vm=rand(ComplexF64,CBm);
+        mvn=rand(ComplexF32,CBn,2);
+        mvm=rand(ComplexF64,CBm,2);
         @test norm(bm*vn-CB*vn)<eps(norm(bm*vn))^eps_exp
         @test norm(bm*mvn-CB*mvn)<eps(norm(bm*mvn))^eps_exp
         @test norm(transpose(bm)*vm-transpose(CB)*vm)<eps(norm(transpose(bm)*vm))^eps_exp
@@ -50,18 +50,18 @@ for t=1:T # start test loop
 
     s=rand(3:9,3)
     u=rand(7:11,2)
-    w=rand(Complex{Float64},3)
+    w=rand(ComplexF64,3)
 mo=vec([0 rand(0:u[1]) u[1]]) #rand(0:9,3)
 no=vec([0 rand(0:u[2]) u[2]]) #rand(0:9,3)
 m=max((mo+s)...)
 n=max((no+circshift(s,-1))...)
-    a=rand(Complex{Float64},s[1],s[2])
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64})
-    b=rand(Complex{Float64},s[2],s[3])
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64})
-    c=rand(Complex{Float64},s[3],s[1])
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64})
-bm=zeros(Complex{Float64},m,n)
+    a=rand(ComplexF64,s[1],s[2])
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64)
+    b=rand(ComplexF64,s[2],s[3])
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64)
+    c=rand(ComplexF64,s[3],s[1])
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64)
+bm=zeros(ComplexF64,m,n)
 bm[(mo[1]+1):(mo[1]+s[1]),(no[1]+1):(no[1]+s[2])]+=w[1]*a
 bm[(mo[2]+1):(mo[2]+s[2]),(no[2]+1):(no[2]+s[3])]+=w[2]*b
 bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=w[3]*c
@@ -71,10 +71,10 @@ bm[(mo[3]+1):(mo[3]+s[3]),(no[3]+1):(no[3]+s[1])]+=w[3]*c
 
     verbose && println("$tsname ($CBm,$CBn)")
     @testset "$CBm x $CBn" begin
-        vn=rand(Complex{Float32},CBn);
-        vm=rand(Complex{Float64},CBm);
-        mvn=rand(Complex{Float32},CBn,2);
-        mvm=rand(Complex{Float64},CBm,2);
+        vn=rand(ComplexF32,CBn);
+        vm=rand(ComplexF64,CBm);
+        mvn=rand(ComplexF32,CBn,2);
+        mvm=rand(ComplexF64,CBm,2);
         @test norm(bm*vn-CB*vn)<eps(norm(bm*vn))^eps_exp
         @test norm(bm*mvn-CB*mvn)<eps(norm(bm*mvn))^eps_exp
         @test norm(transpose(bm)*vm-transpose(CB)*vm)<eps(norm(transpose(bm)*vm))^eps_exp

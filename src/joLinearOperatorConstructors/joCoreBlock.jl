@@ -13,18 +13,18 @@ Universal (Core) block operator composed from different JOLI operators
         weights::AbstractVector,mextend::Integer,nextend::Integer,name::String)
 
 # Example
-    a=rand(Complex{Float64},4,5);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},7,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,8);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
+    a=rand(ComplexF64,4,5);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,7,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,8);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
     moff=[0;5;13]
     noff=[0;6;15]
     BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff) # sparse blocks
     BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff,mextend=5,nextend=5) # sparse blocks with zero extansion of (mextend,nextend) size
     BD=joCoreBlock(A,B,C) # basic diagonal-corners adjacent blocks
-    w=rand(Complex{Float64},3)
+    w=rand(ComplexF64,3)
     BD=joCoreBlock(A,B,C;weights=w) # weighted basic diagonal-corners adjacent blocks
 
 # Notes
