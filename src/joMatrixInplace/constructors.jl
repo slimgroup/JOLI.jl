@@ -33,7 +33,7 @@ function joMatrixInplace(array::AbstractMatrix{EDT};
             (y5,x5)->ldiv!(y5,farray,x5),
             (y6,x6)->ldiv!(y6,transpose(farray),x6),
             (y7,x7)->ldiv!(y7,adjoint(farray),x7),
-            (y8,x8)->ldiv!(y8,farray,x8),
+            (y8,x8)->ldiv!(y8,factorize(conj(array)),x8),
             )
 end
 

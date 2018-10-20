@@ -4,9 +4,9 @@ tsname="InplaceOps"
 
 verbose && println("$tsname - Regular ($mn,$mn)")
 @testset "Regular" begin
-    DDT=Complex{Float32}
+    DDT=Complex{Float64}
     RDT=Complex{Float64}
-    A=joMatrix(rand(mn,mn),DDT=DDT,RDT=RDT)
+    A=joMatrix(rand(DDT,mn,mn),DDT=DDT,RDT=RDT)
 
     x=rand(DDT,mn)
     mx=rand(DDT,mn,mn)
@@ -89,7 +89,7 @@ verbose && println("$tsname - joMatrixInplace ($mn,$mn)")
 @testset "joMatrixInplace" begin
     DDT=Complex{Float64}
     RDT=Complex{Float64}
-    a=rand(mn,mn)
+    a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     AI=joMatrixInplace(a,DDT=DDT,RDT=RDT)
 
@@ -174,7 +174,7 @@ verbose && println("$tsname - joLooseMatrixInplace ($mn,$mn)")
 @testset "joLooseMatrixInplace" begin
     DDT=Complex{Float64}
     RDT=Complex{Float64}
-    a=rand(mn,mn)
+    a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     AI=joLooseMatrixInplace(a,DDT=DDT,RDT=RDT)
 
@@ -257,9 +257,9 @@ end
 
 verbose && println("$tsname - joLinearFunctionInplace ($mn,$mn)")
 @testset "joLinearFunctionInplace" begin
-    DDT=Float64
-    RDT=Float64
-    a=rand(mn,mn)
+    DDT=Complex{Float64}
+    RDT=Complex{Float64}
+    a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     fa=factorize(a)
     AI=joLinearFunctionInplaceAll(mn,mn,
@@ -270,7 +270,7 @@ verbose && println("$tsname - joLinearFunctionInplace ($mn,$mn)")
         (y5,x5)->ldiv!(y5,fa,x5),
         (y6,x6)->ldiv!(y6,transpose(fa),x6),
         (y7,x7)->ldiv!(y7,adjoint(fa),x7),
-        (y8,x8)->ldiv!(y8,fa,x8),
+        (y8,x8)->ldiv!(y8,factorize(conj(a)),x8),
         DDT,RDT)
 
     x=rand(DDT,mn)
@@ -352,9 +352,9 @@ end
 
 verbose && println("$tsname - joLooseLinearFunctionInplace ($mn,$mn)")
 @testset "joLooseLinearFunctionInplace" begin
-    DDT=Float64
-    RDT=Float64
-    a=rand(mn,mn)
+    DDT=Complex{Float64}
+    RDT=Complex{Float64}
+    a=rand(DDT,mn,mn)
     A=joMatrix(a,DDT=DDT,RDT=RDT)
     fa=factorize(a)
     AI=joLooseLinearFunctionInplaceAll(mn,mn,
@@ -365,7 +365,7 @@ verbose && println("$tsname - joLooseLinearFunctionInplace ($mn,$mn)")
         (y5,x5)->ldiv!(y5,fa,x5),
         (y6,x6)->ldiv!(y6,transpose(fa),x6),
         (y7,x7)->ldiv!(y7,adjoint(fa),x7),
-        (y8,x8)->ldiv!(y8,fa,x8),
+        (y8,x8)->ldiv!(y8,factorize(conj(a)),x8),
         DDT,RDT)
 
     x=rand(DDT,mn)
