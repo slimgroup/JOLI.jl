@@ -7,6 +7,7 @@ module JOLI
 # what's being used
 using Nullables
 using Printf
+using Random
 using InteractiveUtils
 using LinearAlgebra
 using SparseArrays
