@@ -16,6 +16,7 @@ using IterativeSolvers
 using InplaceOps
 using FFTW
 using NFFT
+using Wavelets
 
 # what's imported from Base
 import Base.eltype

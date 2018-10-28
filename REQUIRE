@@ -5,3 +5,4 @@ IterativeSolvers
 InplaceOps
 FFTW
 NFFT
+Wavelets
