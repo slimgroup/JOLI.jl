@@ -1,6 +1,7 @@
 using Base.Test
 using JOLI
 using InplaceOps
+using Wavelets
 
 jo_type_mismatch_error_set(false)
 #JOLI.jo_type_mismatch_warn_set(false)
@@ -29,6 +30,7 @@ include("test_joDict.jl")
 include("test_joStack.jl")
 include("test_joDFT.jl")
 include("test_joDCT.jl")
+include("test_joDWT.jl")
 include("test_joCurvelet2D.jl")
 include("test_joCurvelet2DnoFFT.jl")
 include("test_joExtend.jl")

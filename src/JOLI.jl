@@ -9,6 +9,7 @@ using DistributedArrays
 using IterativeSolvers
 using InplaceOps
 using NFFT
+using Wavelets
 
 # what's imported from Base
 import Base.eltype
