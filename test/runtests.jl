@@ -4,6 +4,7 @@ using SparseArrays
 using InplaceOps
 using Libdl
 using FFTW
+using Wavelets
 using JOLI
 
 jo_type_mismatch_error_set(false)
@@ -33,6 +34,7 @@ include("test_joDict.jl")
 include("test_joStack.jl")
 include("test_joDFT.jl")
 include("test_joDCT.jl")
+include("test_joDWT.jl")
 include("test_joCurvelet2D.jl")
 include("test_joCurvelet2DnoFFT.jl")
 include("test_joExtend.jl")
