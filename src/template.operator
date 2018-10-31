@@ -1,0 +1,37 @@
+# whot is it: joOPER
+
+## helper module
+module joOPER_etc
+    using JOLI: jo_convert
+end
+using .joOPER_etc
+
+export joOPER
+"""
+    julia> % Function name and typeless arguments
+
+% Description including return type
+
+# Signature
+
+    % Full function signature
+
+# Arguments
+
+- % argument list -> `arg`: meaning
+
+# Notes
+
+- % extra information
+
+# Examples
+
+- % call syntax examples -> `call(...)`: description
+
+"""
+function joOPER(...)
+    return jo*( ...
+        DDT,RDT;
+        name="joOPER")
+end
+
