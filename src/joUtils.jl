@@ -17,7 +17,7 @@ return identity array
     jo_eye(DT::DataType,m::Integer,n::Integer=m)
 
 """
-@inline jo_eye(m::Integer,n::Integer=m) = Matrix{Float64}(LinearAlgebra.I,m,n)
+@inline jo_eye(m::Integer,n::Integer=m) = Matrix{joFloat}(LinearAlgebra.I,m,n)
 @inline jo_eye(DT::DataType,m::Integer,n::Integer=m) = Matrix{DT}(LinearAlgebra.I,m,n)
 """
 return sparse identity array
@@ -26,7 +26,7 @@ return sparse identity array
     jo_speye(DT::DataType,m::Integer,n::Integer=m)
 
 """
-@inline jo_speye(m::Integer,n::Integer=m) = sparse(one(Float64)*LinearAlgebra.I,m,n)
+@inline jo_speye(m::Integer,n::Integer=m) = sparse(one(joFloat)*LinearAlgebra.I,m,n)
 @inline jo_speye(DT::DataType,m::Integer,n::Integer=m) = sparse(one(DT)*LinearAlgebra.I,m,n)
 """
 return full array
