@@ -42,7 +42,7 @@ function jo_method_error(O::joAbstractOperator,s::String)
     op_type=typeof(O)
     op_name=O.name
     @info "JOLI method error for operator:" op_name op_type
-    @error s
+    throw(joUtilsException(s))
 end
 function jo_method_error(L,R,s::String)
     left_type=typeof(L)
@@ -50,7 +50,7 @@ function jo_method_error(L,R,s::String)
     right_type=typeof(R)
     right_name=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
     @info "JOLI method error for combination:" left_name left_type right_name right_type
-    @error s
+    throw(joUtilsException(s))
 end
 function jo_method_error(L,M,R,s::String)
     left_type=typeof(L)
@@ -60,7 +60,7 @@ function jo_method_error(L,M,R,s::String)
     right_type=typeof(R)
     right_name=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
     @info "JOLI method error for combination:" left_name left_type mid_name mid_type right_name right_type
-    @error s
+    throw(joUtilsException(s))
 end
 
 ############################################################
