@@ -1,4 +1,5 @@
-# whot is it: joOPER
+using JOLI # remove when done
+# what is it: joOPER
 
 ## helper module
 module joOPER_etc
@@ -29,9 +30,5 @@ export joOPER
 - % call syntax examples -> `call(...)`: description
 
 """
-function joOPER(...)
-    return jo*( ...
-        DDT,RDT;
-        name="joOPER")
-end
+joOPER(args...) = nothing
 

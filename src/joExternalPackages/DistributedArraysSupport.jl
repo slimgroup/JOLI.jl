@@ -171,7 +171,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 # Signature
 
-    drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+    drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
 
 # Arguments
 
@@ -186,7 +186,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 - `drand(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with rand of Float32 using MersenneTwister() random device
 
 """
-function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+function drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
     id=DistributedArrays.next_did()
     init=I->rand(RNG,DT,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
@@ -200,7 +200,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 # Signature
 
-    drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+    drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
 
 # Arguments
 
@@ -219,7 +219,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 - `drandn(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with randn of Float32 using MersenneTwister() random device
 
 """
-function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
     DT<:Integer && @warn "Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor.\n\t Falling back to joFloat!" key="JOLI:drandn:Integer" maxlog=1
     DT= (DT<:Integer) ? joFloat : DT
     id=DistributedArrays.next_did()
