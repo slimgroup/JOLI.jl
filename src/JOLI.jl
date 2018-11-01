@@ -72,6 +72,7 @@ include("joLooseLinearFunctionInplace.jl")
 include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
+include("joMixedConstructors.jl")
 
 # contributed domain-specific operators go here
 include("contrib/Seismic.jl")

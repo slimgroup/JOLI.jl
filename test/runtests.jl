@@ -38,6 +38,7 @@ include("test_joDWT.jl")
 include("test_joCurvelet2D.jl")
 include("test_joCurvelet2DnoFFT.jl")
 include("test_joExtend.jl")
+include("test_joGaussian.jl")
 etime=time()
 dtime=etime-stime
 println("\nTest Total elapsed time: ",round(dtime,digits=1),"s")

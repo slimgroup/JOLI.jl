@@ -1,5 +1,5 @@
 ############################################################
-# joLinearFunction - miscaleneous constructor-only operators 
+# joLinearFunction - operator  constructors ################
 ############################################################
 
 # FFT operators: joDFT
