@@ -20,7 +20,7 @@ iswide(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m < A.n)
 iscomplex(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !(DDT<:Real && RDT<:Real)
 
 # islinear(jo)
-function islinear(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,verbose::Bool=false) where {DDT,RDT}
+function islinear(A::joAbstractLinearOperator{DDT,RDT},samples::Integer=3;tol::Float64=0.,verbose::Bool=false) where {DDT,RDT}
     Test=true
     TEST=Array{Bool,1}(undef,0)
     MYTOL=Array{Float64,1}(undef,0)
@@ -37,14 +37,14 @@ function islinear(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.
         rto=abs(norm(AxAy)/norm(Axy)); push!(RTO,rto)
         mytol=(tol>0 ? tol : sqrt(max(eps(norm(Axy)),eps(norm(AxAy))))); push!(MYTOL,mytol)
         test=(dif < mytol); push!(TEST,test); Test=Test&&test
-        result = test ? "passed" : "failed"
-        if verbose println("Linear test [$s] $result with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
+        result = test ? "PASSED" : "FAILED"
+        if verbose println("Linear test [$s] $result with\n tol=    $mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
     end
     return Test,TEST,MYTOL,DIF,RER,RTO
 end
 
 # isadjoint(jo)
-function isadjoint(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false) where {DDT,RDT}
+function isadjoint(A::joAbstractLinearOperator{DDT,RDT},samples::Integer=3;tol::Float64=0.,normfactor::Real=1.,userange::Bool=false,verbose::Bool=false) where {DDT,RDT}
     Test=true
     TEST=Array{Bool,1}(undef,0)
     MYTOL=Array{Float64,1}(undef,0)
@@ -70,8 +70,8 @@ function isadjoint(A::joAbstractLinearOperator{DDT,RDT},samples=3;tol::Float64=0
         rto=abs(xAty/Axy); push!(RTO,rto)
         mytol=(tol>0 ? tol : sqrt(max(eps(abs(Axy)),eps(abs(xAty))))); push!(MYTOL,mytol)
         test=(dif < mytol); push!(TEST,test); Test=Test&&test
-        result = test ? "passed" : "failed"
-        if verbose println("Adjoint test [$s] $result with tol=$mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
+        result = test ? "PASSED" : "FAILED"
+        if verbose println("Adjoint test [$s] $result with\n tol=    $mytol: \n diff=   $dif \n relerr= $rer \n ratio=  $rto") end
     end
     return Test,TEST,MYTOL,DIF,RER,RTO
 end

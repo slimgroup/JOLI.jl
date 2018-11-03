@@ -5,4 +5,7 @@ module Seismic
     # convert shot record to common-midpoint offset
     include("Seismic/joSRtoCMO.jl")
 
+    # units-dependent Radon transform
+    include("Seismic/joRadon.jl")
+
 end
