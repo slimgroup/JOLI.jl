@@ -4,6 +4,7 @@
 
 # helper module
 module joDAdistributor_etc
+    using Distributed
     function balanced_partition(parts::Tuple{Vararg{<:Integer}},dsize::Integer)
         vpart=collect(parts)
         nlabs=length(vpart)
@@ -19,8 +20,8 @@ module joDAdistributor_etc
             r::Int = rem(dsize,nlabs)
             c::Int = ceil(Int,dsize/nlabs)
             f::Int = floor(Int,dsize/nlabs)
-            part[1:r]       = c
-            part[r+1:nlabs] = f
+            part[1:r]       .= c
+            part[r+1:nlabs] .= f
             @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
             for i=0:nlabs idxs[i+1]=sum(part[1:i])+1 end
         else
@@ -45,8 +46,8 @@ module joDAdistributor_etc
     function idxs_cuts(dims::Dims, chunks::Vector{<:Integer})
         cuts = map(balanced_partition, chunks, dims)
         n = length(dims)
-        idxs = Array{NTuple{n,UnitRange{Int}}}(chunks...)
-        for cidx in CartesianRange(tuple(chunks...))
+        idxs = Array{NTuple{n,UnitRange{Int}}}(undef,chunks...)
+        for cidx in CartesianIndices(tuple(chunks...))
             idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] + 1] - 1), n)
         end
         return (idxs, cuts)
@@ -55,8 +56,8 @@ module joDAdistributor_etc
         chunks=length.(parts)
         cuts = [map(balanced_partition, parts, dims)...]
         n = length(dims)
-        idxs = Array{NTuple{n,UnitRange{Int}}}(chunks...)
-        for cidx in CartesianRange(tuple(chunks...))
+        idxs = Array{NTuple{n,UnitRange{Int}}}(undef,chunks...)
+        for cidx in CartesianIndices(tuple(chunks...))
             idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] + 1] - 1), n)
         end
         return (idxs, cuts)

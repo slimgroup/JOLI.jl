@@ -17,7 +17,7 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 """
 dalloc(dims::Dims, args...) = DArray(I->Array{joFloat}(map(length,I)), dims, args...)
-dalloc(::Type{T}, dims::Dims, args...) where {T} = DArray(I->Array{T}(map(length,I)), dims, args...)
+dalloc(::Type{T}, dims::Dims, args...) where {T} = DArray(I->Array{T}(undef,map(length,I)), dims, args...)
 dalloc(::Type{T}, d1::Integer, drest::Integer...) where {T} = dalloc(T, convert(Dims, tuple(d1, drest...)))
 dalloc(d1::Integer, drest::Integer...) = dalloc(joFloat, convert(Dims, tuple(d1, drest...)))
 dalloc(d::Dims) = dalloc(joFloat, d)
@@ -105,7 +105,7 @@ Use it to allocate quicker the array that will have all elements overwritten.
 """
 function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
-    init=I->Array{DT}(map(length,I))
+    init=I->Array{DT}(undef,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end

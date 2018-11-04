@@ -11,8 +11,9 @@ using Random
 using InteractiveUtils
 using LinearAlgebra
 using SparseArrays
-using DistributedArrays
 using IterativeSolvers
+using Distributed
+using DistributedArrays
 using InplaceOps
 using FFTW
 using NFFT
