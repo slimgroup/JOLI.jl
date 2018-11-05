@@ -9,6 +9,17 @@ julia:
 branches:
   only:
   - master
+
+addons:
+  apt_packages:
+    - gfortran
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        brew update && brew cask uninstall --force oclint && brew install gcc;
+    fi
+
+
 #notifications:
 #  email: false
 # uncomment the following lines to override the default test script
