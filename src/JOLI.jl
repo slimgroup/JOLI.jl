@@ -70,4 +70,7 @@ include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
 
+# contributed domain-specific operators go here
+include("contrib/Seismic.jl")
+
 end # module
