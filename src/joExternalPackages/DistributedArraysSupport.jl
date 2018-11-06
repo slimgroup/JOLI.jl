@@ -262,6 +262,6 @@ function distribute(A::AbstractArray,d::joDAdistributor)
     end
     init = I->DistributedArrays.localpart(s)
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
-    return DArray(id, I->localpart(s), d.dims, procs, d.idxs, d.cuts)
+    return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
