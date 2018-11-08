@@ -31,3 +31,8 @@ struct joDAdistributor
     DT::DataType
 end
 
+# type exception
+struct joDAdistributorException <: Exception
+    msg :: String
+end
+

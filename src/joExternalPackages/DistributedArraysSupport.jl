@@ -255,7 +255,7 @@ Distributes array according to given joDAdistributor.
 
 """
 function distribute(A::AbstractArray,d::joDAdistributor)
-    @assert size(A)==d.dims "FATAL ERROR: array size does not match dims of joDAdistributor"
+    size(A)==d.dims || throw(joDAdistributorException("joDAdistributor: array size does not match dims of joDAdistributor"))
     id=DistributedArrays.next_did()
     s = DistributedArrays.verified_destination_serializer(reshape(d.procs, size(d.idxs)), size(d.idxs)) do pididx
         A[d.idxs[pididx]...]

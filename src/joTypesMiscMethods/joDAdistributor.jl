@@ -12,13 +12,13 @@ module joDAdistributor_etc
         f::Int = floor(Int,dsize/nlabs)
         part[1:r]       .= c
         part[r+1:nlabs] .= f
-        @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
+        sum(part)==dsize || throw(joDAdistributorException("joDAdistributor: failed to properly partition $dsize to $nlabs workers"))
         return part
     end
     function balanced_partition_idxs(parts::Tuple{Vararg{INT}},dsize::Integer) where INT<:Integer
         vpart=collect(parts)
         nlabs=length(vpart)
-        @assert sum(vpart)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
+        sum(vpart)==dsize || throw(joDAdistributorException("joDAdistributor: failed to properly partition $dsize to $nlabs workers"))
         idxs = Vector{Int}(undef,nlabs+1)
         for i=0:nlabs idxs[i+1]=sum(vpart[1:i])+1 end
         return idxs
@@ -32,7 +32,7 @@ module joDAdistributor_etc
             f::Int = floor(Int,dsize/nlabs)
             part[1:r]       .= c
             part[r+1:nlabs] .= f
-            @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
+            sum(part)==dsize || throw(joDAdistributorException("joDAdistributor: failed to properly partition $dsize to $nlabs workers"))
             for i=0:nlabs idxs[i+1]=sum(part[1:i])+1 end
         else
             idxs = [collect(1:dsize+1)..., zeros(Int, nlabs-dsize)...,]
@@ -108,11 +108,11 @@ Get joDAdistributor represeanting transpose of another given joDAdistributor
 """
 function transpose(in::joDAdistributor)
     dims=reverse(in.dims)
-    @assert length(dims)==2 "joDAdistributor: transpose(joDAdistributor) makes sense only for 2D distributed arrays"
+    length(dims)==2 || throw(joDAdistributorException("joDAdistributor: transpose(joDAdistributor) makes sense only for 2D distributed arrays"))
     nlabs=length(in.procs)
     ddim=findfirst(i->i>1,in.chunks)
     ldim=findlast(i->i>1,in.chunks)
-    @assert ddim==ldim "joDAdistributor: cannot transpose and array with more then one distributed dimension"
+    ddim==ldim || throw(joDAdistributorException("joDAdistributor: cannot transpose and array with more then one distributed dimension"))
     parts=JOLI.joDAdistributor_etc.balanced_partition(nlabs,dims[ddim])
     return joDAdistributor(dims,ddim,DT=in.DT,parts=parts)
 end
@@ -144,7 +144,7 @@ Creates joDAdistributor type - basic distribution
 
     joDAdistributor(wpool::WorkerPool,dims::Dims;
         DT::DataType=joFloat,
-        chunks::Vector{Integer}=joDAdistributor_etc.default_chunks(dims,workers()),
+        chunks::Vector{Integer}=joDAdistributor_etc.default_chunks(dims,sorted(workers(wpool))),
         name::String="joDAdistributor";
     joDAdistributor(dims::Dims;kwargs...)
 
@@ -164,12 +164,13 @@ Creates joDAdistributor type - basic distribution
 """
 function joDAdistributor(wpool::WorkerPool,dims::Dims;
         DT::DataType=joFloat,
-        chunks::Vector{INT}=joDAdistributor_etc.default_chunks(dims,workers(wpool)),
+        chunks::Vector{INT}=joDAdistributor_etc.default_chunks(dims,sort(workers(wpool))),
         name::String="joDAdistributor",
         ) where INT<:Integer
-    @assert length(dims)==length(chunks) "FATAL ERROR: mismatch between # of dimensions $(length(dims)) and chunks $(length(chunks))"
-    procs = workers(wpool)
-    @assert length(procs)==prod(chunks) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
+    prod(dims)>0 || throw(joDAdistributorException("joDAdistributor: 0 dimension in $(dims)"))
+    length(dims)==length(chunks) || throw(joDAdistributorException("joDAdistributor: mismatch between # of dimensions $(length(dims)) and chunks $(length(chunks))"))
+    procs = sort(workers(wpool))
+    length(procs)==prod(chunks) || throw(joDAdistributorException("joDAdistributor: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"))
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,chunks)
     return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
 end
@@ -209,14 +210,15 @@ function joDAdistributor(wpool::WorkerPool,dims::Dims,ddim::Integer;
         parts::Union{Vector{INT},Dims}=joDAdistributor_etc.balanced_partition(nworkers(wpool),dims[ddim]),
         name::String="joDAdistributor") where INT<:Integer
     nd=length(dims)
-    @assert ddim<=nd "FATAL ERROR: distributed dimension ($ddim) > # of dimensions ($nd)"
-    @assert sum(parts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
+    prod(dims)>0 || throw(joDAdistributorException("joDAdistributor: 0 dimension in $(dims)"))
+    ddim<=nd || throw(joDAdistributorException("joDAdistributor: distributed dimension ($ddim) > # of dimensions ($nd)"))
+    sum(parts)==dims[ddim] || throw(joDAdistributorException("joDAdistributor: size of distributed dimension's parts does not sum up to its size"))
     myparts=([i==ddim ? (parts...,) : tuple(dims[i]) for i=1:nd]...,)
     cdims=convert(Dims,(sum.([myparts...],)...,))
-    @assert dims==cdims "FATAL ERROR: something terrible happened in partition calculations - seek help from developer"
+    dims==cdims || throw(joDAdistributorException("joDAdistributor: something terrible happened in partition calculations - seek help from developer"))
     chunks=[length.([myparts...])...]
-    procs = workers(wpool)
-    @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
+    procs = sort(workers(wpool))
+    prod(chunks)==length(procs) || throw(joDAdistributorException("joDAdistributor: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"))
     idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,myparts)
     return joDAdistributor(name,cdims,procs,chunks,idxs,cuts,DT)
 end
@@ -230,10 +232,11 @@ Creates joDAdistributor type with ultimate distribution topology control
 
 # Signature
 
-    joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{Integer}}}};
+    joDAdistributor(wpool::WorkerPool,parts::Tuple{Vararg{Tuple{Vararg{Integer}}}};
         DT::DataType=joFloat,
         procs::Vector{Integer}=workers(),
         name::String="joDAdistributor")
+    joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{INT}}}};kwargs...)
 
 # Arguments
 
@@ -251,9 +254,10 @@ function joDAdistributor(wpool::WorkerPool,parts::Tuple{Vararg{Tuple{Vararg{INT}
         DT::DataType=joFloat,
         name::String="joDAdistributor") where INT<:Integer
     dims=convert(Dims,(sum.([parts...],)...,))
+    prod(dims)>0 || throw(joDAdistributorException("joDAdistributor: 0 dimension in $(dims)"))
     chunks=[length.([parts...])...]
-    procs = workers(wpool)
-    @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
+    procs = sort(workers(wpool))
+    prod(chunks)==length(procs)  || throw(joDAdistributorException("joDAdistributor: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"))
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
     return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
 end
