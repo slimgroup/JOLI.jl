@@ -133,7 +133,6 @@ function joDAdistributor(wpool::WorkerPool,dims::Dims;
     procs = workers(wpool)
     @assert length(procs)==prod(chunks) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,chunks)
-    println("... basic ...")
     return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
 end
 joDAdistributor(dims::Dims;kwargs...) = joDAdistributor(WorkerPool(workers()),dims;kwargs...)
@@ -181,7 +180,6 @@ function joDAdistributor(wpool::WorkerPool,dims::Dims,ddim::Integer;
     procs = workers(wpool)
     @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,myparts)
-    println("... ddim ...")
     return joDAdistributor(name,cdims,procs,chunks,idxs,cuts,DT)
 end
 joDAdistributor(dims::Dims,ddim::Integer;kwargs...) = joDAdistributor(WorkerPool(workers()),dims,ddim;kwargs...)
@@ -219,7 +217,6 @@ function joDAdistributor(wpool::WorkerPool,parts::Tuple{Vararg{Tuple{Vararg{INT}
     procs = workers(wpool)
     @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
-    println("... ultimate ...")
     return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
 end
 joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{INT}}}};kwargs...) where INT<:Integer =
