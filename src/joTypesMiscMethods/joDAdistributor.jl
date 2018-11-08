@@ -5,7 +5,17 @@
 # helper module
 module joDAdistributor_etc
     using Distributed
-    function balanced_partition(parts::Tuple{Vararg{<:Integer}},dsize::Integer)
+    function balanced_partition(nlabs::Integer,dsize::Integer)
+        part = Vector{Int}(undef,nlabs)
+        r::Int = rem(dsize,nlabs)
+        c::Int = ceil(Int,dsize/nlabs)
+        f::Int = floor(Int,dsize/nlabs)
+        part[1:r]       .= c
+        part[r+1:nlabs] .= f
+        @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
+        return part
+    end
+    function balanced_partition_idxs(parts::Tuple{Vararg{INT}},dsize::Integer) where INT<:Integer
         vpart=collect(parts)
         nlabs=length(vpart)
         @assert sum(vpart)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
@@ -13,7 +23,7 @@ module joDAdistributor_etc
         for i=0:nlabs idxs[i+1]=sum(vpart[1:i])+1 end
         return idxs
     end
-    function balanced_partition(nlabs::Integer,dsize::Integer)
+    function balanced_partition_idxs(nlabs::Integer,dsize::Integer)
         if dsize>=nlabs
             part = Vector{Int}(undef,nlabs)
             idxs = Vector{Int}(undef,nlabs+1)
@@ -25,12 +35,12 @@ module joDAdistributor_etc
             @assert sum(part)==dsize "FATAL ERROR: failed to properly partition $dsize to $nlabs workers"
             for i=0:nlabs idxs[i+1]=sum(part[1:i])+1 end
         else
-            idxs = [[1:(dsize+1);], zeros(Int, nlabs-dsize)]
+            idxs = [collect(1:dsize+1)..., zeros(Int, nlabs-dsize)...,]
         end
         return idxs
     end
 
-    function default_distribution(dims::Dims,pids::Vector{<:Integer})
+    function default_chunks(dims::Dims,pids::Vector{INT}) where INT<:Integer
         chunks = ones(Int, length(dims))
         np = length(pids)
             nd = length(dims)
@@ -43,22 +53,22 @@ module joDAdistributor_etc
         return chunks
     end
 
-    function idxs_cuts(dims::Dims, chunks::Vector{<:Integer})
-        cuts = map(balanced_partition, chunks, dims)
+    function idxs_cuts(dims::Dims, chunks::Vector{INT}) where INT<:Integer
+        cuts = map(balanced_partition_idxs, chunks, dims)
         n = length(dims)
         idxs = Array{NTuple{n,UnitRange{Int}}}(undef,chunks...)
         for cidx in CartesianIndices(tuple(chunks...))
-            idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] + 1] - 1), n)
+            idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] .+ 1] .- 1), n)
         end
         return (idxs, cuts)
     end
-    function idxs_cuts(dims::Dims, parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}})
+    function idxs_cuts(dims::Dims, parts::Tuple{Vararg{Tuple{Vararg{INT}}}}) where INT<:Integer
         chunks=length.(parts)
-        cuts = [map(balanced_partition, parts, dims)...]
+        cuts = [map(balanced_partition_idxs, parts, dims)...]
         n = length(dims)
         idxs = Array{NTuple{n,UnitRange{Int}}}(undef,chunks...)
         for cidx in CartesianIndices(tuple(chunks...))
-            idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] + 1] - 1), n)
+            idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] .+ 1] .- 1), n)
         end
         return (idxs, cuts)
     end
@@ -87,135 +97,131 @@ end
 
 # constructors
 """
-    julia> joDAdistributor(dims[,procs[,chunks]];[name],[DT])
+    julia> joDAdistributor(wpool,dims;[DT,][chunks,][name])
+    julia> joDAdistributor(dims;[DT,][chunks,][name])
 
-Creates joDAdistributor type
+Creates joDAdistributor type - basic distribution
 
-# Signature
+# Signatures
 
-    joDAdistributor(dims::Dims,
-        procs::Vector{<:Integer}=workers(),
-        chunks::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
-        name::String="joDAdistributor",DT::DataType=joFloat)
+    joDAdistributor(wpool::WorkerPool,dims::Dims;
+        DT::DataType=joFloat,
+        chunks::Vector{Integer}=joDAdistributor_etc.default_chunks(dims,workers()),
+        name::String="joDAdistributor";
+    joDAdistributor(dims::Dims;kwargs...)
 
 # Arguments
 
+- `wpool`: WorkerPool instance - defaults to WorkerPool(workers())
 - `dims`: tuple with array's dimensions
-- `procs`: vector of workers' ids
-- `chunks`: vector of number of parts in each dimension
 - `DT`: DataType of array's elements
+- `chunks`: vector of number of parts in each dimension
 - `name`: name of distributor
 
 # Examples
 
-- `joDAdistributor((3,40,5),workers(),[1,4,1];DT=Int8)`: distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
+- `joDAdistributor((3,40,5);DT=Int8)`: basic distributor for Int8 array (3,40,5)
+- `joDAdistributor((3,40,5);DT=Int8, chunks=[1,nworkers(),1])`: basic distributor for Int8 array (3,40,5) forcing distribution in 2nd dimension
 
 """
-function joDAdistributor(dims::Dims,
-        procs::Vector{<:Integer}=workers(),
-        chunks::Vector{<:Integer}=joDAdistributor_etc.default_distribution(dims,procs);
-        name::String="joDAdistributor",DT::DataType=joFloat)
+function joDAdistributor(wpool::WorkerPool,dims::Dims;
+        DT::DataType=joFloat,
+        chunks::Vector{INT}=joDAdistributor_etc.default_chunks(dims,workers(wpool)),
+        name::String="joDAdistributor",
+        ) where INT<:Integer
     @assert length(dims)==length(chunks) "FATAL ERROR: mismatch between # of dimensions $(length(dims)) and chunks $(length(chunks))"
+    procs = workers(wpool)
     @assert length(procs)==prod(chunks) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
     idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,chunks)
+    println("... basic ...")
     return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
 end
+joDAdistributor(dims::Dims;kwargs...) = joDAdistributor(WorkerPool(workers()),dims;kwargs...)
+
 """
-    julia> joDAdistributor(parts[,procs];[name],[DT])
+    julia> joDAdistributor(wpool,dims,ddim;[DT,][parts,][name])
+    julia> joDAdistributor(dims,ddim;[DT,][parts,][name])
 
 Creates joDAdistributor type
 
 # Signature
 
-    joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
-        procs::Vector{<:Integer}=workers();
-        name::String="joDAdistributor",DT::DataType=joFloat)
+    joDAdistributor(wpool::WorkerPool,dims::Dims,ddim::Integer;
+        DT::DataType=joFloat,
+        parts::Union{Vector{Integer},Dims}=joDAdistributor_etc.balanced_partition(nworkers(wpool),dims[ddim]),
+        name::String="joDAdistributor",)
+    joDAdistributor(dims::Dims,ddim::Integer;kwargs...)
 
 # Arguments
 
-- `parts`: tuple of tuples with part's size on each worker
-- `procs`: vector of workers' ids
-- `DT`: DataType of array's elements
-- `name`: name of distributor
-
-# Examples
-
-- `joDAdistributor(((3,),(10,10,10,10),(5,));DT=Int8)`: distribute Int8 array (3,40,5) over 2nd dimension and 4 workers
-
-"""
-function joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{<:Integer}}}},
-        procs::Vector{<:Integer}=workers();
-        name::String="joDAdistributor",DT::DataType=joFloat)
-    dims=convert(Dims,(sum.([parts...],)...,))
-    chunks=[length.([parts...])...]
-    @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
-    idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
-    return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
-end
-"""
-    julia> joDAdistributor(dims,ddim,dparts[,procs];[name],[DT])
-
-Creates joDAdistributor type
-
-# Signature
-
-    function joDAdistributor(dims::Dims,
-        ddim::Integer,dparts::Union{Vector{<:Integer},Dims},
-        procs::Vector{<:Integer}=workers();
-        name::String="joDAdistributor",DT::DataType=joFloat)
-
-# Arguments
-
+- `wpool`: WorkerPool instance - defaults to WorkerPool(workers())
 - `dims`: tuple with array's dimensions
 - `ddim`: dimansion to distribute over
-- `dparts`: tupe/vector of the part's size on each worker
-- `procs`: vector of workers' ids
+- `DT`: DataType of array's elements
+- `parts`: tuple/vector of the subarray's size on each worker in distributed dimension
+- `name`: name of distributor
+
+# Examples
+
+- `joDAdistributor((3,40,5),2;DT=Int8)`: distribute 2nd dimension over 4 workers
+- `joDAdistributor((3,40,5),2;DT=Int8,parts=(11,11,11,7))`: distribute 2nd dimension over 4 workers and specify parts
+
+"""
+function joDAdistributor(wpool::WorkerPool,dims::Dims,ddim::Integer;
+        DT::DataType=joFloat,
+        parts::Union{Vector{INT},Dims}=joDAdistributor_etc.balanced_partition(nworkers(wpool),dims[ddim]),
+        name::String="joDAdistributor") where INT<:Integer
+    nd=length(dims)
+    @assert ddim<=nd "FATAL ERROR: distributed dimension ($ddim) > # of dimensions ($nd)"
+    @assert sum(parts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
+    myparts=([i==ddim ? (parts...,) : tuple(dims[i]) for i=1:nd]...,)
+    cdims=convert(Dims,(sum.([myparts...],)...,))
+    @assert dims==cdims "FATAL ERROR: something terrible happened in partition calculations - seek help from developer"
+    chunks=[length.([myparts...])...]
+    procs = workers(wpool)
+    @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
+    idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,myparts)
+    println("... ddim ...")
+    return joDAdistributor(name,cdims,procs,chunks,idxs,cuts,DT)
+end
+joDAdistributor(dims::Dims,ddim::Integer;kwargs...) = joDAdistributor(WorkerPool(workers()),dims,ddim;kwargs...)
+
+"""
+    julia> joDAdistributor(wpool,parts;[name],[DT])
+    julia> joDAdistributor(parts;[name],[DT])
+
+Creates joDAdistributor type with ultimate distribution topology control
+
+# Signature
+
+    joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{Integer}}}};
+        DT::DataType=joFloat,
+        procs::Vector{Integer}=workers(),
+        name::String="joDAdistributor")
+
+# Arguments
+
+- `wpool`: WorkerPool instance - defaults to WorkerPool(workers())
+- `parts`: tuple of tuples with subarray's size on each worker
 - `DT`: DataType of array's elements
 - `name`: name of distributor
 
 # Examples
 
-- `joDAdistributor((3,40,5),2,(10,10,10,10);DT=Int8)`: distribute 2nd dimension over 4 workers
+- `joDAdistributor(((3,),(10,10,10,10),(5,));DT=Int8)`: distribute Int8 array (3,40,5) over 2nd dimension
 
 """
-function joDAdistributor(dims::Dims,
-        ddim::Integer,dparts::Union{Vector{<:Integer},Dims},
-        procs::Vector{<:Integer}=workers();
-        name::String="joDAdistributor",DT::DataType=joFloat)
-    nd=length(dims)
-    @assert ddim<=nd "FATAL ERROR: distributed dimension ($ddim) > # of dimensions ($nd)"
-    @assert sum(dparts)==dims[ddim] "FATAL ERROR: size of distributed dimension's parts does not sum up to its size"
-    parts=([i==ddim ? (dparts...,) : tuple(dims[i]) for i=1:nd]...,)
-    cdims=convert(Dims,(sum.([parts...],)...,))
-    @assert dims==cdims "FATAL ERROR: something terrible happened in partition calculations - seek help from developer"
+function joDAdistributor(wpool::WorkerPool,parts::Tuple{Vararg{Tuple{Vararg{INT}}}};
+        DT::DataType=joFloat,
+        name::String="joDAdistributor") where INT<:Integer
+    dims=convert(Dims,(sum.([parts...],)...,))
     chunks=[length.([parts...])...]
+    procs = workers(wpool)
     @assert prod(chunks)==length(procs) "FATAL ERROR: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"
-    idxs,cuts = joDAdistributor_etc.idxs_cuts(cdims,parts)
-    return joDAdistributor(name,cdims,procs,chunks,idxs,cuts,DT)
+    idxs,cuts = joDAdistributor_etc.idxs_cuts(dims,parts)
+    println("... ultimate ...")
+    return joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
 end
-"""
-    julia> joDAdistributor(m[,n[...]];[name],[DT])
-
-Creates joDAdistributor type
-
-# Signature
-
-    joDAdistributor(dims::Integer...;name::String="joDAdistributor",DT::DataType=joFloat)
-
-# Arguments
-
-- `m[,n[...]]`: dimensions of distributed array
-- `name`: name of distributor
-
-# Notes
-
-- distributes over last non-singleton (worker-wise) dimension
-- one of the dimensions must be large enough to hold at least one element on each worker
-
-# Examples
-
-- `joDAdistributor(20,30,4;DT=Int8)`: distributes over 3rd dimension if nworkers <=4, or 2nd dimension if 4< nworkers <=30
-
-"""
-joDAdistributor(dims::Integer...;name::String="joDAdistributor",DT::DataType=joFloat) = joDAdistributor(convert(Dims,dims);name=name,DT=DT)
+joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{INT}}}};kwargs...) where INT<:Integer =
+    joDAdistributor(WorkerPool(workers()),parts;kwargs...)
 
