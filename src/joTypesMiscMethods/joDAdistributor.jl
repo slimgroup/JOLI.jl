@@ -78,17 +78,17 @@ using .joDAdistributor_etc
 # printouts
 function show(d::joDAdistributor)
     println("joDAdistributor: ",d.name)
+    println(" DataType: ",d.DT)
     println(" Dims    : ",d.dims)
     println(" Chunks  : ",d.chunks)
     println(" Workers : ",d.procs)
-    println(" DataType: ",d.DT)
 end
 function display(d::joDAdistributor)
     println("joDAdistributor: ",d.name)
+    println(" DataType: ",d.DT)
     println(" Dims    : ",d.dims)
     println(" Chunks  : ",d.chunks)
     println(" Workers : ",d.procs)
-    println(" DataType: ",d.DT)
     for i=1:length(d.procs)
         @printf "  Worker/ranges: %3d " d.procs[i]
         println(d.idxs[i])
@@ -96,6 +96,44 @@ function display(d::joDAdistributor)
 end
 
 # constructors
+"""
+    julia> transpose(in::joDAdistributor)
+
+Get joDAdistributor represeanting transpose of another given joDAdistributor
+
+# Notes
+- operation will preserve # of distributed dimension
+- only transposes of 1D distribution are supported
+
+"""
+function transpose(in::joDAdistributor)
+    dims=reverse(in.dims)
+    @assert length(dims)==2 "joDAdistributor: transpose(joDAdistributor) makes sense only for 2D distributed arrays"
+    nlabs=length(in.procs)
+    ddim=findfirst(i->i>1,in.chunks)
+    ldim=findlast(i->i>1,in.chunks)
+    @assert ddim==ldim "joDAdistributor: cannot transpose and array with more then one distributed dimension"
+    parts=JOLI.joDAdistributor_etc.balanced_partition(nlabs,dims[ddim])
+    return joDAdistributor(dims,ddim,DT=in.DT,parts=parts)
+end
+
+"""
+    julia> joDAdistributor(in::DArray)
+
+Get joDAdistributor represeanting a given DArray
+
+"""
+function joDAdistributor(DA::DArray)
+    name=filter(x->!isspace(x),"DArray_$(DA.id)")
+    dims=DA.dims
+    procs=[DA.pids...,]
+    chunks=map(i->length(i)-1,DA.cuts)
+    idxs=DA.indices
+    cuts=DA.cuts
+    DT=eltype(DA)
+    joDAdistributor(name,dims,procs,chunks,idxs,cuts,DT)
+end
+
 """
     julia> joDAdistributor(wpool,dims;[DT,][chunks,][name])
     julia> joDAdistributor(dims;[DT,][chunks,][name])
