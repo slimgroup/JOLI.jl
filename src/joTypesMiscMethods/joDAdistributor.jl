@@ -113,8 +113,8 @@ function transpose(in::joDAdistributor)
     ddim=findfirst(i->i>1,in.chunks)
     ldim=findlast(i->i>1,in.chunks)
     ddim==ldim || throw(joDAdistributorException("joDAdistributor: cannot transpose and array with more then one distributed dimension"))
-    parts=JOLI.joDAdistributor_etc.balanced_partition(nlabs,dims[ddim])
-    return joDAdistributor(dims,ddim,DT=in.DT,parts=parts)
+    parts=joDAdistributor_etc.balanced_partition(nlabs,dims[ddim])
+    return joDAdistributor(dims,ddim,DT=in.DT,parts=parts,name="transpose($(in.name))")
 end
 
 """

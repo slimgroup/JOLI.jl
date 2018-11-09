@@ -2,7 +2,7 @@
 ## joDAdistributor
 ############################################################
 
-export joDAdistributor
+export joDAdistributor, joDAdistributorException
 
 # type definition
 """
