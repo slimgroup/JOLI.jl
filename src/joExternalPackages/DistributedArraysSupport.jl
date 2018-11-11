@@ -1,3 +1,52 @@
+# helper module with misc DArray utilities
+module joDAutils
+    using DistributedArrays
+
+    function DArray5(init, dims, procs, idxs, cuts)
+        dist = chunks=map(i->length(i)-1,cuts)
+        np = prod(dist)
+        procs = reshape(procs[1:np], ntuple(i->dist[i], length(dist)))
+        id = DistributedArrays.next_did()
+        return DArray(id, init, dims, procs, idxs, cuts)
+    end
+end
+using .joDAutils
+
+export dcopy
+"""
+    julia> dcopy(dtr,[dst])
+
+copy transpose(DArray) into a new DArray using predefined joDAdistributor
+
+# Signature
+
+    dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor)
+    dcopy(Dtr::Transpose{T,<:DArray{T,2}})
+
+# Arguments
+
+- `dtr`: transpose(DArray)
+- `dst`: target joDAdistributor
+
+"""
+function dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor) where T
+    Dst=joDAdistributor(parent(Dtr))
+    Dst.dims==reverse(dst.dims) || throw(joDAdistributorException("the sizes of original array and provided target distributor do not match"))
+    Dst.procs==dst.procs || throw(joDAdistributorException("the workers of original array and provided target distributor do not match"))
+
+    D = parent(Dtr)
+    joDAutils.DArray5(dst.dims, dst.procs, dst.idxs, dst.cuts) do I
+        println(I,reverse(I))
+        lp = Array{T}(undef, map(length, I))
+        rp = convert(Array, D[reverse(I)...])
+        transpose!(lp, rp)
+    end
+end
+function dcopy(Dtr::Transpose{T,<:DArray{T,2}}) where T
+    Dst=transpose(joDAdistributor(parent(Dtr)))
+    return dcopy(Dtr,Dst)
+end
+
 export dalloc
 
 """
@@ -266,36 +315,3 @@ function distribute(A::AbstractArray,d::joDAdistributor)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
-# module with misc DArray utilities
-module joDAutils
-    using LinearAlgebra
-    using DistributedArrays
-    using JOLI: joDAdistributor
-
-    function DArray5(init, dims, procs, idxs, cuts)
-        dist = chunks=map(i->length(i)-1,cuts)
-        np = prod(dist)
-        procs = reshape(procs[1:np], ntuple(i->dist[i], length(dist)))
-        id = DistributedArrays.next_did()
-        return DArray(id, init, dims, procs, idxs, cuts)
-    end
-
-    function copy_DTranspose(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor) where T
-        Dst=joDAdistributor(parent(Dtr))
-        Dst.dims==reverse(dst.dims) || throw(joDAdistributorException("the sizes of original array and provided target distributor do not match"))
-        Dst.procs==dst.procs || throw(joDAdistributorException("the workers of original array and provided target distributor do not match"))
-
-        D = parent(Dtr)
-        DArray5(dst.dims, dst.procs, dst.idxs, dst.cuts) do I
-            println(I,reverse(I))
-            lp = Array{T}(undef, map(length, I))
-            rp = convert(Array, D[reverse(I)...])
-            transpose!(lp, rp)
-        end
-    end
-    function copy_DTranspose(Dtr::Transpose{T,<:DArray{T,2}}) where T
-        Dst=transpose(joDAdistributor(parent(Dtr)))
-        return copy_DTranspose(Dtr,Dst)
-    end
-end
-using .joDAutils
