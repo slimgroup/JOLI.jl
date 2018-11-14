@@ -1,7 +1,8 @@
 ############################################################
-# jo Types - miscellaneous constractors ####################
+# jo parallel tools methods ################################
 ############################################################
 
 ############################################################
 # includes
-include("joTypesMiscMethods/joNumber.jl")
+include("joParallelTools/joDAdistributor.jl")
+include("joParallelTools/joDAdistribute.jl")
