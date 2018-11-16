@@ -15,7 +15,7 @@ end
 Block operator composed from different square JOLI operators
 
     joBlock(rows::Tuple{Vararg{Int}},ops::joAbstractLinearOperator...;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
@@ -44,7 +44,7 @@ Block operator composed from different square JOLI operators
 
 """
 function joBlock(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joBlock") where {RVDT<:Integer,WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joBlock") where {RVDT<:Integer,WDT<:Number}
     isempty(ops) && throw(joBlockException("empty argument list"))
     l=length(ops)
     sum(rows)==l || throw(joBlockException("sum of operators in the rows does not match # of operators"))

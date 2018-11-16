@@ -5,25 +5,25 @@ module joDWT_etc
     using JOLI: jo_convert
     using Wavelets
     # 1D
-    function apply_dwt(v::AbstractVector{<:Number},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_dwt(v::Vector{vdt},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=dwt(v,wt,L)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idwt(v::AbstractVector{<:Number},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_idwt(v::Vector{vdt},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=idwt(v,wt,L)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     # 2D
-    function apply_dwt(v::AbstractVector{<:Number},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_dwt(v::Vector{vdt},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,m,n)
         rv=dwt(rv,wt,L)
         rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idwt(v::AbstractVector{<:Number},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_idwt(v::Vector{vdt},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,m,n)
         rv=idwt(rv,wt,L)
         rv=vec(rv)

@@ -92,7 +92,7 @@ adjoint(A::joKron{DDT,RDT}) where {DDT,RDT} =
         A.iop_A,A.iop_C,A.iop,A.iop_T)
 
 # *(jo,vec)
-function *(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
+function *(A::joKron{ADDT,ARDT},v::LocalVector{ADDT}) where {ADDT,ARDT}
     size(A,2) == size(v,1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
     V=reshape(v,ksz...)
@@ -122,7 +122,7 @@ function *(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
 end
 
 # *(jo,mvec)
-function *(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT}) where {ADDT,ARDT}
+function *(A::joKron{ADDT,ARDT},mv::LocalMatrix{ADDT}) where {ADDT,ARDT}
     size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
     MV=Matrix{ARDT}(undef,A.m,size(mv,2))
     for i=1:size(mv,2)

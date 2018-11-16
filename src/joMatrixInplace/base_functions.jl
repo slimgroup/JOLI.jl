@@ -167,13 +167,13 @@ adjoint(A::joMatrixInplace{DDT,RDT}) where {DDT,RDT} =
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-function mul!(y::AbstractVector{RDT},A::joMatrixInplace{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT}
+function mul!(y::LocalVector{RDT},A::joMatrixInplace{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT}
     A.m == size(y,1) || throw(joMatrixInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joMatrixInplaceException("shape mismatch"))
     A.fop(y,x)
     return y
 end
-function mul!(y::AbstractMatrix{RDT},A::joMatrixInplace{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT}
+function mul!(y::LocalMatrix{RDT},A::joMatrixInplace{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT}
     size(y,2) == size(x,2) || throw(joMatrixInplaceException("shape mismatch"))
     A.m == size(y,1) || throw(joMatrixInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joMatrixInplaceException("shape mismatch"))
@@ -182,13 +182,13 @@ function mul!(y::AbstractMatrix{RDT},A::joMatrixInplace{DDT,RDT},x::AbstractMatr
 end
 
 # ldiv!(...,jo,...)
-function ldiv!(y::AbstractVector{DDT},A::joMatrixInplace{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT}
+function ldiv!(y::LocalVector{DDT},A::joMatrixInplace{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT}
     A.n == size(y,1) || throw(joMatrixInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joMatrixInplaceException("shape mismatch"))
     get(A.iop)(y,x)
     return y
 end
-function ldiv!(y::AbstractMatrix{DDT},A::joMatrixInplace{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT}
+function ldiv!(y::LocalMatrix{DDT},A::joMatrixInplace{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT}
     size(y,2) == size(x,2) || throw(joMatrixInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joMatrixInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joMatrixInplaceException("shape mismatch"))

@@ -65,7 +65,7 @@ end
 
 ############################################################
 ## type tree ###############################################
-function type_tree(top::DataType=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
+function type_tree(top::Type=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
     super ? println(bl,top," <: ",supertype(top)) : println(bl,top)
     ts = subtypes(top)
     if length(ts) > 0

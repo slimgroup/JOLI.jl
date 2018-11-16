@@ -15,7 +15,7 @@ end
 Stack operator composed from different square JOLI operators
 
     joStack(ops::joAbstractLinearOperator...;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
     a=rand(ComplexF64,4,4);
@@ -38,7 +38,7 @@ Stack operator composed from different square JOLI operators
 
 """
 function joStack(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joStack") where {WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joStack") where {WDT<:Number}
     isempty(ops) && throw(joStackException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -86,7 +86,7 @@ end
 Stack operator composed from l-times replicated square JOLI operator
 
     joStack(l::Int,op::joAbstractLinearOperator;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
     a=rand(ComplexF64,4,4);
@@ -102,7 +102,7 @@ Stack operator composed from l-times replicated square JOLI operator
 
 """
 function joStack(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joStack") where {WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joStack") where {WDT<:Number}
     (length(weights)==l || length(weights)==0) || throw(joStackException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
     ms=zeros(Int,l)

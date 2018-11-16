@@ -15,7 +15,7 @@ end
 Block-diagonal operator composed from different square JOLI operators
 
     joBlockDiag(ops::joAbstractLinearOperator...;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
@@ -37,7 +37,7 @@ Block-diagonal operator composed from different square JOLI operators
 
 """
 function joBlockDiag(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
     isempty(ops) && throw(joBlockDiagException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -85,7 +85,7 @@ end
 """
 Block-diagonal operator composed from l-times replicated square JOLI operator
 
-    joBlockDiag(l::Int,op::joAbstractLinearOperator;weights::AbstractVector,name::String)
+    joBlockDiag(l::Int,op::joAbstractLinearOperator;weights::LocalVector,name::String)
 
 # Example
 
@@ -102,7 +102,7 @@ Block-diagonal operator composed from l-times replicated square JOLI operator
 
 """
 function joBlockDiag(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
     op.m==op.n || throw(joBlockDiagException("non-square operator"))
     (length(weights)==l || length(weights)==0) || throw(joBlockDiagException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)

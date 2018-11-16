@@ -76,7 +76,7 @@ adjoint(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+function *(A::joMatrix{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
@@ -87,7 +87,7 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+function *(A::joMatrix{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
@@ -107,7 +107,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \(A::joMatrix{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+function \(A::joMatrix{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if hasinverse(A)
@@ -122,7 +122,7 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \(A::joMatrix{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+function \(A::joMatrix{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
     jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     if hasinverse(A)

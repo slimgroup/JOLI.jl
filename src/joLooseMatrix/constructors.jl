@@ -22,9 +22,12 @@ Look up argument names in help to joLooseMatrix type.
 - if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 """
-joLooseMatrix(array::AbstractMatrix{EDT};
-    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrix") where {EDT} =
-        joLooseMatrix{DDT,RDT}(name,size(array,1),size(array,2),
+function joLooseMatrix(array::AbstractMatrix{EDT};
+    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joLooseMatrix") where {EDT}
+
+        (typeof(array)<:DArray || typeof(array)<:SharedArray) && @warn "Creating joLooseMatrix from non-local array like $(typeof(array)) is likely going to have adverse impact on JOLI's health. Please, avoid it."
+
+        return joLooseMatrix{DDT,RDT}(name,size(array,1),size(array,2),
             v1->jo_convert(RDT,array*v1,false),
             v2->jo_convert(DDT,transpose(array)*v2,false),
             v3->jo_convert(DDT,adjoint(array)*v3,false),
@@ -34,6 +37,7 @@ joLooseMatrix(array::AbstractMatrix{EDT};
             v7->jo_convert(RDT,adjoint(array)\v7,false),
             v8->jo_convert(DDT,conj(array)\v8,false)
             )
+end
 
 joLoosen(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrix{DDT,RDT}("joLoosen("*A.name*")",A.m,A.n,

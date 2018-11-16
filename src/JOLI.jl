@@ -9,12 +9,13 @@ using Nullables
 using Printf
 using Random
 using InteractiveUtils
-using LinearAlgebra
-using SparseArrays
-using IterativeSolvers
 using Distributed
+using SparseArrays
+using SharedArrays
 using DistributedArrays
+using LinearAlgebra
 using InplaceOps
+using IterativeSolvers
 using FFTW
 using NFFT
 using Wavelets
@@ -46,6 +47,15 @@ import IterativeSolvers.Adivtype
 export deltype, reltype
 export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint
 export joLoosen
+
+# array unions
+const LocalVector{T}=Union{Vector{T},SubArray{T,1,dA},
+                           AbstractSparseVector{T}} where {T,dA<:Array{T}}
+const LocalMatrix{T}=Union{Matrix{T},SubArray{T,2,dA},#Diagonal{T,dA},Transpose{T},Adjoint{T},
+                           AbstractSparseMatrix{T}} where {T,dA<:Array{T}}
+const LocalVecOrMat{T}=Union{LocalVector{T},LocalMatrix{T}} where T
+const LocalArray{T}=Union{Array{T},SubArray{T,dA},
+                          AbstractSparseArray{T}} where {T,dA<:Array{T}}
 
 # constants
 export joTol

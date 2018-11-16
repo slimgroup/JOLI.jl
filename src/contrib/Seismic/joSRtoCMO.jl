@@ -5,7 +5,7 @@ module joSRtoCMO_etc
     using JOLI: jo_convert
     using LinearAlgebra
     # forward SRtoCMO
-    function SRtoCMOfwd(x::AbstractVector,nr::Int,ns::Int,RDT::DataType)
+    function SRtoCMOfwd(x::Vector{vdt},nr::Int,ns::Int,RDT::DataType) where vdt<:Number
         x    = reshape(x,nr,ns);
         B    = zeros(RDT,nr,2*ns-1);
         for k = 1-ns:1:nr-1
@@ -16,7 +16,7 @@ module joSRtoCMO_etc
         return B
     end
     # adjoint SRtoCMO
-    function SRtoCMOadj(x::AbstractVector,nr::Int,ns::Int,RDT::DataType)
+    function SRtoCMOadj(x::Vector{vdt},nr::Int,ns::Int,RDT::DataType) where vdt<:Number
         x = reshape(x,nr,2*ns-1);
         B = zeros(RDT,nr,ns);
         for k = 1-ns:1:nr-1

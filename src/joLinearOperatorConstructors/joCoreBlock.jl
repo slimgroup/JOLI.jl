@@ -9,8 +9,8 @@
 Universal (Core) block operator composed from different JOLI operators
 
     joCoreBlock(ops::joAbstractLinearOperator...;
-        moffsets::Vector{Integer},noffsets::Vector{Integer},
-        weights::AbstractVector,mextend::Integer,nextend::Integer,name::String)
+        moffsets::LocalVector{Integer},noffsets::LocalVector{Integer},
+        weights::LocalVector,mextend::Integer,nextend::Integer,name::String)
 
 # Example
     a=rand(ComplexF64,4,5);
@@ -33,8 +33,8 @@ Universal (Core) block operator composed from different JOLI operators
 
 """
 function joCoreBlock(ops::joAbstractLinearOperator...;
-        moffsets::AbstractVector{OT}=zeros(Int,0),noffsets::AbstractVector{OT}=zeros(Int,0),
-        weights::AbstractVector{WT}=zeros(0),mextend::Integer=0,nextend::Integer=0,
+        moffsets::LocalVector{OT}=zeros(Int,0),noffsets::LocalVector{OT}=zeros(Int,0),
+        weights::LocalVector{WT}=zeros(0),mextend::Integer=0,nextend::Integer=0,
         name::String="joCoreBlock") where {OT<:Integer,WT<:Number}
     isempty(ops) && throw(joCoreBlockException("empty argument list"))
     l=length(ops)
@@ -145,7 +145,7 @@ adjoint(A::joCoreBlock{DDT,RDT}) where {DDT,RDT} =
         A.iop_A,A.iop_C,A.iop,A.iop_T)
 
 # *(jo,vec)
-function *(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
+function *(A::joCoreBlock{ADDT,ARDT},v::LocalVector{ADDT}) where {ADDT,ARDT}
     size(A,2) == size(v,1) || throw(joCoreBlockException("shape mismatch"))
     V=zeros(ARDT,A.m) # must be preallocated with zeros
     for i=1:1:A.l
@@ -159,7 +159,7 @@ function *(A::joCoreBlock{ADDT,ARDT},v::AbstractVector{ADDT}) where {ADDT,ARDT}
 end
 
 # *(jo,mvec)
-function *(A::joCoreBlock{ADDT,ARDT},mv::AbstractMatrix{ADDT}) where {ADDT,ARDT}
+function *(A::joCoreBlock{ADDT,ARDT},mv::LocalMatrix{ADDT}) where {ADDT,ARDT}
     size(A, 2) == size(mv, 1) || throw(joCoreBlockException("shape mismatch"))
     MV=zeros(ARDT,size(A,1),size(mv,2)) # must be preallocated with zeros
     for i=1:1:A.l

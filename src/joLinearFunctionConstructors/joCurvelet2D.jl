@@ -3,7 +3,7 @@
 ## helper module
 module joCurvelet2D_etc
     using JOLI: jo_convert
-    function apply_fdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+    function apply_fdct2Dwrap_real(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
         C=Vector{Cdouble}(undef,m)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
         X=jo_convert(Cdouble,v,false)
@@ -13,7 +13,7 @@ module joCurvelet2D_etc
         C=jo_convert(rdt,C,false)
         return C
     end
-    function apply_ifdct2Dwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+    function apply_ifdct2Dwrap_real(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
         X=Vector{Cdouble}(undef,n1*n2)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
         C=jo_convert(Cdouble,v,false)
@@ -23,7 +23,7 @@ module joCurvelet2D_etc
         X=jo_convert(rdt,X,false)
         return X
     end
-    function apply_fdct2Dwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+    function apply_fdct2Dwrap_cplx(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
         C=Vector{Complex{Cdouble}}(undef,m)
         X=jo_convert(Complex{Cdouble},v,false)
         ccall((:jl_fdct_wrapping_cpx,:libdfdct_wrapping),Nothing,
@@ -32,7 +32,7 @@ module joCurvelet2D_etc
         C=jo_convert(rdt,C,false)
         return C
     end
-    function apply_ifdct2Dwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
+    function apply_ifdct2Dwrap_cplx(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
         X=Vector{Complex{Cdouble}}(undef,n1*n2)
         C=jo_convert(Complex{Cdouble},v,false)
         ccall((:jl_ifdct_wrapping_cpx,:libdfdct_wrapping),Nothing,

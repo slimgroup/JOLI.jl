@@ -167,13 +167,13 @@ adjoint(A::joLooseLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-function mul!(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function mul!(y::LocalVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::LocalVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     A.m == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.fop(y,x)
     return y
 end
-function mul!(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function mul!(y::LocalMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::LocalMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
@@ -182,14 +182,14 @@ function mul!(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x:
 end
 
 # ldiv!(...,jo,...)
-function ldiv!(y::AbstractVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function ldiv!(y::LocalVector{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::LocalVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     get(A.iop)(y,x)
     return y
 end
-function ldiv!(y::AbstractMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function ldiv!(y::LocalMatrix{YDT},A::joLooseLinearFunctionInplace{DDT,RDT},x::LocalMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     hasinverse(A) || throw(joLooseLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     size(y,2) == size(x,2) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseLinearFunctionInplaceException("shape mismatch"))

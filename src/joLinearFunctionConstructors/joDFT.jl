@@ -5,7 +5,7 @@ module joDFT_etc
     using JOLI: jo_convert
     using FFTW
     ### planned
-    function apply_fft_centered(pln::FFTW.cFFTWPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_fft_centered(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -19,7 +19,7 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft_centered(pln::AbstractFFTs.ScaledPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_ifft_centered(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -33,7 +33,7 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_fft(pln::FFTW.cFFTWPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_fft(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -46,7 +46,7 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft(pln::AbstractFFTs.ScaledPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_ifft(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -60,7 +60,7 @@ module joDFT_etc
         return rv
     end
     ### not planned
-    function apply_fft_centered(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_fft_centered(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -74,7 +74,7 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft_centered(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_ifft_centered(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -88,7 +88,7 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_fft(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_fft(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -101,7 +101,7 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_ifft(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)

@@ -8,7 +8,7 @@ Restriction operator
 
 # Arguments
 - n::Integer - number of columns
-- idx::AbstractVector{Int} - vector of indecies
+- idx::LocalVector{Int} - vector of indecies
 
 # Exmaple
 - A=joRestriction(3,[1,3])
@@ -16,7 +16,7 @@ Restriction operator
 - A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joRestriction(n::Integer,idx::Vector{VDT};DDT::DataType=joFloat,RDT::DataType=DDT,makecopy::Bool=true) where {VDT<:Integer}
+function joRestriction(n::Integer,idx::LocalVector{idxdt};DDT::DataType=joFloat,RDT::DataType=DDT,makecopy::Bool=true) where {idxdt<:Integer}
     m::Int=length(idx)
     n>=m || throw(joLinearFunctionException("joRestriction: length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joRestriction: max(idx) must be <= n"))

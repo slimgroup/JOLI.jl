@@ -24,6 +24,9 @@ Look up argument names in help to joMatrixInplace type.
 """
 function joMatrixInplace(array::AbstractMatrix{EDT};
     DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joMatrixInplace") where {EDT}
+
+        (typeof(array)<:DArray || typeof(array)<:SharedArray) && @warn "Creating joMatrixInplace from non-local array like $(typeof(array)) is likely going to have adverse impact on JOLI's health. Please, avoid it."
+
         farray=factorize(array)
         return joMatrixInplace{DDT,RDT}(name,size(array,1),size(array,2),
             (y1,x1)->mul!(y1,array,x1),

@@ -263,10 +263,10 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(coll
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-mul!(y::AbstractVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT} = y[:] = A * x
-mul!(y::AbstractMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
+mul!(y::LocalVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT} = y[:] = A * x
+mul!(y::LocalMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
 
 # ldiv!(...,jo,...)
-ldiv!(y::AbstractVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractVector{RDT}) where {DDT,RDT} = y[:] = A \ x
-ldiv!(y::AbstractMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::AbstractMatrix{RDT}) where {DDT,RDT} = y[:,:] = A \ x
+ldiv!(y::LocalVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{RDT}) where {DDT,RDT} = y[:] = A \ x
+ldiv!(y::LocalMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{RDT}) where {DDT,RDT} = y[:,:] = A \ x
 

@@ -167,13 +167,13 @@ adjoint(A::joLooseMatrixInplace{DDT,RDT}) where {DDT,RDT} =
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-function mul!(y::AbstractVector{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function mul!(y::LocalVector{YDT},A::joLooseMatrixInplace{DDT,RDT},x::LocalVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     A.m == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.fop(y,x)
     return y
 end
-function mul!(y::AbstractMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function mul!(y::LocalMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::LocalMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     size(y,2) == size(x,2) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.m == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
@@ -182,13 +182,13 @@ function mul!(y::AbstractMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::Abstrac
 end
 
 # ldiv!(...,jo,...)
-function ldiv!(y::AbstractVector{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function ldiv!(y::LocalVector{YDT},A::joLooseMatrixInplace{DDT,RDT},x::LocalVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     A.n == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     get(A.iop)(y,x)
     return y
 end
-function ldiv!(y::AbstractMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
+function ldiv!(y::LocalMatrix{YDT},A::joLooseMatrixInplace{DDT,RDT},x::LocalMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number}
     size(y,2) == size(x,2) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLooseMatrixInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLooseMatrixInplaceException("shape mismatch"))

@@ -167,13 +167,13 @@ adjoint(A::joLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-function mul!(y::AbstractVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT}
+function mul!(y::LocalVector{RDT},A::joLinearFunctionInplace{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT}
     A.m == size(y,1) || throw(joLinearFunctionInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLinearFunctionInplaceException("shape mismatch"))
     A.fop(y,x)
     return y
 end
-function mul!(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT}
+function mul!(y::LocalMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT}
     size(y,2) == size(x,2) || throw(joLinearFunctionInplaceException("shape mismatch"))
     A.m == size(y,1) || throw(joLinearFunctionInplaceException("shape mismatch"))
     A.n == size(x,1) || throw(joLinearFunctionInplaceException("shape mismatch"))
@@ -182,14 +182,14 @@ function mul!(y::AbstractMatrix{RDT},A::joLinearFunctionInplace{DDT,RDT},x::Abst
 end
 
 # ldiv!(...,jo,...)
-function ldiv!(y::AbstractVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractVector{DDT}) where {DDT,RDT}
+function ldiv!(y::LocalVector{DDT},A::joLinearFunctionInplace{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT}
     hasinverse(A) || throw(joLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     A.n == size(y,1) || throw(joLinearFunctionInplaceException("shape mismatch"))
     A.m == size(x,1) || throw(joLinearFunctionInplaceException("shape mismatch"))
     get(A.iop)(y,x)
     return y
 end
-function ldiv!(y::AbstractMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::AbstractMatrix{DDT}) where {DDT,RDT}
+function ldiv!(y::LocalMatrix{DDT},A::joLinearFunctionInplace{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT}
     hasinverse(A) || throw(joLinearFunctionInplaceException("\\(jo,Vector) not supplied"))
     size(y,2) == size(x,2) || throw(joLinearFunctionInplaceException("shape mismatch"))
     A.n == size(y,1) || throw(joLinearFunctionInplaceException("shape mismatch"))

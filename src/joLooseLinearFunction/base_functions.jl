@@ -82,7 +82,7 @@ adjoint(A::joLooseLinearFunction{DDT,RDT}) where {DDT,RDT} =
 # *(jo,jo)
 
 # *(jo,mvec)
-function *(A::joLooseLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+function *(A::joLooseLinearFunction{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joLooseLinearFunction("shape mismatch"))
     if A.fMVok
         MV=A.fop(mv)
@@ -99,7 +99,7 @@ end
 # *(mvec,jo)
 
 # *(jo,vec)
-function *(A::joLooseLinearFunction{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+function *(A::joLooseLinearFunction{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joLooseLinearFunctionException("shape mismatch"))
     V=A.fop(v)
     return V
@@ -117,7 +117,7 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
-function \(A::joLooseLinearFunction{ADDT,ARDT},mv::AbstractMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+function \(A::joLooseLinearFunction{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.m == size(mv,1) || throw(joLooseLinearFunctionException("shape mismatch"))
     if hasinverse(A)
         if A.iMVok
@@ -156,7 +156,7 @@ end
 # \(mvec,jo)
 
 # \(jo,vec)
-function \(A::joLooseLinearFunction{ADDT,ARDT},v::AbstractVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+function \(A::joLooseLinearFunction{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.m == size(v,1) || throw(joLooseLinearFunctionException("shape mismatch"))
     if hasinverse(A)
         V=get(A.iop)(v)
@@ -254,10 +254,10 @@ end
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-mul!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A * x
-mul!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A * x
+mul!(y::LocalVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::LocalVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A * x
+mul!(y::LocalMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::LocalMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A * x
 
 # ldiv!(...,jo,...)
-ldiv!(y::AbstractVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A \ x
-ldiv!(y::AbstractMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::AbstractMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A \ x
+ldiv!(y::LocalVector{YDT},A::joLooseLinearFunction{DDT,RDT},x::LocalVector{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:] = A \ x
+ldiv!(y::LocalMatrix{YDT},A::joLooseLinearFunction{DDT,RDT},x::LocalMatrix{XDT}) where {DDT,RDT,YDT<:Number,XDT<:Number} = y[:,:] = A \ x
 

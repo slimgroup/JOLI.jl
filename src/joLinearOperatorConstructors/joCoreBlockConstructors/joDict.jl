@@ -15,7 +15,7 @@ end
 Dictionary operator composed from different square JOLI operators
 
     joDict(ops::joAbstractLinearOperator...;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
@@ -40,7 +40,7 @@ Dictionary operator composed from different square JOLI operators
 
 """
 function joDict(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
     isempty(ops) && throw(joDictException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -88,7 +88,7 @@ end
 Dictionary operator composed from l-times replicated square JOLI operator
 
     joDict(l::Int,op::joAbstractLinearOperator;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
@@ -106,7 +106,7 @@ Dictionary operator composed from l-times replicated square JOLI operator
 
 """
 function joDict(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
+           weights::LocalVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
     (length(weights)==l || length(weights)==0) || throw(joDictException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
     ms=zeros(Int,l)
