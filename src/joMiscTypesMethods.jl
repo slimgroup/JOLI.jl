@@ -4,4 +4,4 @@
 
 ############################################################
 # includes
-include("joTypesMiscMethods/joNumber.jl")
+include("joMiscTypesMethods/joNumber.jl")

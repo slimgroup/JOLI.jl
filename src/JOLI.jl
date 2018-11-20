@@ -63,17 +63,15 @@ global joTol = sqrt(eps())
 
 # core operator implementations
 include("joTypes.jl")
-include("joTypesMiscMethods.jl")
+include("joMiscTypesMethods.jl")
 include("joUtils.jl")
 include("joExternalPackages.jl")
 include("joParallelToggles.jl")
 include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")
-include("joLooseMatrix.jl")
 include("joMatrixInplace.jl")
 include("joLooseMatrixInplace.jl")
-include("joLooseLinearFunction.jl")
 include("joLinearFunctionInplace.jl")
 include("joLooseLinearFunctionInplace.jl")
 

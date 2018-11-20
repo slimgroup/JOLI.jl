@@ -2,6 +2,8 @@
 ## joAbstractFosterLinearOperator - extra functions
 
 # elements(jo)
+elements(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} = A*jo_speye(DDT,A.n)
+elements(A::joLooseLinearFunction{DDT,RDT}) where {DDT,RDT} = A*jo_eye(DDT,A.n)
 
 # hasinverse(jo)
 hasinverse(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = !isnull(A.iop)
