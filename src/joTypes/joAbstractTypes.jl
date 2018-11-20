@@ -5,6 +5,7 @@
 # * joAbstractLinearOperator
 # * joAbstractFosterLinearOperator
 #   * joAbstractLinearOperatorInplace
+# * joAbstractParallelToggleOperator
 #   
 ############################################################
 
@@ -57,6 +58,19 @@ abstract type joAbstractLinearOperatorInplace{DDT<:Number,RDT<:Number} <: joAbst
 
 # type exception
 struct joAbstractLinearOperatorInplaceException <: Exception
+    msg :: String
+end
+
+############################################################
+# joAbstractParallelToggleOperator #########################
+
+export joAbstractParallelToggleOperator, joAbstractParallelToggleOperatorException
+
+# type definition
+abstract type joAbstractParallelToggleOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator end
+
+# type exception
+struct joAbstractParallelToggleOperatorException <: Exception
     msg :: String
 end
 

@@ -2,20 +2,36 @@
 ## joDAdistribute/gather - overloaded Base functions
 
 # eltype(jo)
+eltype(A::joAbstractParallelToggleOperator{DDT,RDT}) where {DDT,RDT} = promote_type(DDT,RDT)
 
 # deltype(jo)
+deltype(A::joAbstractParallelToggleOperator{DDT,RDT}) where {DDT,RDT} = DDT
 
 # reltype(jo)
+reltype(A::joAbstractParallelToggleOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
+show(A::joAbstractParallelToggleOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # display(jo)
+display(A::joAbstractParallelToggleOperator) = show(A)
 
 # size(jo)
+size(A::joAbstractParallelToggleOperator) = A.m,A.n
 
 # size(jo,1/2)
+function size(A::joAbstractParallelToggleOperator,ind::Integer)
+    if ind==1
+		return A.m
+	elseif ind==2
+		return A.n
+	else
+		throw(joAbstractParallelToggleOperatorException("invalid index"))
+	end
+end
 
 # length(jo)
+length(A::joAbstractParallelToggleOperator) = A.m*A.n
 
 # jo_full(jo)
 

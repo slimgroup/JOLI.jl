@@ -52,7 +52,7 @@ export joDAdistributeV, joDAgatherV, joDAdistributeMV, joDAgatherMV, joDAtoggleE
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-struct joDAdistributeV{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joDAdistributeV{DDT<:Number,RDT<:Number} <: joAbstractParallelToggleOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -66,7 +66,7 @@ struct joDAdistributeV{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,
     iop_C::Nullable{Function}
     dst::joDAdistributor
 end
-struct joDAdistributeMV{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joDAdistributeMV{DDT<:Number,RDT<:Number} <: joAbstractParallelToggleOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -88,7 +88,7 @@ const joDAdistribute{D,T}=Union{joDAdistributeV{D,T},joDAdistributeMV{D,T}} wher
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-struct joDAgatherV{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joDAgatherV{DDT<:Number,RDT<:Number} <: joAbstractParallelToggleOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
@@ -102,7 +102,7 @@ struct joDAgatherV{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
     iop_C::Nullable{Function}
     dst::joDAdistributor
 end
-struct joDAgatherMV{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}
+struct joDAgatherMV{DDT<:Number,RDT<:Number} <: joAbstractParallelToggleOperator{DDT,RDT}
     name::String
     m::Integer
     n::Integer
