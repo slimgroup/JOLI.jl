@@ -54,12 +54,13 @@ function joDAdistribute(wpool::WorkerPool,m::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
     sum(parts)==m || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much m"))
     dst=joDAdistributor(wpool,(m,),1,parts=parts)
-    return joLinearFunctionFwd(m,m,
+    return joDAdistributeV{DT,DT}("joDAdistributeV",m,m,
         v1->distribute(v1,dst),
         v2->Array(v2),
         v3->Array(v3),
         v4->distribute(v4,dst),
-        DT,DT,fMVok=true,name="joDAdistributeV")
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
 end
 joDAdistribute(m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
@@ -72,12 +73,13 @@ function joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much nvc"))
     dst=joDAdistributor(wpool,(m,nvc),2,parts=parts)
-    return joLinearFunctionFwd(m,m,
+    return joDAdistributeMV{DT,DT}("joDAdistributeMV:$nvc",m,m,
         v1->distribute(v1,dst),
         v2->Array(v2),
         v3->Array(v3),
         v4->distribute(v4,dst),
-        DT,DT,fMVok=true,name="joDAdistributeMV:$nvc")
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
 end
 joDAdistribute(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
@@ -136,12 +138,13 @@ function joDAgather(wpool::WorkerPool,m::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
     sum(parts)==m || throw(joDAdistributorException("joDAgather: sum(parts) does not much m"))
     dst=joDAdistributor(wpool,(m,),1,parts=parts)
-    return joLinearFunctionFwd(m,m,
+    return joDAgatherV{DT,DT}("joDAgatherV",m,m,
         v1->Array(v1),
         v2->distribute(v2,dst),
         v3->distribute(v3,dst),
         v4->Array(v4),
-        DT,DT,fMVok=true,name="joDAgatherV")
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
 end
 joDAgather(m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
@@ -154,12 +157,13 @@ function joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributorException("joDAgather: sum(parts) does not much nvc"))
     dst=joDAdistributor(wpool,(m,nvc),2,parts=parts)
-    return joLinearFunctionFwd(m,m,
+    return joDAgatherMV{DT,DT}("joDAgatherMV:$nvc",m,m,
         v1->Array(v1),
         v2->distribute(v2,dst),
         v3->distribute(v3,dst),
         v4->Array(v4),
-        DT,DT,fMVok=true,name="joDAgatherMV:$nvc")
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
 end
 joDAgather(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);

@@ -4,5 +4,7 @@
 
 ############################################################
 # includes
-include("joParallelTools/joDAdistributor.jl")
-include("joParallelTools/joDAdistribute.jl")
+include("joDAoperations/joDAdistributor.jl")
+include("joDAoperations/joDAdistribute.jl")
+include("joDAoperations/base_functions.jl")
+include("joDAoperations/extra_functions.jl")
