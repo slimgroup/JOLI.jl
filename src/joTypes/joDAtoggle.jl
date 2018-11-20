@@ -2,7 +2,7 @@
 # joDAdistribute #########################################
 ############################################################
 
-export joDAdistribute, joDAgather, joDAtoggleException
+export joDAdistributeV, joDAgatherV, joDAdistributeMV, joDAgatherMV, joDAtoggleException
 
 # type definition
 """
