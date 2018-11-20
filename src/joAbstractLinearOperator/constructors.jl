@@ -1,5 +1,229 @@
 ############################################################
 ## joAbstractLinearOperator - outer constructors
+############################################################
+
+############################################################
+## joMatrix
+
+"""
+joMatrix outer constructor
+
+    joMatrix(array::AbstractMatrix;
+             DDT::DataType=eltype(array),
+             RDT::DataType=promote_type(eltype(array),DDT),
+             name::String="joMatrix")
+
+Look up argument names in help to joMatrix type.
+
+# Example
+- joMatrix(rand(4,3)) # implicit domain and range
+- joMatrix(rand(4,3);DDT=Float32) # implicit range
+- joMatrix(rand(4,3);DDT=Float32,RDT=Float64)
+- joMatrix(rand(4,3);name="my matrix") # adding name
+
+# Notes
+- if DDT:<Real for complex matrix then imaginary part will be neglected for transpose/adjoint operator
+- if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
+
+"""
+function joMatrix(array::AbstractMatrix{EDT};
+    DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joMatrix") where {EDT}
+
+        (typeof(array)<:DArray || typeof(array)<:SharedArray) && @warn "Creating joMatrix from non-local array like $(typeof(array)) is likely going to have adverse impact on JOLI's health. Please, avoid it."
+
+        return joMatrix{DDT,RDT}(name,size(array,1),size(array,2),
+            v1->jo_convert(RDT,array*v1,false),
+            v2->jo_convert(DDT,transpose(array)*v2,false),
+            v3->jo_convert(DDT,adjoint(array)*v3,false),
+            v4->jo_convert(RDT,conj(array)*v4,false),
+            v5->jo_convert(DDT,array\v5,false),
+            v6->jo_convert(RDT,transpose(array)\v6,false),
+            v7->jo_convert(RDT,adjoint(array)\v7,false),
+            v8->jo_convert(DDT,conj(array)\v8,false)
+            )
+end
+
+############################################################
+## joLinearFunction
+
+export joLinearFunctionAll, joLinearFunction_T, joLinearFunction_A,
+       joLinearFunctionFwd, joLinearFunctionFwd_T, joLinearFunctionFwd_A
+
+# outer constructors
+
+"""
+joLinearFunction outer constructor
+
+    joLinearFunctionAll(m::Integer,n::Integer,
+        fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
+        iop::Function,iop_T::Function,iop_A::Function,iop_C::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,iMVok::Bool=false,
+        name::String="joLinearFunctionAll")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunctionAll(m::Integer,n::Integer,
+    fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
+    iop::Function,iop_T::Function,iop_A::Function,iop_C::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,iMVok::Bool=false,
+    name::String="joLinearFunctionAll") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,fop_T,fop_A,fop_C,fMVok,
+            iop,iop_T,iop_A,iop_C,iMVok
+            )
+"""
+joLinearFunction outer constructor
+
+    joLinearFunction_T(m::Integer,n::Integer,
+        fop::Function,fop_T::Function, iop::Function,iop_T::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,iMVok::Bool=false,
+        name::String="joLinearFunction_T")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunction_T(m::Integer,n::Integer,
+    fop::Function,fop_T::Function, iop::Function,iop_T::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,iMVok::Bool=false,
+    name::String="joLinearFunction_T") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,
+            fop_T,
+            v3->conj(fop_T(conj(v3))),
+            v4->conj(fop(conj(v4))),
+            fMVok,
+            iop,
+            iop_T,
+            v7->conj(iop_T(conj(v7))),
+            v8->conj(iop(conj(v8))),
+            iMVok
+            )
+"""
+joLinearFunction outer constructor
+
+    joLinearFunction_A(m::Integer,n::Integer,
+        fop::Function,fop_A::Function, iop::Function,iop_A::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,iMVok::Bool=false,
+        name::String="joLinearFunction_A")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunction_A(m::Integer,n::Integer,
+    fop::Function,fop_A::Function, iop::Function,iop_A::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,iMVok::Bool=false,
+    name::String="joLinearFunction_A") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,
+            v2->conj(fop_A(conj(v2))),
+            fop_A,
+            v4->conj(fop(conj(v4))),
+            fMVok,
+            iop,
+            v6->conj(iop_A(conj(v6))),
+            iop_A,
+            v8->conj(iop(conj(v8))),
+            iMVok
+            )
+"""
+joLinearFunction outer constructor
+
+    joLinearFunctionFwd(m::Integer,n::Integer,
+        fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,
+        name::String="joLinearFunctionFwd")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunctionFwd(m::Integer,n::Integer,
+    fop::Function,fop_T::Function,fop_A::Function,fop_C::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,
+    name::String="joLinearFunctionFwd") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,fop_T,fop_A,fop_C,fMVok,
+            @joNF, @joNF, @joNF, @joNF, false
+            )
+"""
+joLinearFunction outer constructor
+
+    joLinearFunctionFwd_T(m::Integer,n::Integer,
+        fop::Function,fop_T::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,
+        name::String="joLinearFunctionFwd_T")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunctionFwd_T(m::Integer,n::Integer,
+    fop::Function,fop_T::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,
+    name::String="joLinearFunctionFwd_T") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,
+            fop_T,
+            v3->conj(fop_T(conj(v3))),
+            v4->conj(fop(conj(v4))),
+            fMVok,
+            @joNF, @joNF, @joNF, @joNF, false
+            )
+"""
+joLinearFunction outer constructor
+
+    joLinearFunctionFwd_A(m::Integer,n::Integer,
+        fop::Function,fop_A::Function,
+        DDT::DataType,RDT::DataType=DDT;
+        fMVok::Bool=false,
+        name::String="joLinearFunctionFwd_A")
+
+Look up argument names in help to joLinearFunction type.
+
+# Notes
+- the developer is responsible for ensuring that used functions take/return correct DDT/RDT
+
+"""
+joLinearFunctionFwd_A(m::Integer,n::Integer,
+    fop::Function,fop_A::Function,
+    DDT::DataType,RDT::DataType=DDT;
+    fMVok::Bool=false,
+    name::String="joLinearFunctionFwd_A") =
+        joLinearFunction{DDT,RDT}(name,m,n,
+            fop,
+            v2->conj(fop_A(conj(v2))),
+            fop_A,
+            v4->conj(fop(conj(v4))),
+            fMVok,
+            @joNF, @joNF, @joNF, @joNF, false
+            )
+
+############################################################
+## joAddSolver{Any,All}
 
 export joAddSolverAny, joAddSolverAll
 

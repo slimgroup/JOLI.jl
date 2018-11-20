@@ -1,5 +1,5 @@
 ############################################################
-## joAbstractLinearOperator - overloaded Base functions
+## joAbstractLinearOperator(s) - overloaded Base functions
 
 # eltype(jo)
 eltype(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = promote_type(DDT,RDT)
@@ -55,10 +55,115 @@ joImag(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = imag(A)
 
 # conj(jo)
 joConj(A::joAbstractLinearOperator) = conj(A)
+conj(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joLinearOperator{DDT,RDT}("conj("*A.name*")",A.m,A.n,
+        get(A.fop_C),
+        A.fop_A,
+        A.fop_T,
+        A.fop,
+        A.iop_C,
+        A.iop_A,
+        A.iop_T,
+        A.iop
+        )
+conj(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
+    joMatrix{DDT,RDT}("conj("*A.name*")",A.m,A.n,
+        A.fop_C,
+        A.fop_A,
+        A.fop_T,
+        A.fop,
+        A.iop_C,
+        A.iop_A,
+        A.iop_T,
+        A.iop
+        )
+conj(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
+    joLinearFunction{DDT,RDT}("conj("*A.name*")",A.m,A.n,
+        get(A.fop_C),
+        A.fop_A,
+        A.fop_T,
+        A.fop,
+        A.fMVok,
+        A.iop_C,
+        A.iop_A,
+        A.iop_T,
+        A.iop,
+        A.iMVok
+        )
 
 # transpose(jo)
+transpose(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joLinearOperator{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
+        get(A.fop_T),
+        A.fop,
+        A.fop_C,
+        A.fop_A,
+        A.iop_T,
+        A.iop,
+        A.iop_C,
+        A.iop_A
+        )
+transpose(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
+    joMatrix{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
+        A.fop_T,
+        A.fop,
+        A.fop_C,
+        A.fop_A,
+        A.iop_T,
+        A.iop,
+        A.iop_C,
+        A.iop_A
+        )
+transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
+    joLinearFunction{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
+        get(A.fop_T),
+        A.fop,
+        A.fop_C,
+        A.fop_A,
+        A.fMVok,
+        A.iop_T,
+        A.iop,
+        A.iop_C,
+        A.iop_A,
+        A.iMVok
+        )
 
 # adjoint(jo)
+adjoint(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joLinearOperator{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
+        get(A.fop_A),
+        A.fop_C,
+        A.fop,
+        A.fop_T,
+        A.iop_A,
+        A.iop_C,
+        A.iop,
+        A.iop_T
+        )
+adjoint(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
+    joMatrix{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
+        A.fop_A,
+        A.fop_C,
+        A.fop,
+        A.fop_T,
+        A.iop_A,
+        A.iop_C,
+        A.iop,
+        A.iop_T
+        )
+adjoint(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
+    joLinearFunction{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
+        get(A.fop_A),
+        A.fop_C,
+        A.fop,
+        A.fop_T,
+        A.fMVok,
+        A.iop_A,
+        A.iop_C,
+        A.iop,
+        A.iop_T,
+        A.iMVok
+        )
 
 # isreal(jo)
 isreal(A :: joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && RDT<:Real)
@@ -87,10 +192,61 @@ function *(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLinearOperator{BDD
 end
 
 # *(jo,mvec)
+function *(A::joLinearOperator{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+    A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    MV = A.fop(mv)
+    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
+    return MV
+end
+function *(A::joMatrix{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+    A.n == size(mv,1) || throw(joMatrixException("shape mismatch"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    MV = A.fop(mv)
+    jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
+    return MV
+end
+function *(A::joLinearFunction{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+    A.n == size(mv,1) || throw(joLinearFunction("shape mismatch"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    if A.fMVok
+        MV=A.fop(mv)
+        jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
+    else
+        MV=Matrix{ARDT}(undef,A.m,size(mv,2))
+        for i=1:size(mv,2)
+            V=A.fop(mv[:,i])
+            i==1 && jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    end
+    return MV
+end
 
 # *(mvec,jo)
 
 # *(jo,vec)
+function *(A::joLinearOperator{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+    A.n == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    V=A.fop(v)
+    jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    return V
+end
+function *(A::joMatrix{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+    A.n == size(v,1) || throw(joMatrixException("shape mismatch"))
+    jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    V=A.fop(v)
+    jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    return V
+end
+function *(A::joLinearFunction{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+    A.n == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
+    jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    V=A.fop(v)
+    jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    return V
+end
 
 # *(vec,jo)
 
@@ -124,10 +280,138 @@ end
 # \(jo,jo)
 
 # \(jo,mvec)
+function \(A::joLinearOperator{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+    A.m == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ARDT,mvDT,join(["RDT for \\(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    if hasinverse(A)
+        MV=get(A.iop)(mv)
+        jo_check_type_match(ADDT,eltype(MV),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
+    elseif issquare(A)
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4square(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    elseif (istall(A) && !isnull(jo_iterative_solver4tall))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4tall(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4wide(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    else
+        throw(joLinearOperatorException("\\(jo,MultiVector) not supplied"))
+    end
+    return MV
+end
+function \(A::joMatrix{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+    A.m == size(mv,1) || throw(joMatrixException("shape mismatch"))
+    jo_check_type_match(ARDT,mvDT,join(["RDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    if hasinverse(A)
+        MV=get(A.iop)(mv)
+        jo_check_type_match(ADDT,eltype(MV),join(["DDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
+    else
+        throw(joMatrixException("\\(jo,Vector) not supplied"))
+    end
+    return MV
+end
+function \(A::joLinearFunction{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
+    A.m == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
+    jo_check_type_match(ARDT,mvDT,join(["RDT for \\(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    if hasinverse(A)
+        if A.iMVok
+            MV = get(A.iop)(mv)
+        else
+            MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+            for i=1:size(mv,2)
+                V=get(A.iop)(mv[:,i])
+                i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+                MV[:,i]=V
+            end
+        end
+    elseif issquare(A)
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4square(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    elseif (istall(A) && !isnull(jo_iterative_solver4tall))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4tall(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
+        MV=Matrix{ADDT}(undef,A.n,size(mv,2))
+        for i=1:size(mv,2)
+            V=jo_convert(ADDT,jo_iterative_solver4wide(A,mv[:,i]))
+            i==1 && jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,mvec):",A.name,typeof(A),eltype(V)]," / "))
+            MV[:,i]=V
+        end
+    else
+        throw(joLinearFunctionException("\\(jo,MultiVector) not supplied"))
+    end
+    return MV
+end
 
 # \(mvec,jo)
 
 # \(jo,vec)
+function \(A::joLinearOperator{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+    A.m == size(v,1) || throw(joLinearOperatorException("shape mismatch"))
+    jo_check_type_match(ARDT,vDT,join(["RDT for \\(jo,vec):",A.name,typeof(A),vDT]," / "))
+    if hasinverse(A)
+        V=get(A.iop)(v)
+        jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    elseif issquare(A)
+        V=jo_convert(ADDT,jo_iterative_solver4square(A,v))
+    elseif (istall(A) && !isnull(jo_iterative_solver4tall))
+        V=jo_convert(ADDT,jo_iterative_solver4tall(A,v))
+    elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
+        V=jo_convert(ADDT,jo_iterative_solver4wide(A,v))
+    else
+        throw(joLinearOperatorException("\\(jo,Vector) not supplied"))
+    end
+    return V
+end
+function \(A::joMatrix{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+    A.m == size(v,1) || throw(joMatrixException("shape mismatch"))
+    jo_check_type_match(ARDT,vDT,join(["RDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
+    if hasinverse(A)
+        V=get(A.iop)(v)
+        jo_check_type_match(ADDT,eltype(V),join(["DDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    else
+        throw(joMatrixException("\\(jo,Vector) not supplied"))
+    end
+    return V
+end
+function \(A::joLinearFunction{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
+    A.m == size(v,1) || throw(joLinearFunctionException("shape mismatch"))
+    jo_check_type_match(ARDT,vDT,join(["RDT for \\(jo,vec):",A.name,typeof(A),vDT]," / "))
+    if hasinverse(A)
+        V=get(A.iop)(v)
+        jo_check_type_match(ADDT,eltype(V),join(["DDT from \\(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
+    elseif issquare(A)
+        V=jo_convert(ADDT,jo_iterative_solver4square(A,v))
+    elseif (istall(A) && !isnull(jo_iterative_solver4tall))
+        V=jo_convert(ADDT,jo_iterative_solver4tall(A,v))
+    elseif (iswide(A) && !isnull(jo_iterative_solver4wide))
+        V=jo_convert(ADDT,jo_iterative_solver4wide(A,v))
+    else
+        throw(joLinearFunctionException("\\(jo,Vector) not supplied"))
+    end
+    return V
+end
 
 # \(vec,jo)
 
@@ -191,6 +475,41 @@ end
 ## overloaded Base -(...jo...)
 
 # -(jo)
+-(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joLinearOperator{DDT,RDT}("(-"*A.name*")",A.m,A.n,
+        v1->-A.fop(v1),
+        v2->-get(A.fop_T)(v2),
+        v3->-get(A.fop_A)(v3),
+        v4->-get(A.fop_C)(v4),
+        v5->-get(A.iop)(v5),
+        v6->-get(A.iop_T)(v6),
+        v7->-get(A.iop_A)(v7),
+        v8->-get(A.iop_C)(v8)
+        )
+-(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
+    joMatrix{DDT,RDT}("(-"*A.name*")",A.m,A.n,
+        v1->-A.fop(v1),
+        v2->-A.fop_T(v2),
+        v3->-A.fop_A(v3),
+        v4->-A.fop_C(v4),
+        v5->-get(A.iop)(v5),
+        v6->-get(A.iop_T)(v6),
+        v7->-get(A.iop_A)(v7),
+        v8->-get(A.iop_C)(v8)
+        )
+-(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
+    joLinearFunction{DDT,RDT}("(-"*A.name*")",A.m,A.n,
+        v1->-A.fop(v1),
+        v2->-get(A.fop_T)(v2),
+        v3->-get(A.fop_A)(v3),
+        v4->-get(A.fop_C)(v4),
+        A.fMVok,
+        v5->-get(A.iop)(v5),
+        v6->-get(A.iop_T)(v6),
+        v7->-get(A.iop_A)(v7),
+        v8->-get(A.iop_C)(v8),
+        A.iMVok
+        )
 
 # -(jo,jo)
 -(A::joAbstractLinearOperator,B::joAbstractLinearOperator) = A+(-B)
