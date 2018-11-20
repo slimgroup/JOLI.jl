@@ -4,12 +4,8 @@
 
 ############################################################
 # includes
+include("joTypes/joAbstractTypes.jl")
 include("joTypes/joNumber.jl")
-include("joTypes/joDAdistributor.jl")
-include("joTypes/joAbstractOperator.jl")
-include("joTypes/joAbstractFosterLinearOperator.jl")
-include("joTypes/joAbstractLinearOperatorInplace.jl")
-include("joTypes/joAbstractLinearOperator.jl")
 include("joTypes/joDAtoggle.jl")
 include("joTypes/joLinearOperator.jl")
 include("joTypes/joMatrix.jl")
