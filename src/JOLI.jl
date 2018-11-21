@@ -70,10 +70,7 @@ include("joParallelToggles.jl")
 include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")
-include("joMatrixInplace.jl")
-include("joLooseMatrixInplace.jl")
-include("joLinearFunctionInplace.jl")
-include("joLooseLinearFunctionInplace.jl")
+include("joAbstractLinearOperatorInplace.jl")
 
 # derived operator code goes into those
 include("joMatrixConstructors.jl")
