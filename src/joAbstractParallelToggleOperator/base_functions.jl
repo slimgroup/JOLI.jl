@@ -88,6 +88,28 @@ transpose(A::joDAgatherMV{DDT,RDT}) where {DDT,RDT} =
 
 # ishermitian(jo)
 
+# isequal(jo,jo)
+function isequal(a::joDAdistributor,b::joDAdistributor)
+    (a.name  ==b.name  ) || return false
+    (a.dims  ==b.dims  ) || return false
+    (a.procs ==b.procs ) || return false
+    (a.chunks==b.chunks) || return false
+    (a.idxs  ==b.idxs  ) || return false
+    (a.cuts  ==b.cuts  ) || return false
+    (a.DT    ==b.DT    ) || return false
+    return true
+end
+
+# isapprox(jo,jo)
+function isapprox(a::joDAdistributor,b::joDAdistributor)
+    (a.dims  ==b.dims  ) || return false
+    (a.procs ==b.procs ) || return false
+    (a.chunks==b.chunks) || return false
+    (a.idxs  ==b.idxs  ) || return false
+    (a.cuts  ==b.cuts  ) || return false
+    return true
+end
+
 ############################################################
 ## overloaded Base *(...jo...)
 

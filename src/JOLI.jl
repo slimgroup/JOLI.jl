@@ -31,6 +31,8 @@ import Base.*, Base.\, Base.+, Base.-
 import Base.Broadcast.broadcasted # Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
+import Base.isequal, Base.isapprox
+
 
 # what's imported from LinearAlgebra
 import LinearAlgebra.norm

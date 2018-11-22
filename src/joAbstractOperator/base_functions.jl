@@ -55,6 +55,12 @@ issymmetric(A::joAbstractOperator) = jo_method_error(A,"issymmetric(jo) not impl
 # ishermitian(jo)
 ishermitian(A::joAbstractOperator) = jo_method_error(A,"ishermitian(jo) not implemented")
 
+# isequal(jo,jo)
+isequal(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,"isequal(jo,jo) not implemented or type mismatch")
+
+# isapprox(jo,jo)
+isapprox(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,"isapprox(jo,jo) not implemented or type mismatch")
+
 ############################################################
 ## overloaded Base *(...jo...)
 
