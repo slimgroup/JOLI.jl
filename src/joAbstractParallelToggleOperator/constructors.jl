@@ -1,6 +1,9 @@
 ############################################################
-# joDAdistributor methods ##################################
+# joDAdistributor/distribute/gather constructors ###########
 ############################################################
+
+############################################################
+# joDAdistributor constructors #############################
 
 # helper module
 module joDAdistributor_etc
@@ -74,48 +77,6 @@ module joDAdistributor_etc
     end
 end
 using .joDAdistributor_etc
-
-# printouts
-function show(d::joDAdistributor)
-    println("joDAdistributor: ",d.name)
-    println(" DataType: ",d.DT)
-    println(" Dims    : ",d.dims)
-    println(" Chunks  : ",d.chunks)
-    println(" Workers : ",d.procs)
-end
-function display(d::joDAdistributor)
-    println("joDAdistributor: ",d.name)
-    println(" DataType: ",d.DT)
-    println(" Dims    : ",d.dims)
-    println(" Chunks  : ",d.chunks)
-    println(" Workers : ",d.procs)
-    for i=1:length(d.procs)
-        @printf "  Worker/ranges: %3d " d.procs[i]
-        println(d.idxs[i])
-    end
-end
-
-# constructors
-"""
-    julia> transpose(in::joDAdistributor)
-
-Get joDAdistributor represeanting transpose of another given joDAdistributor
-
-# Notes
-- operation will preserve # of distributed dimension
-- only transposes of 1D distribution are supported
-
-"""
-function transpose(in::joDAdistributor)
-    dims=reverse(in.dims)
-    length(dims)==2 || throw(joDAdistributorException("joDAdistributor: transpose(joDAdistributor) makes sense only for 2D distributed arrays"))
-    nlabs=length(in.procs)
-    ddim=findfirst(i->i>1,in.chunks)
-    ldim=findlast(i->i>1,in.chunks)
-    ddim==ldim || throw(joDAdistributorException("joDAdistributor: cannot transpose and array with more then one distributed dimension"))
-    parts=joDAdistributor_etc.balanced_partition(nlabs,dims[ddim])
-    return joDAdistributor(dims,ddim,DT=in.DT,parts=parts,name="transpose($(in.name))")
-end
 
 """
     julia> joDAdistributor(in::DArray)
@@ -263,4 +224,175 @@ function joDAdistributor(wpool::WorkerPool,parts::Tuple{Vararg{Tuple{Vararg{INT}
 end
 joDAdistributor(parts::Tuple{Vararg{Tuple{Vararg{INT}}}};kwargs...) where INT<:Integer =
     joDAdistributor(WorkerPool(workers()),parts;kwargs...)
+
+############################################################
+# joDAdistribute/gather constructors #######################
+############################################################
+
+export joDAdistribute
+"""
+    julia> joDAdistribute(m [,parts]; [DT])
+    julia> joDAdistribute(wpool, m [,parts]; [DT])
+    julia> joDAdistribute(m, nvc [,parts]; [DT])
+    julia> joDAdistribute(wpool, m, nvc [,parts]; [DT])
+
+defines operator to distribute serial vector into DistributedArrays' vector
+
+# Signature
+
+    joDAdistribute(m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
+        kwargs...) where INT<:Integer
+    joDAdistribute(wpool::WorkerPool,m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
+        DT::DataType=joFloat) where INT<:Integer
+    joDAdistribute(m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
+        kwargs...) where INT<:Integer
+    joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
+        DT::DataType=joFloat) where INT<:Integer
+
+# Arguments
+
+- `m`: length of the vector
+- `nvc`: # of columns in multi-vector - if given then multi-vector is distributed over 2nd dimension
+- `parts`: custom partitioning of distributed dimension
+- `wpool`: custom WorkerPool
+- `DT`: DataType for joDAdistributor
+
+# Notes
+
+- no type conversions are attempted at the moment (i.e. DT is used as for any other JOLI operator)
+- adjoint/transpose of the joDAdistribute will gather distributed vector into serial vector
+
+# Examples
+
+- `joDAdistribute(5)`: distribute vector of lenght 5 into default WorkerPool
+- `joDAdistribute(5,2)`: distribute multi-vector of lenght 5 with 2 columns into default WorkerPool
+- `joDAdistribute(5)'`: gather vector of lenght 5
+- `joDAdistribute(5,2)'`: gather multi-vector of lenght 5 with 2 columns
+
+"""
+function joDAdistribute(wpool::WorkerPool,m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
+        DT::DataType=joFloat) where INT<:Integer
+
+    length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
+    sum(parts)==m || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much m"))
+    dst=joDAdistributor(wpool,(m,),1,parts=parts)
+    return joDAdistributeV{DT,DT}("joDAdistributeV",m,m,
+        v1->distribute(v1,dst),
+        v2->Array(v2),
+        v3->Array(v3),
+        v4->distribute(v4,dst),
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
+end
+joDAdistribute(m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
+        kwargs...) where INT<:Integer = joDAdistribute(WorkerPool(workers()),m,parts;kwargs...)
+
+function joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
+        DT::DataType=joFloat) where INT<:Integer
+
+    length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
+    sum(parts)==nvc || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much nvc"))
+    dst=joDAdistributor(wpool,(m,nvc),2,parts=parts)
+    return joDAdistributeMV{DT,DT}("joDAdistributeMV:$nvc",m,m,
+        v1->distribute(v1,dst),
+        v2->Array(v2),
+        v3->Array(v3),
+        v4->distribute(v4,dst),
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
+end
+joDAdistribute(m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
+        kwargs...) where INT<:Integer = joDAdistribute(WorkerPool(workers()),m,nvc,parts;kwargs...)
+
+
+export joDAgather
+"""
+    julia> joDAgather(m [,parts]; [DT])
+    julia> joDAgather(wpool, m [,parts]; [DT])
+    julia> joDAgather(m, nvc [,parts]; [DT])
+    julia> joDAgather(wpool, m, nvc [,parts]; [DT])
+
+defines operator to gather DistributedArrays' vector into serial vector
+
+# Signature
+
+    joDAgather(m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
+        kwargs...) where INT<:Integer
+    joDAgather(wpool::WorkerPool,m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
+        DT::DataType=joFloat) where INT<:Integer
+    joDAgather(m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
+        kwargs...) where INT<:Integer
+    joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
+        DT::DataType=joFloat) where INT<:Integer
+
+# Arguments
+
+- `m`: length of the vector
+- `nvc`: # of columns in multi-vector - if given then multi-vector is distributed over 2nd dimension
+- `parts`: custom partitioning of distributed dimension
+- `wpool`: custom WorkerPool
+- `DT`: DataType for joDAdistributor
+
+# Notes
+
+- no type conversions are attempted at the moment (i.e. DT is used as for any other JOLI operator)
+- adjoint/transpose of the joDAgather will distribute serial vector into DistributedArrays' vector
+
+# Examples
+
+- `joDAgather(5)`: gather vector of lenght 5
+- `joDAgather(5,2)`: gather multi-vector of lenght 5 with 2 columns
+- `joDAgather(5)'`: distribute vector of lenght 5 into default WorkerPool
+- `joDAgather(5,2)'`: distribute multi-vector of lenght 5 with 2 columns into default WorkerPool
+
+"""
+function joDAgather(wpool::WorkerPool,m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
+        DT::DataType=joFloat) where INT<:Integer
+
+    length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
+    sum(parts)==m || throw(joDAdistributorException("joDAgather: sum(parts) does not much m"))
+    dst=joDAdistributor(wpool,(m,),1,parts=parts)
+    return joDAgatherV{DT,DT}("joDAgatherV",m,m,
+        v1->Array(v1),
+        v2->distribute(v2,dst),
+        v3->distribute(v3,dst),
+        v4->Array(v4),
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
+end
+joDAgather(m::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
+        kwargs...) where INT<:Integer = joDAgather(WorkerPool(workers()),m,parts;kwargs...)
+
+function joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
+        DT::DataType=joFloat) where INT<:Integer
+
+    length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
+    sum(parts)==nvc || throw(joDAdistributorException("joDAgather: sum(parts) does not much nvc"))
+    dst=joDAdistributor(wpool,(m,nvc),2,parts=parts)
+    return joDAgatherMV{DT,DT}("joDAgatherMV:$nvc",m,m,
+        v1->Array(v1),
+        v2->distribute(v2,dst),
+        v3->distribute(v3,dst),
+        v4->Array(v4),
+        @joNF, @joNF, @joNF, @joNF,
+        dst)
+end
+joDAgather(m::Integer,nvc::Integer,
+        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
+        kwargs...) where INT<:Integer = joDAgather(WorkerPool(workers()),m,nvc,parts;kwargs...)
 

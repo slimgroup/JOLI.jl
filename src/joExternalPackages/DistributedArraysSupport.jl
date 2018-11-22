@@ -48,7 +48,6 @@ function dcopy(Dtr::Transpose{T,<:DArray{T,2}}) where T
 end
 
 export dalloc
-
 """
     julia> dalloc(dims, [...])
 
@@ -71,6 +70,7 @@ dalloc(::Type{T}, d1::Integer, drest::Integer...) where {T} = dalloc(T, convert(
 dalloc(d1::Integer, drest::Integer...) = dalloc(joFloat, convert(Dims, tuple(d1, drest...)))
 dalloc(d::Dims) = dalloc(joFloat, d)
 
+export dfill
 """
     julia> dfill(F, d; [DT])
 
@@ -160,6 +160,7 @@ function dalloc(d::joDAdistributor;DT::DataType=d.DT)
 end
 #DArray(d::joDAdistributor;DT::DataType=d.DT) = dalloc(d;DT=DT)
 
+export dzeros
 """
     julia> dzeros(d; [DT])
 
@@ -187,6 +188,7 @@ function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export dones
 """
     julia> dones(d; [DT])
 
@@ -214,6 +216,7 @@ function dones(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export drand
 """
     julia> drand(d; [DT], [RNG])
 
@@ -243,6 +246,7 @@ function drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevic
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export drandn
 """
     julia> drandn(d; [DT], [RNG])
 
@@ -278,6 +282,7 @@ function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevi
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export distribute
 """
     julia> distribute(A,d)
 

@@ -15,6 +15,17 @@ show(A::joAbstractParallelToggleOperator) = println((typeof(A),A.name,A.m,A.n))
 
 # display(jo)
 display(A::joAbstractParallelToggleOperator) = show(A)
+function display(d::joDAdistributor)
+    println("joDAdistributor: ",d.name)
+    println(" DataType: ",d.DT)
+    println(" Dims    : ",d.dims)
+    println(" Chunks  : ",d.chunks)
+    println(" Workers : ",d.procs)
+    for i=1:length(d.procs)
+        @printf "  Worker/ranges: %3d " d.procs[i]
+        println(d.idxs[i])
+    end
+end
 
 # size(jo)
 size(A::joAbstractParallelToggleOperator) = A.m,A.n
@@ -45,6 +56,16 @@ length(A::joAbstractParallelToggleOperator) = A.m*A.n
 @inline conj(A::joDAtoggle) = A
 
 # transpose(jo)
+function transpose(in::joDAdistributor)
+    dims=reverse(in.dims)
+    length(dims)==2 || throw(joDAdistributorException("joDAdistributor: transpose(joDAdistributor) makes sense only for 2D distributed arrays"))
+    nlabs=length(in.procs)
+    ddim=findfirst(i->i>1,in.chunks)
+    ldim=findlast(i->i>1,in.chunks)
+    ddim==ldim || throw(joDAdistributorException("joDAdistributor: cannot transpose and array with more then one distributed dimension"))
+    parts=joDAdistributor_etc.balanced_partition(nlabs,dims[ddim])
+    return joDAdistributor(dims,ddim,DT=in.DT,parts=parts,name="transpose($(in.name))")
+end
 transpose(A::joDAdistributeV{DDT,RDT}) where {DDT,RDT} =
     joDAgatherV{RDT,DDT}("regather($(A.name))",A.n,A.m,
         A.fop_T, A.fop, A.fop_C, A.fop_A, A.iop_T, A.iop, A.iop_C, A.iop_A, A.dst)
