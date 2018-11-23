@@ -13,6 +13,7 @@ using Distributed
 using SparseArrays
 using SharedArrays
 using DistributedArrays
+using DistributedArrays.SPMD
 using LinearAlgebra
 using InplaceOps
 using IterativeSolvers

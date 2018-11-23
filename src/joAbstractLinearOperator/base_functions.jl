@@ -192,6 +192,16 @@ function *(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLinearOperator{BDD
 end
 
 # *(jo,mvec)
+function *(A::joAbstractLinearOperator{ADDT,ARDT},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}
+    A.n == size(mv,1) || throw(joAbstractLinearOperatorException("shape mismatch"))
+    length(mv.cuts[1])==2 || throw(joAbstractLinearOperatorException("*(jo,mv::DArray): DArray must be distributed only over 2nd dimension"))
+    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,DAmvec):",A.name,typeof(A),mvDT]," / "))
+    parts=dparts(mv)
+    dMV=joDAdistributor(WorkerPool(vec(mv.pids)),(A.m,size(mv,2)),2;DT=ARDT,parts=parts)
+    MV=dalloc(dMV)
+    spmd(joSPMDutils.jo_x_DAmv!,A,mv,MV,pids=mv.pids)
+    return MV
+end
 function *(A::joLinearOperator{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joLinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))

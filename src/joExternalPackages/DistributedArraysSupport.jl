@@ -346,3 +346,14 @@ function distribute(A::AbstractArray,d::joDAdistributor)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+# helper module with misc SPMD DArray utilities
+module joSPMDutils
+    using DistributedArrays
+    using JOLI: jo_convert, joAbstractLinearOperator
+    function jo_x_DAmv!(A::joAbstractLinearOperator,in::DArray{ADDT,2},out::DArray{ARDT,2}) where {ADDT,ARDT}
+        out[:L]=jo_convert(ARDT,A*in[:L])
+        return nothing
+    end
+end
+using .joSPMDutils
+
