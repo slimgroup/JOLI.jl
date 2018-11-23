@@ -225,7 +225,7 @@ joLinearFunctionFwd_A(m::Integer,n::Integer,
 ############################################################
 ## joAddSolver{Any,All}
 
-export joAddSolverAny, joAddSolverAll
+# exported in joAbstractOperator/constructors.jl
 
 # joAddSolver - outer constructor for adding solver to operator
 """

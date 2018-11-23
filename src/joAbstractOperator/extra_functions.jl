@@ -25,3 +25,7 @@ islinear(A::joAbstractOperator) = jo_method_error(A,"islinear(jo) not implemente
 # isadjoint(jo)
 isadjoint(A::joAbstractOperator) = jo_method_error(A,"isadjoint(jo) not implemented")
 
+# joAddSolver(jo)
+joAddSolverAny(A::joAbstractOperator,args::Function...) = jo_method_error(A,"joAddSolverAny(jo) not implemented")
+joAddSolverAll(A::joAbstractOperator,args::Function...) = jo_method_error(A,"joAddSolverAll(jo) not implemented")
+

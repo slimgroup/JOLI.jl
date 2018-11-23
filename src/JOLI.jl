@@ -74,6 +74,7 @@ include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")
 include("joAbstractLinearOperatorInplace.jl")
+include("joAbstractParallelLinearOperator.jl")
 
 # derived operator code goes into those
 include("joMatrixConstructors.jl")
