@@ -12,6 +12,32 @@ module joDAutils
 end
 using .joDAutils
 
+export dparts
+"""
+    julia> dparts(da,[dim])
+
+return partitioning of DArray in a given dimension
+
+# Signature
+
+    dparts(da::DArray{T,N},dim::Integer=N)
+
+# Arguments
+
+- `da`: DArray
+- `dim`: dimension
+
+# Note
+
+- beware that sum(dparts(da,dim))==size(da,dim) only for exclusive partitioning of DArray in dim dimension
+
+"""
+function dparts(da::DArray{T,N},dim::Integer=N) where {T,N}
+    dim<=N || throw(joDAdistributorException("dparts: requested dimension out of araay dimension"))
+    parts=map(i->length(i[dim]),da.indices)
+    return vec(parts)
+end
+
 export dcopy
 """
     julia> dcopy(dtr,[dst])
