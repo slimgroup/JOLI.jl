@@ -14,26 +14,29 @@ using .joDAutils
 
 export dparts
 """
-    julia> dparts(da,[dim])
+    julia> dparts(da)
 
-return partitioning of DArray in a given dimension
+return partitioning vector of DArray if partioned in single dimension
 
 # Signature
 
-    dparts(da::DArray{T,N},dim::Integer=N)
+    dparts(da::DArray{T,N})
 
 # Arguments
 
 - `da`: DArray
-- `dim`: dimension
 
-# Note
+# Notes
 
-- beware that sum(dparts(da,dim))==size(da,dim) only for exclusive partitioning of DArray in dim dimension
+- if DArray is quasi-distributed (over single worker), dparts returns size(da,N)
 
 """
-function dparts(da::DArray{T,N},dim::Integer=N) where {T,N}
-    dim<=N || throw(joDAdistributorException("dparts: requested dimension out of araay dimension"))
+function dparts(da::DArray{T,N}) where {T,N}
+    chunks=map(i->length(i)-1,da.cuts)
+    dim=findfirst(i->i>1,chunks); dim = dim==nothing ? N : dim
+    ldim=findlast(i->i>1,chunks); ldim = ldim==nothing ? N : ldim
+    dim==ldim || throw(joDAdistributorException("joDAdistributor: cannot return parts of a DArray partitioned in multiple dimensions"))
+    println((chunks,dim,ldim))
     parts=map(i->length(i[dim]),da.indices)
     return vec(parts)
 end
