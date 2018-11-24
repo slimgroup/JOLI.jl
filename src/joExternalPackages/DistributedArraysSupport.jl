@@ -36,7 +36,6 @@ function dparts(da::DArray{T,N}) where {T,N}
     dim=findfirst(i->i>1,chunks); dim = dim==nothing ? N : dim
     ldim=findlast(i->i>1,chunks); ldim = ldim==nothing ? N : ldim
     dim==ldim || throw(joDAdistributorException("joDAdistributor: cannot return parts of a DArray partitioned in multiple dimensions"))
-    println((chunks,dim,ldim))
     parts=map(i->length(i[dim]),da.indices)
     return vec(parts)
 end
