@@ -11,7 +11,7 @@ deltype(A::joAbstractParallelLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractParallelLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractParallelLinearOperator) = println((typeof(A),A.name,A.m,A.n))
+show(A::joAbstractParallelLinearOperator) = println((typeof(A),A.name,(A.m,A.n),A.nvc))
 
 # display(jo)
 display(A::joAbstractParallelLinearOperator) = show(A)
@@ -25,6 +25,8 @@ function size(A::joAbstractParallelLinearOperator,ind::Integer)
 		return A.m
 	elseif ind==2
 		return A.n
+	elseif ind==3
+		return A.nvc
 	else
 		throw(joAbstractParallelLinearOperatorException("invalid index"))
 	end
@@ -42,10 +44,55 @@ length(A::joAbstractParallelLinearOperator) = A.m*A.n
 # imag(jo)
 
 # conj(jo)
+conj(A::joDALinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joDALinearOperator{DDT,RDT}("conj("*A.name*")",A.m,A.n,A.nvc,
+        get(A.fop_C),
+        A.fop_A,
+        A.fop_T,
+        A.fop,
+        A.iop_C,
+        A.iop_A,
+        A.iop_T,
+        A.iop,
+        A.dst_in,
+        A.dst_out,
+        A.fclean,
+        A.rclean
+        )
 
 # transpose(jo)
+transpose(A::joDALinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joDALinearOperator{RDT,DDT}("transpose("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_T),
+        A.fop,
+        A.fop_C,
+        A.fop_A,
+        A.iop_T,
+        A.iop,
+        A.iop_C,
+        A.iop_A,
+        A.dst_out,
+        A.dst_in,
+        A.rclean,
+        A.fclean
+        )
 
 # adjoint(jo)
+adjoint(A::joDALinearOperator{DDT,RDT}) where {DDT,RDT} =
+    joDALinearOperator{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_A),
+        A.fop_C,
+        A.fop,
+        A.fop_T,
+        A.iop_A,
+        A.iop_C,
+        A.iop,
+        A.iop_T,
+        A.dst_out,
+        A.dst_in,
+        A.rclean,
+        A.fclean
+        )
 
 # isreal(jo)
 isreal(A :: joAbstractParallelLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Real && RDT<:Real)
@@ -60,16 +107,6 @@ isreal(A :: joAbstractParallelLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:R
 # *(jo,jo)
 
 # *(jo,mvec)
-function *(A::joDALinearOperator{ADDT,ARDT},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}
-    A.n == size(mv,1) || throw(joAbstractParallelLinearOperatorException("shape mismatch"))
-    length(mv.cuts[1])==2 || throw(joAbstractParallelLinearOperatorException("*(jo,mv::DArray): DArray must be distributed only over 2nd dimension"))
-    jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,DAmvec):",A.name,typeof(A),mvDT]," / "))
-    parts=dparts(mv)
-    dMV=joDAdistributor(WorkerPool(vec(mv.pids)),(A.m,size(mv,2)),2;DT=ARDT,parts=parts)
-    MV=dalloc(dMV)
-    spmd(joSPMDutils.jo_x_DAmv!,A,mv,MV,pids=mv.pids)
-    return MV
-end
 
 # *(mvec,jo)
 

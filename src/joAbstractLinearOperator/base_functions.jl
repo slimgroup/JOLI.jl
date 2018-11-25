@@ -11,7 +11,7 @@ deltype(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractLinearOperator) = println((typeof(A),A.name,A.m,A.n))
+show(A::joAbstractLinearOperator) = println((typeof(A),A.name,(A.m,A.n)))
 
 # display(jo)
 display(A::joAbstractLinearOperator) = show(A)
@@ -199,7 +199,7 @@ function *(A::joAbstractLinearOperator{ADDT,ARDT},mv::DArray{mvDT,2}) where {ADD
     parts=dparts(mv)
     dMV=joDAdistributor(WorkerPool(vec(mv.pids)),(A.m,size(mv,2)),2;DT=ARDT,parts=parts)
     MV=dalloc(dMV)
-    spmd(joSPMDutils.jo_x_DAmv!,A,mv,MV,pids=mv.pids)
+    spmd(joDAutils.jo_x_mv!,A,mv,MV,pids=mv.pids)
     return MV
 end
 function *(A::joLinearOperator{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}

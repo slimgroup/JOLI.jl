@@ -6,6 +6,9 @@
 
 # outer constructors
 
+#function joDALinearOperator(A::joAbstractLinearOperator{ADDT,ARDT},nvc::Integer) where {ADDT<:Number,ARDT<:Number}
+#end
+
 ############################################################
 ## joAddSolver{Any,All}
 

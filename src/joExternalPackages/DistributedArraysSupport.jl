@@ -1,6 +1,7 @@
 # helper module with misc DArray utilities
 module joDAutils
     using DistributedArrays
+    using JOLI: jo_convert, joDALinearOperator, joAbstractLinearOperator
 
     function DArray5(init, dims, procs, idxs, cuts)
         dist = chunks=map(i->length(i)-1,cuts)
@@ -8,6 +9,14 @@ module joDAutils
         procs = reshape(procs[1:np], ntuple(i->dist[i], length(dist)))
         id = DistributedArrays.next_did()
         return DArray(id, init, dims, procs, idxs, cuts)
+    end
+    function jo_x_mv!(A::joAbstractLinearOperator,in::DArray{ADDT,2},out::DArray{ARDT,2}) where {ADDT,ARDT}
+        out[:L]=jo_convert(ARDT,A*in[:L])
+        return nothing
+    end
+    function jo_x_mv!(F::Function,in::DArray{ADDT,2},out::DArray{ARDT,2}) where {ADDT,ARDT}
+        out[:L]=jo_convert(ARDT,F(in[:L]))
+        return nothing
     end
 end
 using .joDAutils
@@ -347,15 +356,4 @@ function distribute(A::AbstractArray,d::joDAdistributor)
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
-
-# helper module with misc SPMD DArray utilities
-module joSPMDutils
-    using DistributedArrays
-    using JOLI: jo_convert, joAbstractLinearOperator
-    function jo_x_DAmv!(A::joAbstractLinearOperator,in::DArray{ADDT,2},out::DArray{ARDT,2}) where {ADDT,ARDT}
-        out[:L]=jo_convert(ARDT,A*in[:L])
-        return nothing
-    end
-end
-using .joSPMDutils
 
