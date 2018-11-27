@@ -245,13 +245,13 @@ defines operator to distribute serial vector into DistributedArrays' vector
         kwargs...) where INT<:Integer
     joDAdistribute(wpool::WorkerPool,m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
     joDAdistribute(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
         kwargs...) where INT<:Integer
     joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
 
 # Arguments
 
@@ -260,6 +260,7 @@ defines operator to distribute serial vector into DistributedArrays' vector
 - `parts`: custom partitioning of distributed dimension
 - `wpool`: custom WorkerPool
 - `DT`: DataType for joDAdistributor
+- `glcean`: clean DArray after gathering
 
 # Notes
 
@@ -276,7 +277,7 @@ defines operator to distribute serial vector into DistributedArrays' vector
 """
 function joDAdistribute(wpool::WorkerPool,m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
 
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
     sum(parts)==m || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much m"))
@@ -287,7 +288,7 @@ function joDAdistribute(wpool::WorkerPool,m::Integer,
         v3->Array(v3),
         v4->distribute(v4,dst),
         @joNF, @joNF, @joNF, @joNF,
-        dst)
+        dst,gclean)
 end
 joDAdistribute(m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
@@ -295,7 +296,7 @@ joDAdistribute(m::Integer,
 
 function joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
 
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much nvc"))
@@ -306,7 +307,7 @@ function joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
         v3->Array(v3),
         v4->distribute(v4,dst),
         @joNF, @joNF, @joNF, @joNF,
-        dst)
+        dst,gclean)
 end
 joDAdistribute(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
@@ -329,13 +330,13 @@ defines operator to gather DistributedArrays' vector into serial vector
         kwargs...) where INT<:Integer
     joDAgather(wpool::WorkerPool,m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
     joDAgather(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
         kwargs...) where INT<:Integer
     joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
 
 # Arguments
 
@@ -344,6 +345,7 @@ defines operator to gather DistributedArrays' vector into serial vector
 - `parts`: custom partitioning of distributed dimension
 - `wpool`: custom WorkerPool
 - `DT`: DataType for joDAdistributor
+- `glcean`: clean DArray after gathering
 
 # Notes
 
@@ -360,7 +362,7 @@ defines operator to gather DistributedArrays' vector into serial vector
 """
 function joDAgather(wpool::WorkerPool,m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),m);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
 
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
     sum(parts)==m || throw(joDAdistributorException("joDAgather: sum(parts) does not much m"))
@@ -371,7 +373,7 @@ function joDAgather(wpool::WorkerPool,m::Integer,
         v3->distribute(v3,dst),
         v4->Array(v4),
         @joNF, @joNF, @joNF, @joNF,
-        dst)
+        dst,gclean)
 end
 joDAgather(m::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),m);
@@ -379,7 +381,7 @@ joDAgather(m::Integer,
 
 function joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
-        DT::DataType=joFloat) where INT<:Integer
+        DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
 
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributorException("joDAgather: sum(parts) does not much nvc"))
@@ -390,7 +392,7 @@ function joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
         v3->distribute(v3,dst),
         v4->Array(v4),
         @joNF, @joNF, @joNF, @joNF,
-        dst)
+        dst,gclean)
 end
 joDAgather(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);

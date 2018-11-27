@@ -44,54 +44,63 @@ length(A::joAbstractParallelLinearOperator) = A.m*A.n
 # imag(jo)
 
 # conj(jo)
-conj(A::joDALinearOperator{DDT,RDT}) where {DDT,RDT} =
-    joDALinearOperator{DDT,RDT}("conj("*A.name*")",A.m,A.n,A.nvc,
-        get(A.fop_C),
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop,
-        A.dst_in,
-        A.dst_out,
-        A.fclean,
-        A.rclean
+conj(A::joDALinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDALinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop,
+        A.dst_in, A.dst_out, A.fclean, A.rclean
+        )
+conj(A::joDAdistributingLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDAdistributingLinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop,
+        A.dst, A.gclean
+        )
+conj(A::joDAgatheringLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDAgatheringLinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop,
+        A.dst, A.gclean
         )
 
 # transpose(jo)
-transpose(A::joDALinearOperator{DDT,RDT}) where {DDT,RDT} =
-    joDALinearOperator{RDT,DDT}("transpose("*A.name*")",A.n,A.m,A.nvc,
-        get(A.fop_T),
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A,
-        A.dst_out,
-        A.dst_in,
-        A.rclean,
-        A.fclean
+transpose(A::joDALinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDALinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A,
+        A.dst_out, A.dst_in, A.rclean, A.fclean
+        )
+transpose(A::joDAdistributingLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDAgatheringLinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A,
+        A.dst, A.gclean
+        )
+transpose(A::joDAgatheringLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDAdistributingLinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A,
+        A.dst, A.gclean
         )
 
 # adjoint(jo)
-adjoint(A::joDALinearOperator{DDT,RDT}) where {DDT,RDT} =
-    joDALinearOperator{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,A.nvc,
-        get(A.fop_A),
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T,
-        A.dst_out,
-        A.dst_in,
-        A.rclean,
-        A.fclean
+adjoint(A::joDALinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDALinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T,
+        A.dst_out, A.dst_in, A.rclean, A.fclean
+        )
+adjoint(A::joDAdistributingLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDAgatheringLinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T,
+        A.dst, A.gclean
+        )
+adjoint(A::joDAgatheringLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
+    joDAdistributingLinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T,
+        A.dst, A.gclean
         )
 
 # isreal(jo)

@@ -68,10 +68,14 @@ function transpose(in::joDAdistributor)
 end
 transpose(A::joDAdistribute{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgather{RDT,DDT,N}("regather($(A.name))",A.n,A.m,
-        A.fop_T, A.fop, A.fop_C, A.fop_A, A.iop_T, A.iop, A.iop_C, A.iop_A, A.dst)
+        A.fop_T, A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A,
+        A.dst, A.gclean)
 transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistribute{RDT,DDT,N}("redistribute($(A.name))",A.n,A.m,
-        A.fop_T, A.fop, A.fop_C, A.fop_A, A.iop_T, A.iop, A.iop_C, A.iop_A, A.dst)
+        A.fop_T, A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A,
+        A.dst, A.gclean)
 
 # adjoint(jo)
 @inline adjoint(A::joDAtoggle) = transpose(A)
@@ -112,7 +116,7 @@ end
 # *(jo,mvec)
 function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joDAtoggleException("joDAdistributeMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.dst.dims==size(mv) || throw(joDAtoggleException("sjoDAdistributeMV: hape mismatch dst$(A.dst.dims)*v$(size(mv))"))
+    A.dst.dims==size(mv) || throw(joDAtoggleException("sjoDAdistributeMV: shape mismatch dst$(A.dst.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
@@ -120,7 +124,7 @@ function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARD
 end
 function *(A::joDAgather{ADDT,ARDT,2},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joDAtoggleException("joDAgatherMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.dst.dims==size(mv) || throw(joDAtoggleException("joDAgatherMV: hape mismatch dst$(A.dst.dims)*v$(size(mv))"))
+    A.dst.dims==size(mv) || throw(joDAtoggleException("joDAgatherMV: shape mismatch dst$(A.dst.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))

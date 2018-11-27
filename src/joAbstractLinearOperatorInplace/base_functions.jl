@@ -28,139 +28,67 @@
 # conj(jo)
 conj(A::joMatrixInplace{DDT,RDT}) where {DDT,RDT} =
     joMatrixInplace{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        A.fop_C,
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop
+        A.fop_C, A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop
         )
 conj(A::joLooseMatrixInplace{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrixInplace{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        A.fop_C,
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop
+        A.fop_C, A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop
         )
 conj(A::joLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
     joLinearFunctionInplace{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        get(A.fop_C),
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop
         )
 conj(A::joLooseLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
     joLooseLinearFunctionInplace{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        get(A.fop_C),
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop
         )
 
 # transpose(jo)
 transpose(A::joMatrixInplace{DDT,RDT}) where {DDT,RDT} =
     joMatrixInplace{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        A.fop_T,
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A
+        A.fop_T, A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A
         )
 transpose(A::joLooseMatrixInplace{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrixInplace{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        A.fop_T,
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A
+        A.fop_T, A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A
         )
 transpose(A::joLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
     joLinearFunctionInplace{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        get(A.fop_T),
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A
         )
 transpose(A::joLooseLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
     joLooseLinearFunctionInplace{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        get(A.fop_T),
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A
         )
 
 # adjoint(jo)
 adjoint(A::joMatrixInplace{DDT,RDT}) where {DDT,RDT} =
     joMatrixInplace{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        A.fop_A,
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T
+        A.fop_A, A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T
         )
 adjoint(A::joLooseMatrixInplace{DDT,RDT}) where {DDT,RDT} =
     joLooseMatrixInplace{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        A.fop_A,
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T
+        A.fop_A, A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T
         )
 adjoint(A::joLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
     joLinearFunctionInplace{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        get(A.fop_A),
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T
         )
 adjoint(A::joLooseLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
     joLooseLinearFunctionInplace{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        get(A.fop_A),
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T
         )
 
 # isreal(jo)

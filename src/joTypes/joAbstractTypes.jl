@@ -43,7 +43,7 @@ end
 export joAbstractParallelableLinearOperator, joAbstractParallelableLinearOperatorException
 
 # type definition
-abstract type joAbstractParallelableLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT} end
+abstract type joAbstractParallelableLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractLinearOperator{DDT,RDT} end
 
 # type exception
 struct joAbstractParallelableLinearOperatorException <: Exception
@@ -82,7 +82,7 @@ end
 export joAbstractParallelToggleOperator, joAbstractParallelToggleOperatorException
 
 # type definition
-abstract type joAbstractParallelToggleOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator end
+abstract type joAbstractParallelToggleOperator{DDT<:Number,RDT<:Number,N} <: joAbstractOperator end
 
 # type exception
 struct joAbstractParallelToggleOperatorException <: Exception
@@ -95,7 +95,7 @@ end
 export joAbstractParallelLinearOperator, joAbstractParallelLinearOperatorException
 
 # type definition
-abstract type joAbstractParallelLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractOperator end
+abstract type joAbstractParallelLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractOperator end
 
 # type exception
 struct joAbstractParallelLinearOperatorException <: Exception

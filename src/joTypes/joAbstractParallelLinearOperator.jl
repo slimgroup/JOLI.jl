@@ -16,7 +16,7 @@ export joDAgatheringLinearOperator, joDAgatheringLinearOperatorException
     !!! Do not use it to create the operators
 
 """
-struct joDALinearOperator{DDT<:Number,RDT<:Number} <: joAbstractParallelLinearOperator{DDT,RDT}
+struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractParallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -40,7 +40,7 @@ end
     !!! Do not use it to create the operators
 
 """
-struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractParallelLinearOperator{DDT,RDT}
+struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractParallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -62,7 +62,7 @@ end
     !!! Do not use it to create the operators
 
 """
-struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractParallelLinearOperator{DDT,RDT}
+struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractParallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer

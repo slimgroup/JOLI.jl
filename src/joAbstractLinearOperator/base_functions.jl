@@ -57,112 +57,52 @@ joImag(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = imag(A)
 joConj(A::joAbstractLinearOperator) = conj(A)
 conj(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
     joLinearOperator{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        get(A.fop_C),
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop
         )
 conj(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
     joMatrix{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        A.fop_C,
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop
+        A.fop_C, A.fop_A, A.fop_T, A.fop,
+        A.iop_C, A.iop_A, A.iop_T, A.iop
         )
 conj(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{DDT,RDT}("conj("*A.name*")",A.m,A.n,
-        get(A.fop_C),
-        A.fop_A,
-        A.fop_T,
-        A.fop,
-        A.fMVok,
-        A.iop_C,
-        A.iop_A,
-        A.iop_T,
-        A.iop,
-        A.iMVok
+        get(A.fop_C), A.fop_A, A.fop_T, A.fop, A.fMVok,
+        A.iop_C, A.iop_A, A.iop_T, A.iop, A.iMVok
         )
 
 # transpose(jo)
 transpose(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
     joLinearOperator{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        get(A.fop_T),
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A
         )
 transpose(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
     joMatrix{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        A.fop_T,
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A
+        A.fop_T, A.fop, A.fop_C, A.fop_A,
+        A.iop_T, A.iop, A.iop_C, A.iop_A
         )
 transpose(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{RDT,DDT}("transpose("*A.name*")",A.n,A.m,
-        get(A.fop_T),
-        A.fop,
-        A.fop_C,
-        A.fop_A,
-        A.fMVok,
-        A.iop_T,
-        A.iop,
-        A.iop_C,
-        A.iop_A,
-        A.iMVok
+        get(A.fop_T), A.fop, A.fop_C, A.fop_A, A.fMVok,
+        A.iop_T, A.iop, A.iop_C, A.iop_A, A.iMVok
         )
 
 # adjoint(jo)
 adjoint(A::joLinearOperator{DDT,RDT}) where {DDT,RDT} =
     joLinearOperator{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        get(A.fop_A),
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T
         )
 adjoint(A::joMatrix{DDT,RDT}) where {DDT,RDT} =
     joMatrix{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        A.fop_A,
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T
+        A.fop_A, A.fop_C, A.fop, A.fop_T,
+        A.iop_A, A.iop_C, A.iop, A.iop_T
         )
 adjoint(A::joLinearFunction{DDT,RDT}) where {DDT,RDT} =
     joLinearFunction{RDT,DDT}("adjoint("*A.name*")",A.n,A.m,
-        get(A.fop_A),
-        A.fop_C,
-        A.fop,
-        A.fop_T,
-        A.fMVok,
-        A.iop_A,
-        A.iop_C,
-        A.iop,
-        A.iop_T,
-        A.iMVok
+        get(A.fop_A), A.fop_C, A.fop, A.fop_T, A.fMVok,
+        A.iop_A, A.iop_C, A.iop, A.iop_T, A.iMVok
         )
 
 # isreal(jo)
