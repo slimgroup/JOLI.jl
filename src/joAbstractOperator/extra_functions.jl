@@ -29,3 +29,5 @@ isadjoint(A::joAbstractOperator) = jo_method_error(A,"isadjoint(jo) not implemen
 joAddSolverAny(A::joAbstractOperator,args::Function...) = jo_method_error(A,"joAddSolverAny(jo) not implemented")
 joAddSolverAll(A::joAbstractOperator,args::Function...) = jo_method_error(A,"joAddSolverAll(jo) not implemented")
 
+# isequiv
+

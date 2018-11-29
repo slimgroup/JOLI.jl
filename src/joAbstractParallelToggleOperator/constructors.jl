@@ -313,7 +313,6 @@ joDAdistribute(m::Integer,nvc::Integer,
         parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
         kwargs...) where INT<:Integer = joDAdistribute(WorkerPool(workers()),m,nvc,parts;kwargs...)
 
-
 export joDAgather
 """
     julia> joDAgather(m [,parts]; [DT])

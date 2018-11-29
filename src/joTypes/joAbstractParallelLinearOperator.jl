@@ -53,7 +53,7 @@ struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractPa
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst::joDAdistributor       # output distributor
+    dst_out::joDAdistributor   # output distributor
     gclean::Bool               # clean input vector post gathering
 end
 """
@@ -75,7 +75,7 @@ struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractParal
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst::joDAdistributor       # input distributor
+    dst_in::joDAdistributor       # input distributor
     gclean::Bool               # clean input vector post gathering
 end
 

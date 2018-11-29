@@ -48,7 +48,7 @@ import IterativeSolvers.Adivtype
 
 # extra exported methods
 export deltype, reltype
-export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint
+export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint, isequiv
 export joLoosen
 
 # array unions

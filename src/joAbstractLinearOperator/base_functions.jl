@@ -130,6 +130,9 @@ function *(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLinearOperator{BDD
         @joNF, @joNF, @joNF, @joNF
         )
 end
+# in joAbstractParallelLinearOperator/base_functions.jl
+#function *(A::joDAdistributingLinearOperator{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
+#function *(A::joAbstractLinearOperator{CDT,ARDT},B::joDAgatheringLinearOperator{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
 
 # *(jo,mvec)
 function *(A::joAbstractLinearOperator{ADDT,ARDT},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}

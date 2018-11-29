@@ -70,12 +70,12 @@ transpose(A::joDAdistribute{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgather{RDT,DDT,N}("regather($(A.name))",A.n,A.m,
         A.fop_T, A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst, A.gclean)
+        A.dst_out, A.gclean)
 transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistribute{RDT,DDT,N}("redistribute($(A.name))",A.n,A.m,
         A.fop_T, A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst, A.gclean)
+        A.dst_in, A.gclean)
 
 # adjoint(jo)
 @inline adjoint(A::joDAtoggle) = transpose(A)
@@ -88,23 +88,23 @@ transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
 
 # isequal(jo,jo)
 function isequal(a::joDAdistributor,b::joDAdistributor)
-    (a.name  ==b.name  ) || return false
-    (a.dims  ==b.dims  ) || return false
-    (a.procs ==b.procs ) || return false
-    (a.chunks==b.chunks) || return false
-    (a.idxs  ==b.idxs  ) || return false
-    (a.cuts  ==b.cuts  ) || return false
-    (a.DT    ==b.DT    ) || return false
+    (a.name  == b.name  ) || return false
+    (a.dims  == b.dims  ) || return false
+    (a.procs == b.procs ) || return false
+    (a.chunks== b.chunks) || return false
+    (a.idxs  == b.idxs  ) || return false
+    (a.cuts  == b.cuts  ) || return false
+    (a.DT    == b.DT    ) || return false
     return true
 end
 
 # isapprox(jo,jo)
 function isapprox(a::joDAdistributor,b::joDAdistributor)
-    (a.dims  ==b.dims  ) || return false
-    (a.procs ==b.procs ) || return false
-    (a.chunks==b.chunks) || return false
-    (a.idxs  ==b.idxs  ) || return false
-    (a.cuts  ==b.cuts  ) || return false
+    (a.dims  == b.dims  ) || return false
+    (a.procs == b.procs ) || return false
+    (a.chunks== b.chunks) || return false
+    (a.idxs  == b.idxs  ) || return false
+    (a.cuts  == b.cuts  ) || return false
     return true
 end
 
@@ -116,7 +116,7 @@ end
 # *(jo,mvec)
 function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joDAtoggleException("joDAdistributeMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.dst.dims==size(mv) || throw(joDAtoggleException("sjoDAdistributeMV: shape mismatch dst$(A.dst.dims)*v$(size(mv))"))
+    A.dst_out.dims==size(mv) || throw(joDAtoggleException("sjoDAdistributeMV: shape mismatch dst$(A.dst_out.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
@@ -124,19 +124,23 @@ function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARD
 end
 function *(A::joDAgather{ADDT,ARDT,2},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joDAtoggleException("joDAgatherMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.dst.dims==size(mv) || throw(joDAtoggleException("joDAgatherMV: shape mismatch dst$(A.dst.dims)*v$(size(mv))"))
+    A.dst_in.dims==size(mv) || throw(joDAtoggleException("joDAgatherMV: shape mismatch dst$(A.dst_in.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
+    isequiv(A.dst_in,mv) || throw(joDAtoggleException("*($(A.name),mv::Darray): input distributor mismatch"))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
+# in joAbstractParallelLinearOperator/base_functions.jl
+#function *(A::joDAdistribute{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
+#function *(A::joAbstractLinearOperator{CDT,ARDT},B::joDAgather{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
 
 # *(mvec,jo)
 
 # *(jo,vec)
 function *(A::joDAdistribute{ADDT,ARDT,1},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joDAtoggleException("joDAdistributeV: shape mismatch A$(size(A))*v$(size(v))"))
-    A.dst.dims==size(v) || throw(joDAtoggleException("joDAdistributeV: shape mismatch dst$(A.dst.dims)*v$(size(v))"))
+    A.dst_out.dims==size(v) || throw(joDAtoggleException("joDAdistributeV: shape mismatch dst$(A.dst_out.dims)*v$(size(v))"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
@@ -144,7 +148,7 @@ function *(A::joDAdistribute{ADDT,ARDT,1},v::LocalVector{vDT}) where {ADDT,ARDT,
 end
 function *(A::joDAgather{ADDT,ARDT,1},v::DArray{vDT,1}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joDAtoggleException("joDAgatherV: shape mismatch A$(size(A))*v$(size(v))"))
-    A.dst.dims==size(v) || throw(joDAtoggleException("joDAgatherV: shape mismatch dst$(A.dst.dims)*v$(size(v))"))
+    A.dst_in.dims==size(v) || throw(joDAtoggleException("joDAgatherV: shape mismatch dst$(A.dst_in.dims)*v$(size(v))"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))

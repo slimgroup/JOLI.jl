@@ -64,7 +64,7 @@ struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractParallelToggleOper
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst::joDAdistributor       # output distributor
+    dst_out::joDAdistributor   # output distributor
     gclean::Bool               # clean input vector post gathering
 end
 """
@@ -86,7 +86,7 @@ struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractParallelToggleOperator
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst::joDAdistributor       # input distributor
+    dst_in::joDAdistributor    # input distributor
     gclean::Bool               # clean input vector post gathering
 end
 
