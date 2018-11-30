@@ -42,7 +42,7 @@ end
 ############################################################
 # joDA{distribute,gather} ##################################
 
-export joDAdistribute, joDAgather, joDAtoggleException
+export joDAdistribute, joDAgather
 
 # type definition
 """
@@ -52,10 +52,11 @@ export joDAdistribute, joDAgather, joDAtoggleException
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractParallelToggleOperator{DDT,RDT,N}
+struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
+    nvc::Integer
     fop::Function    # forward
     fop_T::Function  # transpose
     fop_A::Function  # adjoint
@@ -74,10 +75,11 @@ end
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractParallelToggleOperator{DDT,RDT,N}
+struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
+    nvc::Integer
     fop::Function    # forward
     fop_T::Function  # transpose
     fop_A::Function  # adjoint
@@ -88,13 +90,5 @@ struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractParallelToggleOperator
     iop_C::Nullable{Function}
     dst_in::joDAdistributor    # input distributor
     gclean::Bool               # clean input vector post gathering
-end
-
-# toggle unions
-const joDAtoggle{D,T,N}=Union{joDAdistribute{D,T,N},joDAgather{D,T,N}} where {D,T,N}
-
-# type exception
-struct joDAtoggleException <: Exception
-    msg :: String
 end
 

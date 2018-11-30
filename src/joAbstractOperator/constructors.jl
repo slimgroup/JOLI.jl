@@ -5,5 +5,5 @@
 # common constructor exports
 
 # in ./joAbstractLinearOperator/constructors.jl
-# in ./joAbstractParallelLinearOperator/constructors.jl
+# in ./joAbstractDAparallelLinearOperator/constructors.jl
 export joAddSolverAny, joAddSolverAll

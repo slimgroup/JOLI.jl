@@ -6,8 +6,9 @@
 #   * joAbstractParallelableLinearOperator
 # * joAbstractFosterLinearOperator
 #   * joAbstractLinearOperatorInplace
-# * joAbstractParallelToggleOperator
-# * joAbstractParallelLinearOperator
+# * joAbstractDAparallelOperator
+#  * joAbstractDAparallelToggleOperator
+#  * joAbstractDAparallelLinearOperator
 #   
 ############################################################
 
@@ -77,28 +78,41 @@ struct joAbstractLinearOperatorInplaceException <: Exception
 end
 
 ############################################################
-# joAbstractParallelToggleOperator #########################
+# joAbstractDAparallelOperator #############################
 
-export joAbstractParallelToggleOperator, joAbstractParallelToggleOperatorException
+export joAbstractDAparallelOperator, joAbstractDAparallelOperatorException
 
 # type definition
-abstract type joAbstractParallelToggleOperator{DDT<:Number,RDT<:Number,N} <: joAbstractOperator end
+abstract type joAbstractDAparallelOperator{DDT<:Number,RDT<:Number,N} <: joAbstractOperator end
 
 # type exception
-struct joAbstractParallelToggleOperatorException <: Exception
+struct joAbstractDAparallelOperatorException <: Exception
     msg :: String
 end
 
 ############################################################
-# joAbstractParallelLinearOperator #########################
+# joAbstractDAparallelToggleOperator #######################
 
-export joAbstractParallelLinearOperator, joAbstractParallelLinearOperatorException
+export joAbstractDAparallelToggleOperator, joAbstractDAparallelToggleOperatorException
 
 # type definition
-abstract type joAbstractParallelLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractOperator end
+abstract type joAbstractDAparallelToggleOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelOperator{DDT,RDT,N} end
 
 # type exception
-struct joAbstractParallelLinearOperatorException <: Exception
+struct joAbstractDAparallelToggleOperatorException <: Exception
+    msg :: String
+end
+
+############################################################
+# joAbstractDAparallelLinearOperator #######################
+
+export joAbstractDAparallelLinearOperator, joAbstractDAparallelLinearOperatorException
+
+# type definition
+abstract type joAbstractDAparallelLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelOperator{DDT,RDT,N} end
+
+# type exception
+struct joAbstractDAparallelLinearOperatorException <: Exception
     msg :: String
 end
 

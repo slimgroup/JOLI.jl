@@ -282,7 +282,7 @@ function joDAdistribute(wpool::WorkerPool,m::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
     sum(parts)==m || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much m"))
     dst=joDAdistributor(wpool,(m,),1,parts=parts)
-    return joDAdistribute{DT,DT,1}("joDAdistributeV",m,m,
+    return joDAdistribute{DT,DT,1}("joDAdistributeV",m,m,1,
         v1->distribute(v1,dst),
         v2->Array(v2),
         v3->Array(v3),
@@ -301,7 +301,7 @@ function joDAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAdistribute: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributorException("joDAdistribute: sum(parts) does not much nvc"))
     dst=joDAdistributor(wpool,(m,nvc),2,parts=parts)
-    return joDAdistribute{DT,DT,2}("joDAdistributeMV:$nvc",m,m,
+    return joDAdistribute{DT,DT,2}("joDAdistributeMV:$nvc",m,m,nvc,
         v1->distribute(v1,dst),
         v2->Array(v2),
         v3->Array(v3),
@@ -366,7 +366,7 @@ function joDAgather(wpool::WorkerPool,m::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
     sum(parts)==m || throw(joDAdistributorException("joDAgather: sum(parts) does not much m"))
     dst=joDAdistributor(wpool,(m,),1,parts=parts)
-    return joDAgather{DT,DT,1}("joDAgatherV",m,m,
+    return joDAgather{DT,DT,1}("joDAgatherV",m,m,1,
         v1->Array(v1),
         v2->distribute(v2,dst),
         v3->distribute(v3,dst),
@@ -385,7 +385,7 @@ function joDAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
     length(parts)==nworkers(wpool) || throw(joDAdistributorException("joDAgather: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributorException("joDAgather: sum(parts) does not much nvc"))
     dst=joDAdistributor(wpool,(m,nvc),2,parts=parts)
-    return joDAgather{DT,DT,2}("joDAgatherMV:$nvc",m,m,
+    return joDAgather{DT,DT,2}("joDAgatherMV:$nvc",m,m,nvc,
         v1->Array(v1),
         v2->distribute(v2,dst),
         v3->distribute(v3,dst),

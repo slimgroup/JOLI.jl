@@ -2,7 +2,7 @@
 ## joMatrix - extra functions
 
 # elements(jo)
-#elements(A::joDAtoggle) = throw(joDAtoggleException("elements: pointless operation for joDAdistribute/joDAgather operations"))
+#elements(A::joAbstractDAparallelToggleOperator) = throw(joAbstractDAparallelToggleOperatorException("elements: pointless operation for joDAdistribute/joDAgather operations"))
 
 # hasinverse(jo)
 
