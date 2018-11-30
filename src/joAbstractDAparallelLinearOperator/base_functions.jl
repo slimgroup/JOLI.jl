@@ -190,7 +190,7 @@ function *(A::joDAgatherLinOpsUnion{CDT,ARDT,2},B::joDAdistributeLinOpsUnion{BDD
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF)
 end
-
+# extras with warnings
 function *(A::joDAdistribute{CDT,ARDT,2},B::joDAgather{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
     A.dst_out.dims[2]==B.dst_in.dims[2] || throw(joDALinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
