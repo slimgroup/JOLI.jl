@@ -100,7 +100,7 @@ struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDApar
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joDAdistributor       # input distributor
+    dst_in::joDAdistributor    # input distributor
     gclean::Bool               # clean input vector post gathering
 end
 

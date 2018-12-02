@@ -73,7 +73,7 @@ function dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor) where T
 
     D = parent(Dtr)
     joDAutils.DArray5(dst.dims, dst.procs, dst.idxs, dst.cuts) do I
-        println(I,reverse(I))
+        # @debug I rI=reverse(I)
         lp = Array{T}(undef, map(length, I))
         rp = convert(Array, D[reverse(I)...])
         transpose!(lp, rp)
