@@ -9,7 +9,7 @@ and applying them in basic algebraic matrix-vector operations.
 From julia prompt run the following if you will not need developer's write access or if you do not have GitHub account:
 
 ```
-Pkg.add(PackageSpec(url="https://github.com/slimgroup/JOLI.jl.git",rev="v07-devel"))
+Pkg.add(PackageSpec(url="https://github.com/slimgroup/JOLI.jl.git",rev="master"))
 ```
 
 or with GitHub account (and SSH keys registered) for full developer access:
