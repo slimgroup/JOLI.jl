@@ -3,8 +3,9 @@
 ## helper module
 module joDCT_etc
     using JOLI: jo_convert
+    using FFTW
     ### planned
-    function apply_dct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_dct(pln::FFTW.DCTPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -17,7 +18,7 @@ module joDCT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idct(pln::Base.DFT.FFTW.DCTPlan,v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_idct(pln::FFTW.DCTPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -31,7 +32,7 @@ module joDCT_etc
         return rv
     end
     ### not planned
-    function apply_dct(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_dct(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -44,7 +45,7 @@ module joDCT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idct(v::AbstractVector{<:Number},ms::Tuple,rdt::DataType)
+    function apply_idct(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         l::Integer=length(ms)
         mp::Integer=prod(ms)
         lv::Integer=length(v)
@@ -83,7 +84,7 @@ function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::Data
     if planned
     pf=plan_dct(zeros(ms))
     ipf=plan_idct(zeros(ms))
-    return joLinearFunctionCT(prod(ms),prod(ms),
+    return joLinearFunction_A(prod(ms),prod(ms),
         v1->joDCT_etc.apply_dct(pf,v1,ms,RDT),
         v2->joDCT_etc.apply_idct(ipf,v2,ms,DDT),
         v3->joDCT_etc.apply_idct(ipf,v3,ms,DDT),
@@ -92,7 +93,7 @@ function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::Data
         name="joDCTp"
         )
     else
-    return joLinearFunctionCT(prod(ms),prod(ms),
+    return joLinearFunction_A(prod(ms),prod(ms),
         v1->joDCT_etc.apply_dct(v1,ms,RDT),
         v2->joDCT_etc.apply_idct(v2,ms,DDT),
         v3->joDCT_etc.apply_idct(v3,ms,DDT),

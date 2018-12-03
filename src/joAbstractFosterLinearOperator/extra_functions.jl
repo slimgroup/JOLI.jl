@@ -2,21 +2,23 @@
 ## joAbstractFosterLinearOperator - extra functions
 
 # elements(jo)
+elements(A::joLooseMatrix{DDT,RDT}) where {DDT,RDT} = A*jo_speye(DDT,A.n)
+elements(A::joLooseLinearFunction{DDT,RDT}) where {DDT,RDT} = A*jo_eye(DDT,A.n)
 
 # hasinverse(jo)
-hasinverse{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = !isnull(A.iop)
+hasinverse(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = !isnull(A.iop)
 
 # issquare(jo)
-issquare{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = (A.m == A.n)
+issquare(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m == A.n)
 
 # istall(jo)
-istall{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = (A.m > A.n)
+istall(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m > A.n)
 
 # iswide(jo)
-iswide{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = (A.m < A.n)
+iswide(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m < A.n)
 
 # iscomplex(jo)
-iscomplex{DDT,RDT}(A::joAbstractFosterLinearOperator{DDT,RDT}) = !(DDT<:Real && RDT<:Real)
+iscomplex(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = !(DDT<:Real && RDT<:Real)
 
 # islinear(jo)
 

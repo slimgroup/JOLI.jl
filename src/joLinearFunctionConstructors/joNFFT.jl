@@ -3,28 +3,28 @@
 ## helper module
 module joNFFT_etc
     using JOLI: jo_convert
-    function apply_nfft_centered(pln,n,v::AbstractVector,rdt::DataType)
-        iv=jo_convert(Complex{Float64},v)
+    function apply_nfft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        iv=jo_convert(ComplexF64,v)
         rv=nfft(pln,iv)/sqrt(n)
         rv=fftshift(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_infft_centered(pln,n,v::AbstractVector,rdt::DataType)
-        iv=jo_convert(Complex{Float64},v)
+    function apply_infft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        iv=jo_convert(ComplexF64,v)
         iv=ifftshift(iv)
         rv=nfft_adjoint(pln,iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_nfft(pln,n,v::AbstractVector,rdt::DataType)
-        iv=jo_convert(Complex{Float64},v)
+    function apply_nfft(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        iv=jo_convert(ComplexF64,v)
         rv=nfft(pln,iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_infft(pln,n,v::AbstractVector,rdt::DataType)
-        iv=jo_convert(Complex{Float64},v)
+    function apply_infft(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        iv=jo_convert(ComplexF64,v)
         rv=nfft_adjoint(pln,iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
@@ -42,7 +42,7 @@ export joNFFT
 - joNFFT(N,nodes) - 1D NFFT
 
 # Notes
-- NFFT always uses Complex{Float64} vectors internally
+- NFFT always uses ComplexF64 vectors internally
 - see https://github.com/tknopp/NFFT.jl/tree/master for docs for optional parameters to NFFTplan
 
 """
@@ -50,14 +50,14 @@ function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bes
     M=length(pos)
     p=NFFTPlan(pos,N,m,sigma,window,K)
     if centered
-        return joLinearFunctionFwdCT(M,N,
+        return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft_centered(p,N,v1,RDT),
             v2->joNFFT_etc.apply_infft_centered(p,N,v2,DDT),
             DDT,RDT;
             name="joNFFTc"
             )
     else
-        return joLinearFunctionFwdCT(M,N,
+        return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft(p,N,v1,RDT),
             v2->joNFFT_etc.apply_infft(p,N,v2,DDT),
             DDT,RDT;

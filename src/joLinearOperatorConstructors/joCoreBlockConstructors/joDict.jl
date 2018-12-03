@@ -4,7 +4,7 @@
 
 export joDict, joDictException
 
-type joDictException <: Exception
+struct joDictException <: Exception
     msg :: String
 end
 
@@ -15,21 +15,21 @@ end
 Dictionary operator composed from different square JOLI operators
 
     joDict(ops::joAbstractLinearOperator...;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},4,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},4,6);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,4,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,4,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
     # either
         D=joDict(A,B,C) # basic dictionary in function syntax
     #or
         D=[A B C] # basic dictionary in [] syntax
-    w=rand(Complex{Float64},3)
+    w=rand(ComplexF64,3)
     D=joDict(A,B,C;weights=w) # weighted dictionary
 
 # Notes
@@ -39,8 +39,8 @@ Dictionary operator composed from different square JOLI operators
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
 """
-function joDict{WDT<:Number}(ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joDict")
+function joDict(ops::joAbstractLinearOperator...;
+           weights::LocalVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
     isempty(ops) && throw(joDictException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -64,37 +64,37 @@ function joDict{WDT<:Number}(ops::joAbstractLinearOperator...;
     m=ops[1].m
     n=sum(ns)
     weighted=(length(ws)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
-            push!(fops_T,ws[i]*ops[i].')
-            push!(fops_CT,conj(ws[i])*ops[i]')
+            push!(fops_T,ws[i]*transpose(ops[i]))
+            push!(fops_A,conj(ws[i])*adjoint(ops[i]))
             push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
-            push!(fops_T,ops[i].')
-            push!(fops_CT,ops[i]')
+            push!(fops_T,transpose(ops[i]))
+            push!(fops_A,adjoint(ops[i]))
             push!(fops_C,conj(ops[i]))
         end
     end
     return joCoreBlock{deltype(fops[1]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
+                      fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 """
 Dictionary operator composed from l-times replicated square JOLI operator
 
     joDict(l::Int,op::joAbstractLinearOperator;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    w=rand(Complex{Float64},3)
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
+    a=rand(ComplexF64,4,4);
+    w=rand(ComplexF64,3)
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
     D=joDict(3,A) # basic dictionary
     D=joDict(3,A;weights=w) # weighted dictionary
 
@@ -105,8 +105,8 @@ Dictionary operator composed from l-times replicated square JOLI operator
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
 """
-function joDict{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joDict")
+function joDict(l::Integer,op::joAbstractLinearOperator;
+           weights::LocalVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
     (length(weights)==l || length(weights)==0) || throw(joDictException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
     ms=zeros(Int,l)
@@ -123,24 +123,24 @@ function joDict{WDT<:Number}(l::Integer,op::joAbstractLinearOperator;
     m=op.m
     n=l*op.n
     weighted=(length(weights)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*op)
-            push!(fops_T,ws[i]*op.')
-            push!(fops_CT,conj(ws[i])*op')
+            push!(fops_T,ws[i]*transpose(op))
+            push!(fops_A,conj(ws[i])*adjoint(op))
             push!(fops_C,conj(ws[i])*conj(op))
         else
             push!(fops,op)
-            push!(fops_T,op.')
-            push!(fops_CT,op')
+            push!(fops_T,transpose(op))
+            push!(fops_A,adjoint(op))
             push!(fops_C,conj(op))
         end
     end
     return joCoreBlock{deltype(op),reltype(op)}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
+                      fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 

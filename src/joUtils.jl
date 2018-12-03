@@ -2,47 +2,70 @@
 # Utilities ################################################
 ############################################################
 
-type joUtilsException <: Exception
+struct joUtilsException <: Exception
     msg :: String
 end
 
 
 ############################################################
+## jo_eye/speye/full #######################################
+export jo_eye, jo_speye, jo_full
+"""
+return identity array
+
+    jo_eye(m::Integer,n::Integer=m)
+    jo_eye(DT::DataType,m::Integer,n::Integer=m)
+
+"""
+@inline jo_eye(m::Integer,n::Integer=m) = Matrix{joFloat}(LinearAlgebra.I,m,n)
+@inline jo_eye(DT::DataType,m::Integer,n::Integer=m) = Matrix{DT}(LinearAlgebra.I,m,n)
+"""
+return sparse identity array
+
+    jo_speye(m::Integer,n::Integer=m)
+    jo_speye(DT::DataType,m::Integer,n::Integer=m)
+
+"""
+@inline jo_speye(m::Integer,n::Integer=m) = sparse(one(joFloat)*LinearAlgebra.I,m,n)
+@inline jo_speye(DT::DataType,m::Integer,n::Integer=m) = sparse(one(DT)*LinearAlgebra.I,m,n)
+"""
+return full array
+
+    jo_full(A::AbstractArray)
+
+"""
+@inline jo_full(A::AbstractArray) = Array(A)
+
+############################################################
 ## jo_method_error #########################################
 function jo_method_error(O::joAbstractOperator,s::String)
-    t=typeof(O)
-    n=O.name
-    info("Method error for JOLI operator";prefix="JOLI: ")
-    info("  named $n of type $t";prefix="JOLI: ")
-    error(s)
+    op_type=typeof(O)
+    op_name=O.name
+    @info "JOLI method error for operator:" op_name op_type
+    throw(joUtilsException(s))
 end
 function jo_method_error(L,R,s::String)
-    lt=typeof(L)
-    ln=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
-    rt=typeof(R)
-    rn=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
-    info("Method error for input combination:";prefix="JOLI: ")
-    info("  Left variable:  named $ln of type $lt";prefix="JOLI: ")
-    info("  Right variable: named $rn of type $rt";prefix="JOLI: ")
-    error(s)
+    left_type=typeof(L)
+    left_name=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
+    right_type=typeof(R)
+    right_name=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
+    @info "JOLI method error for combination:" left_name left_type right_name right_type
+    throw(joUtilsException(s))
 end
 function jo_method_error(L,M,R,s::String)
-    lt=typeof(L)
-    ln=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
-    mt=typeof(M)
-    mn=typeof(M)<:joAbstractOperator ? M.name : "non-JOLI"
-    rt=typeof(R)
-    rn=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
-    info("Method error for input combination:";prefix="JOLI: ")
-    info("  Left variable:  named $ln of type $lt";prefix="JOLI: ")
-    info("  Mid variable:   named $mn of type $mt";prefix="JOLI: ")
-    info("  Right variable: named $rn of type $rt";prefix="JOLI: ")
-    error(s)
+    left_type=typeof(L)
+    left_name=typeof(L)<:joAbstractOperator ? L.name : "non-JOLI"
+    mid_type=typeof(M)
+    mid_name=typeof(M)<:joAbstractOperator ? M.name : "non-JOLI"
+    right_type=typeof(R)
+    right_name=typeof(R)<:joAbstractOperator ? R.name : "non-JOLI"
+    @info "JOLI method error for combination:" left_name left_type mid_name mid_type right_name right_type
+    throw(joUtilsException(s))
 end
 
 ############################################################
 ## type tree ###############################################
-function type_tree(top::DataType=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
+function type_tree(top::Type=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
     super ? println(bl,top," <: ",supertype(top)) : println(bl,top)
     ts = subtypes(top)
     if length(ts) > 0
@@ -58,7 +81,7 @@ end
 export joInt, joFloat, joComplex
 global joInt=Int64
 global joFloat=Float64
-global joComplex=Complex{Float64}
+global joComplex=ComplexF64
 export jo_joInt_set, jo_joFloat_set, jo_joComplex_set, jo_jo32bit_set, jo_jo64bit_set, jo_joTypes_get
 """
 set default integer type joInt
@@ -99,7 +122,7 @@ set default type joInt, joFloat, joComplex to 32 bit
 function jo_jo32bit_set()
     global joInt=Int32
     global joFloat=Float32
-    global joComplex=Complex{Float32}
+    global joComplex=ComplexF32
     global joTol=sqrt(eps(Float32))
     return joInt, joFloat, joComplex
 end
@@ -112,7 +135,7 @@ set default type joInt, joFloat, joComplex to 64 bit
 function jo_jo64bit_set()
     global joInt=Int64
     global joFloat=Float64
-    global joComplex=Complex{Float64}
+    global joComplex=ComplexF64
     global joTol=sqrt(eps(Float64))
     return joInt, joFloat, joComplex
 end
@@ -150,7 +173,7 @@ end
 global jo_iterative_solver4square = (A,v)->gmres(A,v)
 export jo_iterative_solver4square_set
 """
-Set default iterative solver for \(jo,vec) and square jo
+Set default iterative solver for \\(jo,vec) and square jo
 
     jo_iterative_solver4square_set(f::Function)
 
@@ -170,7 +193,7 @@ end
 global jo_iterative_solver4tall = @joNF
 export jo_iterative_solver4tall_set
 """
-Set default iterative solver for \(jo,vec) and tall jo
+Set default iterative solver for \\(jo,vec) and tall jo
 
     jo_iterative_solver4tall_set(f::Function)
 
@@ -190,7 +213,7 @@ end
 global jo_iterative_solver4wide = @joNF
 export jo_iterative_solver4wide_set
 """
-Set default iterative solver for \(jo,vec) and wide jo
+Set default iterative solver for \\(jo,vec) and wide jo
 
     jo_iterative_solver4wide_set(f::Function)
 
@@ -215,7 +238,7 @@ Type of the real number or element type of complex number.
 - jo_precision_type(1.)
 - jo_precision_type(1+im*3.)
 """
-jo_precision_type{ITx<:Number, Tx<:Union{Complex{ITx}, ITx}}(x::Tx) = ITx
+jo_precision_type(x::Tx) where {ITx<:Number, Tx<:Union{Complex{ITx}, ITx}} = ITx
 
 ############################################################
 ## complex precision type ##################################
@@ -227,17 +250,17 @@ Type of element of complex scalar
 
 # Example
 - jo_complex_eltype(1.+im*1.)
-- jo_complex_eltype(zero(Complex{Float64}))
+- jo_complex_eltype(zero(ComplexF64))
 
 """
-jo_complex_eltype{T}(a::Complex{T}) = T
+jo_complex_eltype(a::Complex{T}) where {T} = T
 """
 Type of element of complex data type
 
     jo_complex_eltype(DT::DataType)
 
 # Example
-- jo_complex_eltype(Complex{Float32})
+- jo_complex_eltype(ComplexF32)
 
 """
 function jo_complex_eltype(DT::DataType)
@@ -275,8 +298,8 @@ function jo_type_mismatch_error_set(flag::Bool)
 end
 function jo_type_mismatch_warn_set(flag::Bool)
     global jo_type_mismatch_warn
-    warn("Very, very bad idea! You are a sneaky fellow.")
-    warn("Function jo_type_mismatch_warn_set is deprecated and will be removed in the future.")
+    @warn "Very, very bad idea! You are a sneaky fellow."
+    @warn "Function jo_type_mismatch_warn_set is deprecated and will be removed in the future."
     jo_type_mismatch_warn=flag
     return
 end
@@ -297,7 +320,7 @@ mode to error mode.
 function jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
     if !(DT1==DT2)
         jo_type_mismatch_error && throw(joUtilsException("type mismatch: $DT1 vs. $DT2 in $where"))
-        jo_type_mismatch_warn && warn("type mismatch: $DT1 vs. $DT2 in $where")
+        jo_type_mismatch_warn && @warn "type mismatch: $DT1 vs. $DT2 in $where" 
     end
     return
 end
@@ -332,10 +355,10 @@ Convert vector to new type
   use jo_convert_warn_set(false) to turn off the warning
 
 # Example
-- jo_convert(Complex{Float32},rand(3))
+- jo_convert(ComplexF32,rand(3))
 
 """
-function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
+function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:Integer}
     DT==VT && return vin
     #println("jo_convert{VT<:Integer}")
     if DT<:Integer
@@ -349,7 +372,7 @@ function jo_convert{VT<:Integer}(DT::DataType,vin::AbstractArray{VT},warning::Bo
     end
     return vout
 end
-function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
+function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:AbstractFloat}
     DT==VT && return vin
     #println("jo_convert{VT<:AbstractFloat}")
     if !(DT<:Integer)
@@ -359,13 +382,13 @@ function jo_convert{VT<:AbstractFloat}(DT::DataType,vin::AbstractArray{VT},warni
     end
     return vout
 end
-function jo_convert{VT<:Complex}(DT::DataType,vin::AbstractArray{VT},warning::Bool=true)
+function jo_convert(DT::DataType,vin::AbstractArray{VT},warning::Bool=true) where {VT<:Complex}
     DT==VT && return vin
     #println("jo_convert{VT<:Complex}")
     if DT<:Complex
         vout=convert(AbstractArray{DT},vin)
     elseif DT<:AbstractFloat
-        (warning && jo_convert_warn) && warn("jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part.")
+        (warning && jo_convert_warn) && @warn "jo_convert: Inexact conversion from $VT to $DT. Dropping imaginary part."
         vout=convert(AbstractArray{DT},real(vin))
     else
         throw(joUtilsException("jo_convert: Refused conversion from $VT to $DT."))
@@ -384,10 +407,10 @@ Convert number to new type
   use jo_convert_warn_set(false) to turn off the warning
 
 # Example
-- jo_convert(Complex{Float32},rand())
+- jo_convert(ComplexF32,rand())
 
 """
-function jo_convert{NT<:Integer}(DT::DataType,nin::NT,warning::Bool=true)
+function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:Integer}
     DT==NT && return nin
     #println("jo_convert{NT<:Integer}")
     if DT<:Integer
@@ -401,7 +424,7 @@ function jo_convert{NT<:Integer}(DT::DataType,nin::NT,warning::Bool=true)
     end
     return nout
 end
-function jo_convert{NT<:AbstractFloat}(DT::DataType,nin::NT,warning::Bool=true)
+function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:AbstractFloat}
     DT==NT && return nin
     #println("jo_convert{NT<:AbstractFloat}")
     if !(DT<:Integer)
@@ -411,13 +434,13 @@ function jo_convert{NT<:AbstractFloat}(DT::DataType,nin::NT,warning::Bool=true)
     end
     return nout
 end
-function jo_convert{NT<:Complex}(DT::DataType,nin::NT,warning::Bool=true)
+function jo_convert(DT::DataType,nin::NT,warning::Bool=true) where {NT<:Complex}
     DT==NT && return nin
     #println("jo_convert{NT<:Complex}")
     if DT<:Complex
         nout=convert(DT,nin)
     elseif DT<:AbstractFloat
-        (warning && jo_convert_warn) && warn("jo_convert: Inexact conversion from $NT to $DT. Dropping imaginary part.")
+        (warning && jo_convert_warn) && @warn "jo_convert: Inexact conversion from $NT to $DT. Dropping imaginary part."
         nout=convert(DT,real(nin))
     else
         throw(joUtilsException("jo_convert: Refused conversion from $NT to $DT."))

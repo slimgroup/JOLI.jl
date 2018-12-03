@@ -4,7 +4,7 @@
 
 export joBlock, joBlockException
 
-type joBlockException <: Exception
+struct joBlockException <: Exception
     msg :: String
 end
 
@@ -15,23 +15,23 @@ end
 Block operator composed from different square JOLI operators
 
     joBlock(rows::Tuple{Vararg{Int}},ops::joAbstractLinearOperator...;
-        weights::AbstractVector,name::String)
+        weights::LocalVector,name::String)
 
 # Example
 
-    a=rand(Complex{Float64},4,4);
-    A=joMatrix(a;DDT=Complex{Float32},RDT=Complex{Float64},name="A")
-    b=rand(Complex{Float64},4,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,6);
-    C=joMatrix(c;DDT=Complex{Float32},RDT=Complex{Float64},name="C")
-    d=rand(Complex{Float64},6,6);
-    D=joMatrix(d;DDT=Complex{Float32},RDT=Complex{Float64},name="D")
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,4,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
+    d=rand(ComplexF64,6,6);
+    D=joMatrix(d;DDT=ComplexF32,RDT=ComplexF64,name="D")
     # either
         S=joBlock([2,2],A,B,C,D) # basic block in function syntax
     # or
         S=[A B; C D] # basic block in [] syntax
-    w=rand(Complex{Float64},4)
+    w=rand(ComplexF64,4)
     S=joBlock(A,B,C;weights=w) # weighted block
 
 # Notes
@@ -43,8 +43,8 @@ Block operator composed from different square JOLI operators
 - the domain/range types of joBlock are equal to domain/range types of the given operators
 
 """
-function joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
-           weights::AbstractVector{WDT}=zeros(0),name::String="joBlock")
+function joBlock(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
+           weights::LocalVector{WDT}=zeros(0),name::String="joBlock") where {RVDT<:Integer,WDT<:Number}
     isempty(ops) && throw(joBlockException("empty argument list"))
     l=length(ops)
     sum(rows)==l || throw(joBlockException("sum of operators in the rows does not match # of operators"))
@@ -92,24 +92,24 @@ function joBlock{RVDT<:Integer,WDT<:Number}(rows::Vector{RVDT},ops::joAbstractLi
     m=sum(rm)
     n=rn[1]
     weighted=(length(ws)==l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         if weighted
             push!(fops,ws[i]*ops[i])
-            push!(fops_T,ws[i]*ops[i].')
-            push!(fops_CT,conj(ws[i])*ops[i]')
+            push!(fops_T,ws[i]*transpose(ops[i]))
+            push!(fops_A,conj(ws[i])*adjoint(ops[i]))
             push!(fops_C,conj(ws[i])*conj(ops[i]))
         else
             push!(fops,ops[i])
-            push!(fops_T,ops[i].')
-            push!(fops_CT,ops[i]')
+            push!(fops_T,transpose(ops[i]))
+            push!(fops_A,adjoint(ops[i]))
             push!(fops_C,conj(ops[i]))
         end
     end
     return joCoreBlock{deltype(fops[1]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,mo,no,ws,
-                      fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
+                      fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 

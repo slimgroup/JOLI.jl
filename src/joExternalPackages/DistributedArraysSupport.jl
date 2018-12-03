@@ -1,5 +1,90 @@
-export dalloc
+# helper module with misc DArray utilities
+module joDAutils
+    using DistributedArrays
+    using JOLI: jo_convert, joDALinearOperator, joAbstractLinearOperator
 
+    function DArray5(init, dims, procs, idxs, cuts)
+        dist = chunks=map(i->length(i)-1,cuts)
+        np = prod(dist)
+        procs = reshape(procs[1:np], ntuple(i->dist[i], length(dist)))
+        id = DistributedArrays.next_did()
+        return DArray(id, init, dims, procs, idxs, cuts)
+    end
+    function jo_x_mv!(A::joAbstractLinearOperator,in::DArray{ADDT,2},out::DArray{ARDT,2}) where {ADDT,ARDT}
+        out[:L]=jo_convert(ARDT,A*in[:L])
+        return nothing
+    end
+    function jo_x_mv!(F::Function,in::DArray{ADDT,2},out::DArray{ARDT,2}) where {ADDT,ARDT}
+        out[:L]=jo_convert(ARDT,F(in[:L]))
+        return nothing
+    end
+end
+using .joDAutils
+
+export dparts
+"""
+    julia> dparts(da)
+
+return partitioning vector of DArray if partioned in single dimension
+
+# Signature
+
+    dparts(da::DArray{T,N})
+
+# Arguments
+
+- `da`: DArray
+
+# Notes
+
+- if DArray is quasi-distributed (over single worker), dparts returns size(da,N)
+
+"""
+function dparts(da::DArray{T,N}) where {T,N}
+    chunks=map(i->length(i)-1,da.cuts)
+    dim=findfirst(i->i>1,chunks); dim = dim==nothing ? N : dim
+    ldim=findlast(i->i>1,chunks); ldim = ldim==nothing ? N : ldim
+    dim==ldim || throw(joDAdistributorException("joDAdistributor: cannot return parts of a DArray partitioned in multiple dimensions"))
+    parts=map(i->length(i[dim]),da.indices)
+    return vec(parts)
+end
+
+export dcopy
+"""
+    julia> dcopy(dtr,[dst])
+
+copy transpose(DArray) into a new DArray using predefined joDAdistributor
+
+# Signature
+
+    dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor)
+    dcopy(Dtr::Transpose{T,<:DArray{T,2}})
+
+# Arguments
+
+- `dtr`: transpose(DArray)
+- `dst`: target joDAdistributor
+
+"""
+function dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor) where T
+    Dst=joDAdistributor(parent(Dtr))
+    Dst.dims==reverse(dst.dims) || throw(joDAdistributorException("the sizes of original array and provided target distributor do not match"))
+    Dst.procs==dst.procs || throw(joDAdistributorException("the workers of original array and provided target distributor do not match"))
+
+    D = parent(Dtr)
+    joDAutils.DArray5(dst.dims, dst.procs, dst.idxs, dst.cuts) do I
+        # @debug I rI=reverse(I)
+        lp = Array{T}(undef, map(length, I))
+        rp = convert(Array, D[reverse(I)...])
+        transpose!(lp, rp)
+    end
+end
+function dcopy(Dtr::Transpose{T,<:DArray{T,2}}) where T
+    Dst=transpose(joDAdistributor(parent(Dtr)))
+    return dcopy(Dtr,Dst)
+end
+
+export dalloc
 """
     julia> dalloc(dims, [...])
 
@@ -17,11 +102,12 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 """
 dalloc(dims::Dims, args...) = DArray(I->Array{joFloat}(map(length,I)), dims, args...)
-dalloc{T}(::Type{T}, dims::Dims, args...) = DArray(I->Array{T}(map(length,I)), dims, args...)
-dalloc{T}(::Type{T}, d1::Integer, drest::Integer...) = dalloc(T, convert(Dims, tuple(d1, drest...)))
+dalloc(::Type{T}, dims::Dims, args...) where {T} = DArray(I->Array{T}(undef,map(length,I)), dims, args...)
+dalloc(::Type{T}, d1::Integer, drest::Integer...) where {T} = dalloc(T, convert(Dims, tuple(d1, drest...)))
 dalloc(d1::Integer, drest::Integer...) = dalloc(joFloat, convert(Dims, tuple(d1, drest...)))
 dalloc(d::Dims) = dalloc(joFloat, d)
 
+export dfill
 """
     julia> dfill(F, d; [DT])
 
@@ -105,11 +191,13 @@ Use it to allocate quicker the array that will have all elements overwritten.
 """
 function dalloc(d::joDAdistributor;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
-    init=I->Array{DT}(map(length,I))
+    init=I->Array{DT}(undef,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
+#DArray(d::joDAdistributor;DT::DataType=d.DT) = dalloc(d;DT=DT)
 
+export dzeros
 """
     julia> dzeros(d; [DT])
 
@@ -137,6 +225,7 @@ function dzeros(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export dones
 """
     julia> dones(d; [DT])
 
@@ -164,6 +253,7 @@ function dones(d::joDAdistributor;DT::DataType=d.DT)
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export drand
 """
     julia> drand(d; [DT], [RNG])
 
@@ -171,7 +261,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 # Signature
 
-    drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+    drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
 
 # Arguments
 
@@ -186,13 +276,14 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 - `drand(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with rand of Float32 using MersenneTwister() random device
 
 """
-function drand(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+function drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
     id=DistributedArrays.next_did()
     init=I->rand(RNG,DT,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export drandn
 """
     julia> drandn(d; [DT], [RNG])
 
@@ -200,7 +291,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 # Signature
 
-    drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
+    drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
 
 # Arguments
 
@@ -219,8 +310,8 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 - `drandn(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with randn of Float32 using MersenneTwister() random device
 
 """
-function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
-    DT<:Integer && warn("Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor.\n\t Falling back to joFloat!"; once=true, key="JOLI:drandn:Integer")
+function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
+    DT<:Integer && @warn "Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor.\n\t Falling back to joFloat!" key="JOLI:drandn:Integer" maxlog=1
     DT= (DT<:Integer) ? joFloat : DT
     id=DistributedArrays.next_did()
     init=I->randn(RNG,DT,map(length,I))
@@ -228,6 +319,7 @@ function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG=RandomDevice())
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 
+export distribute
 """
     julia> distribute(A,d)
 
@@ -255,13 +347,13 @@ Distributes array according to given joDAdistributor.
 
 """
 function distribute(A::AbstractArray,d::joDAdistributor)
-    @assert size(A)==d.dims "FATAL ERROR: array size does not match dims of joDAdistributor"
+    size(A)==d.dims || throw(joDAdistributorException("joDAdistributor: array size does not match dims of joDAdistributor"))
     id=DistributedArrays.next_did()
     s = DistributedArrays.verified_destination_serializer(reshape(d.procs, size(d.idxs)), size(d.idxs)) do pididx
         A[d.idxs[pididx]...]
     end
     init = I->DistributedArrays.localpart(s)
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
-    return DArray(id, I->localpart(s), d.dims, procs, d.idxs, d.cuts)
+    return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
 

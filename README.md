@@ -9,13 +9,13 @@ and applying them in basic algebraic matrix-vector operations.
 From julia prompt run the following if you will not need developer's write access or if you do not have GitHub account:
 
 ```
-Pkg.clone("https://github.com/slimgroup/JOLI.jl.git")
+Pkg.add(PackageSpec(url="https://github.com/slimgroup/JOLI.jl.git",rev="v07-devel"))
 ```
 
 or with GitHub account (and SSH keys registered) for full developer access:
 
 ```
-Pkg.clone("git@github.com:slimgroup/JOLI.jl.git")
+Pkg.develop(PackageSpec(url="git@github.com:slimgroup/JOLI.jl.git"))
 ```
 
 ## Documentation (more to come)

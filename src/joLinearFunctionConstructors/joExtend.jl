@@ -2,82 +2,82 @@
 
 ## helper module
 module joExtend_etc
-    using JOLI: jo_convert
+    using JOLI: jo_convert, LocalVector, LocalMatrix
     ### zeros
-    function zeros_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_fwd(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [zeros(VT,pad_lower); v; zeros(VT,pad_upper)]
         return jo_convert(rdt,w,false)
     end
-    function zeros_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_fwd(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [zeros(VT,pad_lower,size(v,2)); v; zeros(VT,pad_upper,size(v,2))]
         return jo_convert(rdt,w,false)
     end
-    function zeros_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_tran(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:n+pad_lower]
         return jo_convert(rdt,w,false)
     end
-    function zeros_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function zeros_tran(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:n+pad_lower,:]
         return jo_convert(rdt,w,false)
     end
     ### border
-    function border_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
-        w = [repmat([v[1]],pad_lower); v; repmat([v[end]],pad_upper)]
+    function border_fwd(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
+        w = [repeat([v[1]],pad_lower); v; repeat([v[end]],pad_upper)]
         return jo_convert(rdt,w,false)
     end
-    function border_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
-        w = [repmat(v[1:1,:],pad_lower,1); v; repmat(v[end:end,:],pad_upper,1)]
+    function border_fwd(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
+        w = [repeat(v[1:1,:],pad_lower,1); v; repeat(v[end:end,:],pad_upper,1)]
         return jo_convert(rdt,w,false)
     end
-    function border_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function border_tran(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper]
         w[1] += sum(v[1:pad_lower])
         w[end] += sum(v[end-pad_upper+1:end])
         return jo_convert(rdt,w,false)
     end
-    function border_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function border_tran(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
-        w[1:1,:] += sum(v[1:pad_lower,:],1)
-        w[end:end,:] += sum(v[end-pad_upper+1:end,:],1)
+        w[1:1,:] += sum(v[1:pad_lower,:],dims=1)
+        w[end:end,:] += sum(v[end-pad_upper+1:end,:],dims=1)
         return jo_convert(rdt,w,false)
     end
     ### mirror
-    function mirror_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_fwd(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [reverse(v[1:pad_lower]); v; reverse(v[end-pad_upper+1:end])]
         return jo_convert(rdt,w,false)
     end
-    function mirror_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_fwd(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [flipdim(v[1:pad_lower,:],1); v; flipdim(v[end-pad_upper+1:end,:],1)]
         return jo_convert(rdt,w,false)
     end
-    function mirror_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_tran(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper]
         w[1:pad_lower] += reverse(v[1:pad_lower])
         w[end-pad_upper+1:end] += reverse(v[end-pad_upper+1:end])
         return jo_convert(rdt,w,false)
     end
-    function mirror_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function mirror_tran(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
         w[1:pad_lower,:] += flipdim(v[1:pad_lower,:],1)
         w[end-pad_upper+1:end,:] += flipdim(v[end-pad_upper+1:end,:],1)
         return jo_convert(rdt,w,false)
     end
     ### periodic
-    function periodic_fwd{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_fwd(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [v[end-pad_lower+1:end]; v; v[1:pad_upper]]
         return jo_convert(rdt,w,false)
     end
-    function periodic_fwd{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_fwd(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = [v[end-pad_lower+1:end,:]; v; v[1:pad_upper,:]]
         return jo_convert(rdt,w,false)
     end
-    function periodic_tran{VT<:Number}(v::AbstractVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_tran(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper]
         w[1:pad_upper] += v[end-pad_upper+1:end]
         w[end-pad_lower+1:end] += v[1:pad_lower]
         return jo_convert(rdt,w,false)
     end
-    function periodic_tran{VT<:Number}(v::AbstractMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType)
+    function periodic_tran(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
         w[1:pad_upper,:] += v[end-pad_upper+1:end,:]
         w[end-pad_lower+1:end,:] += v[1:pad_lower,:]
@@ -123,8 +123,8 @@ append, to a n-length vector, its periodic extension: y=[x;x[1:10]]
 
 """
 function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::Integer=0,DDT::DataType=joFloat,RDT::DataType=DDT)
-    (pad_upper>=0 && pad_upper<=n) || error("joExtend: invalid pad_upper size; should be 0<= pad_upper <=n")
-    (pad_lower>=0 && pad_lower<=n) || error("joExtend: invalid pad_lower size; should be 0<= pad_lower <=n")
+    (pad_upper>=0 && pad_upper<=n) || throw(joLinearFunctionException("joExtend: invalid pad_upper size; should be 0<= pad_upper <=n"))
+    (pad_lower>=0 && pad_lower<=n) || throw(joLinearFunctionException("joExtend: invalid pad_lower size; should be 0<= pad_lower <=n"))
     if pad_type==:zeros
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
@@ -158,7 +158,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 DDT,RDT;fMVok=true,
                                 name="joExtend(periodic)")
     else
-        error("joExtend: unknown extension type.")
+        throw(joLinearFunctionException("joExtend: unknown extension type."))
     end
     return nothing
 end

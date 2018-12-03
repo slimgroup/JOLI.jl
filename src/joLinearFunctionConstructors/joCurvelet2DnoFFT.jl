@@ -3,39 +3,39 @@
 ## helper module
 module joCurvelet2DnoFFT_etc
     using JOLI: jo_convert, jo_complex_eltype
-    function apply_fdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        C=Vector{Cdouble}(m)
+    function apply_fdct2DnoFFTwrap_real(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
+        C=Vector{Cdouble}(undef,m)
         X=jo_convert(Complex{Cdouble},v,false)
-        ccall((:jl_fdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
+        ccall((:jl_fdct_wrapping_real_nofft,:libdfdct_wrapping),Nothing,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Cdouble}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
         C=jo_convert(rdt,C,false)
         return C
     end
-    function apply_ifdct2DnoFFTwrap_real(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        X=Vector{Complex{Cdouble}}(n1*n2)
+    function apply_ifdct2DnoFFTwrap_real(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
+        X=Vector{Complex{Cdouble}}(undef,n1*n2)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2DnoFFT: input vector must be real for real transform"))
         C=jo_convert(Cdouble,v,false)
-        ccall((:jl_ifdct_wrapping_real_nofft,:libdfdct_wrapping),Void,
+        ccall((:jl_ifdct_wrapping_real_nofft,:libdfdct_wrapping),Nothing,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Cdouble}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
         X=jo_convert(rdt,X,false)
         return X
     end
-    function apply_fdct2DnoFFTwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        C=Vector{Complex{Cdouble}}(m)
+    function apply_fdct2DnoFFTwrap_cplx(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
+        C=Vector{Complex{Cdouble}}(undef,m)
         X=jo_convert(Complex{Cdouble},v,false)
-        ccall((:jl_fdct_wrapping_cpx_nofft,:libdfdct_wrapping),Void,
+        ccall((:jl_fdct_wrapping_cpx_nofft,:libdfdct_wrapping),Nothing,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,X,C)
         elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
         C=jo_convert(rdt,C,false)
         return C
     end
-    function apply_ifdct2DnoFFTwrap_cplx(v::AbstractVector,n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer)
-        X=Vector{Complex{Cdouble}}(n1*n2)
+    function apply_ifdct2DnoFFTwrap_cplx(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
+        X=Vector{Complex{Cdouble}}(undef,n1*n2)
         C=jo_convert(Complex{Cdouble},v,false)
-        ccall((:jl_ifdct_wrapping_cpx_nofft,:libdfdct_wrapping),Void,
+        ccall((:jl_ifdct_wrapping_cpx_nofft,:libdfdct_wrapping),Nothing,
             (Cint,Cint,Cint,Cint,Cint,Cint,Cint,Csize_t,Ptr{Array{Complex{Cdouble}}},Ptr{Array{Complex{Cdouble}}}),
             n1,n2,nbs,nbac,actl,rctl,zfin,m,C,X)
         elv= eltype(v)<:Complex ? jo_complex_eltype(eltype(v)) : eltype(v)
@@ -69,7 +69,7 @@ export joCurvelet2DnoFFT
 - joCurvelet2DnoFFT(32,32;zero_finest=true) - real transform with zeros at the finnest scales (64-bit)
 - joCurvelet2DnoFFT(32,32;DDT=Float64,real_crvlts=false) - complex transform with complex 64-bit input for forward
 - joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=Float64,real_crvlts=false) - complex transform with just precision specification for curvelets
-- joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=Complex{Float64},real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
+- joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=ComplexF64,real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
 
 # Notes
 
@@ -88,12 +88,12 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::Da
     nbs=convert(Cint,max(nbs,nbscales))
     nbs > 1 || throw(joLinearFunctionException("joCurvelt2DnoFFT: not enough elements in one of dimensions"))
     if nbscales!=0 && nbs>nbscales
-        warn("Adjusted number of scales to required $nbs")
+        @warn "Adjusted number of scales to required $nbs"
     end
     nbac=convert(Cint,max(8,nbangles_coarse))
     nbac%4==0 || throw(joLinearFunctionException("joCurvelt2DnoFFT: nbangles_coarse must be multiple of 4"))
     if nbangles_coarse < 8
-        warn("Adjusted number of coarse angles to required $nbac")
+        @warn "Adjusted number of coarse angles to required $nbac"
     end
     actl=convert(Cint,all_crvlts)
     rctl=convert(Cint,real_crvlts)
@@ -112,14 +112,14 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::Da
     end
     cfmap_size=ccall((:jl_fdct_sizes_map_size,:libdfdct_wrapping),Cint,
         (Cint,Cint,Cint),nbs,nbac,all_crvlts)
-    cfmap=Vector{Cint}(cfmap_size)
+    cfmap=Vector{Cint}(undef,cfmap_size)
     m=Ref{Csize_t}(0)
-    ccall((:jl_fdct_sizes,:libdfdct_wrapping),Void,
+    ccall((:jl_fdct_sizes,:libdfdct_wrapping),Nothing,
         (Cint,Cint,Cint,Cint,Cint,Ptr{Array{Cint}},Ref{Csize_t}),
         nbs,nbac,actl,n1,n2,cfmap,m)
     m=convert(Int128,m[])
 
-    return joLinearFunctionCT(m,n1*n2,
+    return joLinearFunction_A(m,n1*n2,
         v1->apply_fdct2DnoFFTwrap(v1,n1,n2,m,rtp,nbs,nbac,actl,rctl,zfin),
         v2->apply_ifdct2DnoFFTwrap(v2,n1,n2,m,dtp,nbs,nbac,actl,rctl,zfin),
         v3->apply_ifdct2DnoFFTwrap(v3,n1,n2,m,dtp,nbs,nbac,actl,rctl,zfin),

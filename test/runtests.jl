@@ -1,14 +1,18 @@
-using Base.Test
-using JOLI
+using Test
+using LinearAlgebra
+using SparseArrays
 using InplaceOps
+using Libdl
+using FFTW
 using Wavelets
+using JOLI
 
 jo_type_mismatch_error_set(false)
 #JOLI.jo_type_mismatch_warn_set(false)
 verbose=false
 
 # write your own tests here
-tic()
+stime=time()
 include("test_joMatrixSingle.jl")
 include("test_joMatrixProduct.jl")
 include("test_joMatrixSum.jl")
@@ -34,4 +38,7 @@ include("test_joDWT.jl")
 include("test_joCurvelet2D.jl")
 include("test_joCurvelet2DnoFFT.jl")
 include("test_joExtend.jl")
-println("\nTest Total elapsed time: ",round(toq(),1),"s")
+include("test_joGaussian.jl")
+etime=time()
+dtime=etime-stime
+println("\nTest Total elapsed time: ",round(dtime,digits=1),"s")

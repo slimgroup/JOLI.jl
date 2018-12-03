@@ -5,25 +5,25 @@ module joDWT_etc
     using JOLI: jo_convert
     using Wavelets
     # 1D
-    function apply_dwt(v::AbstractVector{<:Number},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_dwt(v::Vector{vdt},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=dwt(v,wt,L)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idwt(v::AbstractVector{<:Number},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_idwt(v::Vector{vdt},m::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=idwt(v,wt,L)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     # 2D
-    function apply_dwt(v::AbstractVector{<:Number},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_dwt(v::Vector{vdt},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,m,n)
         rv=dwt(rv,wt,L)
         rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idwt(v::AbstractVector{<:Number},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType)
+    function apply_idwt(v::Vector{vdt},m::Integer,n::Integer,wt::OrthoFilter,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,m,n)
         rv=idwt(rv,wt,L)
         rv=vec(rv)
@@ -66,7 +66,7 @@ export joDWT
 
 """
 function joDWT(m::Integer,wt::OrthoFilter=wavelet(WT.haar);L::Integer=maxtransformlevels(m),DDT::DataType=joFloat,RDT::DataType=DDT)
-    return joLinearFunctionCT(m,m,
+    return joLinearFunction_A(m,m,
         v1->joDWT_etc.apply_dwt(v1,m,wt,L,RDT),
         v2->joDWT_etc.apply_idwt(v2,m,wt,L,DDT),
         v3->joDWT_etc.apply_idwt(v3,m,wt,L,DDT),
@@ -76,7 +76,7 @@ function joDWT(m::Integer,wt::OrthoFilter=wavelet(WT.haar);L::Integer=maxtransfo
 end
 function joDWT(m::Integer,n::Integer,wt::OrthoFilter=wavelet(WT.haar);L::Integer=maxtransformlevels(min(m,n)),DDT::DataType=joFloat,RDT::DataType=DDT)
     (m!=n && n!=1) && throw(joLinearFunctionException("joDWT: only square images are supported for now"))
-    return joLinearFunctionCT(m*n,m*n,
+    return joLinearFunction_A(m*n,m*n,
         v1->joDWT_etc.apply_dwt(v1,m,n,wt,L,RDT),
         v2->joDWT_etc.apply_idwt(v2,m,n,wt,L,DDT),
         v3->joDWT_etc.apply_idwt(v3,m,n,wt,L,DDT),

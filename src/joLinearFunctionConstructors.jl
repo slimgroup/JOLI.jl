@@ -1,5 +1,5 @@
 ############################################################
-# joLinearFunction - miscaleneous constructor-only operators 
+# joLinearFunction - operator  constructors ################
 ############################################################
 
 # FFT operators: joDFT
@@ -23,9 +23,6 @@ include("joLinearFunctionConstructors/joRestriction.jl")
 
 # Mask operator
 include("joLinearFunctionConstructors/joMask.jl")
-
-# Padding/extension operators: joExtension (deprecated)
-include("joLinearFunctionConstructors/joExtension.jl")
 
 # Padding/extension operators: joExtend
 include("joLinearFunctionConstructors/joExtend.jl")

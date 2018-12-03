@@ -16,7 +16,7 @@ Mask operator
 - A=joMask(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joMask{VDT<:Integer}(n::Integer,idx::Vector{VDT};DDT::DataType=joFloat,RDT::DataType=DDT)
+function joMask(n::Integer,idx::Vector{VDT};DDT::DataType=joFloat,RDT::DataType=DDT) where {VDT<:Integer}
     l=length(idx)
     n>=l || throw(joLinearFunctionException("joMask length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joMask max(idx) must be <= n"))

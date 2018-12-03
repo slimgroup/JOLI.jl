@@ -85,8 +85,8 @@ function transpose{DDT,RDT}(A::joMyOperator{DDT,RDT})
 ...
 end
 
-# ctranspose(jo)
-function ctranspose{DDT,RDT}(A::joMyOperator{DDT,RDT})
+# adjoint(jo)
+function adjoint{DDT,RDT}(A::joMyOperator{DDT,RDT})
 ...
 end
 

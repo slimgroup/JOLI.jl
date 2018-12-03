@@ -11,12 +11,12 @@
 Kronecker product
 
 # Example
-    a=rand(Complex{Float64},6,4);
+    a=rand(ComplexF64,6,4);
     A=joMatrix(a;name="A")
-    b=rand(Complex{Float64},6,8);
-    B=joMatrix(b;DDT=Complex{Float32},RDT=Complex{Float64},name="B")
-    c=rand(Complex{Float64},6,4);
-    C=joMatrix(c;DDT=Complex{Float64},RDT=Complex{Float32},name="C")
+    b=rand(ComplexF64,6,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,4);
+    C=joMatrix(c;DDT=ComplexF64,RDT=ComplexF32,name="C")
     K=joKron(A,B,C)
 
 # Notes
@@ -32,10 +32,10 @@ function joKron(ops::joAbstractLinearOperator...)
     end
     ms=zeros(Int,l)
     ns=zeros(Int,l)
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:l
         ms[i]=ops[i].m
         ns[i]=ops[i].n
@@ -44,19 +44,19 @@ function joKron(ops::joAbstractLinearOperator...)
     n=prod(ns)
     for i=1:l
         push!(fops,ops[i])
-        push!(fops_T,ops[i].')
-        push!(fops_CT,ops[i]')
+        push!(fops_T,transpose(ops[i]))
+        push!(fops_A,adjoint(ops[i]))
         push!(fops_C,conj(ops[i]))
     end
     return joKron{deltype(fops[l]),reltype(fops[1])}("joKron($l)",m,n,l,ms,ns,false,
-                 fops,fops_T,fops_CT,fops_C,@joNF,@joNF,@joNF,@joNF)
+                 fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 
 ############################
 ## overloaded Base functions
 
-# showall(jo)
-function showall(A::joKron)
+# display(jo)
+function display(A::joKron)
     println("# joKron")
     println("-     name: ",A.name)
     println("-     type: ",typeof(A))
@@ -71,28 +71,28 @@ function showall(A::joKron)
 end
 
 # conj(jo)
-conj{DDT,RDT}(A::joKron{DDT,RDT}) =
+conj(A::joKron{DDT,RDT}) where {DDT,RDT} =
     joKron{DDT,RDT}("(conj("*A.name*"))",
         A.m,A.n,A.l,A.ms,A.ns,A.flip,
-        A.fop_C,A.fop_CT,A.fop_T,A.fop,
-        A.iop_C,A.iop_CT,A.iop_T,A.iop)
+        A.fop_C,A.fop_A,A.fop_T,A.fop,
+        A.iop_C,A.iop_A,A.iop_T,A.iop)
 
 # transpose(jo)
-transpose{DDT,RDT}(A::joKron{DDT,RDT}) =
-    joKron{RDT,DDT}("("*A.name*".')",
+transpose(A::joKron{DDT,RDT}) where {DDT,RDT} =
+    joKron{RDT,DDT}("(transpose("*A.name*"))",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
-        A.fop_T,A.fop,A.fop_C,A.fop_CT,
-        A.iop_T,A.iop,A.iop_C,A.iop_CT)
+        A.fop_T,A.fop,A.fop_C,A.fop_A,
+        A.iop_T,A.iop,A.iop_C,A.iop_A)
 
-# ctranspose(jo)
-ctranspose{DDT,RDT}(A::joKron{DDT,RDT}) =
-    joKron{RDT,DDT}("("*A.name*"')",
+# adjoint(jo)
+adjoint(A::joKron{DDT,RDT}) where {DDT,RDT} =
+    joKron{RDT,DDT}("(adjoint("*A.name*"))",
         A.n,A.m,A.l,A.ns,A.ms,!A.flip,
-        A.fop_CT,A.fop_C,A.fop,A.fop_T,
-        A.iop_CT,A.iop_C,A.iop,A.iop_T)
+        A.fop_A,A.fop_C,A.fop,A.fop_T,
+        A.iop_A,A.iop_C,A.iop,A.iop_T)
 
 # *(jo,vec)
-function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT})
+function *(A::joKron{ADDT,ARDT},v::LocalVector{ADDT}) where {ADDT,ARDT}
     size(A,2) == size(v,1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
     V=reshape(v,ksz...)
@@ -122,9 +122,9 @@ function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},v::AbstractVector{ADDT})
 end
 
 # *(jo,mvec)
-function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT})
+function *(A::joKron{ADDT,ARDT},mv::LocalMatrix{ADDT}) where {ADDT,ARDT}
     size(A, 2) == size(mv, 1) || throw(joKronException("shape mismatch"))
-    MV=Matrix{ARDT}(A.m,size(mv,2))
+    MV=Matrix{ARDT}(undef,A.m,size(mv,2))
     for i=1:size(mv,2)
         MV[:,i]=A*mv[:,i]
     end
@@ -132,20 +132,20 @@ function *{ADDT,ARDT}(A::joKron{ADDT,ARDT},mv::AbstractMatrix{ADDT})
 end
 
 # -(jo)
-function -{DDT,RDT}(A::joKron{DDT,RDT})
-    fops=Vector{joAbstractLinearOperator}(0)
-    fops_T=Vector{joAbstractLinearOperator}(0)
-    fops_CT=Vector{joAbstractLinearOperator}(0)
-    fops_C=Vector{joAbstractLinearOperator}(0)
+function -(A::joKron{DDT,RDT}) where {DDT,RDT}
+    fops=Vector{joAbstractLinearOperator}(undef,0)
+    fops_T=Vector{joAbstractLinearOperator}(undef,0)
+    fops_A=Vector{joAbstractLinearOperator}(undef,0)
+    fops_C=Vector{joAbstractLinearOperator}(undef,0)
     for i=1:A.l
         push!(fops,-A.fop[i])
         push!(fops_T,-A.fop_T[i])
-        push!(fops_CT,-A.fop_CT[i])
+        push!(fops_A,-A.fop_A[i])
         push!(fops_C,-A.fop_C[i])
     end
     return joKron{DDT,RDT}("(-"*A.name*")",
         A.m,A.n,A.l,A.ms,A.ns,A.flip,
-        fops,fops_T,fops_CT,fops_C,
-        A.iop,A.iop_T,A.iop_CT,A.iop_C)
+        fops,fops_T,fops_A,fops_C,
+        A.iop,A.iop_T,A.iop_A,A.iop_C)
 end
 

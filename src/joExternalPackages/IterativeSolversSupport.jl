@@ -1,4 +1,6 @@
-Adivtype{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}, b::AbstractVector) = DDT
+############################################################
+# IterativeSolvers support #################################
+############################################################
 
-# discarded Amultype{DDT,RDT}(A::joAbstractLinearOperator{DDT,RDT}, x::AbstractVector) = RDT
+Adivtype(A::joAbstractLinearOperator{DDT,RDT}, b::AbstractVector) where {DDT,RDT} = DDT
 

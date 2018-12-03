@@ -1,10 +1,10 @@
 using Documenter, JOLI
 
 makedocs(
+    sitename = "JOLI Reference",
     modules = [JOLI]
 )
 
 #deploydocs(
-#    target = "tmp",
-#    repo = "github.com/JOLI.jl.git"
+#    repo = "github.com/slimgroup/JOLI.jl.git"
 #)

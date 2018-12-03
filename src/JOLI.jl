@@ -5,70 +5,82 @@
 module JOLI
 
 # what's being used
+using Nullables
+using Printf
+using Random
+using InteractiveUtils
+using Distributed
+using SparseArrays
+using SharedArrays
 using DistributedArrays
-using IterativeSolvers
+using DistributedArrays.SPMD
+using LinearAlgebra
 using InplaceOps
+using IterativeSolvers
+using FFTW
 using NFFT
 using Wavelets
 
 # what's imported from Base
 import Base.eltype
-import Base.show, Base.showall, Base.display
+import Base.show, Base.display
 import Base.size, Base.length
-import Base.full
-import Base.norm, Base.vecnorm
 import Base.real, Base.imag, Base.conj
-import Base.transpose, Base.ctranspose
-import Base.isreal, Base.issymmetric, Base.ishermitian
+import Base.transpose, Base.adjoint
+import Base.isreal
 import Base.*, Base.\, Base.+, Base.-
-import Base.(.*), Base.(.\), Base.(.+), Base.(.-)
+import Base.Broadcast.broadcasted # Base.(.*), Base.(.\), Base.(.+), Base.(.-)
 import Base.hcat, Base.vcat, Base.hvcat
 import Base.inv
-import Base.A_mul_B!, Base.At_mul_B!, Base.Ac_mul_B!
-import Base.A_ldiv_B!, Base.At_ldiv_B!, Base.Ac_ldiv_B!
+import Base.isequal, Base.isapprox
+
+
+# what's imported from LinearAlgebra
+import LinearAlgebra.norm
+import LinearAlgebra.issymmetric, LinearAlgebra.ishermitian
+import LinearAlgebra.mul!, LinearAlgebra.ldiv!
 
 # what's imported from DistributedArrays
 import DistributedArrays: DArray, distribute, dzeros, dones, dfill, drand, drandn
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype
-# discarded IterativeSolvers.Amultype
-
-# what's imported from InplaceOps
-import InplaceOps.op_transpose, InplaceOps.op_ctranspose
-import InplaceOps.Transpose, InplaceOps.CTranspose
-import InplaceOps.mul!, InplaceOps.ldiv!
 
 # extra exported methods
 export deltype, reltype
-export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint
+export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint, isequiv
 export joLoosen
+
+# array unions
+const LocalVector{T}=Union{Vector{T},SubArray{T,1,dA},
+                           AbstractSparseVector{T}} where {T,dA<:Array{T}}
+const LocalMatrix{T}=Union{Matrix{T},SubArray{T,2,dA},#Diagonal{T,dA},Transpose{T},Adjoint{T},
+                           AbstractSparseMatrix{T}} where {T,dA<:Array{T}}
+const LocalVecOrMat{T}=Union{LocalVector{T},LocalMatrix{T}} where T
+const LocalArray{T}=Union{Array{T},SubArray{T,dA},
+                          AbstractSparseArray{T}} where {T,dA<:Array{T}}
 
 # constants
 export joTol
 global joTol = sqrt(eps())
 
-# package for each operator code goes here
+# core operator implementations
 include("joTypes.jl")
-include("joTypesMiscMethods.jl")
+include("joMiscTypesMethods.jl")
 include("joUtils.jl")
 include("joExternalPackages.jl")
+include("joAbstractDAparallelToggleOperator.jl")
 include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")
 include("joAbstractLinearOperatorInplace.jl")
-include("joLinearOperator.jl")
-include("joMatrix.jl")
-include("joLooseMatrix.jl")
-include("joMatrixInplace.jl")
-include("joLooseMatrixInplace.jl")
-include("joLinearFunction.jl")
-include("joLooseLinearFunction.jl")
-include("joLinearFunctionInplace.jl")
-include("joLooseLinearFunctionInplace.jl")
+include("joAbstractDAparallelLinearOperator.jl")
+
+# derived operator code goes into those
 include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
+include("joMixedConstructors.jl")
 
 # contributed domain-specific operators go here
 include("contrib/Seismic.jl")

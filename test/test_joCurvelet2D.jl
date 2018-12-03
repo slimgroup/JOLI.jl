@@ -1,8 +1,8 @@
 T=0
 try
-    h=Base.Libdl.dlopen(:libdfdct_wrapping)
-    T=3
-    Base.Libdl.dlclose(h)
+    h=dlopen(:libdfdct_wrapping)
+    global T=3
+    dlclose(h)
 catch
     warn("Skipping joCurvelet2D tests - libdfdct_wrapping not found")
 end
@@ -12,9 +12,9 @@ tsname="joCurvelet2D"
 for t=1:T # start test loop
     m=32*t
     Awr=joCurvelet2D(m,m)
-    Awc=joCurvelet2D(m,m;DDT=Complex{Float64},real_crvlts=false)
+    Awc=joCurvelet2D(m,m;DDT=ComplexF64,real_crvlts=false)
     Acr=joCurvelet2D(m,m;all_crvlts=true)
-    Acc=joCurvelet2D(m,m;DDT=Complex{Float64},all_crvlts=true,real_crvlts=false)
+    Acc=joCurvelet2D(m,m;DDT=ComplexF64,all_crvlts=true,real_crvlts=false)
 
     verbose && println("$tsname ($m,$m)")
     @testset "$m x $m" begin
