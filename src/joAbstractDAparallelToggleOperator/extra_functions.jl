@@ -18,9 +18,3 @@
 
 # isadjoint(jo)
 
-# isequiv
-function isequiv(a::joPAsetup,b::DArray)
-    (a.procs == vec(b.pids)) || return false
-    (a.idxs  == b.indices  ) || return false
-    return true
-end

@@ -15,17 +15,6 @@ show(A::joAbstractDAparallelToggleOperator) = println((typeof(A),A.name,(A.m,A.n
 
 # display(jo)
 display(A::joAbstractDAparallelToggleOperator) = show(A)
-function display(d::joPAsetup)
-    println("joPAsetup: ",d.name)
-    println(" DataType: ",d.DT)
-    println(" Dims    : ",d.dims)
-    println(" Chunks  : ",d.chunks)
-    println(" Workers : ",d.procs)
-    for i=1:length(d.procs)
-        @printf "  Worker/ranges: %3d " d.procs[i]
-        println(d.idxs[i])
-    end
-end
 
 # size(jo)
 size(A::joAbstractDAparallelToggleOperator) = A.m,A.n
@@ -56,16 +45,6 @@ length(A::joAbstractDAparallelToggleOperator) = A.m*A.n
 @inline conj(A::joAbstractDAparallelToggleOperator) = A
 
 # transpose(jo)
-function transpose(in::joPAsetup)
-    dims=reverse(in.dims)
-    length(dims)==2 || throw(joPAsetupException("joPAsetup: transpose(joPAsetup) makes sense only for 2D distributed arrays"))
-    nlabs=length(in.procs)
-    ddim=findfirst(i->i>1,in.chunks)
-    ldim=findlast(i->i>1,in.chunks)
-    ddim==ldim || throw(joPAsetupException("joPAsetup: cannot transpose and array with more then one distributed dimension"))
-    parts=joPAsetup_etc.balanced_partition(nlabs,dims[ddim])
-    return joPAsetup(dims,ddim,DT=in.DT,parts=parts,name="transpose($(in.name))")
-end
 transpose(A::joDAdistribute{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgather{RDT,DDT,N}("regather($(A.name))",A.n,A.m,A.nvc,
         A.fop_T, A.fop, A.fop_C, A.fop_A,
@@ -85,28 +64,6 @@ transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
 # issymmetric(jo)
 
 # ishermitian(jo)
-
-# isequal(jo,jo)
-function isequal(a::joPAsetup,b::joPAsetup)
-    (a.name  == b.name  ) || return false
-    (a.dims  == b.dims  ) || return false
-    (a.procs == b.procs ) || return false
-    (a.chunks== b.chunks) || return false
-    (a.idxs  == b.idxs  ) || return false
-    (a.cuts  == b.cuts  ) || return false
-    (a.DT    == b.DT    ) || return false
-    return true
-end
-
-# isapprox(jo,jo)
-function isapprox(a::joPAsetup,b::joPAsetup)
-    (a.dims  == b.dims  ) || return false
-    (a.procs == b.procs ) || return false
-    (a.chunks== b.chunks) || return false
-    (a.idxs  == b.idxs  ) || return false
-    (a.cuts  == b.cuts  ) || return false
-    return true
-end
 
 ############################################################
 ## overloaded Base *(...jo...)
