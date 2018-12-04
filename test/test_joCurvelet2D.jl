@@ -4,7 +4,7 @@ try
     global T=3
     dlclose(h)
 catch
-    warn("Skipping joCurvelet2D tests - libdfdct_wrapping not found")
+    @warn "Skipping joCurvelet2D tests - libdfdct_wrapping not found"
 end
 
 tsname="joCurvelet2D"
