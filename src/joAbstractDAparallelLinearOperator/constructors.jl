@@ -13,10 +13,10 @@ Create a linear operator working on 2D DAaray in multi-vector (over 2nd dimensio
 # Signature
 
     function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,RDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
+        parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
     joDAdistributedLinOp(A::joAbstractLinearOperator{ADDT,ARDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(),nvc);
+        parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(),nvc);
         fclean::Bool=false,rclean::Bool=false) where {ADDT<:Number,ARDT<:Number,INT<:Integer}
 
 # Arguments
@@ -37,7 +37,7 @@ Create a linear operator working on 2D DAaray in multi-vector (over 2nd dimensio
 
 """
 function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,RDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
+        parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
 
     length(parts)==nworkers(wpool) || throw(joDAdistributedLinearOperatorException("joDAdistributedLinearOperator: lenght(parts) does not much nworkers()"))
@@ -54,7 +54,7 @@ function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,
                idst,odst,fclean,rclean)
 end
 joDAdistributedLinOp(A::joAbstractLinearOperator{ADDT,ARDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(),nvc);
+        parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(),nvc);
         fclean::Bool=false,rclean::Bool=false) where {ADDT<:Number,ARDT<:Number,INT<:Integer} =
         joDAdistributedLinOp(WorkerPool(workers()),A,nvc,fclean=fclean,rclean=rclean)
 
