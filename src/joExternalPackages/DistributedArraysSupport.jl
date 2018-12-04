@@ -44,7 +44,7 @@ function dparts(da::DArray{T,N}) where {T,N}
     chunks=map(i->length(i)-1,da.cuts)
     dim=findfirst(i->i>1,chunks); dim = dim==nothing ? N : dim
     ldim=findlast(i->i>1,chunks); ldim = ldim==nothing ? N : ldim
-    dim==ldim || throw(joDAdistributorException("joDAdistributor: cannot return parts of a DArray partitioned in multiple dimensions"))
+    dim==ldim || throw(joPAsetupException("joPAsetup: cannot return parts of a DArray partitioned in multiple dimensions"))
     parts=map(i->length(i[dim]),da.indices)
     return vec(parts)
 end
@@ -53,23 +53,23 @@ export dcopy
 """
     julia> dcopy(dtr,[dst])
 
-copy transpose(DArray) into a new DArray using predefined joDAdistributor
+copy transpose(DArray) into a new DArray using predefined joPAsetup
 
 # Signature
 
-    dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor)
+    dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joPAsetup)
     dcopy(Dtr::Transpose{T,<:DArray{T,2}})
 
 # Arguments
 
 - `dtr`: transpose(DArray)
-- `dst`: target joDAdistributor
+- `dst`: target joPAsetup
 
 """
-function dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor) where T
-    Dst=joDAdistributor(parent(Dtr))
-    Dst.dims==reverse(dst.dims) || throw(joDAdistributorException("the sizes of original array and provided target distributor do not match"))
-    Dst.procs==dst.procs || throw(joDAdistributorException("the workers of original array and provided target distributor do not match"))
+function dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joPAsetup) where T
+    Dst=joPAsetup(parent(Dtr))
+    Dst.dims==reverse(dst.dims) || throw(joPAsetupException("the sizes of original array and provided target distributor do not match"))
+    Dst.procs==dst.procs || throw(joPAsetupException("the workers of original array and provided target distributor do not match"))
 
     D = parent(Dtr)
     joDAutils.DArray5(dst.dims, dst.procs, dst.idxs, dst.cuts) do I
@@ -80,7 +80,7 @@ function dcopy(Dtr::Transpose{T,<:DArray{T,2}},dst::joDAdistributor) where T
     end
 end
 function dcopy(Dtr::Transpose{T,<:DArray{T,2}}) where T
-    Dst=transpose(joDAdistributor(parent(Dtr)))
+    Dst=transpose(joPAsetup(parent(Dtr)))
     return dcopy(Dtr,Dst)
 end
 
@@ -115,13 +115,13 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 
 # Signature
 
-    dfill(F::Function,d::joDAdistributor;DT::DataType=d.DT)
+    dfill(F::Function,d::joPAsetup;DT::DataType=d.DT)
 
 # Arguments
 
 - `F`: anonymous function of the form `I->f(...,map(length,I)))`
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 
 # Notes
 
@@ -133,7 +133,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 - `dfill(I->ones(d.DT,map(length,I)),d)`: fill a distributed array with ones of type d.DT
 
 """
-function dfill(F::Function,d::joDAdistributor;DT::DataType=d.DT)
+function dfill(F::Function,d::joPAsetup;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, F, d.dims, procs, d.idxs, d.cuts)
@@ -146,12 +146,12 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 
 # Signature
 
-    dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
+    dfill(x::Number,d::joPAsetup;DT::DataType=d.DT)
 
 # Arguments
 
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 
 # Examples
 
@@ -159,7 +159,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 - `dfill(3.,d;DT=Float32)`: fill a distributed array with Float32(3.)
 
 """
-function dfill(x::Number,d::joDAdistributor;DT::DataType=d.DT)
+function dfill(x::Number,d::joPAsetup;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     X=DT(x)
     init=I->fill(X,map(length,I))
@@ -176,12 +176,12 @@ Use it to allocate quicker the array that will have all elements overwritten.
 
 # Signature
 
-    dalloc(d::joDAdistributor;DT::DataType=d.DT)
+    dalloc(d::joPAsetup;DT::DataType=d.DT)
 
 # Arguments
 
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 
 # Examples
 
@@ -189,13 +189,13 @@ Use it to allocate quicker the array that will have all elements overwritten.
 - `dalloc(d,DT=Float32)`: allocate array and overwite d.DT with Float32
 
 """
-function dalloc(d::joDAdistributor;DT::DataType=d.DT)
+function dalloc(d::joPAsetup;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->Array{DT}(undef,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
     return DArray(id, init, d.dims, procs, d.idxs, d.cuts)
 end
-#DArray(d::joDAdistributor;DT::DataType=d.DT) = dalloc(d;DT=DT)
+#DArray(d::joPAsetup;DT::DataType=d.DT) = dalloc(d;DT=DT)
 
 export dzeros
 """
@@ -205,12 +205,12 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 
 # Signature
 
-    dzeros(d::joDAdistributor;DT::DataType=d.DT)
+    dzeros(d::joPAsetup;DT::DataType=d.DT)
 
 # Arguments
 
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 
 # Examples
 
@@ -218,7 +218,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 - `dzeros(d,DT=Float32)`: allocate array of Float32 zeros
 
 """
-function dzeros(d::joDAdistributor;DT::DataType=d.DT)
+function dzeros(d::joPAsetup;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->zeros(DT,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
@@ -233,12 +233,12 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 
 # Signature
 
-    dones(d::joDAdistributor;DT::DataType=d.DT)
+    dones(d::joPAsetup;DT::DataType=d.DT)
 
 # Arguments
 
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 
 # Examples
 
@@ -246,7 +246,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled wi
 - `dones(d,DT=Float32)`: allocate array of Float32 ones
 
 """
-function dones(d::joDAdistributor;DT::DataType=d.DT)
+function dones(d::joPAsetup;DT::DataType=d.DT)
     id=DistributedArrays.next_did()
     init=I->ones(DT,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
@@ -261,12 +261,12 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 # Signature
 
-    drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
+    drand(d::joPAsetup;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
 
 # Arguments
 
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 - `RNG`: random-number generator function (see help for rand/randn)
 
 # Examples
@@ -276,7 +276,7 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 - `drand(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with rand of Float32 using MersenneTwister() random device
 
 """
-function drand(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
+function drand(d::joPAsetup;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
     id=DistributedArrays.next_did()
     init=I->rand(RNG,DT,map(length,I))
     procs = reshape(d.procs, ntuple(i->d.chunks[i], length(d.chunks)))
@@ -291,12 +291,12 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 
 # Signature
 
-    drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
+    drandn(d::joPAsetup;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
 
 # Arguments
 
-- `d`: see help for joDAdistributor
-- `DT`: keyword argument to overwrite the type in joDAdistributor
+- `d`: see help for joPAsetup
+- `DT`: keyword argument to overwrite the type in joPAsetup
 - `RNG`: random-number generator function (see help for rand/randn)
 
 # Notes
@@ -310,8 +310,8 @@ Constructs a DistributedArrays.DArray, according to given distributor, filled us
 - `drandn(d,DT=Float32,RNG=MersenneTwister(1234))`: allocate array with randn of Float32 using MersenneTwister() random device
 
 """
-function drandn(d::joDAdistributor;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
-    DT<:Integer && @warn "Cannot use Integer type in randn.\n\t Overwite joDAdistributor's type using DT keyword\n\t or create Float joDAdistributor.\n\t Falling back to joFloat!" key="JOLI:drandn:Integer" maxlog=1
+function drandn(d::joPAsetup;DT::DataType=d.DT,RNG::AbstractRNG=RandomDevice())
+    DT<:Integer && @warn "Cannot use Integer type in randn.\n\t Overwite joPAsetup's type using DT keyword\n\t or create Float joPAsetup.\n\t Falling back to joFloat!" key="JOLI:drandn:Integer" maxlog=1
     DT= (DT<:Integer) ? joFloat : DT
     id=DistributedArrays.next_did()
     init=I->randn(RNG,DT,map(length,I))
@@ -323,31 +323,31 @@ export distribute
 """
     julia> distribute(A,d)
 
-Distributes array according to given joDAdistributor.
+Distributes array according to given joPAsetup.
 
 # Signature
 
-    distribute(a::AbstractArray,d::joDAdistributor)
+    distribute(a::AbstractArray,d::joPAsetup)
 
 # Arguments
 
 - `A`: array to ditribute
-- `d`: see help for joDAdistributor
+- `d`: see help for joPAsetup
 
 # Notes
 
-- the type in joDAdistributor is ignored here
+- the type in joPAsetup is ignored here
 - distributes over last non-singleton (worker-wise) dimension
 - one of the dimensions must be large enough to hold at least one element on each worker
 
 # Examples
 
 - `distribute(A,d)`: distribute A using given distributor
-- `distribute(A,joDAdistributor(size(A)...))`: distribute A using default distributor settings
+- `distribute(A,joPAsetup(size(A)...))`: distribute A using default distributor settings
 
 """
-function distribute(A::AbstractArray,d::joDAdistributor)
-    size(A)==d.dims || throw(joDAdistributorException("joDAdistributor: array size does not match dims of joDAdistributor"))
+function distribute(A::AbstractArray,d::joPAsetup)
+    size(A)==d.dims || throw(joPAsetupException("joPAsetup: array size does not match dims of joPAsetup"))
     id=DistributedArrays.next_did()
     s = DistributedArrays.verified_destination_serializer(reshape(d.procs, size(d.idxs)), size(d.idxs)) do pididx
         A[d.idxs[pididx]...]

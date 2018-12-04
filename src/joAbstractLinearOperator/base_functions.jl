@@ -140,7 +140,7 @@ function *(A::joAbstractLinearOperator{ADDT,ARDT},mv::DArray{mvDT,2}) where {ADD
     length(mv.cuts[1])==2 || throw(joAbstractLinearOperatorException("*(jo,mv::DArray): DArray must be distributed only over 2nd dimension"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,DAmvec):",A.name,typeof(A),mvDT]," / "))
     parts=dparts(mv)
-    dMV=joDAdistributor(WorkerPool(vec(mv.pids)),(A.m,size(mv,2)),2;DT=ARDT,parts=parts)
+    dMV=joPAsetup(WorkerPool(vec(mv.pids)),(A.m,size(mv,2)),2;DT=ARDT,parts=parts)
     MV=dalloc(dMV)
     spmd(joDAutils.jo_x_mv!,A,mv,MV,pids=mv.pids)
     return MV

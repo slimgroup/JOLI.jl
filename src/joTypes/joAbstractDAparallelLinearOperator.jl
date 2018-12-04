@@ -30,10 +30,10 @@ struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLine
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joDAdistributor    # input distributor
-    dst_out::joDAdistributor   # output distributor
-    fclean::Bool               # clean input vector post forward
-    rclean::Bool               # clean input vector post reverse
+    dst_in::joPAsetup    # input distributor
+    dst_out::joPAsetup   # output distributor
+    fclean::Bool         # clean input vector post forward
+    rclean::Bool         # clean input vector post reverse
 end
 """
     joDAdistributedLinearOperator is glueing type & constructor
@@ -54,10 +54,10 @@ struct joDAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAp
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joDAdistributor    # input distributor
-    dst_out::joDAdistributor   # output distributor
-    fclean::Bool               # clean input vector post forward
-    rclean::Bool               # clean input vector post reverse
+    dst_in::joPAsetup   # input distributor
+    dst_out::joPAsetup  # output distributor
+    fclean::Bool        # clean input vector post forward
+    rclean::Bool        # clean input vector post reverse
 end
 """
     joDAdistributingLinearOperator is glueing type & constructor
@@ -78,8 +78,8 @@ struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDA
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_out::joDAdistributor   # output distributor
-    gclean::Bool               # clean input vector post gathering
+    dst_out::joPAsetup  # output distributor
+    gclean::Bool        # clean input vector post gathering
 end
 """
     joDAgatheringLinearOperator is glueing type & constructor
@@ -100,8 +100,8 @@ struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDApar
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joDAdistributor    # input distributor
-    gclean::Bool               # clean input vector post gathering
+    dst_in::joPAsetup  # input distributor
+    gclean::Bool       # clean input vector post gathering
 end
 
 # type exception

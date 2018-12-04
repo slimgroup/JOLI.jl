@@ -3,43 +3,6 @@
 ############################################################
 
 ############################################################
-## joDAdistributor
-
-export joDAdistributor, joDAdistributorException
-
-# type definition
-"""
-joDAdistributor type
-
-# Atributes
-
-- name::String        # name for identification
-- dims::Dims          # dimensions of the array
-- procs::Vector{Int}  # ids of workers to use
-- chunks::Vector{Int} # number of chunks in each dimension
-- idxs::Array{Tuple{Vararg{UnitRange{<:Integer}}}}
-- cuts::Vector{Vector{<:Integer}}
-- DT::DataType
-
-See help for outer constructors for joDAdistributor.
-
-"""
-struct joDAdistributor
-    name::String        # name for identification
-    dims::Dims          # dimensions of the array
-    procs::Vector{Int}  # ids of workers to use
-    chunks::Vector{Int} # number of chunks in each dimension
-    idxs::Array{Tuple{Vararg{UnitRange{<:Integer}}}}
-    cuts::Vector{Vector{<:Integer}}
-    DT::DataType
-end
-
-# type exception
-struct joDAdistributorException <: Exception
-    msg :: String
-end
-
-############################################################
 # joDA{distribute,gather} ##################################
 
 export joDAdistribute, joDAgather
@@ -65,8 +28,8 @@ struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOp
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_out::joDAdistributor   # output distributor
-    gclean::Bool               # clean input vector post gathering
+    dst_out::joPAsetup  # output distributor
+    gclean::Bool        # clean input vector post gathering
 end
 """
     joDAgather is DAarray toggle type & constructor
@@ -88,7 +51,7 @@ struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperat
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joDAdistributor    # input distributor
-    gclean::Bool               # clean input vector post gathering
+    dst_in::joPAsetup  # input distributor
+    gclean::Bool       # clean input vector post gathering
 end
 

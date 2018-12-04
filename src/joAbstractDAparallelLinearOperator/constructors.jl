@@ -13,10 +13,10 @@ Create a linear operator working on 2D DAaray in multi-vector (over 2nd dimensio
 # Signature
 
     function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,RDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
+        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
     joDAdistributedLinOp(A::joAbstractLinearOperator{ADDT,ARDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
+        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(),nvc);
         fclean::Bool=false,rclean::Bool=false) where {ADDT<:Number,ARDT<:Number,INT<:Integer}
 
 # Arguments
@@ -37,14 +37,14 @@ Create a linear operator working on 2D DAaray in multi-vector (over 2nd dimensio
 
 """
 function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,RDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(wpool),nvc);
+        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
 
     length(parts)==nworkers(wpool) || throw(joDAdistributedLinearOperatorException("joDAdistributedLinearOperator: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributedLinearOperatorException("joDAdistributedLinearOperator: sum(parts) does not much nvc"))
 
-    idst=joDAdistributor(wpool,(A.n,nvc),2,parts=parts)
-    odst=joDAdistributor(wpool,(A.m,nvc),2,parts=parts)
+    idst=joPAsetup(wpool,(A.n,nvc),2,parts=parts)
+    odst=joPAsetup(wpool,(A.m,nvc),2,parts=parts)
     return joDAdistributedLinearOperator{DDT,RDT,2}("joDAdistributedLinearOperator($(A.name))",A.m,A.n,nvc,
                v1->A*v1,
                v2->transpose(A)*v2,
@@ -54,7 +54,7 @@ function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,
                idst,odst,fclean,rclean)
 end
 joDAdistributedLinOp(A::joAbstractLinearOperator{ADDT,ARDT},nvc::Integer,
-        parts::Vector{INT}=JOLI.joDAdistributor_etc.balanced_partition(nworkers(),nvc);
+        parts::Vector{INT}=JOLI.joPAsetup_etc.balanced_partition(nworkers(),nvc);
         fclean::Bool=false,rclean::Bool=false) where {ADDT<:Number,ARDT<:Number,INT<:Integer} =
         joDAdistributedLinOp(WorkerPool(workers()),A,nvc,fclean=fclean,rclean=rclean)
 
