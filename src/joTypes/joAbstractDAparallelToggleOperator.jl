@@ -28,7 +28,7 @@ struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOp
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_out::joPAsetup  # output distributor
+    PAs_out::joPAsetup  # output distributor
     gclean::Bool        # clean input vector post gathering
 end
 """
@@ -51,7 +51,7 @@ struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperat
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joPAsetup  # input distributor
+    PAs_in::joPAsetup  # input distributor
     gclean::Bool       # clean input vector post gathering
 end
 

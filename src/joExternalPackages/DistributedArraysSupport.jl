@@ -1,7 +1,7 @@
 # helper module with misc DArray utilities
 module joDAutils
     using DistributedArrays
-    using JOLI: jo_convert, joDALinearOperator, joAbstractLinearOperator
+    using JOLI: jo_convert, joAbstractLinearOperator
 
     function DArray5(init, dims, procs, idxs, cuts)
         dist = chunks=map(i->length(i)-1,cuts)

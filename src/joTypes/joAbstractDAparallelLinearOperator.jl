@@ -30,8 +30,8 @@ struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLine
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joPAsetup    # input distributor
-    dst_out::joPAsetup   # output distributor
+    PAs_in::joPAsetup    # input distributor
+    PAs_out::joPAsetup   # output distributor
     fclean::Bool         # clean input vector post forward
     rclean::Bool         # clean input vector post reverse
 end
@@ -54,8 +54,8 @@ struct joDAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAp
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joPAsetup   # input distributor
-    dst_out::joPAsetup  # output distributor
+    PAs_in::joPAsetup   # input distributor
+    PAs_out::joPAsetup  # output distributor
     fclean::Bool        # clean input vector post forward
     rclean::Bool        # clean input vector post reverse
 end
@@ -78,7 +78,7 @@ struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDA
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_out::joPAsetup  # output distributor
+    PAs_out::joPAsetup  # output distributor
     gclean::Bool        # clean input vector post gathering
 end
 """
@@ -100,7 +100,7 @@ struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDApar
     iop_T::Nullable{Function}
     iop_A::Nullable{Function}
     iop_C::Nullable{Function}
-    dst_in::joPAsetup  # input distributor
+    PAs_in::joPAsetup  # input distributor
     gclean::Bool       # clean input vector post gathering
 end
 

@@ -48,25 +48,25 @@ conj(A::joDALinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDALinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
         get(A.fop_C), A.fop_A, A.fop_T, A.fop,
         A.iop_C, A.iop_A, A.iop_T, A.iop,
-        A.dst_in, A.dst_out, A.fclean, A.rclean
+        A.PAs_in, A.PAs_out, A.fclean, A.rclean
         )
 conj(A::joDAdistributedLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistributedLinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
         get(A.fop_C), A.fop_A, A.fop_T, A.fop,
         A.iop_C, A.iop_A, A.iop_T, A.iop,
-        A.dst_in, A.dst_out, A.fclean, A.rclean
+        A.PAs_in, A.PAs_out, A.fclean, A.rclean
         )
 conj(A::joDAdistributingLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistributingLinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
         get(A.fop_C), A.fop_A, A.fop_T, A.fop,
         A.iop_C, A.iop_A, A.iop_T, A.iop,
-        A.dst_out, A.gclean
+        A.PAs_out, A.gclean
         )
 conj(A::joDAgatheringLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgatheringLinearOperator{DDT,RDT,N}("conj("*A.name*")",A.m,A.n,A.nvc,
         get(A.fop_C), A.fop_A, A.fop_T, A.fop,
         A.iop_C, A.iop_A, A.iop_T, A.iop,
-        A.dst_in, A.gclean
+        A.PAs_in, A.gclean
         )
 
 # transpose(jo)
@@ -74,25 +74,25 @@ transpose(A::joDALinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDALinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_T), A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst_out, A.dst_in, A.rclean, A.fclean
+        A.PAs_out, A.PAs_in, A.rclean, A.fclean
         )
 transpose(A::joDAdistributedLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistributedLinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_T), A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst_out, A.dst_in, A.rclean, A.fclean
+        A.PAs_out, A.PAs_in, A.rclean, A.fclean
         )
 transpose(A::joDAdistributingLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgatheringLinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_T), A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst_out, A.gclean
+        A.PAs_out, A.gclean
         )
 transpose(A::joDAgatheringLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistributingLinearOperator{RDT,DDT,N}("transpose("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_T), A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst_in, A.gclean
+        A.PAs_in, A.gclean
         )
 
 # adjoint(jo)
@@ -100,25 +100,25 @@ adjoint(A::joDALinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDALinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_A), A.fop_C, A.fop, A.fop_T,
         A.iop_A, A.iop_C, A.iop, A.iop_T,
-        A.dst_out, A.dst_in, A.rclean, A.fclean
+        A.PAs_out, A.PAs_in, A.rclean, A.fclean
         )
 adjoint(A::joDAdistributedLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistributedLinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_A), A.fop_C, A.fop, A.fop_T,
         A.iop_A, A.iop_C, A.iop, A.iop_T,
-        A.dst_out, A.dst_in, A.rclean, A.fclean
+        A.PAs_out, A.PAs_in, A.rclean, A.fclean
         )
 adjoint(A::joDAdistributingLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgatheringLinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_A), A.fop_C, A.fop, A.fop_T,
         A.iop_A, A.iop_C, A.iop, A.iop_T,
-        A.dst_out, A.gclean
+        A.PAs_out, A.gclean
         )
 adjoint(A::joDAgatheringLinearOperator{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistributingLinearOperator{RDT,DDT,N}("adjoint("*A.name*")",A.n,A.m,A.nvc,
         get(A.fop_A), A.fop_C, A.fop, A.fop_T,
         A.iop_A, A.iop_C, A.iop, A.iop_T,
-        A.dst_in, A.gclean
+        A.PAs_in, A.gclean
         )
 
 # isreal(jo)
@@ -135,38 +135,38 @@ isreal(A :: joAbstractDAparallelLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<
 function *(A::joDALinOpsUnion{CDT,ARDT,2},B::joDALinOpsUnion{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
     A.nvc==B.nvc || throw(joDALinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
-    isapprox(A.dst_in,B.dst_out) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
+    isapprox(A.PAs_in,B.PAs_out) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
     return joDALinearOperator{BDDT,ARDT,2}("($(A.name)*$(B.name))",size(A,1),size(B,2),A.nvc,
                v1->A*(B*v1),
                v2->transpose(B)*(transpose(A)*v2),
                v3->adjoint(B)*(adjoint(A)*v3),
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF,
-               B.dst_in,A.dst_out,B.fclean,A.rclean)
+               B.PAs_in,A.PAs_out,B.fclean,A.rclean)
 end
 function *(A::joDALinOpsUnion{CDT,ARDT,2},B::joDAdistributeLinOpsUnion{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
     A.nvc==B.nvc || throw(joDALinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
-    isapprox(A.dst_in,B.dst_out) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
+    isapprox(A.PAs_in,B.PAs_out) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
     return joDAdistributingLinearOperator{BDDT,ARDT,2}("($(A.name)*$(B.name))",size(A,1),size(B,2),A.nvc,
                v1->A*(B*v1),
                v2->transpose(B)*(transpose(A)*v2),
                v3->adjoint(B)*(adjoint(A)*v3),
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF,
-               A.dst_out,B.gclean)
+               A.PAs_out,B.gclean)
 end
 function *(A::joDAgatherLinOpsUnion{CDT,ARDT,2},B::joDALinOpsUnion{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joDAgatheringLinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
     A.nvc==B.nvc || throw(joDAgatheringLinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
-    isapprox(A.dst_in,B.dst_out) || throw(joDAgatheringLinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
+    isapprox(A.PAs_in,B.PAs_out) || throw(joDAgatheringLinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
     return joDAgatheringLinearOperator{BDDT,ARDT,2}("($(A.name)*$(B.name))",size(A,1),size(B,2),A.nvc,
                v1->A*(B*v1),
                v2->transpose(B)*(transpose(A)*v2),
                v3->adjoint(B)*(adjoint(A)*v3),
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF,
-               B.dst_in,B.fclean)
+               B.PAs_in,B.fclean)
 end
 function *(A::joDAdistributeLinOpsUnion{CDT,ARDT,2},B::joDAgatherLinOpsUnion{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
@@ -177,12 +177,12 @@ function *(A::joDAdistributeLinOpsUnion{CDT,ARDT,2},B::joDAgatherLinOpsUnion{BDD
                v3->adjoint(B)*(adjoint(A)*v3),
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF,
-               B.dst_in,A.dst_out,B.gclean,A.gclean)
+               B.PAs_in,A.PAs_out,B.gclean,A.gclean)
 end
 function *(A::joDAgatherLinOpsUnion{CDT,ARDT,2},B::joDAdistributeLinOpsUnion{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joLinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
     A.nvc==B.nvc || throw(joLinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
-    isapprox(A.dst_in,B.dst_out) || throw(joLinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
+    isapprox(A.PAs_in,B.PAs_out) || throw(joLinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
     return joLinearOperator{BDDT,ARDT}("($(A.name)*$(B.name))",size(A,1),size(B,2),
                v1->A*(B*v1),
                v2->transpose(B)*(transpose(A)*v2),
@@ -193,17 +193,17 @@ end
 # extras with warnings
 function *(A::joDAdistribute{CDT,ARDT,2},B::joDAgather{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joDALinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
-    A.dst_out.dims[2]==B.dst_in.dims[2] || throw(joDALinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
+    A.PAs_out.dims[2]==B.PAs_in.dims[2] || throw(joDALinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
     @warn "*($(typeof(A)),$(typeof(B))) is a senseless operation. Get rid of it!"
-    return joDALinearOperator{BDDT,ARDT,2}("($(A.name)*$(B.name))",size(A,1),size(B,2),A.dst_out.dims[2],
+    return joDALinearOperator{BDDT,ARDT,2}("($(A.name)*$(B.name))",size(A,1),size(B,2),A.PAs_out.dims[2],
                v1->v1, v2->v2, v3->v3, v4->v4,
                @joNF, @joNF, @joNF, @joNF,
-               B.dst_in,A.dst_out,B.gclean,A.gclean)
+               B.PAs_in,A.PAs_out,B.gclean,A.gclean)
 end
 function *(A::joDAgather{CDT,ARDT,2},B::joDAdistribute{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joLinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
-    A.dst_in.dims[2]==B.dst_out.dims[2] || throw(joLinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
-    isapprox(A.dst_in,B.dst_out) || throw(joLinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
+    A.PAs_in.dims[2]==B.PAs_out.dims[2] || throw(joLinearOperatorException("*($(A.name),$(B.name)): nvc mismatch"))
+    isapprox(A.PAs_in,B.PAs_out) || throw(joLinearOperatorException("*($(A.name),$(B.name)): distributor mismatch"))
     @warn "*($(typeof(A)),$(typeof(B))) is a senseless operation. Get rid of it!"
     return joLinearOperator{BDDT,ARDT}("($(A.name)*$(B.name))",size(A,1),size(B,2),
                v1->v1, v2->v2, v3->v3, v4->v4,
@@ -218,7 +218,7 @@ function *(A::joDAdistributeLinOpsUnion{CDT,ARDT,2},B::joAbstractLinearOperator{
                v3->adjoint(B)*(adjoint(A)*v3),
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF,
-               A.dst_out,A.gclean)
+               A.PAs_out,A.gclean)
 end
 function *(A::joAbstractLinearOperator{CDT,ARDT},B::joDAgatherLinOpsUnion{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
     size(A,2) == size(B,1) || throw(joAbstractLinearOperatorException("*($(A.name),$(B.name)): shape mismatch"))
@@ -228,7 +228,7 @@ function *(A::joAbstractLinearOperator{CDT,ARDT},B::joDAgatherLinOpsUnion{BDDT,C
                v3->adjoint(B)*(adjoint(A)*v3),
                v4->conj(A)*(conj(B)*v4),
                @joNF, @joNF, @joNF, @joNF,
-               B.dst_in,B.gclean)
+               B.PAs_in,B.gclean)
 end
 
 # *(jo,mvec)
@@ -236,7 +236,7 @@ function *(A::joDALinearOperator{ADDT,ARDT,2},mv::DArray{mvDT,2}) where {ADDT,AR
     A.n == size(mv,1) || throw(joDALinearOperatorException("shape mismatch"))
     A.nvc == size(mv,2) || throw(joDALinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.dst_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    isequiv(A.PAs_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
     MV=A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
@@ -245,9 +245,9 @@ function *(A::joDAdistributedLinearOperator{ADDT,ARDT,2},mv::DArray{mvDT,2}) whe
     A.n == size(mv,1) || throw(joDALinearOperatorException("shape mismatch"))
     A.nvc == size(mv,2) || throw(joDALinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.dst_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
-    MV=dalloc(A.dst_out)
-    spmd(joDAutils.jo_x_mv!,A.fop,mv,MV,pids=A.dst_out.procs)
+    isequiv(A.PAs_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    MV=dalloc(A.PAs_out)
+    spmd(joDAutils.jo_x_mv!,A.fop,mv,MV,pids=A.PAs_out.procs)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
@@ -263,7 +263,7 @@ function *(A::joDAgatheringLinearOperator{ADDT,ARDT,2},mv::DArray{mvDT,2}) where
     A.n == size(mv,1) || throw(joDAgatheringLinearOperatorException("shape mismatch in A$(size(A))*v$(size(mv))"))
     A.nvc == size(mv,2) || throw(joDAgatheringLinearOperatorException("nvc size mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.dst_in,mv) || throw(joDAgatheringLinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    isequiv(A.PAs_in,mv) || throw(joDAgatheringLinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV

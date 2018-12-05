@@ -49,12 +49,12 @@ transpose(A::joDAdistribute{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAgather{RDT,DDT,N}("regather($(A.name))",A.n,A.m,A.nvc,
         A.fop_T, A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst_out, A.gclean)
+        A.PAs_out, A.gclean)
 transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
     joDAdistribute{RDT,DDT,N}("redistribute($(A.name))",A.n,A.m,A.nvc,
         A.fop_T, A.fop, A.fop_C, A.fop_A,
         A.iop_T, A.iop, A.iop_C, A.iop_A,
-        A.dst_in, A.gclean)
+        A.PAs_in, A.gclean)
 
 # adjoint(jo)
 @inline adjoint(A::joAbstractDAparallelToggleOperator) = transpose(A)
@@ -73,7 +73,7 @@ transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
 # *(jo,mvec)
 function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joAbstractDAparallelToggleOperatorException("joDAdistributeMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.dst_out.dims==size(mv) || throw(joAbstractDAparallelToggleOperatorException("sjoDAdistributeMV: shape mismatch dst$(A.dst_out.dims)*v$(size(mv))"))
+    A.PAs_out.dims==size(mv) || throw(joAbstractDAparallelToggleOperatorException("sjoDAdistributeMV: shape mismatch dst$(A.PAs_out.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
@@ -81,9 +81,9 @@ function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARD
 end
 function *(A::joDAgather{ADDT,ARDT,2},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joAbstractDAparallelToggleOperatorException("joDAgatherMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.dst_in.dims==size(mv) || throw(joAbstractDAparallelToggleOperatorException("joDAgatherMV: shape mismatch dst$(A.dst_in.dims)*v$(size(mv))"))
+    A.PAs_in.dims==size(mv) || throw(joAbstractDAparallelToggleOperatorException("joDAgatherMV: shape mismatch dst$(A.PAs_in.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.dst_in,mv) || throw(joAbstractDAparallelToggleOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    isequiv(A.PAs_in,mv) || throw(joAbstractDAparallelToggleOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
@@ -97,7 +97,7 @@ end
 # *(jo,vec)
 function *(A::joDAdistribute{ADDT,ARDT,1},v::LocalVector{vDT}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joAbstractDAparallelToggleOperatorException("joDAdistributeV: shape mismatch A$(size(A))*v$(size(v))"))
-    A.dst_out.dims==size(v) || throw(joAbstractDAparallelToggleOperatorException("joDAdistributeV: shape mismatch dst$(A.dst_out.dims)*v$(size(v))"))
+    A.PAs_out.dims==size(v) || throw(joAbstractDAparallelToggleOperatorException("joDAdistributeV: shape mismatch dst$(A.PAs_out.dims)*v$(size(v))"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
@@ -105,7 +105,7 @@ function *(A::joDAdistribute{ADDT,ARDT,1},v::LocalVector{vDT}) where {ADDT,ARDT,
 end
 function *(A::joDAgather{ADDT,ARDT,1},v::DArray{vDT,1}) where {ADDT,ARDT,vDT<:Number}
     A.n == size(v,1) || throw(joAbstractDAparallelToggleOperatorException("joDAgatherV: shape mismatch A$(size(A))*v$(size(v))"))
-    A.dst_in.dims==size(v) || throw(joAbstractDAparallelToggleOperatorException("joDAgatherV: shape mismatch dst$(A.dst_in.dims)*v$(size(v))"))
+    A.PAs_in.dims==size(v) || throw(joAbstractDAparallelToggleOperatorException("joDAgatherV: shape mismatch dst$(A.PAs_in.dims)*v$(size(v))"))
     jo_check_type_match(ADDT,vDT,join(["DDT for *(jo,vec):",A.name,typeof(A),vDT]," / "))
     V=A.fop(v)
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
