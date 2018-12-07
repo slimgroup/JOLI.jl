@@ -236,16 +236,16 @@ function *(A::joDALinearOperator{ADDT,ARDT,2},mv::DArray{mvDT,2}) where {ADDT,AR
     A.n == size(mv,1) || throw(joDALinearOperatorException("shape mismatch"))
     A.nvc == size(mv,2) || throw(joDALinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.PAs_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    isequiv(A.PAs_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::DArray): input distributor mismatch"))
     MV=A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
 function *(A::joDAdistributedLinearOperator{ADDT,ARDT,2},mv::DArray{mvDT,2}) where {ADDT,ARDT,mvDT<:Number}
-    A.n == size(mv,1) || throw(joDALinearOperatorException("shape mismatch"))
-    A.nvc == size(mv,2) || throw(joDALinearOperatorException("shape mismatch"))
+    A.n == size(mv,1) || throw(joDAdistributedLinearOperatorException("shape mismatch"))
+    A.nvc == size(mv,2) || throw(joDAdistributedLinearOperatorException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.PAs_in,mv) || throw(joDALinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    isequiv(A.PAs_in,mv) || throw(joDAdistributedLinearOperatorException("*($(A.name),mv::DArray): input distributor mismatch"))
     MV=dalloc(A.PAs_out)
     spmd(joDAutils.jo_x_mv!,A.fop,mv,MV,pids=A.PAs_out.procs)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
@@ -263,7 +263,7 @@ function *(A::joDAgatheringLinearOperator{ADDT,ARDT,2},mv::DArray{mvDT,2}) where
     A.n == size(mv,1) || throw(joDAgatheringLinearOperatorException("shape mismatch in A$(size(A))*v$(size(mv))"))
     A.nvc == size(mv,2) || throw(joDAgatheringLinearOperatorException("nvc size mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
-    isequiv(A.PAs_in,mv) || throw(joDAgatheringLinearOperatorException("*($(A.name),mv::Darray): input distributor mismatch"))
+    isequiv(A.PAs_in,mv) || throw(joDAgatheringLinearOperatorException("*($(A.name),mv::DArray): input distributor mismatch"))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV

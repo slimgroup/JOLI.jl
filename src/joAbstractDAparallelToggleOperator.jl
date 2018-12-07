@@ -1,5 +1,5 @@
 ############################################################
-# joParallelToggles - parallel V/MV conversion operators ###
+# joDAparallelToggles - parallel V/MV conversion operators #
 ############################################################
 
 # includes

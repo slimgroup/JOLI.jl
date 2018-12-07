@@ -69,11 +69,13 @@ include("joTypes.jl")
 include("joMiscTypesMethods.jl")
 include("joUtils.jl")
 include("joExternalPackages.jl")
+include("joAbstractSAparallelToggleOperator.jl")
 include("joAbstractDAparallelToggleOperator.jl")
 include("joAbstractOperator.jl")
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")
 include("joAbstractLinearOperatorInplace.jl")
+include("joAbstractSAparallelLinearOperator.jl")
 include("joAbstractDAparallelLinearOperator.jl")
 
 # derived operator code goes into those

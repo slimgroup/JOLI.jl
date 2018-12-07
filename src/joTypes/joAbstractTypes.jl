@@ -6,6 +6,9 @@
 #   * joAbstractParallelableLinearOperator
 # * joAbstractFosterLinearOperator
 #   * joAbstractLinearOperatorInplace
+# * joAbstractSAparallelOperator
+#  * joAbstractSAparallelToggleOperator
+#  * joAbstractSAparallelLinearOperator
 # * joAbstractDAparallelOperator
 #  * joAbstractDAparallelToggleOperator
 #  * joAbstractDAparallelLinearOperator
@@ -74,6 +77,45 @@ abstract type joAbstractLinearOperatorInplace{DDT<:Number,RDT<:Number} <: joAbst
 
 # type exception
 struct joAbstractLinearOperatorInplaceException <: Exception
+    msg :: String
+end
+
+############################################################
+# joAbstractSAparallelOperator #############################
+
+export joAbstractSAparallelOperator, joAbstractSAparallelOperatorException
+
+# type definition
+abstract type joAbstractSAparallelOperator{DDT<:Number,RDT<:Number,N} <: joAbstractOperator end
+
+# type exception
+struct joAbstractSAparallelOperatorException <: Exception
+    msg :: String
+end
+
+############################################################
+# joAbstractSAparallelToggleOperator #######################
+
+export joAbstractSAparallelToggleOperator, joAbstractSAparallelToggleOperatorException
+
+# type definition
+abstract type joAbstractSAparallelToggleOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelOperator{DDT,RDT,N} end
+
+# type exception
+struct joAbstractSAparallelToggleOperatorException <: Exception
+    msg :: String
+end
+
+############################################################
+# joAbstractSAparallelLinearOperator #######################
+
+export joAbstractSAparallelLinearOperator, joAbstractSAparallelLinearOperatorException
+
+# type definition
+abstract type joAbstractSAparallelLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelOperator{DDT,RDT,N} end
+
+# type exception
+struct joAbstractSAparallelLinearOperatorException <: Exception
     msg :: String
 end
 

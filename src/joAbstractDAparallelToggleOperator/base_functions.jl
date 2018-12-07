@@ -42,7 +42,7 @@ length(A::joAbstractDAparallelToggleOperator) = A.m*A.n
 # imag(jo)
 
 # conj(jo)
-@inline conj(A::joAbstractDAparallelToggleOperator) = A
+conj(A::joAbstractDAparallelToggleOperator) = A
 
 # transpose(jo)
 transpose(A::joDAdistribute{DDT,RDT,N}) where {DDT,RDT,N} =
@@ -57,7 +57,7 @@ transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
         A.PAs_in, A.gclean)
 
 # adjoint(jo)
-@inline adjoint(A::joAbstractDAparallelToggleOperator) = transpose(A)
+adjoint(A::joAbstractDAparallelToggleOperator) = transpose(A)
 
 # isreal(jo)
 
@@ -73,7 +73,7 @@ transpose(A::joDAgather{DDT,RDT,N}) where {DDT,RDT,N} =
 # *(jo,mvec)
 function *(A::joDAdistribute{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joAbstractDAparallelToggleOperatorException("joDAdistributeMV: shape mismatch A$(size(A))*v$(size(mv))"))
-    A.PAs_out.dims==size(mv) || throw(joAbstractDAparallelToggleOperatorException("sjoDAdistributeMV: shape mismatch dst$(A.PAs_out.dims)*v$(size(mv))"))
+    A.PAs_out.dims==size(mv) || throw(joAbstractDAparallelToggleOperatorException("joDAdistributeMV: shape mismatch dst$(A.PAs_out.dims)*v$(size(mv))"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))

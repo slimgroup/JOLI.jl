@@ -323,7 +323,7 @@ export distribute
 """
     julia> distribute(A,d)
 
-Distributes array according to given joPAsetup.
+Distributes DArray according to given joPAsetup.
 
 # Signature
 

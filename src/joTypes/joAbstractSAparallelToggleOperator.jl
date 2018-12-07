@@ -1,21 +1,21 @@
 ############################################################
-## types supporting conversion from local to DA arrays #####
+## types supporting conversion from local to SA arrays #####
 ############################################################
 
 ############################################################
-# joDA{distribute,gather} ##################################
+# joSA{distribute,gather} ##################################
 
-export joDAdistribute, joDAgather
+export joSAdistribute, joSAgather
 
 # type definition
 """
-    joDAdistribute is DAarray toggle type & constructor
+    joSAdistribute is SAarray toggle type & constructor
 
     !!! Do not use it to create the operators
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperator{DDT,RDT,N}
+struct joSAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelToggleOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -32,13 +32,13 @@ struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOp
     gclean::Bool        # clean input vector post gathering
 end
 """
-    joDAgather is DAarray toggle type & constructor
+    joSAgather is SAarray toggle type & constructor
 
     !!! Do not use it to create the operators
     !!! Use joMatrix and joLinearFunction constructors
 
 """
-struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperator{DDT,RDT,N}
+struct joSAgather{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelToggleOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer

@@ -282,9 +282,14 @@ end
 ## joPAsetup - extra functions
 
 # isequiv
-function isequiv(a::joPAsetup,b::DArray)
-    (a.procs == vec(b.pids)) || return false
-    (a.idxs  == b.indices  ) || return false
+function isequiv(d::joPAsetup,a::SharedArray)
+    (d.procs == vec(a.pids)) || return false
+    (d.dims  == size(a)  ) || return false
+    return true
+end
+function isequiv(d::joPAsetup,a::DArray)
+    (d.procs == vec(a.pids)) || return false
+    (d.idxs  == a.indices  ) || return false
     return true
 end
 
