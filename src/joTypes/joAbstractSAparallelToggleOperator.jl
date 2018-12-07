@@ -9,7 +9,7 @@ export joSAdistribute, joSAgather
 
 # type definition
 """
-    joSAdistribute is SAarray toggle type & constructor
+    joSAdistribute is SharedArray toggle type & constructor
 
     !!! Do not use it to create the operators
     !!! Use joMatrix and joLinearFunction constructors
@@ -32,7 +32,7 @@ struct joSAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelToggleOp
     gclean::Bool        # clean input vector post gathering
 end
 """
-    joSAgather is SAarray toggle type & constructor
+    joSAgather is SharedArray toggle type & constructor
 
     !!! Do not use it to create the operators
     !!! Use joMatrix and joLinearFunction constructors
