@@ -42,6 +42,7 @@ import LinearAlgebra.mul!, LinearAlgebra.ldiv!
 
 # what's imported from DistributedArrays
 import DistributedArrays: DArray, distribute, dzeros, dones, dfill, drand, drandn
+import DistributedArrays.SPMD: scatter
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype

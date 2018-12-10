@@ -12,11 +12,15 @@ module joSAutils
         end
         return nothing
     end
+    # Tuple{Vararg{UnitRange}}
+    # Tuple{Vararg{UnitRange{INT}}} where INT<:Integer
     function jo_x_mv!(F::Function,din::joPAsetup,dout::joPAsetup,
             in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT}
 
-        @sync @distributed for i in din.procs
-            out[dout.idxs[indexpids(out)]...]=jo_convert(ARDT,F(in[din.idxs[indexpids(in)]...]))
+        #out[:,:] = F(sdata(in))
+        P=length(in.pids)
+        @sync @distributed for p=1:P
+            out[dout.idxs[p]...]=jo_convert(ARDT,F(in[din.idxs[p]...]))
         end
         return nothing
     end
@@ -45,34 +49,40 @@ Allocates a SharedArray according to given distributor
 
 """
 function salloc(d::joPAsetup;DT::DataType=d.DT)
-    return SharedArray{DT,length(d.dims)}(d.dims,pids=d.procs)
+    #S = SharedArray{DT}(d.dims; pids=d.procs)
+    S = SharedArray{DT}(d.dims)
+    return S
 end
 
 export szeros
 function szeros(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=zeros(DT,length(SharedArrays.localindices(S)))
-    S = SharedArray{DT,length(d.dims)}(d.dims, init=fill, pids=d.procs)
+    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
 export sones
 function sones(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=ones(DT,length(SharedArrays.localindices(S)))
-    S = SharedArray{DT,length(d.dims)}(d.dims, init=fill, pids=d.procs)
+    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
 export srand
 function srand(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=rand(DT,length(SharedArrays.localindices(S)))
-    S = SharedArray{DT,length(d.dims)}(d.dims, init=fill, pids=d.procs)
+    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
 export srandn
 function srandn(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=randn(DT,length(SharedArrays.localindices(S)))
-    S = SharedArray{DT,length(d.dims)}(d.dims, init=fill, pids=d.procs)
+    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
@@ -104,8 +114,9 @@ Scatters SharedArray according to given joPAsetup.
 """
 function scatter(A::AbstractArray,d::joPAsetup)
     size(A)==d.dims || throw(joPAsetupException("joPAsetup: array size does not match dims of joPAsetup"))
-    SA=SharedArray{eltype(A),ndims(A)}(d.dims,pids=d.procs)
-    SA[:]=A[:]
+    #SA=SharedArray{eltype(A)}(d.dims; pids=d.procs)
+    SA = SharedArray{eltype(A)}(d.dims)
+    SA[:] = A[:]
     return SA
 end
 
