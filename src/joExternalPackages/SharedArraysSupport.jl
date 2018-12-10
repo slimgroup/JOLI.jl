@@ -4,23 +4,43 @@ module joSAutils
     using SharedArrays
     using JOLI: jo_convert, joAbstractLinearOperator, joPAsetup
 
+    # A::joAbstractLinearOperator
+    function jo_x_mv!(A::joAbstractLinearOperator,din::Tuple{Vararg{UnitRange{INT}}},dout::Tuple{Vararg{UnitRange{INT}}},
+            in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT,INT<:Integer}
+
+            out[dout...]=jo_convert(ARDT,F*in[din...])
+        return nothing
+    end
     function jo_x_mv!(A::joAbstractLinearOperator,din::joPAsetup,dout::joPAsetup,
             in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT}
 
-        @sync @distributed for i in din.procs
-            out[dout.idxs[indexpids(out)]...]=jo_convert(ARDT,A*in[din.idxs[indexpids(in)]...])
+        @assert out.pids==in.pids "SharedArrays pids in($(in.pids)) and out($(out.pids)) do not match"
+        P=length(out.pids)
+        @sync begin
+            for w=1:P
+                p=out.pids[w]
+                @async remotecall_wait(jo_x_mv!,p,A,din.idxs[w],dout.idxs[w],in,out)
+            end
         end
         return nothing
     end
-    # Tuple{Vararg{UnitRange}}
-    # Tuple{Vararg{UnitRange{INT}}} where INT<:Integer
+    # F::Function
+    function jo_x_mv!(F::Function,din::Tuple{Vararg{UnitRange{INT}}},dout::Tuple{Vararg{UnitRange{INT}}},
+            in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT,INT<:Integer}
+
+            out[dout...]=jo_convert(ARDT,F(in[din...]))
+        return nothing
+    end
     function jo_x_mv!(F::Function,din::joPAsetup,dout::joPAsetup,
             in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT}
 
-        #out[:,:] = F(sdata(in))
-        P=length(in.pids)
-        @sync @distributed for p=1:P
-            out[dout.idxs[p]...]=jo_convert(ARDT,F(in[din.idxs[p]...]))
+        @assert out.pids==in.pids "SharedArrays pids in($(in.pids)) and out($(out.pids)) do not match"
+        P=length(out.pids)
+        @sync begin
+            for w=1:P
+                p=out.pids[w]
+                @async remotecall_wait(jo_x_mv!,p,F,din.idxs[w],dout.idxs[w],in,out)
+            end
         end
         return nothing
     end
@@ -49,7 +69,7 @@ Allocates a SharedArray according to given distributor
 
 """
 function salloc(d::joPAsetup;DT::DataType=d.DT)
-    #S = SharedArray{DT}(d.dims; pids=d.procs)
+    #bug S = SharedArray{DT}(d.dims; pids=d.procs)
     S = SharedArray{DT}(d.dims)
     return S
 end
@@ -57,7 +77,7 @@ end
 export szeros
 function szeros(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=zeros(DT,length(SharedArrays.localindices(S)))
-    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
     S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
@@ -65,7 +85,7 @@ end
 export sones
 function sones(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=ones(DT,length(SharedArrays.localindices(S)))
-    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
     S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
@@ -73,7 +93,7 @@ end
 export srand
 function srand(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=rand(DT,length(SharedArrays.localindices(S)))
-    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
     S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
@@ -81,7 +101,7 @@ end
 export srandn
 function srandn(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=randn(DT,length(SharedArrays.localindices(S)))
-    #S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
+    #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
     S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
@@ -114,7 +134,7 @@ Scatters SharedArray according to given joPAsetup.
 """
 function scatter(A::AbstractArray,d::joPAsetup)
     size(A)==d.dims || throw(joPAsetupException("joPAsetup: array size does not match dims of joPAsetup"))
-    #SA=SharedArray{eltype(A)}(d.dims; pids=d.procs)
+    #bug SA=SharedArray{eltype(A)}(d.dims; pids=d.procs)
     SA = SharedArray{eltype(A)}(d.dims)
     SA[:] = A[:]
     return SA
