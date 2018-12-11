@@ -70,7 +70,8 @@ Allocates a SharedArray according to given distributor
 """
 function salloc(d::joPAsetup;DT::DataType=d.DT)
     #bug S = SharedArray{DT}(d.dims; pids=d.procs)
-    S = SharedArray{DT}(d.dims)
+    S = SharedArray{DT}(deepcopy(d.dims); pids=deepcopy(d.procs))
+    #S = SharedArray{DT}(d.dims)
     return S
 end
 
@@ -78,7 +79,8 @@ export szeros
 function szeros(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=zeros(DT,length(SharedArrays.localindices(S)))
     #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
-    S = SharedArray{DT}(d.dims; init=fill)
+    S = SharedArray{DT}(deepcopy(d.dims); init=fill, pids=deepcopy(d.procs))
+    #S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
@@ -86,7 +88,8 @@ export sones
 function sones(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=ones(DT,length(SharedArrays.localindices(S)))
     #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
-    S = SharedArray{DT}(d.dims; init=fill)
+    S = SharedArray{DT}(deepcopy(d.dims); init=fill, pids=deepcopy(d.procs))
+    #S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
@@ -94,7 +97,8 @@ export srand
 function srand(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=rand(DT,length(SharedArrays.localindices(S)))
     #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
-    S = SharedArray{DT}(d.dims; init=fill)
+    S = SharedArray{DT}(deepcopy(d.dims); init=fill, pids=deepcopy(d.procs))
+    #S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
@@ -102,7 +106,8 @@ export srandn
 function srandn(d::joPAsetup;DT::DataType=d.DT)
     fill=S->S[SharedArrays.localindices(S)]=randn(DT,length(SharedArrays.localindices(S)))
     #bug S = SharedArray{DT}(d.dims; init=fill, pids=d.procs)
-    S = SharedArray{DT}(d.dims; init=fill)
+    S = SharedArray{DT}(deepcopy(d.dims); init=fill, pids=deepcopy(d.procs))
+    #S = SharedArray{DT}(d.dims; init=fill)
     return S
 end
 
@@ -134,8 +139,9 @@ Scatters SharedArray according to given joPAsetup.
 """
 function scatter(A::AbstractArray,d::joPAsetup)
     size(A)==d.dims || throw(joPAsetupException("joPAsetup: array size does not match dims of joPAsetup"))
-    #bug SA=SharedArray{eltype(A)}(d.dims; pids=d.procs)
-    SA = SharedArray{eltype(A)}(d.dims)
+    #bug SA = SharedArray{eltype(A)}(d.dims; pids=d.procs)
+    SA = SharedArray{eltype(A)}(deepcopy(d.dims); pids=deepcopy(d.procs))
+    #SA = SharedArray{eltype(A)}(d.dims)
     SA[:] = A[:]
     return SA
 end
