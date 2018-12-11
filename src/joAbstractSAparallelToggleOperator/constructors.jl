@@ -11,6 +11,8 @@ export joSAdistribute
     julia> joSAdistribute(wpool, m [,parts]; [DT])
     julia> joSAdistribute(m, nvc [,parts]; [DT])
     julia> joSAdistribute(wpool, m, nvc [,parts]; [DT])
+    julia> joSAdistribute(dst)
+    julia> joSAdistribute(SA)
 
 defines operator to distribute serial vector into DistributedArrays' vector
 
@@ -28,6 +30,8 @@ defines operator to distribute serial vector into DistributedArrays' vector
     joSAdistribute(wpool::WorkerPool,m::Integer,nvc::Integer,
         parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
+    joSAdistribute(dst::joPAsetup;gclean::Bool=false)
+    joSAdistribute(A::joSAdistributedLinearOperator;gclean::Bool=false)
 
 # Arguments
 
@@ -36,6 +40,8 @@ defines operator to distribute serial vector into DistributedArrays' vector
 - `parts`: custom partitioning of distributed dimension
 - `wpool`: custom WorkerPool
 - `DT`: DataType for joPAsetup
+- `dst`: joPAsetup
+- `SA`: joSAdistributedLinearOperator
 - `glcean`: clean SArray after gathering
 
 # Notes
@@ -88,6 +94,19 @@ end
 joSAdistribute(m::Integer,nvc::Integer,
         parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(),nvc);
         kwargs...) where INT<:Integer = joSAdistribute(WorkerPool(workers()),m,nvc,parts;kwargs...)
+function joSAdistribute(dst::joPAsetup;gclean::Bool=false)
+    m=dst.dims[1]
+    nvc=dst.dims[2]
+    DT=dst.DT
+    return joSAdistribute{DT,DT,2}("joSAdistributeMV:$nvc",m,m,nvc,
+        v1->scatter(v1,dst),
+        v2->sdata(v2),
+        v3->sdata(v3),
+        v4->scatter(v4,dst),
+        @joNF, @joNF, @joNF, @joNF,
+        dst,gclean)
+end
+joSAdistribute(A::joSAdistributedLinearOperator;gclean::Bool=false) = joSAdistribute(A.PAs_in,gclean=gclean)
 
 export joSAgather
 """
@@ -95,6 +114,8 @@ export joSAgather
     julia> joSAgather(wpool, m [,parts]; [DT])
     julia> joSAgather(m, nvc [,parts]; [DT])
     julia> joSAgather(wpool, m, nvc [,parts]; [DT])
+    julia> joSAgather(dst)
+    julia> joSAgather(SA)
 
 defines operator to gather DistributedArrays' vector into serial vector
 
@@ -112,6 +133,8 @@ defines operator to gather DistributedArrays' vector into serial vector
     joSAgather(wpool::WorkerPool,m::Integer,nvc::Integer,
         parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
+    joSAgather(dst::joPAsetup;gclean::Bool=false)
+    joSAgather(A::joSAdistributedLinearOperator;gclean::Bool=false)
 
 # Arguments
 
@@ -121,6 +144,8 @@ defines operator to gather DistributedArrays' vector into serial vector
 - `wpool`: custom WorkerPool
 - `DT`: DataType for joPAsetup
 - `glcean`: clean SArray after gathering
+- `dst`: joPAsetup
+- `SA`: joSAdistributedLinearOperator
 
 # Notes
 
@@ -172,4 +197,17 @@ end
 joSAgather(m::Integer,nvc::Integer,
         parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(),nvc);
         kwargs...) where INT<:Integer = joSAgather(WorkerPool(workers()),m,nvc,parts;kwargs...)
+function joSAgather(dst::joPAsetup;gclean::Bool=false)
+    m=dst.dims[1]
+    nvc=dst.dims[2]
+    DT=dst.DT
+    return joSAgather{DT,DT,2}("joSAgatherMV:$nvc",m,m,nvc,
+        v1->sdata(v1),
+        v2->scatter(v2,dst),
+        v3->scatter(v3,dst),
+        v4->sdata(v4),
+        @joNF, @joNF, @joNF, @joNF,
+        dst,gclean)
+end
+joSAgather(A::joSAdistributedLinearOperator;gclean::Bool=false) = joSAgather(A.PAs_out,gclean=gclean)
 

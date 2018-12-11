@@ -44,8 +44,8 @@ function joDAdistributedLinOp(wpool::WorkerPool,A::joAbstractLinearOperator{DDT,
     length(parts)==nworkers(wpool) || throw(joDAdistributedLinearOperatorException("joDAdistributedLinearOperator: lenght(parts) does not much nworkers()"))
     sum(parts)==nvc || throw(joDAdistributedLinearOperatorException("joDAdistributedLinearOperator: sum(parts) does not much nvc"))
 
-    idst=joPAsetup(wpool,(A.n,nvc),2,parts=parts)
-    odst=joPAsetup(wpool,(A.m,nvc),2,parts=parts)
+    idst=joPAsetup(wpool,(A.n,nvc),2,parts=parts,DT=DDT)
+    odst=joPAsetup(wpool,(A.m,nvc),2,parts=parts,DT=RDT)
     return joDAdistributedLinearOperator{DDT,RDT,2}("joDAdistributedLinearOperator($(A.name))",A.m,A.n,nvc,
                v1->A*v1,
                v2->transpose(A)*v2,
