@@ -4,7 +4,7 @@ module joDAutils
     using JOLI: jo_convert, joAbstractLinearOperator
 
     function DArray5(init, dims, procs, idxs, cuts)
-        dist = chunks=map(i->length(i)-1,cuts)
+        dist = map(i->length(i)-1,cuts)
         np = prod(dist)
         procs = reshape(procs[1:np], ntuple(i->dist[i], length(dist)))
         id = DistributedArrays.next_did()

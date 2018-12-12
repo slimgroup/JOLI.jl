@@ -15,7 +15,7 @@ module joSAutils
             in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT}
 
         @assert out.pids==in.pids "SharedArrays pids in($(in.pids)) and out($(out.pids)) do not match"
-        P=length(out.pids)
+        P::Int=length(out.pids)
         @sync begin
             for w=1:P
                 p=out.pids[w]
@@ -35,7 +35,7 @@ module joSAutils
             in::SharedArray{ADDT,2},out::SharedArray{ARDT,2}) where {ADDT,ARDT}
 
         @assert out.pids==in.pids "SharedArrays pids in($(in.pids)) and out($(out.pids)) do not match"
-        P=length(out.pids)
+        P::Int=length(out.pids)
         @sync begin
             for w=1:P
                 p=out.pids[w]
