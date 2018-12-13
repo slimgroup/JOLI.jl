@@ -41,6 +41,12 @@ module joPAsetup_etc
         end
         return idxs
     end
+    function balanced_partition_ranges(nlabs::Integer,dsize::Integer)
+        idxs=balanced_partition_idxs(nlabs,dsize)
+        n=length(idxs)-1
+        rngs=map(i->idxs[i]:idxs[i+1]-1,1:n)
+        return rngs
+    end
 
     function default_chunks(dims::Dims,pids::Vector{INT}) where INT<:Integer
         chunks = ones(Int, length(dims))
