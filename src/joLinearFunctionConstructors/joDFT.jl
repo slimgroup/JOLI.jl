@@ -6,111 +6,71 @@ module joDFT_etc
     using FFTW
     ### planned
     function apply_fft_centered(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
+        rv=reshape(v,ms)
         rv=(pln*rv)/sqrt(mp)
-        for d=1:l rv=fftshift(rv,d) end
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=fftshift(rv)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_ifft_centered(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
-        for d=1:l rv=ifftshift(rv,d) end
+        rv=reshape(v,ms)
+        rv=ifftshift(rv)
         rv=(pln*rv)*sqrt(mp)
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_fft(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
+        rv=reshape(v,ms)
         rv=(pln*rv)/sqrt(mp)
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_ifft(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
+        rv=reshape(v,ms)
         rv=(pln*rv)*sqrt(mp)
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     ### not planned
     function apply_fft_centered(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
-        rv=fft(rv,1:l)/sqrt(mp)
-        for d=1:l rv=fftshift(rv,d) end
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=reshape(v,ms)
+        rv=fft(rv)/sqrt(mp)
+        rv=fftshift(rv)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_ifft_centered(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
-        for d=1:l rv=ifftshift(rv,d) end
-        rv=ifft(rv,1:l)*sqrt(mp)
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=reshape(v,ms)
+        rv=ifftshift(rv)
+        rv=ifft(rv)*sqrt(mp)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_fft(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
-        rv=fft(rv,1:l)/sqrt(mp)
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=reshape(v,ms)
+        rv=fft(rv)/sqrt(mp)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_ifft(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        l::Integer=length(ms)
         mp::Integer=prod(ms)
-        lv::Integer=length(v)
-        lvmp::Integer=lv/mp
-        vs=collect(ms)
-        if lvmp>1 push!(vs,lvmp) end
-        rv=reshape(v,vs...)
-        rv=ifft(rv,1:l)*sqrt(mp)
-        lvmp>1 ? rv=reshape(rv,mp,lvmp) : rv=vec(rv)
+        rv=reshape(v,ms)
+        rv=ifft(rv)*sqrt(mp)
+        rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
