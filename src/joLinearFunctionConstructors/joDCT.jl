@@ -5,36 +5,76 @@ module joDCT_etc
     using JOLI: jo_convert
     using FFTW
     ### planned
-    function apply_dct(pln::FFTW.DCTPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_dct(pln::FFTW.DCTPlan,v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,ms)
         rv=pln*rv
         rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idct(pln::FFTW.DCTPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_dct(pln::FFTW.DCTPlan,v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        pf=plan_dct(zeros(msc),[1:lms...])
+        rv=reshape(v,msc)
+        rv=pf*rv
+        rv=reshape(rv,(prod(ms),nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_idct(pln::FFTW.DCTPlan,v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,ms)
         rv=pln*rv
         rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_idct(pln::FFTW.DCTPlan,v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        pf=plan_idct(zeros(msc),[1:lms...])
+        rv=reshape(v,msc)
+        rv=pf*rv
+        rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     ### not planned
-    function apply_dct(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_dct(v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,ms)
         rv=dct(rv)
         rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_idct(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_dct(v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        pf=plan_dct(zeros(msc),[1:lms...])
+        rv=reshape(v,msc)
+        rv=pf*rv
+        rv=reshape(rv,(prod(ms),nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_idct(v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         rv=reshape(v,ms)
         rv=idct(rv)
         rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_idct(v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        pf=plan_idct(zeros(msc),[1:lms...])
+        rv=reshape(v,msc)
+        rv=pf*rv
+        rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
         return rv
     end
@@ -58,28 +98,29 @@ Multi-dimensional DCT transform over fast dimension(s)
 # Notes
 
 - if you intend to use joDCT in remote* calls, you have to either set planned=false or create the operator on the worker
+- joDCT is always planned if applied to multi-vector
 
 """
 function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::DataType=DDT)
     if planned
-    pf=plan_dct(zeros(ms))
-    ipf=plan_idct(zeros(ms))
-    return joLinearFunction_A(prod(ms),prod(ms),
-        v1->joDCT_etc.apply_dct(pf,v1,ms,RDT),
-        v2->joDCT_etc.apply_idct(ipf,v2,ms,DDT),
-        v3->joDCT_etc.apply_idct(ipf,v3,ms,DDT),
-        v4->joDCT_etc.apply_dct(pf,v4,ms,RDT),
-        DDT,RDT;
-        name="joDCTp"
-        )
+        pf=plan_dct(zeros(ms))
+        ipf=plan_idct(zeros(ms))
+        return joLinearFunction_A(prod(ms),prod(ms),
+            v1->joDCT_etc.apply_dct(pf,v1,ms,RDT),
+            v2->joDCT_etc.apply_idct(ipf,v2,ms,DDT),
+            v3->joDCT_etc.apply_idct(ipf,v3,ms,DDT),
+            v4->joDCT_etc.apply_dct(pf,v4,ms,RDT),
+            DDT,RDT;fMVok=true,iMVok=true,
+            name="joDCTp"
+            )
     else
-    return joLinearFunction_A(prod(ms),prod(ms),
-        v1->joDCT_etc.apply_dct(v1,ms,RDT),
-        v2->joDCT_etc.apply_idct(v2,ms,DDT),
-        v3->joDCT_etc.apply_idct(v3,ms,DDT),
-        v4->joDCT_etc.apply_dct(v4,ms,RDT),
-        DDT,RDT;
-        name="joDCT")
+        return joLinearFunction_A(prod(ms),prod(ms),
+            v1->joDCT_etc.apply_dct(v1,ms,RDT),
+            v2->joDCT_etc.apply_idct(v2,ms,DDT),
+            v3->joDCT_etc.apply_idct(v3,ms,DDT),
+            v4->joDCT_etc.apply_dct(v4,ms,RDT),
+            DDT,RDT;fMVok=true,iMVok=true,
+            name="joDCT")
     end
 end
 
