@@ -5,8 +5,8 @@ module joDFT_etc
     using JOLI: jo_convert
     using FFTW
     ### planned
-    function apply_fft_centered(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_fft_centered(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=(pln*rv)/sqrt(mp)
         rv=fftshift(rv)
@@ -14,8 +14,22 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft_centered(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_fft_centered(pln::FFTW.cFFTWPlan,v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_fft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=(pf*rv)/sqrt(mp)
+        rv=fftshift(rv,dims)
+        rv=reshape(rv,(mp,nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_ifft_centered(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=ifftshift(rv)
         rv=(pln*rv)*sqrt(mp)
@@ -23,25 +37,65 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_fft(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_ifft_centered(pln::AbstractFFTs.ScaledPlan,v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_ifft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=fftshift(rv,dims)
+        rv=(pf*rv)*sqrt(mp)
+        rv=reshape(rv,(prod(ms),nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_fft(pln::FFTW.cFFTWPlan,v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=(pln*rv)/sqrt(mp)
         rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_fft(pln::FFTW.cFFTWPlan,v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_fft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=(pf*rv)/sqrt(mp)
+        rv=reshape(rv,(mp,nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_ifft(pln::AbstractFFTs.ScaledPlan,v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=(pln*rv)*sqrt(mp)
         rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_ifft(pln::AbstractFFTs.ScaledPlan,v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_ifft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=(pf*rv)*sqrt(mp)
+        rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     ### not planned
-    function apply_fft_centered(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_fft_centered(v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=fft(rv)/sqrt(mp)
         rv=fftshift(rv)
@@ -49,8 +103,22 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft_centered(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_fft_centered(v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_fft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=(pf*rv)/sqrt(mp)
+        rv=fftshift(rv,dims)
+        rv=reshape(rv,(mp,nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_ifft_centered(v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=ifftshift(rv)
         rv=ifft(rv)*sqrt(mp)
@@ -58,19 +126,59 @@ module joDFT_etc
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_fft(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_ifft_centered(v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_ifft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=fftshift(rv,dims)
+        rv=(pf*rv)*sqrt(mp)
+        rv=reshape(rv,(prod(ms),nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_fft(v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=fft(rv)/sqrt(mp)
         rv=vec(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
-    function apply_ifft(v::Vector{vdt},ms::Tuple,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        mp::Integer=prod(ms)
+    function apply_fft(v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_fft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=(pf*rv)/sqrt(mp)
+        rv=reshape(rv,(mp,nvc))
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_ifft(v::Vector{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        mp=prod(ms)
         rv=reshape(v,ms)
         rv=ifft(rv)*sqrt(mp)
         rv=vec(rv)
+        rv=jo_convert(rdt,rv,false)
+        return rv
+    end
+    function apply_ifft(v::Matrix{vdt},ms::Dims,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+        lms=length(ms)
+        nvc=size(v,2)
+        msc=(ms...,nvc)
+        dims=[1:lms...]
+        pf=plan_ifft(zeros(msc),dims)
+        mp=prod(ms)
+        rv=reshape(v,msc)
+        rv=(pf*rv)*sqrt(mp)
+        rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
         return rv
     end
@@ -110,7 +218,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v2->joDFT_etc.apply_ifft_centered(ipf,v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft_centered(ipf,v3,ms,DDT),
                 v4->joDFT_etc.apply_fft_centered(pf,v4,ms,RDT),
-                DDT,RDT;
+                DDT,RDT;fMVok=true,iMVok=true,
                 name="joDFTpc"
                 )
         else
@@ -119,7 +227,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v2->joDFT_etc.apply_ifft(ipf,v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft(ipf,v3,ms,DDT),
                 v4->joDFT_etc.apply_fft(pf,v4,ms,RDT),
-                DDT,RDT;
+                DDT,RDT;fMVok=true,iMVok=true,
                 name="joDFTp"
                 )
         end
@@ -130,7 +238,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v2->joDFT_etc.apply_ifft_centered(v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft_centered(v3,ms,DDT),
                 v4->joDFT_etc.apply_fft_centered(v4,ms,RDT),
-                DDT,RDT;
+                DDT,RDT;fMVok=true,iMVok=true,
                 name="joDFTc"
                 )
         else
@@ -139,7 +247,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v2->joDFT_etc.apply_ifft(v2,ms,DDT),
                 v3->joDFT_etc.apply_ifft(v3,ms,DDT),
                 v4->joDFT_etc.apply_fft(v4,ms,RDT),
-                DDT,RDT;
+                DDT,RDT;fMVok=true,iMVok=true,
                 name="joDFT"
                 )
         end

@@ -12,8 +12,8 @@ for t=1:T # start test loop
 
     A1=joDCT(m)
     A2=joDCT(m,m)
-    verbose && println("$tsname ($m,$m) - planned")
-    @testset "$m x $m" begin
+    verbose && println("$tsname ($m[,$m]) - planned")
+    @testset "$m [x $m]" begin
         @test isadjoint(joDCT(m))[1]
         @test islinear(joDCT(m))[1]
         @test isadjoint(joDCT(m,m))[1]
@@ -40,8 +40,8 @@ for t=1:T # start test loop
 
     A1=joDCT(m;planned=false)
     A2=joDCT(m,m;planned=false)
-    verbose && println("$tsname ($m,$m) - not planned")
-    @testset "$m x $m" begin
+    verbose && println("$tsname ($m[,$m]) - not planned")
+    @testset "$m [x $m]" begin
         @test isadjoint(joDCT(m;planned=false))[1]
         @test islinear(joDCT(m;planned=false))[1]
         @test isadjoint(joDCT(m,m;planned=false))[1]
