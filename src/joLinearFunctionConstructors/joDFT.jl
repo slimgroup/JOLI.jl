@@ -19,9 +19,9 @@ module joDFT_etc
         nvc=size(v,2)
         msc=(ms...,nvc)
         dims=[1:lms...]
-        pf=plan_fft(zeros(msc),dims)
         mp=prod(ms)
         rv=reshape(v,msc)
+        pf=plan_fft(rv,dims)
         rv=(pf*rv)/sqrt(mp)
         if centered rv=fftshift(rv,dims) end
         rv=reshape(rv,(mp,nvc))
@@ -42,9 +42,9 @@ module joDFT_etc
         nvc=size(v,2)
         msc=(ms...,nvc)
         dims=[1:lms...]
-        pf=plan_ifft(zeros(msc),dims)
         mp=prod(ms)
         rv=reshape(v,msc)
+        pf=plan_ifft(rv,dims)
         if centered rv=fftshift(rv,dims) end
         rv=(pf*rv)*sqrt(mp)
         rv=reshape(rv,(prod(ms),nvc))
@@ -66,9 +66,9 @@ module joDFT_etc
         nvc=size(v,2)
         msc=(ms...,nvc)
         dims=[1:lms...]
-        pf=plan_fft(zeros(msc),dims)
         mp=prod(ms)
         rv=reshape(v,msc)
+        pf=plan_fft(rv,dims)
         rv=(pf*rv)/sqrt(mp)
         if centered rv=fftshift(rv,dims) end
         rv=reshape(rv,(mp,nvc))
@@ -89,9 +89,9 @@ module joDFT_etc
         nvc=size(v,2)
         msc=(ms...,nvc)
         dims=[1:lms...]
-        pf=plan_ifft(zeros(msc),dims)
         mp=prod(ms)
         rv=reshape(v,msc)
+        pf=plan_ifft(rv,dims)
         if centered rv=fftshift(rv,dims) end
         rv=(pf*rv)*sqrt(mp)
         rv=reshape(rv,(prod(ms),nvc))

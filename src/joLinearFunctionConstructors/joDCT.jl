@@ -16,8 +16,8 @@ module joDCT_etc
         lms=length(ms)
         nvc=size(v,2)
         msc=(ms...,nvc)
-        pf=plan_dct(zeros(msc),[1:lms...])
         rv=reshape(v,msc)
+        pf=plan_dct(rv,[1:lms...])
         rv=pf*rv
         rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
@@ -34,8 +34,8 @@ module joDCT_etc
         lms=length(ms)
         nvc=size(v,2)
         msc=(ms...,nvc)
-        pf=plan_idct(zeros(msc),[1:lms...])
         rv=reshape(v,msc)
+        pf=plan_idct(rv,[1:lms...])
         rv=pf*rv
         rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
@@ -53,8 +53,8 @@ module joDCT_etc
         lms=length(ms)
         nvc=size(v,2)
         msc=(ms...,nvc)
-        pf=plan_dct(zeros(msc),[1:lms...])
         rv=reshape(v,msc)
+        pf=plan_dct(rv,[1:lms...])
         rv=pf*rv
         rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
@@ -71,8 +71,8 @@ module joDCT_etc
         lms=length(ms)
         nvc=size(v,2)
         msc=(ms...,nvc)
-        pf=plan_idct(zeros(msc),[1:lms...])
         rv=reshape(v,msc)
+        pf=plan_idct(rv,[1:lms...])
         rv=pf*rv
         rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
