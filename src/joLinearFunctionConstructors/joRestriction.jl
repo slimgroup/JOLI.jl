@@ -10,7 +10,7 @@ Restriction operator
 - n::Integer - number of columns
 - idx::LocalVector{Int} - vector of indecies
 
-# Exmaple
+# Examples
 - A=joRestriction(3,[1,3])
 - A=joRestriction(3,[1,3];DDT=Float32)
 - A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)

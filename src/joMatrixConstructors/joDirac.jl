@@ -1,6 +1,20 @@
 # identity operators: joDirac
 
 export joDirac
+"""
+Dirac operator
+
+    joDirac(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT)
+
+# Arguments
+- m::Integer - number of columns
+
+# Examples
+- A=joDirac(3)
+- A=joDirac(3;DDT=Float32)
+- A=joDirac(3;DDT=Float32,RDT=Float64)
+
+"""
 joDirac(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT) =
     joMatrix{DDT,RDT}("joDirac",m,m,
         v1->jo_convert(RDT,v1,false),
