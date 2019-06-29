@@ -55,7 +55,7 @@ export joLoosen
 # array unions
 const LocalVector{T}=Union{Vector{T},SubArray{T,1,dA},
                            AbstractSparseVector{T}} where {T,dA<:Array{T}}
-const LocalMatrix{T}=Union{Matrix{T},SubArray{T,2,dA},#Diagonal{T,dA},Transpose{T},Adjoint{T},
+const LocalMatrix{T}=Union{Matrix{T},SubArray{T,2,dA},Transpose{T,Matrix{T}},Adjoint{T,Matrix{T}},
                            AbstractSparseMatrix{T}} where {T,dA<:Array{T}}
 const LocalVecOrMat{T}=Union{LocalVector{T},LocalMatrix{T}} where T
 const LocalArray{T}=Union{Array{T},SubArray{T,dA},
