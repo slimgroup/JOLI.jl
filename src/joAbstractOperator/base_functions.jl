@@ -61,6 +61,9 @@ isequal(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,"iseq
 # isapprox(jo,jo)
 isapprox(A::joAbstractOperator,B::joAbstractOperator) = jo_method_error(A,B,"isapprox(jo,jo) not implemented or type mismatch")
 
+# getindex(jo,...)
+getindex(A::joAbstractOperator,args...) = jo_method_error(A,B,"getindex(jo,...) not implemented or type mismatch")
+
 ############################################################
 ## overloaded Base *(...jo...)
 

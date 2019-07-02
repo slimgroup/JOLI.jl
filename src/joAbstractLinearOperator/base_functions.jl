@@ -116,6 +116,12 @@ issymmetric(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} =
 ishermitian(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} =
     (A.m == A.n && (norm(elements(A)-elements(adjoint(A))) < joTol))
 
+# getindex(jo,...)
+getindex(A::joAbstractLinearOperator{DDT,RDT},::Colon,i::Integer) where {DDT,RDT} =
+    joHelpers_etc.elements_column_helper(A,i)
+getindex(A::joAbstractLinearOperator{DDT,RDT},::Colon,r::UnitRange{URT}) where {DDT,RDT,URT<:Integer}  =
+    joHelpers_etc.elements_column_helper(A,r)
+
 ############################################################
 ## overloaded Base *(...jo...)
 

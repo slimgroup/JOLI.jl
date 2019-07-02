@@ -84,6 +84,12 @@ isreal(A :: joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<:Rea
 
 # ishermitian(jo)
 
+# getindex(jo,...)
+getindex(A::joAbstractFosterLinearOperator{DDT,RDT},::Colon,i::Integer) where {DDT,RDT} =
+    joHelpers_etc.elements_column_helper(A,i)
+getindex(A::joAbstractFosterLinearOperator{DDT,RDT},::Colon,r::UnitRange{URT}) where {DDT,RDT,URT<:Integer}  =
+    joHelpers_etc.elements_column_helper(A,r)
+
 ############################################################
 ## overloaded Base *(...jo...)
 

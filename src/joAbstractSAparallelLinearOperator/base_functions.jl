@@ -128,6 +128,8 @@ isreal(A :: joAbstractSAparallelLinearOperator{DDT,RDT}) where {DDT,RDT} = (DDT<
 
 # ishermitian(jo)
 
+# getindex(jo,...)
+
 ############################################################
 ## overloaded Base *(...jo...)
 

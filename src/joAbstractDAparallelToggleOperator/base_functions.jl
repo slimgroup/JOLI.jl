@@ -65,6 +65,8 @@ adjoint(A::joAbstractDAparallelToggleOperator) = transpose(A)
 
 # ishermitian(jo)
 
+# getindex(jo,...)
+
 ############################################################
 ## overloaded Base *(...jo...)
 

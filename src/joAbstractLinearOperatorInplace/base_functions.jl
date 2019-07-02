@@ -97,6 +97,8 @@ adjoint(A::joLooseLinearFunctionInplace{DDT,RDT}) where {DDT,RDT} =
 
 # ishermitian(jo)
 
+# getindex(jo,...)
+
 ############################################################
 ## overloaded Base *(...jo...)
 
