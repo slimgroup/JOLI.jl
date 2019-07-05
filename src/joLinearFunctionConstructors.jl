@@ -30,3 +30,6 @@ include("joLinearFunctionConstructors/joExtend.jl")
 # Permutation operator: joPermutation
 include("joLinearFunctionConstructors/joPermutation.jl")
 
+# Outer product operator: joOuterProd
+include("joLinearFunctionConstructors/joOuterProd.jl")
+
