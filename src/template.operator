@@ -9,9 +9,9 @@ using .joOPER_etc
 
 export joOPER
 """
-    julia> % Function name and typeless arguments
-
 % Description including return type
+
+    julia> % Function name and typeless arguments
 
 # Signature
 

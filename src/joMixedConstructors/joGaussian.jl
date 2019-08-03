@@ -62,9 +62,9 @@ using .joGaussian_etc
 
 export joGaussian
 """
-    julia> A=joGaussian(M,N;kwargs...)
+Gausian matrix
 
-% Description including return type
+    julia> A=joGaussian(M,N;kwargs...)
 
 # Signature
 

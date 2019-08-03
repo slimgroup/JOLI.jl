@@ -14,6 +14,9 @@ include("joLinearFunctionConstructors/joNFFT.jl")
 # DWT operators: joDWT
 include("joLinearFunctionConstructors/joDWT.jl")
 
+# Romberg operator
+include("joLinearFunctionConstructors/joRomberg.jl")
+
 # CurveLab operators: joCurvelet2D joCurvelet2DnoFFT
 include("joLinearFunctionConstructors/joCurvelet2D.jl")
 include("joLinearFunctionConstructors/joCurvelet2DnoFFT.jl")
