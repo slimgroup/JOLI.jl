@@ -4,27 +4,27 @@
 module joNFFT_etc
     using JOLI: jo_convert
     function apply_nfft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        iv=jo_convert(ComplexF64,v)
+        iv=jo_convert(ComplexF64,v,false)
         rv=nfft(pln,iv)/sqrt(n)
         rv=fftshift(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_infft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        iv=jo_convert(ComplexF64,v)
+        iv=jo_convert(ComplexF64,v,false)
         iv=ifftshift(iv)
         rv=nfft_adjoint(pln,iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_nfft(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        iv=jo_convert(ComplexF64,v)
+        iv=jo_convert(ComplexF64,v,false)
         rv=nfft(pln,iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_infft(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        iv=jo_convert(ComplexF64,v)
+        iv=jo_convert(ComplexF64,v,false)
         rv=nfft_adjoint(pln,iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv

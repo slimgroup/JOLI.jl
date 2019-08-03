@@ -12,7 +12,7 @@ module joGaussian_etc
             rv = rv + randn(lrng,rdt,m) * v[i]
         end
         Random.seed!(rng,rns)
-        rv = jo_convert(rdt,rv)
+        rv = jo_convert(rdt,rv,false)
         return rv
     end
     function aI(v::LocalVector{vdt},m::Integer,n::Integer,rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
@@ -22,7 +22,7 @@ module joGaussian_etc
             rv[i] = (randn(lrng,rdt,1,m)*v)[1]
         end
         Random.seed!(rng,rns)
-        rv = jo_convert(rdt,rv)
+        rv = jo_convert(rdt,rv,false)
         return rv
     end
     function scale(m::Integer,n::Integer,rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType)
@@ -34,7 +34,7 @@ module joGaussian_etc
             rv[i] = (one(rdt)/sqrt(v'*v))
         end
         Random.seed!(rng,rns)
-        rv = jo_convert(rdt,rv)
+        rv = jo_convert(rdt,rv,false)
         return rv
     end
     function fIN(v::LocalVector{vdt},m::Integer,n::Integer,scale::LocalVector{<:Number},rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
@@ -44,7 +44,7 @@ module joGaussian_etc
             rv = rv + randn(lrng,rdt,m) * (scale[i]*v[i])
         end
         Random.seed!(rng,rns)
-        rv = jo_convert(rdt,rv)
+        rv = jo_convert(rdt,rv,false)
         return rv
     end
     function aIN(v::LocalVector{vdt},m::Integer,n::Integer,scale::LocalVector{<:Number},rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
@@ -54,7 +54,7 @@ module joGaussian_etc
             rv[i] = scale[i]*((randn(lrng,rdt,1,m)*v)[1])
         end
         Random.seed!(rng,rns)
-        rv = jo_convert(rdt,rv)
+        rv = jo_convert(rdt,rv,false)
         return rv
     end
 end
