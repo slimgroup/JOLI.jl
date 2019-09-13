@@ -19,6 +19,7 @@ SharedArrays = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [compat]
 julia = ">= 0.7"

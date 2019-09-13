@@ -1,8 +1,8 @@
 using Test
+using Libdl
 using LinearAlgebra
 using SparseArrays
 using InplaceOps
-using Libdl
 using FFTW
 using Wavelets
 using JOLI
