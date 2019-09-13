@@ -4,6 +4,8 @@ Julia framework for constructing matrix-free linear operators
 with explicite domain/range type control
 and applying them in basic algebraic matrix-vector operations.
 
+[![Build Status](https://travis-ci.org/slimgroup/JOLI.jl.svg?branch=master)](https://travis-ci.org/slimgroup/JOLI.jl)
+
 ## INSTALLATION
 
 ### Using SLIM Registry (preferred method) ###
