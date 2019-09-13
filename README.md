@@ -6,16 +6,26 @@ and applying them in basic algebraic matrix-vector operations.
 
 ## INSTALLATION
 
-From julia prompt run the following if you will not need developer's write access or if you do not have GitHub account:
+### Using SLIM Registry (preferred method) ###
+
+First switch to package manager prompt (using ']') and add SLIM registry:
 
 ```
-Pkg.add(PackageSpec(url="https://github.com/slimgroup/JOLI.jl.git",rev="master"))
+	registry add https://github.com/slimgroup/SLIMregistryJL.git
 ```
 
-or with GitHub account (and SSH keys registered) for full developer access:
+Then still from package manager prompt add JOLI:
 
 ```
-Pkg.develop(PackageSpec(url="git@github.com:slimgroup/JOLI.jl.git"))
+	add JOLI
+```
+
+### Adding without SLIM registry ###
+
+After switching to package manager prompt (using ']') type:
+
+```
+	add https://github.com/slimgroup/JOLI.jl.git
 ```
 
 ## Documentation (more to come)
