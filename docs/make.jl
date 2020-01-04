@@ -5,6 +5,6 @@ makedocs(
     modules = [JOLI]
 )
 
-#deploydocs(
-#    repo = "github.com/slimgroup/JOLI.jl.git"
-#)
+deploydocs(
+    repo = "github.com/slimgroup/JOLI.jl.git"
+)

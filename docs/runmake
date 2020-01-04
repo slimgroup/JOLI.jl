@@ -3,6 +3,6 @@ set -x
 
 rm -rvf build
 julia make.jl || exit 1
-test -e build/index.md || exit 1
-mv -fv build/index.md ../REFERENCE.md
-perl -pi -e 's/index\.md/REFERENCE.md/g' ../REFERENCE.md
+#test -e build/index.md || exit 1
+#mv -fv build/index.md ../REFERENCE.md
+#perl -pi -e 's/index\.md/REFERENCE.md/g' ../REFERENCE.md

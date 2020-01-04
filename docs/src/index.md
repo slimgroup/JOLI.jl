@@ -4,27 +4,41 @@
 Depth = 3
 ```
 
-## Functions
+## Module
+
 ```@autodocs
 Modules = [JOLI]
-Private = false
+Order = [:module]
+```
+
+## Types
+
+```@autodocs
+Modules = [JOLI]
+Order = [:type]
+```
+
+## Functions
+
+```@autodocs
+Modules = [JOLI]
 Order = [:function]
+```
+
+## Constants
+
+```@autodocs
+Modules = [JOLI]
+Order = [:constant]
 ```
 
 ## Macros
 
 ```@autodocs
 Modules = [JOLI]
-Private = false
 Order = [:macro]
 ```
 
-## Types
-```@autodocs
-Modules = [JOLI]
-Private = false
-Order = [:type]
-```
 ## Index
 
 ```@index
