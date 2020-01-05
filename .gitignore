@@ -4,3 +4,4 @@
 *.jl.mem
 *.swp
 docs/build
+docs/gh-pages

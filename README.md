@@ -32,7 +32,7 @@ After switching to package manager prompt (using ']') type:
 
 ## Documentation (more to come)
 
-For now it is just [REFERENCE guide](REFERENCE.md).
+For now it is just [REFERENCE guide](https://slimgroup.github.io/JOLI.jl).
 
 ## Examples (more to come)
 

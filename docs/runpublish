@@ -1,0 +1,12 @@
+#!/bin/bash
+set -x
+
+rm -rf gh-pages
+test -e build/index.html || exit 1
+git clone --quiet --branch gh-pages --single-branch git@github.com:slimgroup/JOLI.jl.git gh-pages || exit 1
+cd gh-pages || exit 1
+git checkout gh-pages || exit 1
+rsync -avH ../build/ ./ || exit 1
+git add --all || exit 1
+git commit -m "Docs on $(date)" || exit 1
+git push
