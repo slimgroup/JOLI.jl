@@ -108,10 +108,10 @@ end
 struct joDALinearOperatorException <: Exception
     msg :: String
 end
-struct joDAdistrributedLinearOperatorException <: Exception
+struct joDAdistributedLinearOperatorException <: Exception
     msg :: String
 end
-struct joDAditributingLinearOperatorException <: Exception
+struct joDAdistributingLinearOperatorException <: Exception
     msg :: String
 end
 struct joDAgatheringLinearOperatorException <: Exception

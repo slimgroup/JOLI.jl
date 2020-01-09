@@ -111,7 +111,7 @@ end
 struct joSAdistributedLinearOperatorException <: Exception
     msg :: String
 end
-struct joSAditributingLinearOperatorException <: Exception
+struct joSAdistributingLinearOperatorException <: Exception
     msg :: String
 end
 struct joSAgatheringLinearOperatorException <: Exception

@@ -255,7 +255,7 @@ function *(A::joSAdistributedLinearOperator{ADDT,ARDT,2},mv::SharedArray{mvDT,2}
 end
 function *(A::joSAdistributingLinearOperator{ADDT,ARDT,2},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
     A.n == size(mv,1) || throw(joSAdistributingLinearOperatorException("shape mismatch in A$(size(A))*v$(size(mv))"))
-    A.nvc == size(mv,2) || throw(joSAdistrbutingLinearOperatorException("nvc size mismatch"))
+    A.nvc == size(mv,2) || throw(joSAdistributingLinearOperatorException("nvc size mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     MV = A.fop(mv)
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
