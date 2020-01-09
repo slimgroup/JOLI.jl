@@ -31,7 +31,7 @@ defines operator to distribute serial vector into DistributedArrays' vector
         parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
     joDAdistribute(dst::joPAsetup;gclean::Bool=false)
-    joDAdistribute(A::joDAdistributedLinearOperator;gclean::Bool=false)
+    joDAdistribute(A::joDMVdistributedLinearOperator;gclean::Bool=false)
 
 # Arguments
 
@@ -41,7 +41,7 @@ defines operator to distribute serial vector into DistributedArrays' vector
 - `wpool`: custom WorkerPool
 - `DT`: DataType for joPAsetup
 - `dst`: joPAsetup
-- `DA`: joDAdistributedLinearOperator
+- `DA`: joDMVdistributedLinearOperator
 - `glcean`: clean DArray after gathering
 
 # Notes
@@ -106,7 +106,7 @@ function joDAdistribute(dst::joPAsetup;gclean::Bool=false)
         @joNF, @joNF, @joNF, @joNF,
         dst,gclean)
 end
-joDAdistribute(A::joDAdistributedLinearOperator;gclean::Bool=false) = joDAdistribute(A.PAs_in,gclean=gclean)
+joDAdistribute(A::joDMVdistributedLinearOperator;gclean::Bool=false) = joDAdistribute(A.PAs_in,gclean=gclean)
 
 export joDAgather
 """
@@ -134,7 +134,7 @@ defines operator to gather DistributedArrays' vector into serial vector
         parts::Vector{INT}=joPAsetup_etc.balanced_partition(nworkers(wpool),nvc);
         DT::DataType=joFloat,gclean::Bool=false) where INT<:Integer
     joDAgather(dst::joPAsetup;gclean::Bool=false)
-    joDAgather(A::joDAdistributedLinearOperator;gclean::Bool=false)
+    joDAgather(A::joDMVdistributedLinearOperator;gclean::Bool=false)
 
 # Arguments
 
@@ -144,7 +144,7 @@ defines operator to gather DistributedArrays' vector into serial vector
 - `wpool`: custom WorkerPool
 - `DT`: DataType for joPAsetup
 - `dst`: joPAsetup
-- `DA`: joDAdistributedLinearOperator
+- `DA`: joDMVdistributedLinearOperator
 - `glcean`: clean DArray after gathering
 
 # Notes
@@ -209,5 +209,5 @@ function joDAgather(dst::joPAsetup;gclean::Bool=false)
         @joNF, @joNF, @joNF, @joNF,
         dst,gclean)
 end
-joDAgather(A::joDAdistributedLinearOperator;gclean::Bool=false) = joDAgather(A.PAs_out,gclean=gclean)
+joDAgather(A::joDMVdistributedLinearOperator;gclean::Bool=false) = joDAgather(A.PAs_out,gclean=gclean)
 

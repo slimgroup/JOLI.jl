@@ -1,23 +1,23 @@
 ############################################################
-# joAbstractSAparallelLinearOperator subtypes ##############
+# joAbstractSMVparallelLinearOperator subtypes ##############
 ############################################################
 
 ############################################################
-# joSALinearOperator #######################################
+# joSMVLinearOperator #######################################
 
-export joSALinearOperator, joSALinearOperatorException
-export joSAdistributedLinearOperator, joSAdistributedLinearOperatorException
-export joSAdistributingLinearOperator, joSAdistributingLinearOperatorException
-export joSAgatheringLinearOperator, joSAgatheringLinearOperatorException
+export joSMVLinearOperator, joSMVLinearOperatorException
+export joSMVdistributedLinearOperator, joSMVdistributedLinearOperatorException
+export joSMVdistributingLinearOperator, joSMVdistributingLinearOperatorException
+export joSMVgatheringLinearOperator, joSMVgatheringLinearOperatorException
 
 # type definition
 """
-    joSALinearOperator is glueing type & constructor
+    joSMVLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joSALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelLinearOperator{DDT,RDT,N}
+struct joSMVLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -36,12 +36,12 @@ struct joSALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelLine
     rclean::Bool         # clean input vector post reverse
 end
 """
-    joSAdistributedLinearOperator is glueing type & constructor
+    joSMVdistributedLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joSAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelLinearOperator{DDT,RDT,N}
+struct joSMVdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -60,12 +60,12 @@ struct joSAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAp
     rclean::Bool        # clean input vector post reverse
 end
 """
-    joSAdistributingLinearOperator is glueing type & constructor
+    joSMVdistributingLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joSAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelLinearOperator{DDT,RDT,N}
+struct joSMVdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -82,12 +82,12 @@ struct joSAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSA
     gclean::Bool        # clean input vector post gathering
 end
 """
-    joSAgatheringLinearOperator is glueing type & constructor
+    joSMVgatheringLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joSAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelLinearOperator{DDT,RDT,N}
+struct joSMVgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -105,20 +105,20 @@ struct joSAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractSApar
 end
 
 # type exception
-struct joSALinearOperatorException <: Exception
+struct joSMVLinearOperatorException <: Exception
     msg :: String
 end
-struct joSAdistributedLinearOperatorException <: Exception
+struct joSMVdistributedLinearOperatorException <: Exception
     msg :: String
 end
-struct joSAditributingLinearOperatorException <: Exception
+struct joSMVdistributingLinearOperatorException <: Exception
     msg :: String
 end
-struct joSAgatheringLinearOperatorException <: Exception
+struct joSMVgatheringLinearOperatorException <: Exception
     msg :: String
 end
 
 # unions
-const joSALinOpsUnion{D,R,N}=Union{joSALinearOperator{D,R,N},joSAdistributedLinearOperator{D,R,N}} where {D,R,N}
-const joSAdistributeLinOpsUnion{D,R,N}=Union{joSAdistribute{D,R,N},joSAdistributingLinearOperator{D,R,N}} where {D,R,N}
-const joSAgatherLinOpsUnion{D,R,N}=Union{joSAgather{D,R,N},joSAgatheringLinearOperator{D,R,N}} where {D,R,N}
+const joSMVLinOpsUnion{D,R,N}=Union{joSMVLinearOperator{D,R,N},joSMVdistributedLinearOperator{D,R,N}} where {D,R,N}
+const joSMVdistributeLinOpsUnion{D,R,N}=Union{joSAdistribute{D,R,N},joSMVdistributingLinearOperator{D,R,N}} where {D,R,N}
+const joSMVgatherLinOpsUnion{D,R,N}=Union{joSAgather{D,R,N},joSMVgatheringLinearOperator{D,R,N}} where {D,R,N}

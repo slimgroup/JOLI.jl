@@ -90,7 +90,7 @@ function *(A::joSAgather{ADDT,ARDT,2},mv::SharedArray{mvDT,2}) where {ADDT,ARDT,
     jo_check_type_match(ARDT,eltype(MV),join(["RDT from *(jo,mvec):",A.name,typeof(A),eltype(MV)]," / "))
     return MV
 end
-# in joAbstractSAparallelLinearOperator/base_functions.jl
+# in joAbstractSMVparallelLinearOperator/base_functions.jl
 #function *(A::joSAdistribute{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
 #function *(A::joAbstractLinearOperator{CDT,ARDT},B::joSAgather{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
 

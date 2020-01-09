@@ -136,12 +136,12 @@ function *(A::joAbstractLinearOperator{CDT,ARDT},B::joAbstractLinearOperator{BDD
         @joNF, @joNF, @joNF, @joNF
         )
 end
-# in joAbstractSAparallelLinearOperator/base_functions.jl
-#function *(A::joSAdistributingLinearOperator{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
-#function *(A::joAbstractLinearOperator{CDT,ARDT},B::joSAgatheringLinearOperator{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
-# in joAbstractDAparallelLinearOperator/base_functions.jl
-#function *(A::joDAdistributingLinearOperator{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
-#function *(A::joAbstractLinearOperator{CDT,ARDT},B::joDAgatheringLinearOperator{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
+# in joAbstractSMVparallelLinearOperator/base_functions.jl
+#function *(A::joSMVdistributingLinearOperator{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
+#function *(A::joAbstractLinearOperator{CDT,ARDT},B::joSMVgatheringLinearOperator{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
+# in joAbstractDMVparallelLinearOperator/base_functions.jl
+#function *(A::joDMVdistributingLinearOperator{CDT,ARDT,2},B::joAbstractLinearOperator{BDDT,CDT}) where {ARDT,BDDT,CDT}
+#function *(A::joAbstractLinearOperator{CDT,ARDT},B::joDMVgatheringLinearOperator{BDDT,CDT,2}) where {ARDT,BDDT,CDT}
 
 # *(jo,mvec)
 function *(A::joLinearOperator{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}

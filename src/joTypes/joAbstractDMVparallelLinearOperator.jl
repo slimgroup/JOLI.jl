@@ -1,23 +1,23 @@
 ############################################################
-# joAbstractDAparallelLinearOperator subtypes ##############
+# joAbstractDMVparallelLinearOperator subtypes ##############
 ############################################################
 
 ############################################################
-# joDALinearOperator #######################################
+# joDMVLinearOperator #######################################
 
-export joDALinearOperator, joDALinearOperatorException
-export joDAdistributedLinearOperator, joDAdistributedLinearOperatorException
-export joDAdistributingLinearOperator, joDAdistributingLinearOperatorException
-export joDAgatheringLinearOperator, joDAgatheringLinearOperatorException
+export joDMVLinearOperator, joDMVLinearOperatorException
+export joDMVdistributedLinearOperator, joDMVdistributedLinearOperatorException
+export joDMVdistributingLinearOperator, joDMVdistributingLinearOperatorException
+export joDMVgatheringLinearOperator, joDMVgatheringLinearOperatorException
 
 # type definition
 """
-    joDALinearOperator is glueing type & constructor
+    joDMVLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
+struct joDMVLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -36,12 +36,12 @@ struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLine
     rclean::Bool         # clean input vector post reverse
 end
 """
-    joDAdistributedLinearOperator is glueing type & constructor
+    joDMVdistributedLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joDAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
+struct joDMVdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -60,12 +60,12 @@ struct joDAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAp
     rclean::Bool        # clean input vector post reverse
 end
 """
-    joDAdistributingLinearOperator is glueing type & constructor
+    joDMVdistributingLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
+struct joDMVdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -82,12 +82,12 @@ struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDA
     gclean::Bool        # clean input vector post gathering
 end
 """
-    joDAgatheringLinearOperator is glueing type & constructor
+    joDMVgatheringLinearOperator is glueing type & constructor
 
     !!! Do not use it to create the operators
 
 """
-struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
+struct joDMVgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDMVparallelLinearOperator{DDT,RDT,N}
     name::String
     m::Integer
     n::Integer
@@ -105,20 +105,20 @@ struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDApar
 end
 
 # type exception
-struct joDALinearOperatorException <: Exception
+struct joDMVLinearOperatorException <: Exception
     msg :: String
 end
 struct joDAdistrributedLinearOperatorException <: Exception
     msg :: String
 end
-struct joDAditributingLinearOperatorException <: Exception
+struct joDMVdistributingLinearOperatorException <: Exception
     msg :: String
 end
-struct joDAgatheringLinearOperatorException <: Exception
+struct joDMVgatheringLinearOperatorException <: Exception
     msg :: String
 end
 
 # unions
-const joDALinOpsUnion{D,R,N}=Union{joDALinearOperator{D,R,N},joDAdistributedLinearOperator{D,R,N}} where {D,R,N}
-const joDAdistributeLinOpsUnion{D,R,N}=Union{joDAdistribute{D,R,N},joDAdistributingLinearOperator{D,R,N}} where {D,R,N}
-const joDAgatherLinOpsUnion{D,R,N}=Union{joDAgather{D,R,N},joDAgatheringLinearOperator{D,R,N}} where {D,R,N}
+const joDMVLinOpsUnion{D,R,N}=Union{joDMVLinearOperator{D,R,N},joDMVdistributedLinearOperator{D,R,N}} where {D,R,N}
+const joDMVdistributeLinOpsUnion{D,R,N}=Union{joDAdistribute{D,R,N},joDMVdistributingLinearOperator{D,R,N}} where {D,R,N}
+const joDMVgatherLinOpsUnion{D,R,N}=Union{joDAgather{D,R,N},joDMVgatheringLinearOperator{D,R,N}} where {D,R,N}
