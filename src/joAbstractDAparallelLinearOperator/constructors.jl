@@ -9,7 +9,7 @@ export joDAdistributedLinOp
 """
     julia> joDAdistributedLinOp(A,nvc; [parts] [,fclean] [,rclean])
 
-Create a linear operator working on 2D DAaray in multi-vector (over 2nd dimension) mode.
+Create a linear operator working on 2D DArray in multi-vector (over 2nd dimension) mode.
 
 # Signature
 
@@ -30,7 +30,7 @@ Create a linear operator working on 2D DAaray in multi-vector (over 2nd dimensio
 
 # Examples
 
-- `joDAdistributedLinOp(A,30)`: operator taht will apply A to distributed multivector with 30 columns
+- `joDAdistributedLinOp(A,30)`: operator that will apply A to distributed multivector with 30 columns
 
 # Notes
 

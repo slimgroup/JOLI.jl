@@ -30,7 +30,7 @@ Create a linear operator working on 2D SharedArray in multi-vector (over 2nd dim
 
 # Examples
 
-- `joSAdistributedLinOp(A,30)`: operator taht will apply A to distributed multivector with 30 columns
+- `joSAdistributedLinOp(A,30)`: operator that will apply A to distributed multivector with 30 columns
 
 # Notes
 
