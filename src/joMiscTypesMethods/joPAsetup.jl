@@ -101,6 +101,47 @@ function joPAsetup(DA::DArray)
 end
 
 """
+    julia> joPAsetup(wpool,n;[DT,][name])
+    julia> joPAsetup(n;[DT,][name])
+
+Creates joPAsetup type - basic 1D distribution
+
+# Signatures
+
+    joPAsetup(wpool::WorkerPool,n::Integer;
+        DT::DataType=joFloat,
+        name::String="joPAsetup";
+    joPAsetup(n::Integer;kwargs...)
+
+# Arguments
+
+- `wpool`: WorkerPool instance - defaults to WorkerPool(workers())
+- `n`: length of the vector
+- `DT`: DataType of vector's elements
+- `name`: name of distributor
+
+# Examples
+
+- `joPAsetup(128)`: basic distributor for joFloat vector
+- `joPAsetup(40;DT=Int8)`: basic distributor for Int8 vector
+
+"""
+function joPAsetup(wpool::WorkerPool,n::Integer;
+        DT::DataType=joFloat,
+        name::String="joPAsetup",
+        ) where INT<:Integer
+    n>0 || throw(joPAsetupException("joPAsetup: invalid lenght of the vector: $n"))
+    dims=(n,)
+    chunks=joPAsetup_etc.default_chunks(dims,sort(workers(wpool)))
+    length(dims)==length(chunks) || throw(joPAsetupException("joPAsetup: mismatch between # of dimensions $(length(dims)) and chunks $(length(chunks))"))
+    procs = sort(workers(wpool))
+    length(procs)==prod(chunks) || throw(joPAsetupException("joPAsetup: mismatch between # of partitions $(prod(chunks)) and workers $(length(procs))"))
+    idxs,cuts = joPAsetup_etc.idxs_cuts(dims,chunks)
+    return joPAsetup(name,dims,procs,chunks,idxs,cuts,DT)
+end
+joPAsetup(n::Integer;kwargs...) = joPAsetup(WorkerPool(workers()),n;kwargs...)
+
+"""
     julia> joPAsetup(wpool,dims;[DT,][chunks,][name])
     julia> joPAsetup(dims;[DT,][chunks,][name])
 
