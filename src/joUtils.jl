@@ -65,7 +65,14 @@ end
 
 ############################################################
 ## type tree ###############################################
-function type_tree(top::Type=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
+export jo_type_tree
+"""
+Show type tree of JOLI operators, or any type with editional Type argument.
+
+    jo_type_tree()
+    jo_type_tree(Number)
+"""
+function jo_type_tree(top::Type=joAbstractOperator;bl::String="* ",in::String="  ",super::Bool=true)
     super ? println(bl,top," <: ",supertype(top)) : println(bl,top)
     ts = subtypes(top)
     if length(ts) > 0
