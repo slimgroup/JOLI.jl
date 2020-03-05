@@ -83,6 +83,15 @@ module joPAsetup_etc
 end
 using .joPAsetup_etc
 
+export jo_balanced_partition
+"""
+    julia> jo_balanced_partition(nlabs::Integer,dsize::Integer)
+
+Get balanced partitioning of the dimension (dsize) on n workers (nlabs)
+
+"""
+jo_balanced_partition=joPAsetup_etc.balanced_partition
+
 """
     julia> joPAsetup(in::DArray)
 
