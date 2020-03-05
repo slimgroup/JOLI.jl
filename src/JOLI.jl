@@ -26,7 +26,7 @@ switch precision of computations using global type definitions.
 
 Contrary to other BLAS-like Julia packages, JOLI operators act on
 matrices as if those were column-wise collections of vectors. I.e.
-JOLI operator does treat explicit matrix on left side of '*' as
+JOLI operator does not treat explicit matrix on left side of '*' as
 another operator, and will act on it immediately. Such behaviour
 is convenient for implementation of Kronecker product.
 
