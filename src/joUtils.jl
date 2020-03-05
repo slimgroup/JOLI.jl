@@ -78,7 +78,7 @@ function jo_type_tree(top::Type=joAbstractOperator;bl::String="* ",in::String=" 
     if length(ts) > 0
         for t in ts
             T=Base.unwrap_unionall(t)
-            type_tree(T;bl=in*bl,in=in,super=false)
+            jo_type_tree(T;bl=in*bl,in=in,super=false)
         end
     end
 end
