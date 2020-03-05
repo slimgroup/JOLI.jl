@@ -9,10 +9,9 @@ export joLinearOperator, joLinearOperatorException
 
 # type definition
 """
-    joLinearOperator is glueing type & constructor
+joLinearOperator is glueing type & constructor
 
-    !!! Do not use it to create the operators
-    !!! Use joMatrix and joLinearFunction constructors
+!!! Do not use it to create the operators
 
 """
 struct joLinearOperator{DDT<:Number,RDT<:Number} <: joAbstractLinearOperator{DDT,RDT}

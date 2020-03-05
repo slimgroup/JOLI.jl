@@ -10,6 +10,8 @@
 # Arguments
 
 - % argument list -> `arg`: meaning
+- optional
+    - argument list -> `arg`: meaning
 
 # Notes
 
@@ -17,6 +19,6 @@
 
 # Examples
 
-- % call syntax examples -> `call(...)`: description
+- % call syntax examples -> `call(...)` % description
 
 """

@@ -2,6 +2,35 @@
 # JOLI module ##############################################
 ############################################################
 
+"""
+Julia Operator LIbrary (JOLI) is a package for creating
+algebraic operators (currently linear only) and use them
+in a way that tries to mimic the mathematical formulas of
+basics algebra.
+
+JOLI has a collection of methods that allow creating and
+use of element-free operators, AbstraxtMatrix-based operators,
+and composing all of those into complex formulas that are not
+explicitly executed until they act on the vector. '+', '*', '-'
+and etc... operation are supported in any combination of operators
+and vectors.
+
+JOLI operators support operations like adjoint, transpose,
+and conjugate for element-free operators provided that enough
+functionality is provided when constructing JOLI operator.
+
+JOLI operators support and enforce consistency of domain and range
+data types for operators with both vectors acted upon and created
+by operators. JOLI also has the functionality that allows easily to
+switch precision of computations using global type definitions.
+
+Contrary to other BLAS-like Julia packages, JOLI operators act on
+matrices as if those were column-wise collections of vectors. I.e.
+JOLI operator does treat explicit matrix on left side of '*' as
+another operator, and will act on it immediately. Such behaviour
+is convenient for implementation of Kronecker product.
+
+"""
 module JOLI
 
 # what's being used

@@ -12,9 +12,9 @@ export joDAgatheringLinearOperator, joDAgatheringLinearOperatorException
 
 # type definition
 """
-    joDALinearOperator is glueing type & constructor
+joDALinearOperator is glueing type & constructor
 
-    !!! Do not use it to create the operators
+!!! Do not use it to create the operators
 
 """
 struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
@@ -36,9 +36,9 @@ struct joDALinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLine
     rclean::Bool         # clean input vector post reverse
 end
 """
-    joDAdistributedLinearOperator is glueing type & constructor
+joDAdistributedLinearOperator is glueing type & constructor
 
-    !!! Do not use it to create the operators
+!!! Do not use it to create the operators
 
 """
 struct joDAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
@@ -60,9 +60,9 @@ struct joDAdistributedLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAp
     rclean::Bool        # clean input vector post reverse
 end
 """
-    joDAdistributingLinearOperator is glueing type & constructor
+joDAdistributingLinearOperator is glueing type & constructor
 
-    !!! Do not use it to create the operators
+!!! Do not use it to create the operators
 
 """
 struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
@@ -82,9 +82,9 @@ struct joDAdistributingLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDA
     gclean::Bool        # clean input vector post gathering
 end
 """
-    joDAgatheringLinearOperator is glueing type & constructor
+joDAgatheringLinearOperator is glueing type & constructor
 
-    !!! Do not use it to create the operators
+!!! Do not use it to create the operators
 
 """
 struct joDAgatheringLinearOperator{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelLinearOperator{DDT,RDT,N}
