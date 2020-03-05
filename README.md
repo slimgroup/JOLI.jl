@@ -13,8 +13,9 @@ JOLI has a collection of methods that allow creating and
 use of element-free operators, AbstractMatrix-based operators,
 and composing all of those into complex formulas that are not
 explicitly executed until they act on the vector. '+', '*', '-'
-and etc... operation are supported in any combination of operators
-and vectors.
+and etc... operations are supported in any mathematicaly valid
+combination of operators and vectors. Composite operators can be
+defined before they are used to act on vectors.
 
 JOLI operators support operations like adjoint, transpose,
 and conjugate for element-free operators provided that enough
