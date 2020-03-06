@@ -11,7 +11,7 @@ deltype(A::joAbstractSAparallelLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractSAparallelLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractSAparallelLinearOperator) = println((typeof(A),A.name,(A.m,A.n),A.nvc))
+show(A::joAbstractSAparallelLinearOperator) = println((typeof(A),((A.m,A.n),A.nvc),A.name))
 
 # display(jo)
 display(A::joAbstractSAparallelLinearOperator) = show(A)

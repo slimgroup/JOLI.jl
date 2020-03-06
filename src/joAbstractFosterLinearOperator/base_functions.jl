@@ -11,7 +11,7 @@ deltype(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractFosterLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractFosterLinearOperator) = println((typeof(A),A.name,(A.m,A.n)))
+show(A::joAbstractFosterLinearOperator) = println((typeof(A),(A.m,A.n),A.name))
 
 # display(jo)
 display(A::joAbstractFosterLinearOperator) = show(A)

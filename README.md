@@ -9,12 +9,16 @@ algebraic operators (currently linear only) and use them
 in a way that tries to mimic the mathematical formulas of
 basics algebra.
 
+The package was created in SLIM group at the University of
+British Columbia for their work in seismic imaging and modelling.
+
 JOLI has a collection of methods that allow creating and
-use of element-free operators, AbstractMatrix-based operators,
-and composing all of those into complex formulas that are not
-explicitly executed until they act on the vector. '+', '*', '-'
-and etc... operations are supported in any mathematicaly valid
-combination of operators and vectors. Composite operators can be
+use of element-free operators, operators created from explicit
+Matrices, and composing all of those into complex formulas that
+are not explicitly executed until they act on the Vector or Matrix.
+'*', '+', '-', and etc... operations are supported in any mathematically
+valid combination of operators and vectors as long as vector is on the
+right side of the operator. Composite operators can be
 defined before they are used to act on vectors.
 
 JOLI operators support operations like adjoint, transpose,
@@ -26,7 +30,7 @@ data types for operators with both vectors acted upon and created
 by operators. JOLI also has the functionality that allows easily to
 switch precision of computations using global type definitions.
 
-Contrary to other BLAS-like Julia packages, JOLI operators act on
+Contrary to other linear-operators Julia packages, JOLI operators act on
 matrices as if those were column-wise collections of vectors. I.e.
 JOLI operator does not treat explicit matrix on left side of '*' as
 another operator, and will act on it immediately. Such behaviour

@@ -285,7 +285,7 @@ joPAsetup(parts::Tuple{Vararg{Tuple{Vararg{INT}}}};kwargs...) where INT<:Integer
 ## joPAsetup - overloaded Base functions
 
 # show(jo)
-show(A::joPAsetup) = println((typeof(A),A.name,A.DT,A.dims))
+show(A::joPAsetup) = println((typeof(A),A.DT,A.dims,A.name))
 
 # display(jo)
 function display(d::joPAsetup)
