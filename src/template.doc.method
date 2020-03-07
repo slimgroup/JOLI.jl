@@ -1,17 +1,17 @@
 """
-    julia> % Function name and typeless arguments
+    julia> op = % method name and typeless arguments
 
 % Description including return type
 
 # Signature
 
-    % Full function signature
+    % full function signature
 
 # Arguments
 
 - % argument list -> `arg`: meaning
 - optional
-    - argument list -> `arg`: meaning
+    - % argument list -> `arg`: meaning
 
 # Notes
 
@@ -19,6 +19,6 @@
 
 # Examples
 
-- % call syntax examples -> `call(...)` % description
+- % call syntax examples -> `call(...)` # description
 
 """

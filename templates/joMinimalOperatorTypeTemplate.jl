@@ -1,4 +1,6 @@
 ############################################################
+# For advanced JOLI users who want to create their own types
+############################################################
 # joMyOperator #########################################
 ############################################################
 # based in joLinearFunction
@@ -6,7 +8,7 @@
 #   to fully work with other joAbstractLinearOperator types
 #
 #   un-implemented methods are defined in
-#       joLinearOperator/base_functions.jl
+#       joAbstractLinearOperator/base_functions.jl
 ############################################################
 
 export joMyOperator, joMyOperatorException
