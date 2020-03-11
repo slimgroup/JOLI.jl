@@ -1,5 +1,8 @@
 # JOLI - Julia Operators LIbrary
 
+[![Build Status](https://travis-ci.org/slimgroup/JOLI.jl.svg?branch=master)](https://travis-ci.org/slimgroup/JOLI.jl)
+[[REFERENCE guide](https://slimgroup.github.io/JOLI.jl)]
+
 **Julia framework for constructing matrix-free linear operators
 with explicit domain/range type control
 and applying them in basic algebraic matrix-vector operations.**
@@ -35,8 +38,6 @@ matrices as if those were column-wise collections of vectors. I.e.
 JOLI operator does not treat explicit matrix on left side of '*' as
 another operator, and will act on it immediately. Such behaviour
 is convenient for implementation of Kronecker product.
-
-[![Build Status](https://travis-ci.org/slimgroup/JOLI.jl.svg?branch=master)](https://travis-ci.org/slimgroup/JOLI.jl)
 
 ## INSTALLATION
 
