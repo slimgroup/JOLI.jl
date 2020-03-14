@@ -72,4 +72,4 @@ For now it is just [REFERENCE guide](https://slimgroup.github.io/JOLI.jl).
 Check [examples](examples) for the examples of how to build your own operators or types,
 or look up DCT implementation in [src/joLinearFunctionConstructors/joDCT.jl](src/joLinearFunctionConstructors/joDCT.jl).
 
-Try [templates/joLinearFunctionFwd](templates/joLinearFunctionFwd) as a starting point for building your own operators.
+Try [templates/joLinearFunctionFwd.jl](templates/joLinearFunctionFwd.jl) as a starting point for building your own operators.
