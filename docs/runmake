@@ -4,4 +4,4 @@ set -x
 rm -rf build
 julia make.jl || exit 1
 test -e build/index.html || exit 1
-open build/index.html
+open -a Opera build/index.html
