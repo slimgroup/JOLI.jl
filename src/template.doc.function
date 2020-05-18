@@ -1,0 +1,18 @@
+"""
+    julia> op = % method name and typeless arguments
+
+% Description including return type
+
+# Signature
+
+    % full function signature
+
+# Arguments
+
+- % argument list -> `arg`: meaning
+- optional
+    - % argument list -> `arg`: meaning
+- keyword
+    - % argument list -> `arg`: meaning, defaults to ???
+
+"""

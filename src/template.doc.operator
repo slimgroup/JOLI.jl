@@ -1,7 +1,7 @@
 """
     julia> op = % method name and typeless arguments
 
-% Description including return type
+% Description
 
 # Signature
 
@@ -12,6 +12,8 @@
 - % argument list -> `arg`: meaning
 - optional
     - % argument list -> `arg`: meaning
+- keyword
+    - % argument list -> `arg`: meaning, defaults to ???
 
 # Notes
 
@@ -20,5 +22,6 @@
 # Examples
 
 - % call syntax examples -> `call(...)` # description
+- % example with RDT/DDT
 
 """
