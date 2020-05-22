@@ -326,7 +326,7 @@ mode to error mode.
 """
 function jo_check_type_match(DT1::DataType,DT2::DataType,where::String)
     if !(DT1==DT2)
-        jo_type_mismatch_error && throw(joUtilsException("type mismatch: $DT1 vs. $DT2 in $where"))
+        jo_type_mismatch_error && throw(joUtilsException("type mismatch: expected $DT1 instead of $DT2 in $where"))
         jo_type_mismatch_warn && @warn "type mismatch: $DT1 vs. $DT2 in $where" 
     end
     return
