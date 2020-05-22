@@ -63,6 +63,10 @@ After switching to package manager prompt (using ']') type:
 	add https://github.com/slimgroup/JOLI.jl.git
 ```
 
+### 3-Rd Party Libraries ###
+
+- **CurveLab**: In order to use `joCurvelet2D` or `joCurvelet2DnoFFT` operators, you need to obtain *CurveLab-2.1.2-SLIM*, a SLIM extension to *CurveLab-2.1.2*. The tarball of this extension is available from [curvelet.org](http://www.curvelet.org) under [Software](http://www.curvelet.org/software.html) tab. The installation instructions are included in the tarball of *CurveLab-2.1.2-SLIM*. Note, that CurveLab is free only for academic use and requires registration.
+
 ## Documentation (more to come)
 
 For now it is just [REFERENCE guide](https://slimgroup.github.io/JOLI.jl).
