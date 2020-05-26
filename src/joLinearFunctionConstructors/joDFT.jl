@@ -104,28 +104,53 @@ using .joDFT_etc
 # constructors
 export joDFT
 """
+    julia> op = joDFT(m[,n[,...]];[plannned=...,][centered=...,][DDT=...,][RDT=...,][name=...])
+
 Multi-dimensional FFT transform over fast dimension(s)
 
-    joDFT(m[,n[, ...]]
-            [;planned=true,centered=false,DDT=joFloat,RDT=(DDT:<Real?Complex{DDT}:DDT)])
+# Signature
 
-# Examples
+    function joDFT(ms::Integer...;
+        planned::Bool=true, centered::Bool=false,
+        DDT::DataType=joFloat, RDT::DataType=(DDT<:Real ? Complex{DDT} : DDT),
+        name::String="joDFT")
 
-- joDFT(m) - 1D FFT
-- joDFT(m; centered=true) - 1D FFT with centered coefficients
-- joDFT(m; planned=false) - 1D FFT without the precomputed plan
-- joDFT(m,n) - 2D FFT
-- joDFT(m; DDT=Float32) - 1D FFT for 32-bit input
-- joDFT(m; DDT=Float32,RDT=ComplexF64) - 1D FFT for 32-bit input and 64-bit output
+# Arguments
+
+- `m`: dimension
+- optional
+    - `n,...`: more dimensions
+- keywords
+    - `planned`: use FFTW plan
+    - `centered`: produce centered coefficients
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
+- multidimensional image must be vectorized
 - if DDT:<Real then imaginary part will be neglected for transpose/adjoint
 - if you intend to use joDFT in remote* calls, you have to either set planned=false or create the operator on the worker
 - joDFT is always planned if applied to multi-vector
 
+# Examples
+
+```
+joDFT(m) # 1D FFT
+joDFT(m; centered=true) # 1D FFT with centered coefficients
+joDFT(m; planned=false) # 1D FFT without the precomputed plan
+joDFT(m,n) # 2D FFT
+joDFT(m; DDT=Float32) # 1D FFT for 32-bit input
+joDFT(m; DDT=Float32,RDT=ComplexF64) # 1D FFT for 32-bit input and 64-bit output
+```
+
 """
-function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataType=joFloat,RDT::DataType=(DDT<:Real ? Complex{DDT} : DDT))
+function joDFT(ms::Integer...;
+    planned::Bool=true, centered::Bool=false,
+    DDT::DataType=joFloat, RDT::DataType=(DDT<:Real ? Complex{DDT} : DDT),
+    name::String="joDFT")
+
     if planned
         pf=plan_fft(zeros(ms))
         ipf=plan_ifft(zeros(ms))
@@ -136,7 +161,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v3->joDFT_etc.apply_ifft(ipf,v3,ms,DDT,true),
                 v4->joDFT_etc.apply_fft(pf,v4,ms,RDT,true),
                 DDT,RDT;fMVok=true,iMVok=true,
-                name="joDFTpc"
+                name=name*"_pc"
                 )
         else
             return joLinearFunction_A(prod(ms),prod(ms),
@@ -145,7 +170,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v3->joDFT_etc.apply_ifft(ipf,v3,ms,DDT,false),
                 v4->joDFT_etc.apply_fft(pf,v4,ms,RDT,false),
                 DDT,RDT;fMVok=true,iMVok=true,
-                name="joDFTp"
+                name=name*"_p"
                 )
         end
     else
@@ -156,7 +181,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v3->joDFT_etc.apply_ifft(v3,ms,DDT,true),
                 v4->joDFT_etc.apply_fft(v4,ms,RDT,true),
                 DDT,RDT;fMVok=true,iMVok=true,
-                name="joDFTc"
+                name=name*"_c"
                 )
         else
             return joLinearFunction_A(prod(ms),prod(ms),
@@ -165,7 +190,7 @@ function joDFT(ms::Integer...;planned::Bool=true,centered::Bool=false,DDT::DataT
                 v3->joDFT_etc.apply_ifft(v3,ms,DDT,false),
                 v4->joDFT_etc.apply_fft(v4,ms,RDT,false),
                 DDT,RDT;fMVok=true,iMVok=true,
-                name="joDFT"
+                name=name
                 )
         end
     end

@@ -83,25 +83,50 @@ using .joDCT_etc
 
 export joDCT
 """
+    julia> joDCT(m[,n[,...]];[planned::Bool=true][,DDT=joFloat][,RDT=DDT])
+
 Multi-dimensional DCT transform over fast dimension(s)
 
-    joDCT(m[,n[, ...]] [;planned::Bool=true,DDT=joFloat,RDT=DDT])
+# Signature
 
-# Examples
+    function joDCT(ms::Integer...;
+        planned::Bool=true,
+        DDT::DataType=joFloat,RDT::DataType=DDT,
+        name::String="joDCT")
 
-- joDCT(m) - 1D DCT
-- joDCT(m; planned=false) - 1D FFT without the precomputed plan
-- joDCT(m,n) - 2D DCT
-- joDCT(m; DDT=Float32) - 1D DCT for 32-bit vectors
-- joDCT(m; DDT=Float32,RDT=Float64) - 1D DCT for 32-bit input and 64-bit output
+# Arguments
+
+- `m`: dimension
+- optional
+    - `n,...`: more dimensions
+- keywords
+    - `planned`: use DCT plan
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
+- multidimensional image must be vectorized
 - if you intend to use joDCT in remote* calls, you have to either set planned=false or create the operator on the worker
 - joDCT is always planned if applied to multi-vector
 
+# Examples
+
+```
+joDCT(m) # 1D DCT
+joDCT(m; planned=false) # 1D DCT without the precomputed plan
+joDCT(m,n) # 2D DCT
+joDCT(m; DDT=Float32) # 1D DCT for 32-bit vectors
+joDCT(m; DDT=Float32,RDT=Float64) # 1D DCT for 32-bit input and 64-bit output
+```
+
 """
-function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::DataType=DDT)
+function joDCT(ms::Integer...;
+    planned::Bool=true,
+    DDT::DataType=joFloat,RDT::DataType=DDT,
+    name::String="joDCT")
+
     if planned
         pf=plan_dct(zeros(ms))
         ipf=plan_idct(zeros(ms))
@@ -111,7 +136,7 @@ function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::Data
             v3->joDCT_etc.apply_idct(ipf,v3,ms,DDT),
             v4->joDCT_etc.apply_dct(pf,v4,ms,RDT),
             DDT,RDT;fMVok=true,iMVok=true,
-            name="joDCTp"
+            name=name*"_p"
             )
     else
         return joLinearFunction_A(prod(ms),prod(ms),
@@ -120,7 +145,7 @@ function joDCT(ms::Integer...;planned::Bool=true,DDT::DataType=joFloat,RDT::Data
             v3->joDCT_etc.apply_idct(v3,ms,DDT),
             v4->joDCT_etc.apply_dct(v4,ms,RDT),
             DDT,RDT;fMVok=true,iMVok=true,
-            name="joDCT")
+            name=name)
     end
 end
 

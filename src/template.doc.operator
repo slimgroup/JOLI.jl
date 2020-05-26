@@ -12,8 +12,11 @@
 - % argument list -> `arg`: meaning
 - optional
     - % argument list -> `arg`: meaning
-- keyword
-    - % argument list -> `arg`: meaning, defaults to ???
+- keywords
+    - % argument list -> `arg`: meaning (default ???)
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
@@ -21,7 +24,9 @@
 
 # Examples
 
-- % call syntax examples -> `call(...)` # description
-- % example with RDT/DDT
+```
+% call syntax examples -> `call(...)` # description
+% example with RDT/DDT
+```
 
 """
