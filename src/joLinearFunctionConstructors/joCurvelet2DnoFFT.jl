@@ -47,34 +47,51 @@ using .joCurvelet2DnoFFT_etc
 
 export joCurvelet2DnoFFT
 """
+    julia> op = joCurvelet2DnoFFT(n1,n2;[DDT=joComplex,][RDT=DDT,]
+                    [nbscales=...,][nbangles_coarse=...,][all_crvlts=...,]
+                    [real_crvlts=...,][zero_finest=...,][name=...])
+
 2D Curvelet transform (wrapping) over fast dimensions without FFT
 
-    joCurvelet2DnoFFT(n1,n2 [;DDT=joComplex,RDT=DDT,
-        nbscales=#,nbangles_coarse=16,all_crvlts=false,real_crvlts=true,zero_finest=false])
+# Signature
+
+    function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,
+            nbscales::Integer=0,
+            nbangles_coarse::Integer=16,
+            all_crvlts::Bool=false,
+            real_crvlts::Bool=true,
+            zero_finest::Bool=false,
+            name::String="joCurvelt2DnoFFT")
 
 # Arguments
 
-- n1,n2 - image sizes
-- nbscales - # of scales (requires #>=default; defaults to max(1,ceil(log2(min(n1,n2))-3)))
-- nbangles_coarse - # of angles at coarse scale (requires #%4==0, #>=8; defaults to 16)
-- all_crvlts - curvelets at finnest scales (defaults to false)
-- real_crvlts - real transform (defaults to true) and requires real input
-- zero_finest - zero out finnest scales (defaults to false)
-
-# Examples
-
-- joCurvelet2DnoFFT(32,32) - real transform (64-bit)
-- joCurvelet2DnoFFT(32,32;real_crvlts=false) - complex transform (64-bit)
-- joCurvelet2DnoFFT(32,32;all_crvlts=true) - real transform with curevelts at the finnest scales (64-bit)
-- joCurvelet2DnoFFT(32,32;zero_finest=true) - real transform with zeros at the finnest scales (64-bit)
-- joCurvelet2DnoFFT(32,32;DDT=Float64,real_crvlts=false) - complex transform with complex 64-bit input for forward
-- joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=Float64,real_crvlts=false) - complex transform with just precision specification for curvelets
-- joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=ComplexF64,real_crvlts=false) - complex transform with full type specification for curvelets (same as above)
+- `n1`,`n2`: image sizes
+- keywords
+    - `nbscales`: # of scales (requires #>=default; defaults to max(1,ceil(log2(min(n1,n2))-3)))
+    - `nbangles_coarse`: # of angles at coarse scale (requires #%4==0, #>=8; defaults to 16)
+    - `all_crvlts`: curvelets at finnest scales (defaults to false)
+    - `real_crvlts`: real transform (defaults to true) and requires real input
+    - `zero_finest`: zero out finnest scales (defaults to false)
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
 - real joCurvelet2DnoFFT passed adjoint test while either combined with joDFT, or with isadjont flag userange=true
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
+
+# Examples
+
+```
+joCurvelet2DnoFFT(32,32) # real transform (64-bit)
+joCurvelet2DnoFFT(32,32;real_crvlts=false) # complex transform (64-bit)
+joCurvelet2DnoFFT(32,32;all_crvlts=true) # real transform with curevelts at the finnest scales (64-bit)
+joCurvelet2DnoFFT(32,32;zero_finest=true) # real transform with zeros at the finnest scales (64-bit)
+joCurvelet2DnoFFT(32,32;DDT=Float64,real_crvlts=false) # complex transform with complex 64-bit input for forward
+joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=Float64,real_crvlts=false) # complex transform with just precision specification for curvelets
+joCurvelet2DnoFFT(32,32;DDT=Float32,RDT=ComplexF64,real_crvlts=false) # complex transform with full type specification for curvelets (same as above)
+```
 
 """
 function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,
@@ -82,7 +99,8 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::Da
             nbangles_coarse::Integer=16,
             all_crvlts::Bool=false,
             real_crvlts::Bool=true,
-            zero_finest::Bool=false)
+            zero_finest::Bool=false,
+            name::String="joCurvelt2DnoFFT")
 
     nbs=convert(Cint,max(1,ceil(log2(min(n1,n2))-3)))
     nbs=convert(Cint,max(nbs,nbscales))
@@ -103,12 +121,12 @@ function joCurvelet2DnoFFT(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::Da
         rtp=RDT
         apply_fdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_fdct2DnoFFTwrap_real
         apply_ifdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_ifdct2DnoFFTwrap_real
-        myname="joCurvelt2DnoFFTwrapReal"
+        myname=name*"_wrapReal"
     else
         rtp= RDT<:Complex ? RDT : Complex{RDT}
         apply_fdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_fdct2DnoFFTwrap_cplx
         apply_ifdct2DnoFFTwrap=joCurvelet2DnoFFT_etc.apply_ifdct2DnoFFTwrap_cplx
-        myname="joCurvelt2DnoFFTwrapCplx"
+        myname=name*"_wrapCplx"
     end
     cfmap_size=ccall((:jl_fdct_sizes_map_size,:libdfdct_wrapping),Cint,
         (Cint,Cint,Cint),nbs,nbac,all_crvlts)
