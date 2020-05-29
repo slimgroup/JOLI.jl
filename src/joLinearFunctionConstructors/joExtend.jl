@@ -88,41 +88,64 @@ using .joExtend_etc
 
 export joExtend
 """
+    julia> op = joExtend(n,pad_type;[pad_lower=0,][pad_upper=0,][DDT=joFloat,][RDT=DDT])
+
 1D extension operator
 
-    joExtend(n,pad_type; pad_lower=0,pad_upper=0,DDT=joFloat,RDT=DDT)
+# Signature
+
+    function joExtend(n::Integer,pad_type::Symbol;
+        pad_upper::Integer=0,pad_lower::Integer=0,
+        DDT::DataType=joFloat,RDT::DataType=DDT,
+        name="joExtend")
 
 # Arguments
 
-- n : size of input vector
-- pad_type : one of the symbols
-   - :zeros - pad signal with zeros
-   - :border - pad signal with values at the edge of the domain
-   - :mirror - mirror extension of the signal
-   - :periodic - periodic extension of the signal
-- pad_lower : number of points to pad on the lower index end (keyword arg, default=0)
-- pad_upper : number of points to pad on the upper index end (keyword arg, default=0)
+- `n` : size of input vector
+- `pad_type` : one of the symbols
+   - `:zeros` : pad signal with zeros
+   - `:border` : pad signal with values at the edge of the domain
+   - `:mirror` : mirror extension of the signal
+   - `:periodic` : periodic extension of the signal
+- keywords
+    - `pad_lower` : number of points to pad on the lower index end (keyword arg, default=0)
+    - `pad_upper` : number of points to pad on the upper index end (keyword arg, default=0)
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Examples
 
 extend a n-length vector with 10 zeros on either side
 
-    joExtend(n,:zeros,pad_lower=10,pad_upper=10)
+    joExtend(n,:zeros; pad_lower=10,pad_upper=10)
 
 append, to a n-length vector, so that x[n+1:n+10] = x[n]
 
-    joExtend(n,:border,pad_upper=10)
+    joExtend(n,:border; pad_upper=10)
 
-prepend, to a n-length vector, its mirror extension: y=[reverse(x[1:10]);x]
+prepend, to n-length vector, its mirror extension: y=[reverse(x[1:10]);x]
 
-    joExtend(n,:mirror,pad_lower=10)
+    joExtend(n,:mirror; pad_lower=10)
 
-append, to a n-length vector, its periodic extension: y=[x;x[1:10]]
+append, to n-length vector, its periodic extension: y=[x;x[1:10]]
 
-    joExtend(n,:periodic,pad_upper=10)
+    joExtend(n,:periodic; pad_upper=10)
+
+prepend to 32-bit input
+
+    joExtend(n,:mirror; pad_lower=10,DDT=Float32)
+
+append to a 32-bit input and return 64-bit output
+
+    joExtend(n,:periodic; pad_upper=10,DDT=Float32,RDT=Float64)
 
 """
-function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::Integer=0,DDT::DataType=joFloat,RDT::DataType=DDT)
+function joExtend(n::Integer,pad_type::Symbol;
+    pad_upper::Integer=0,pad_lower::Integer=0,
+    DDT::DataType=joFloat,RDT::DataType=DDT,
+    name="joExtend")
+
     (pad_upper>=0 && pad_upper<=n) || throw(joLinearFunctionException("joExtend: invalid pad_upper size; should be 0<= pad_upper <=n"))
     (pad_lower>=0 && pad_lower<=n) || throw(joLinearFunctionException("joExtend: invalid pad_lower size; should be 0<= pad_lower <=n"))
     if pad_type==:zeros
@@ -132,7 +155,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.zeros_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;fMVok=true,
-                                name="joExtend(zeros)")
+                                name=name*"_zeros")
     elseif pad_type==:border
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.border_fwd(v1,n,pad_upper,pad_lower,RDT),
@@ -140,7 +163,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.border_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.border_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;fMVok=true,
-                                name="joExtend(border)")
+                                name=name*"_border")
     elseif pad_type==:mirror
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.mirror_fwd(v1,n,pad_upper,pad_lower,RDT),
@@ -148,7 +171,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.mirror_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.mirror_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;fMVok=true,
-                                name="joExtend(mirror)")
+                                name=name*"_mirror")
     elseif pad_type==:periodic
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.periodic_fwd(v1,n,pad_upper,pad_lower,RDT),
@@ -156,7 +179,7 @@ function joExtend(n::Integer,pad_type::Symbol; pad_upper::Integer=0,pad_lower::I
                                 v2->joExtend_etc.periodic_tran(v2,n,pad_upper,pad_lower,DDT),
                                 v1->joExtend_etc.periodic_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 DDT,RDT;fMVok=true,
-                                name="joExtend(periodic)")
+                                name=name*"_periodic")
     else
         throw(joLinearFunctionException("joExtend: unknown extension type."))
     end

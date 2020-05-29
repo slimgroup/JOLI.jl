@@ -24,9 +24,13 @@
 
 # Examples
 
-```
-% call syntax examples -> `call(...)` # description
-% example with RDT/DDT
-```
+% description
+
+    % example
+
+examples with RDT/DDT
+
+    % jo%(...;DDT=...)
+    % jo%(...;DDT=...,RDT=...)
 
 """

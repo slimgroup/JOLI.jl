@@ -136,14 +136,29 @@ Multi-dimensional FFT transform over fast dimension(s)
 
 # Examples
 
-```
-joDFT(m) # 1D FFT
-joDFT(m; centered=true) # 1D FFT with centered coefficients
-joDFT(m; planned=false) # 1D FFT without the precomputed plan
-joDFT(m,n) # 2D FFT
-joDFT(m; DDT=Float32) # 1D FFT for 32-bit input
-joDFT(m; DDT=Float32,RDT=ComplexF64) # 1D FFT for 32-bit input and 64-bit output
-```
+1D FFT
+
+    joDFT(m)
+
+1D FFT with centered coefficients
+
+    joDFT(m; centered=true)
+
+1D FFT without the precomputed plan
+
+    joDFT(m; planned=false)
+
+2D FFT
+
+    joDFT(m,n)
+
+1D FFT for 32-bit input
+
+    joDFT(m; DDT=Float32)
+
+1D FFT for 32-bit input and 64-bit output
+
+    joDFT(m; DDT=Float32,RDT=ComplexF64)
 
 """
 function joDFT(ms::Integer...;

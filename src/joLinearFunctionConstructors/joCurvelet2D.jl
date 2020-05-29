@@ -82,15 +82,33 @@ export joCurvelet2D
 
 # Examples
 
-```
-joCurvelet2D(32,32) # real transform (64-bit)
-joCurvelet2D(32,32;real_crvlts=false) # complex transform (64-bit)
-joCurvelet2D(32,32;all_crvlts=true) # real transform with curevelts at the finnest scales (64-bit)
-joCurvelet2D(32,32;zero_finest=true) # real transform with zeros at the finnest scales (64-bit)
-joCurvelet2D(32,32;DDT=Float64,real_crvlts=false) # complex transform with real 64-bit input for forward
-joCurvelet2D(32,32;DDT=Float32,RDT=Float64,real_crvlts=false) # complex transform with just precision specification for curvelets
-joCurvelet2D(32,32;DDT=Float32,RDT=ComplexF64,real_crvlts=false) # complex transform with full type specification for curvelets (same as above)
-```
+real transform (64-bit)
+
+    joCurvelet2D(32,32)
+
+complex transform (64-bit)
+
+    joCurvelet2D(32,32;real_crvlts=false)
+
+real transform with curevelts at the finnest scales (64-bit)
+
+    joCurvelet2D(32,32;all_crvlts=true)
+
+real transform with zeros at the finnest scales (64-bit)
+
+    joCurvelet2D(32,32;zero_finest=true)
+
+complex transform with real 64-bit input for forward
+
+    joCurvelet2D(32,32;DDT=Float64,real_crvlts=false)
+
+complex transform with just precision specification for curvelets
+
+    joCurvelet2D(32,32;DDT=Float32,RDT=Float64,real_crvlts=false)
+
+complex transform with full type specification for curvelets (same as above)
+
+    joCurvelet2D(32,32;DDT=Float32,RDT=ComplexF64,real_crvlts=false)
 
 """
 function joCurvelet2D(n1::Integer,n2::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,

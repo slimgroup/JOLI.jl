@@ -113,13 +113,25 @@ Multi-dimensional DCT transform over fast dimension(s)
 
 # Examples
 
-```
-joDCT(m) # 1D DCT
-joDCT(m; planned=false) # 1D DCT without the precomputed plan
-joDCT(m,n) # 2D DCT
-joDCT(m; DDT=Float32) # 1D DCT for 32-bit vectors
-joDCT(m; DDT=Float32,RDT=Float64) # 1D DCT for 32-bit input and 64-bit output
-```
+1D DCT
+
+    joDCT(m)
+
+1D DCT without the precomputed plan
+
+    joDCT(m; planned=false)
+
+2D DCT
+
+    joDCT(m,n)
+
+1D DCT for 32-bit vectors
+
+    joDCT(m; DDT=Float32)
+
+1D DCT for 32-bit input and 64-bit output
+
+    joDCT(m; DDT=Float32,RDT=Float64)
 
 """
 function joDCT(ms::Integer...;

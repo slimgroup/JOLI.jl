@@ -64,14 +64,29 @@ export joDWT
 
 # Examples
 
-```
-joDWT(m,wt) # 1D DWT using Haar wavelet
-wt=wavelet(WT.haar) # define wavelet
-joDWT(m,wt) # 1D DWT
-joDWT(m,n,wt) # 2D DWT
-joDWT(m,wt; DDT=Float32) # 1D DWT for 32-bit vectors
-joDWT(m,wt; DDT=Float32,RDT=Float64) # 1D DWT for 32-bit input and 64-bit output
-```
+1D DWT with implicit using Haar wavelet
+
+    joDWT(m)
+
+define wavelet
+
+    wt=wavelet(WT.haar)
+
+1D DWT
+
+    joDWT(m,wt)
+
+2D DWT
+
+    joDWT(m,n,wt)
+
+1D DWT for 32-bit vectors
+
+    joDWT(m,wt; DDT=Float32)
+
+1D DWT for 32-bit input and 64-bit output
+
+    joDWT(m,wt; DDT=Float32,RDT=Float64)
 
 """
 function joDWT(m::Integer,wt::OrthoFilter=wavelet(WT.haar);
