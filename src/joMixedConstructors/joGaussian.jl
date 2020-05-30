@@ -78,9 +78,7 @@ Gausian matrix
 
 # Arguments
 
-- `M`: size
-- optional
-    - `N`: for non-square matrix
+- `M[,N]`: sizes
 - keywords
     - `implicit`: keyword element-free operator if true
     - `normalized`: keyword normalized (unit global-norm for explicit or unit-column norm for implicit) operator if true
@@ -116,12 +114,9 @@ normalized and element-free operator
 
     A=joGaussian(M,implicit=true,normalized=true)
 
-for 32-bit input
+examples with DDT/RDT
 
     A=joGaussian(M,N; DDT=Float32)
-
-for 32-bit input and 64-bit output
-
     A=joGaussian(M,N; DDT=Float32,RDT=Float64)
 
 """

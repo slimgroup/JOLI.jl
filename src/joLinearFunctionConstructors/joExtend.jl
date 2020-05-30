@@ -132,12 +132,9 @@ append, to n-length vector, its periodic extension: y=[x;x[1:10]]
 
     joExtend(n,:periodic; pad_upper=10)
 
-prepend to 32-bit input
+examples with DDT/RDT
 
     joExtend(n,:mirror; pad_lower=10,DDT=Float32)
-
-append to a 32-bit input and return 64-bit output
-
     joExtend(n,:periodic; pad_upper=10,DDT=Float32,RDT=Float64)
 
 """

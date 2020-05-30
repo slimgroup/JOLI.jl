@@ -125,12 +125,9 @@ Multi-dimensional DCT transform over fast dimension(s)
 
     joDCT(m,n)
 
-1D DCT for 32-bit vectors
+examples with DDT/RDT
 
     joDCT(m; DDT=Float32)
-
-1D DCT for 32-bit input and 64-bit output
-
     joDCT(m; DDT=Float32,RDT=Float64)
 
 """

@@ -39,9 +39,9 @@ using .joRomberg_etc
 
 export joRomberg
 """
-A random comvolution based on Romberg 08
+    julia> op = joRomberg(n1[,n2[,...]];[DDT=...,][RDT=...,][name=...])
 
-    julia> A = joRomberg(n1[,n2[...]];kwargs...)
+A random comvolution based on Romberg 08
 
 # Signature
 
@@ -51,16 +51,28 @@ A random comvolution based on Romberg 08
 # Arguments
 
 - `n1[,n2[...]]`: dimensions of the image; M=N=prod(ni)
-- `DDT/RDT`: domain/range DatType
-- `name`: custom name
+- keywords
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Examples
 
-- A=joRomberg(9)
-- A=joRomberg(9,11)
+    A=joRomberg(9)
+
+    A=joRomberg(9,11)
+
+32-bit input
+
+    A=joRomberg(9,11; DDT=Float32)
+
+32-bit input and 64-bit output
+
+    A=joRomberg(9,11; DDT=Float32,RDT=Float64)
 
 """
 function joRomberg(dims::Integer...;DDT::DataType=joFloat,RDT::DataType=DDT,name::String="joRomberg")
+
     m = n = prod(dims)
     phs = joRomberg_etc.random_phases(DDT,dims)
     sgn = sign.(randn(dims))

@@ -28,7 +28,7 @@
 
     % example
 
-examples with RDT/DDT
+examples with DDT/RDT
 
     % jo%(...;DDT=...)
     % jo%(...;DDT=...,RDT=...)

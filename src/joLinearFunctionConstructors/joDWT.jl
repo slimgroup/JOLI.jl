@@ -80,12 +80,9 @@ define wavelet
 
     joDWT(m,n,wt)
 
-1D DWT for 32-bit vectors
+examples with DDT/RDT
 
     joDWT(m,wt; DDT=Float32)
-
-1D DWT for 32-bit input and 64-bit output
-
     joDWT(m,wt; DDT=Float32,RDT=Float64)
 
 """

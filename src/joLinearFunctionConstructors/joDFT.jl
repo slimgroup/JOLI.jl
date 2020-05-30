@@ -152,12 +152,9 @@ Multi-dimensional FFT transform over fast dimension(s)
 
     joDFT(m,n)
 
-1D FFT for 32-bit input
+examples with DDT/RDT
 
     joDFT(m; DDT=Float32)
-
-1D FFT for 32-bit input and 64-bit output
-
     joDFT(m; DDT=Float32,RDT=ComplexF64)
 
 """
