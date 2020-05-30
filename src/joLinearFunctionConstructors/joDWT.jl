@@ -64,7 +64,7 @@ export joDWT
 
 # Examples
 
-1D DWT with implicit using Haar wavelet
+1D DWT with default wavelet (Haar wavelet)
 
     joDWT(m)
 

@@ -64,24 +64,31 @@ export joGaussian
 """
 Gausian matrix
 
-    julia> A=joGaussian(M,N;kwargs...)
+    julia> op = joGaussian(M,[N];
+                [implicit=...,][normalized=...,][orthonormal=...,][RNG=...,]
+                [DDT=...,][RDT=...,][name=...])
 
 # Signature
 
     joGaussian(M::Integer,N::Integer=M;
-        DDT::DataType=joFloat,RDT::DataType=DDT,
         implicit::Bool=false,normalized::Bool=false,orthonormal::Bool=false,
-        RNG::AbstractRNG=Random.seed!())
+        RNG::AbstractRNG=Random.seed!(),
+        DDT::DataType=joFloat,RDT::DataType=DDT,
+        name::String="joGaussian")
 
 # Arguments
 
-- `M`,`N`: size
+- `M`: size
 - optional
-    - `DDT`,`RDT`: keyword domain/range DataType
+    - `N`: for non-square matrix
+- keywords
     - `implicit`: keyword element-free operator if true
     - `normalized`: keyword normalized (unit global-norm for explicit or unit-column norm for implicit) operator if true
     - `orthonormal`: keyword explict orthonormal operator if true (above implicit/normalized is ignorred); requires M<=N
     - `RNG`: keyword random number generator function with explicit seeding
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
@@ -89,24 +96,47 @@ Gausian matrix
 
 # Examples
 
-- `A=joGaussian(M,N)`: not-normalized and explict dense matrix
-- `A=joGaussian(M,orthonormal=true)`: explicit orthonormal dense matrix
-- `A=joGaussian(M,implicit=true)`: not-normalized and element-free operator
-- `A=joGaussian(M,normalized=true)`: normalized and explict dense matrix
-- `A=joGaussian(M,implicit=true,normalized=true)`: normalized and element-free operator
+not-normalized and explict dense matrix
+
+    A=joGaussian(M,N)
+
+explicit orthonormal dense matrix
+
+    A=joGaussian(M,orthonormal=true)
+
+not-normalized and element-free operator
+
+    A=joGaussian(M,implicit=true)
+
+normalized and explict dense matrix
+
+    A=joGaussian(M,normalized=true)
+
+normalized and element-free operator
+
+    A=joGaussian(M,implicit=true,normalized=true)
+
+for 32-bit input
+
+    A=joGaussian(M,N; DDT=Float32)
+
+for 32-bit input and 64-bit output
+
+    A=joGaussian(M,N; DDT=Float32,RDT=Float64)
 
 """
 function joGaussian(M::Integer,N::Integer=M;
-         DDT::DataType=joFloat,RDT::DataType=DDT,
          implicit::Bool=false,normalized::Bool=false,orthonormal::Bool=false,
-         RNG::AbstractRNG=Random.seed!())
+         RNG::AbstractRNG=Random.seed!(),
+         DDT::DataType=joFloat,RDT::DataType=DDT,
+         name::String="joGaussian")
 
     if orthonormal
         M>N && throw(joLinearFunctionException("Orthonormal mode is not supported when M > N"))
         A = qr(randn(RNG,DDT,N,M))
         #a = DDT(0.5)*(A.Q)'
         a = (A.Q)'
-        return joMatrix(a;DDT=DDT,RDT=RDT,name="joGaussianO")
+        return joMatrix(a;DDT=DDT,RDT=RDT,name=name*"_o")
     else
         if implicit
             rngs=copy(RNG.seed)
@@ -117,22 +147,22 @@ function joGaussian(M::Integer,N::Integer=M;
                     v1->joGaussian_etc.fIN(v1,M,N,fscale,RNG,rngs,RDT),
                     v2->joGaussian_etc.aIN(v2,M,N,ascale,RNG,rngs,DDT),
                     DDT,RDT;
-                    name="joGaussianIN")
+                    name=name*"_in")
             else
                 return joLinearFunctionFwd_A(M,N,
                     v1->joGaussian_etc.fI(v1,M,N,RNG,rngs,RDT),
                     v2->joGaussian_etc.aI(v2,M,N,RNG,rngs,DDT),
                     DDT,RDT;
-                    name="joGaussianI")
+                    name=name*"_i")
             end
         else
             a = randn(RNG,DDT,M,N)
             if normalized
                 nf=one(DDT)/sqrt(sum(a.*a))
                 a = a * sparse(nf*LinearAlgebra.I,N,N)
-                return joMatrix(a;DDT=DDT,RDT=RDT,name="joGaussianEN")
+                return joMatrix(a;DDT=DDT,RDT=RDT,name=name*"_en")
             else
-                return joMatrix(a;DDT=DDT,RDT=RDT,name="joGaussianE")
+                return joMatrix(a;DDT=DDT,RDT=RDT,name=name*"_e")
             end
         end
     end
