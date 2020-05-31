@@ -3,6 +3,7 @@
 ## helper module
 module joNFFT_etc
     using JOLI: jo_convert
+    using NFFT
     function apply_nfft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         iv=jo_convert(ComplexF64,v,false)
         rv=nfft(pln,iv)/sqrt(n)
@@ -34,19 +35,47 @@ using .joNFFT_etc
 
 export joNFFT
 """
+    julia> op = joNFFT(N,nodes[,m=...][,sigma=...][,window=...][,K=...];
+                [centered=...,][DDT=...,][RDT=...][name=...])
+
 1D NFFT transform over fast dimension (wrapper to https://github.com/tknopp/NFFT.jl/tree/master)
 
-    joNFFT(N,nodes::Vector{joFloat} [,m=4,sigma=2.0,window=:kaiser_bessel,K=2000;centered=false,DDT=joComplex,RDT=DDT])
+# Signature
 
-# Examples
-- joNFFT(N,nodes) - 1D NFFT
+    function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;
+        centered::Bool=false,DDT::DataType=joComplex,RDT::DataType=DDT)
+
+# Arguments
+
+- `N`: size
+- `nodes`: nodes' positions
+- optional
+    - see https://github.com/tknopp/NFFT.jl for info about optional parameters to NFFTplan: `m`, `sigma`, `window`, and `K`
+- keywords
+    - `centered`: return centered coefficients
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
+
 - NFFT always uses ComplexF64 vectors internally
-- see https://github.com/tknopp/NFFT.jl/tree/master for docs for optional parameters to NFFTplan
+
+# Examples
+
+1D NFFT
+
+    joNFFT(N,nodes)
+
+examples with DDT/RDT
+
+    % joNFFT(N,nodes; DDT=ComplexF32)
+    % joNFFT(N,nodes; DDT=ComplexF32,RDT=ComplexF64)
 
 """
-function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;centered::Bool=false,DDT::DataType=joComplex,RDT::DataType=DDT)
+function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;
+    centered::Bool=false,DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
+
     M=length(pos)
     p=NFFTPlan(pos,N,m,sigma,window,K)
     if centered
@@ -54,14 +83,14 @@ function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bes
             v1->joNFFT_etc.apply_nfft_centered(p,N,v1,RDT),
             v2->joNFFT_etc.apply_infft_centered(p,N,v2,DDT),
             DDT,RDT;
-            name="joNFFTc"
+            name=name*"_c"
             )
     else
         return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft(p,N,v1,RDT),
             v2->joNFFT_etc.apply_infft(p,N,v2,DDT),
             DDT,RDT;
-            name="joNFFT"
+            name=name
             )
     end
 end
