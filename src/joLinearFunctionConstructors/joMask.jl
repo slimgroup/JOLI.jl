@@ -26,8 +26,8 @@ Mask operator with index array
 
 examples with DDT/RDT
 
-    A=joMask(3,[1,3];DDT=Float32)
-    A=joMask(3,[1,3];DDT=Float32,RDT=Float64)
+    A=joMask(3,[1,3]; DDT=Float32)
+    A=joMask(3,[1,3]; DDT=Float32,RDT=Float64)
 
 """
 function joMask(n::Integer,idx::Vector{VDT};
@@ -49,7 +49,7 @@ function joMask(n::Integer,idx::Vector{VDT};
         )
 end
 """
-    joMask(mask;[makecopy=...,][DDT=...,][RDT=DDT,][name=...])
+    joMask(mask;[makecopy=...,][DDT=...,][RDT=...,][name=...])
 
 Mask operator with BitArray mask
 
@@ -77,8 +77,8 @@ define BitArray mask and operator
 
 examples with RDT/DDT
 
-    A=joMask(mask;DDT=Float32)
-    A=joMask(mask;DDT=Float32,RDT=Float64)
+    A=joMask(mask; DDT=Float32)
+    A=joMask(mask; DDT=Float32,RDT=Float64)
 
 """
 function joMask(mask::BitArray{1};
