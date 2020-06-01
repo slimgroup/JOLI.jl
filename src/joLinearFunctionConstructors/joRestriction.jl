@@ -2,21 +2,39 @@
 
 export joRestriction
 """
+    julia> op = joRestriction(n,idx;[makecopy=...,][DDT=...,][RDT=...,][name=...])
+
 Restriction operator
 
-    joRestriction(n,idx[;DDT=joFloat,RDT=DDT,makecopy=true])
+# Signature
+
+    function joRestriction(n::Integer,idx::LocalVector{idxdt};
+        makecopy::Bool=true,DDT::DataType=joFloat,RDT::DataType=DDT,name::String="joRestriction")
+            where {idxdt<:Integer}
 
 # Arguments
-- n::Integer - number of columns
-- idx::LocalVector{Int} - vector of indecies
+
+- `n`: number of columns
+- `idx`: vector of indecies
+- keywords
+    - `makecopy`: make private copy of indecies vector
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Examples
-- A=joRestriction(3,[1,3])
-- A=joRestriction(3,[1,3];DDT=Float32)
-- A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)
+
+    A=joRestriction(3,[1,3])
+
+examples with DDT/RDT
+
+    A=joRestriction(3,[1,3];DDT=Float32)
+    A=joRestriction(3,[1,3];DDT=Float32,RDT=Float64)
 
 """
-function joRestriction(n::Integer,idx::LocalVector{idxdt};DDT::DataType=joFloat,RDT::DataType=DDT,makecopy::Bool=true) where {idxdt<:Integer}
+function joRestriction(n::Integer,idx::LocalVector{idxdt};
+    makecopy::Bool=true,DDT::DataType=joFloat,RDT::DataType=DDT,name::String="joRestriction") where {idxdt<:Integer}
+
     m::Int=length(idx)
     n>=m || throw(joLinearFunctionException("joRestriction: length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joRestriction: max(idx) must be <= n"))
@@ -36,7 +54,7 @@ function joRestriction(n::Integer,idx::LocalVector{idxdt};DDT::DataType=joFloat,
         v3->jo_convert(DDT,rev(v3,n,myidx),false),
         v4->jo_convert(RDT,fwd(v4,m,myidx),false),
         DDT,RDT;
-        name="joRestriction",
+        name=name,
         fMVok=true
         )
 end

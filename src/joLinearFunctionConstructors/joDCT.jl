@@ -83,7 +83,7 @@ using .joDCT_etc
 
 export joDCT
 """
-    julia> joDCT(m[,n[,...]];[planned::Bool=true][,DDT=joFloat][,RDT=DDT])
+    julia> op = joDCT(m[,n[,...]];[planned::Bool=true][,DDT=joFloat][,RDT=DDT])
 
 Multi-dimensional DCT transform over fast dimension(s)
 

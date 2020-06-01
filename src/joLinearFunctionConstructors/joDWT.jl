@@ -35,7 +35,7 @@ using .joDWT_etc
 
 export joDWT
 """
-    julia> joDWT(m,[n,][wt];[L=...,][DDT=...,][RDT=...])
+    julia> op = joDWT(m,[n,][wt];[L=...,][DDT=...,][RDT=...])
 
 1/2-dimensional DWT transform over fast dimension(s) - based on Wavelets.jl. See Wavelets.jl package form more information, especially current filter list.
 

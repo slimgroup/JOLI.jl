@@ -59,15 +59,11 @@ A random comvolution based on Romberg 08
 # Examples
 
     A=joRomberg(9)
-
     A=joRomberg(9,11)
 
-32-bit input
+examples with DDT/RDT
 
     A=joRomberg(9,11; DDT=Float32)
-
-32-bit input and 64-bit output
-
     A=joRomberg(9,11; DDT=Float32,RDT=Float64)
 
 """

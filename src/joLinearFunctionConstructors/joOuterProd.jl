@@ -46,13 +46,13 @@ using .joOuterProd_etc
 
 export joOuterProd
 """
-    julia> joOuterProd(U,V)
+    julia> op = joOuterProd(U,V;[DDT=...,][RDT=...,][name=...])
 
-% Memory efficient implemtation of operator A = U*V'
+Memory efficient implementation of operator A = U*V'
 
 # Signature
 
-    % joOuterProd(U::LocalVecOrMat{UDT},V::LocalVecOrMat{VDT};
+    joOuterProd(U::LocalVecOrMat{UDT},V::LocalVecOrMat{VDT};
         DDT::DataType=joFloat,RDT::DataType=promote_type(UDT,VDT,DDT),name::String="joOuterProd")
             where {UDT<:Number,VDT<:Number}
 
@@ -60,6 +60,10 @@ export joOuterProd
 
 - `U`: left vector or matrix
 - `V`: right vector or matrix
+- keywords
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
@@ -67,8 +71,13 @@ export joOuterProd
 
 # Examples
 
-- A=joOuterProd(rand(4),rand(5))
-- A=joOuterProd(rand(4,2),rand(5,2))
+    A=joOuterProd(rand(4),rand(5))
+    A=joOuterProd(rand(4,2),rand(5,2))
+
+examples with DDT/RDT
+
+    A=joOuterProd(rand(4),rand(5); DDT=Float32)
+    A=joOuterProd(rand(4),rand(5); DDT=Float32,RDT=Float64)
 
 """
 function joOuterProd(U::LocalVecOrMat{UDT},V::LocalVecOrMat{VDT};
