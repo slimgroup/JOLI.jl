@@ -36,14 +36,15 @@ using .joNFFT_etc
 export joNFFT
 """
     julia> op = joNFFT(N,nodes[,m=...][,sigma=...][,window=...][,K=...];
-                [centered=...,][DDT=...,][RDT=...][name=...])
+                [centered=...,][DDT=...,][RDT=...,][name=...])
 
 1D NFFT transform over fast dimension (wrapper to https://github.com/tknopp/NFFT.jl)
 
 # Signature
 
-    function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;
-        centered::Bool=false,DDT::DataType=joComplex,RDT::DataType=DDT)
+    function joNFFT(N::Integer,pos::Vector{joFloat},
+        m=4,sigma=2.0,window=:kaiser_bessel,K=2000; centered::Bool=false,
+        DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
 
 # Arguments
 
@@ -73,8 +74,9 @@ examples with DDT/RDT
     % joNFFT(N,nodes; DDT=ComplexF32,RDT=ComplexF64)
 
 """
-function joNFFT(N::Integer,pos::Vector{joFloat},m=4,sigma=2.0,window=:kaiser_bessel,K=2000;
-    centered::Bool=false,DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
+function joNFFT(N::Integer,pos::Vector{joFloat},
+    m=4,sigma=2.0,window=:kaiser_bessel,K=2000; centered::Bool=false,
+    DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
 
     M=length(pos)
     p=NFFTPlan(pos,N,m,sigma,window,K)
