@@ -38,7 +38,7 @@ export joNFFT
     julia> op = joNFFT(N,nodes[,m=...][,sigma=...][,window=...][,K=...];
                 [centered=...,][DDT=...,][RDT=...][name=...])
 
-1D NFFT transform over fast dimension (wrapper to https://github.com/tknopp/NFFT.jl/tree/master)
+1D NFFT transform over fast dimension (wrapper to https://github.com/tknopp/NFFT.jl)
 
 # Signature
 
