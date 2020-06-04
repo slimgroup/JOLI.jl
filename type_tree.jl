@@ -1,2 +1,2 @@
 using JOLI
-JOLI.type_tree()
+jo_type_tree()
