@@ -44,7 +44,7 @@ export joOPER
 """
     julia> op = joOPER(% typeless arguments)
 
-% Description including return type
+% Description
 
 # Signature
 
@@ -55,6 +55,11 @@ export joOPER
 - % argument list -> `arg`: meaning
 - optional
     - % argument list -> `arg`: meaning
+- keywords
+    - % argument list -> `arg`: meaning (default ???)
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
@@ -62,7 +67,14 @@ export joOPER
 
 # Examples
 
-- % call syntax examples -> `call(...)` # description
+% description
+
+    % example
+
+examples with DDT/RDT
+
+    % joOPER(...; DDT=...)
+    % joOPER(...; DDT=...,RDT=...)
 
 """
 function joOPER(n::Integer,your_otherargs...;
