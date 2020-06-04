@@ -30,7 +30,7 @@
 
 examples with DDT/RDT
 
-    % jo%(...;DDT=...)
-    % jo%(...;DDT=...,RDT=...)
+    % jo%(...; DDT=...)
+    % jo%(...; DDT=...,RDT=...)
 
 """

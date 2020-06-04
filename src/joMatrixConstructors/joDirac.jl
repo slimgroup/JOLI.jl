@@ -2,21 +2,36 @@
 
 export joDirac
 """
+    joDirac(m;[DDT=...,][RDT=...,][name=...])
+
 Dirac operator
 
-    joDirac(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT)
+# Signature
+
+    joDirac(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,name::String="joDirac")
 
 # Arguments
-- m::Integer - number of columns
+
+# Arguments
+
+- `m`: size
+- keywords
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Examples
-- A=joDirac(3)
-- A=joDirac(3;DDT=Float32)
-- A=joDirac(3;DDT=Float32,RDT=Float64)
+
+    A=joDirac(3)
+
+examples with DDT/RDT
+
+    A=joDirac(3; DDT=Float32)
+    A=joDirac(3; DDT=Float32,RDT=Float64)
 
 """
-joDirac(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT) =
-    joMatrix{DDT,RDT}("joDirac",m,m,
+joDirac(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,name::String="joDirac") =
+    joMatrix{DDT,RDT}(name,m,m,
         v1->jo_convert(RDT,v1,false),
         v2->jo_convert(DDT,v2,false),
         v3->jo_convert(DDT,v3,false),
