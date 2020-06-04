@@ -12,7 +12,6 @@ export joDAdistribute, joDAgather
     joDAdistribute is DAarray toggle type & constructor
 
     !!! Do not use it to create the operators
-    !!! Use joMatrix and joLinearFunction constructors
 
 """
 struct joDAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperator{DDT,RDT,N}
@@ -35,7 +34,6 @@ end
     joDAgather is DAarray toggle type & constructor
 
     !!! Do not use it to create the operators
-    !!! Use joMatrix and joLinearFunction constructors
 
 """
 struct joDAgather{DDT<:Number,RDT<:Number,N} <: joAbstractDAparallelToggleOperator{DDT,RDT,N}

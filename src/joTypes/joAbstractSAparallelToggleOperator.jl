@@ -12,7 +12,6 @@ export joSAdistribute, joSAgather
     joSAdistribute is SharedArray toggle type & constructor
 
     !!! Do not use it to create the operators
-    !!! Use joMatrix and joLinearFunction constructors
 
 """
 struct joSAdistribute{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelToggleOperator{DDT,RDT,N}
@@ -35,7 +34,6 @@ end
     joSAgather is SharedArray toggle type & constructor
 
     !!! Do not use it to create the operators
-    !!! Use joMatrix and joLinearFunction constructors
 
 """
 struct joSAgather{DDT<:Number,RDT<:Number,N} <: joAbstractSAparallelToggleOperator{DDT,RDT,N}
