@@ -1,0 +1,5 @@
+include("inplace_fake.jl")
+include("inplace_joMatrixInplace.jl")
+include("inplace_joLooseMatrixInplace.jl")
+include("inplace_joLinearFunctionInplace.jl")
+include("inplace_joLooseLinearFunctionInplace.jl")
