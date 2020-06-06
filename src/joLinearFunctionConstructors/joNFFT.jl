@@ -2,8 +2,9 @@
 
 ## helper module
 module joNFFT_etc
-    using JOLI: jo_convert
     using NFFT
+    using FFTW: fftshift, ifftshift
+    using JOLI: jo_convert
     function apply_nfft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         iv=jo_convert(ComplexF64,v,false)
         rv=nfft(pln,iv)/sqrt(n)
@@ -67,6 +68,10 @@ export joNFFT
 1D NFFT
 
     joNFFT(N,nodes)
+
+centered coefficients
+
+    joNFFT(N,nodes; centered=true)
 
 examples with DDT/RDT
 
