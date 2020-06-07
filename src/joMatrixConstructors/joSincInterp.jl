@@ -10,26 +10,45 @@ using .joSincInterp_etc
 
 export joSincInterp
 """
-    julia> joSincInterp(xin,xout,r)
+    julia> joSincInterp(xin,xout;[r=...,][DDT=...,][RDT=...,][name=...])
 
 sinc interpolation matrix for interpolating functions f defined on grid xin to functions defined on grid xout
 
 # Signature
 
-    joSincInterp(xin::AbstractArray{T,1},xout::AbstractArray{T,1};r::I=0,DDT=T,RDT=T) where {T<:AbstractFloat,I<:Integer}
+    function joSincInterp(xin::AbstractArray{T,1},xout::AbstractArray{T,1};
+        r::I=0,DDT::DataType=T,RDT::DataType=DDT,name::String="joSincInterp")
+        where {T<:AbstractFloat,I<:Integer}
 
 # Arguments
 
 - `xin`  - 1D input grid
 - `xout` - 1D output grid
-- `r`    - kaiser window parameter (default: 0, no windowing)
+- keywords
+    - `r`: kaiser window parameter (default: 0, no windowing)
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
 - If xout has more than one point, the spacings of xin and xout are normalized to the spacing of xout.
  
+# Examples
+
+% description
+
+    joSincInterp(xin,xout)
+
+examples with DDT/RDT
+
+    % joSincInterp(xin,xout; DDT=Float32)
+    % joSincInterp(xin,xout; DDT=Float32,RDT=Float64)
+
 """
-function joSincInterp(xin::AbstractArray{T,1},xout::AbstractArray{T,1};r::I=0,DDT=T,RDT=T) where {T<:AbstractFloat,I<:Integer}
+function joSincInterp(xin::AbstractArray{T,1},xout::AbstractArray{T,1};
+    r::I=0,DDT::DataType=T,RDT::DataType=DDT,name::String="joSincInterp") where {T<:AbstractFloat,I<:Integer}
+
     if length(xout)>1
         dx = xout[2]-xout[1]
         xin = xin./dx
@@ -41,7 +60,7 @@ function joSincInterp(xin::AbstractArray{T,1},xout::AbstractArray{T,1};r::I=0,DD
         window = [joSincInterp_etc.kaiser_window(xout[i]-xin[j],r,r_b[r]) for i in 1:length(xout), j in 1:length(xin)]
         S = S .* window
     end
-    return joMatrix(S,DDT=DDT,RDT=RDT)
+    return joMatrix(S,DDT=DDT,RDT=RDT,name=name)
 
 end
 

@@ -47,27 +47,43 @@ using .joLinInterp1D_etc
 
 export joLinInterp1D
 """
-
-    julia> joLinInterp1D(xin,xout,T)
+    julia> joLinInterp1D(xin,xout;[DDT=...,][RDT=...,][name=...])
 
 1D Linear interpolation operator
+
+# Signature
+
+    function joLinInterp1D(xin::AbstractArray{T,1},xout::AbstractArray{T,1};
+        DDT::DataType=T,RDT::DataType=DDT,name::String="joLinInterp1D") where {T<:AbstractFloat}
 
 # Arguments
 
 - `xin`  - input grid
 - `xout` - output grid
-- `T`    - vector data type
-
-# Signature
-
-    joLinInterp1D(xin,xout,T)
+- keywords
+    - `DDT`: domain data type
+    - `RDT`: range data type
+    - `name`: custom name
 
 # Notes
 
 - The interval [minimum(xout),maximum(xout)] must be contained in the interval [minimum(xin),maximum(xin)]
 
+# Examples
+
+% description
+
+    joLinInterp1D(xin,xout)
+
+examples with DDT/RDT
+
+    joLinInterp1D(xin,xout; DDT=Float32)
+    joLinInterp1D(xin,xout; DDT=Float32,RDT=Float64)
+
 """
-function joLinInterp1D(xin,xout,T)
+function joLinInterp1D(xin::AbstractArray{T,1},xout::AbstractArray{T,1};
+    DDT::DataType=T,RDT::DataType=DDT,name::String="joLinInterp1D") where {T<:AbstractFloat}
+
     xin = sort(xin)
     xout = sort(xout)
     nin = length(xin)
@@ -78,6 +94,6 @@ function joLinInterp1D(xin,xout,T)
     b = (xout-xin[I])./(xin[I.+1]-xin[I])
     a = (xin[I.+1]-xout)./(xin[I.+1]-xin[I])
     A = sparse(1:nout,I,a,nout,nin) + sparse(1:nout,min.(I.+1,nin),b,nout,nin)
-    return joMatrix(A,DDT=T,name="joLinInterp1D")
+    return joMatrix(A,DDT=DDT,RDT=RDT,name=name)
 end
 
