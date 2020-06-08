@@ -106,20 +106,28 @@ end
 ############################
 ## overloaded Base functions
 
-# display(jo)
-function display(A::joCoreBlock)
-    println("# joCoreBlock")
-    println("-      name: ",A.name)
-    println("-      type: ",typeof(A))
-    println("-      size: ",size(A))
-    println("-  # of ops: ",A.l)
-    println("-   m-sizes: ",A.ms)
-    println("-   n-sizes: ",A.ns)
-    println("- m-offsets: ",A.mo)
-    println("- n-offsets: ",A.no)
-    println("-  weigthts: ",A.ws)
+# show(jo)
+function show(A::joCoreBlock)
+    println("Type: $(typeof(A).name)")
+    println("Name: $(A.name)")
+    println("Size: $(size(A))")
+    println(" DDT: $(deltype(A))")
+    println(" RDT: $(reltype(A))")
+    println("# of ops: $(A.l)")
     for i=1:A.l
-    println("*      op $i: ",(A.fop[i].name,typeof(A.fop[i]),A.fop[i].m,A.fop[i].n))
+        a=A.fop[i]
+        println("  $i Type: $(typeof(a).name)")
+        println("     Name: $(a.name)")
+        println("     Size: $(size(a))")
+        println(" M-offset: $(A.mo[i])")
+        println(" N-offset: $(A.no[i])")
+        try
+            println("   Weight: $(A.ws[i])")
+        catch
+            nothing
+        end
+        println("      DDT: $(deltype(a))")
+        println("      RDT: $(reltype(a))")
     end
 end
 

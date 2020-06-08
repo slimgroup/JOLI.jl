@@ -285,10 +285,7 @@ joPAsetup(parts::Tuple{Vararg{Tuple{Vararg{INT}}}};kwargs...) where INT<:Integer
 ## joPAsetup - overloaded Base functions
 
 # show(jo)
-show(A::joPAsetup) = println((typeof(A),A.DT,A.dims,A.name))
-
-# display(jo)
-function display(d::joPAsetup)
+function show(d::joPAsetup)
     println("joPAsetup: ",d.name)
     println(" DataType: ",d.DT)
     println(" Dims    : ",d.dims)
@@ -299,6 +296,9 @@ function display(d::joPAsetup)
         println(d.idxs[i])
     end
 end
+
+# display(jo)
+display(A::joPAsetup) = println((typeof(A),A.DT,A.dims,A.name))
 
 # transpose(jo)
 function transpose(in::joPAsetup)

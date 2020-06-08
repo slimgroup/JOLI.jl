@@ -11,10 +11,18 @@ deltype(A::joAbstractDAparallelLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractDAparallelLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractDAparallelLinearOperator) = println((typeof(A),((A.m,A.n),A.nvc),A.name))
+function show(A::joAbstractDAparallelLinearOperator)
+    println("Type: $(typeof(A).name)")
+    println("Name: $(A.name)")
+    println("Size: $(size(A))")
+    println(" NVC: $(A.nvc)")
+    println(" DDT: $(deltype(A))")
+    println(" RDT: $(reltype(A))")
+    return nothing
+end
 
 # display(jo)
-display(A::joAbstractDAparallelLinearOperator) = show(A)
+display(A::joAbstractDAparallelLinearOperator) = println((typeof(A),((A.m,A.n),A.nvc),A.name))
 
 # size(jo)
 size(A::joAbstractDAparallelLinearOperator) = A.m,A.n

@@ -11,10 +11,18 @@ deltype(A::joAbstractSAparallelToggleOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractSAparallelToggleOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractSAparallelToggleOperator) = println((typeof(A),((A.m,A.n),A.nvc),A.name))
+function show(A::joAbstractSAparallelToggleOperator)
+    println("Type: $(typeof(A).name)")
+    println("Name: $(A.name)")
+    println("Size: $(size(A))")
+    println(" NVC: $(A.nvc)")
+    println(" DDT: $(deltype(A))")
+    println(" RDT: $(reltype(A))")
+    return nothing
+end
 
 # display(jo)
-display(A::joAbstractSAparallelToggleOperator) = show(A)
+display(A::joAbstractSAparallelToggleOperator) = println((typeof(A),((A.m,A.n),A.nvc),A.name))
 
 # size(jo)
 size(A::joAbstractSAparallelToggleOperator) = A.m,A.n

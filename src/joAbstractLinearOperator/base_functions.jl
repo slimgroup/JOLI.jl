@@ -11,10 +11,17 @@ deltype(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = DDT
 reltype(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = RDT
 
 # show(jo)
-show(A::joAbstractLinearOperator) = println((typeof(A),(A.m,A.n),A.name))
+function show(A::joAbstractLinearOperator)
+    println("Type: $(typeof(A).name)")
+    println("Name: $(A.name)")
+    println("Size: $(size(A))")
+    println(" DDT: $(deltype(A))")
+    println(" RDT: $(reltype(A))")
+    return nothing
+end
 
 # display(jo)
-display(A::joAbstractLinearOperator) = show(A)
+display(A::joAbstractLinearOperator) = println((typeof(A),(A.m,A.n),A.name))
 
 # size(jo)
 size(A::joAbstractLinearOperator) = A.m,A.n
