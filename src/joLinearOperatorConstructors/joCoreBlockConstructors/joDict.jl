@@ -12,25 +12,22 @@ end
 ## outer constructors
 
 """
-Dictionary operator composed from different square JOLI operators
+    julia> op = joDict(op1[,op2][,...];[weights=...,][name=...])
+
+Dictionary (single block row) operator composed from different JOLI operators
+
+# Signature
 
     joDict(ops::joAbstractLinearOperator...;
-        weights::LocalVector,name::String)
+        weights::LocalVector{WDT}=zeros(0),name::String="joDict")
+            where {WDT<:Number}
 
-# Example
+# Arguments
 
-    a=rand(ComplexF64,4,4);
-    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
-    b=rand(ComplexF64,4,8);
-    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
-    c=rand(ComplexF64,4,6);
-    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
-    # either
-        D=joDict(A,B,C) # basic dictionary in function syntax
-    #or
-        D=[A B C] # basic dictionary in [] syntax
-    w=rand(ComplexF64,3)
-    D=joDict(A,B,C;weights=w) # weighted dictionary
+- `op#`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `weights`: vector of waights for each operator
+    - `name`: custom name
 
 # Notes
 
@@ -38,9 +35,37 @@ Dictionary operator composed from different square JOLI operators
 - all given operators must have same domain/range types
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
+# Example
+
+define operators
+
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,4,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,4,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
+
+define weights if needed
+
+    w=rand(ComplexF64,3)
+
+basic dictionary in function syntax
+
+    D=joDict(A,B,C)
+
+basic dictionary in [] syntax
+
+    D=[A B C]
+
+weighted dictionary
+
+    D=joDict(A,B,C;weights=w)
+
 """
 function joDict(ops::joAbstractLinearOperator...;
            weights::LocalVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
+
     isempty(ops) && throw(joDictException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -85,18 +110,23 @@ function joDict(ops::joAbstractLinearOperator...;
                       fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 """
+    julia> op = joDict(l,op;[weights=...,][name=...])
+
 Dictionary operator composed from l-times replicated square JOLI operator
 
-    joDict(l::Int,op::joAbstractLinearOperator;
-        weights::LocalVector,name::String)
+# Signature
 
-# Example
+    joDict(l::Integer,op::joAbstractLinearOperator;
+        weights::LocalVector{WDT}=zeros(0),name::String="joDict")
+            where {WDT<:Number}
 
-    a=rand(ComplexF64,4,4);
-    w=rand(ComplexF64,3)
-    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
-    D=joDict(3,A) # basic dictionary
-    D=joDict(3,A;weights=w) # weighted dictionary
+# Arguments
+
+- `l`: # of replcated blocks
+- `op`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `weights`: vector of waights for each operator
+    - `name`: custom name
 
 # Notes
 
@@ -104,9 +134,27 @@ Dictionary operator composed from l-times replicated square JOLI operator
 - all given operators must have same domain/range types
 - the domain/range types of joDict are equal to domain/range types of the given operators
 
+# Example
+
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+
+define weights if needed
+
+    w=rand(ComplexF64,3)
+
+basic dictionary
+
+    D=joDict(3,A)
+
+weighted dictionary
+
+    D=joDict(3,A;weights=w)
+
 """
 function joDict(l::Integer,op::joAbstractLinearOperator;
            weights::LocalVector{WDT}=zeros(0),name::String="joDict") where {WDT<:Number}
+
     (length(weights)==l || length(weights)==0) || throw(joDictException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
     ms=zeros(Int,l)

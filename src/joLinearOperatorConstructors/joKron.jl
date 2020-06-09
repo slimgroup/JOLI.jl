@@ -6,25 +6,46 @@
 ## outer constructors
 
 """
-    joKron(ops::joAbstractLinearOperator...)
+    julia> op = joKron(op1[,op2][,...];[name=...])
 
-Kronecker product
+Kronecker product of serial JOLI operators
 
-# Example
-    a=rand(ComplexF64,6,4);
-    A=joMatrix(a;name="A")
-    b=rand(ComplexF64,6,8);
-    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
-    c=rand(ComplexF64,6,4);
-    C=joMatrix(c;DDT=ComplexF64,RDT=ComplexF32,name="C")
-    K=joKron(A,B,C)
+# Signature
+
+    joKron(ops::joAbstractLinearOperator...;name::String="joKron")
+
+# Arguments
+
+- `op#`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `name`: custom name
 
 # Notes
+
 - the domain and range types of joKron are equal respectively to domain type of rightmost operator and range type of leftmost operator
 - all operators in the chain must have consistent passing domain/range types, i.e. domain type of operator on the left have to be the same as range type of operator on the right
 
+
+# Example
+
+define operators
+
+    a=rand(ComplexF64,6,4);
+    A=joMatrix(a;name="A")
+
+    b=rand(ComplexF64,6,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+
+    c=rand(ComplexF64,6,4);
+    C=joMatrix(c;DDT=ComplexF64,RDT=ComplexF32,name="C")
+
+define Kronecker product
+
+    K=joKron(A,B,C)
+
 """
-function joKron(ops::joAbstractLinearOperator...)
+function joKron(ops::joAbstractLinearOperator...;name::String="joKron")
+
     isempty(ops) && throw(joKronException("empty argument list"))
     l=length(ops)
     for i=2:l
@@ -48,7 +69,7 @@ function joKron(ops::joAbstractLinearOperator...)
         push!(fops_A,adjoint(ops[i]))
         push!(fops_C,conj(ops[i]))
     end
-    return joKron{deltype(fops[l]),reltype(fops[1])}("joKron($l)",m,n,l,ms,ns,false,
+    return joKron{deltype(fops[l]),reltype(fops[1])}(name*"($l)",m,n,l,ms,ns,false,
                  fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 

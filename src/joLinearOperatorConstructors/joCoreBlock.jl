@@ -6,36 +6,75 @@
 ## outer constructors
 
 """
-Universal (Core) block operator composed from different JOLI operators
+    julia> op = joCoreBlock(op1[,op2][,...];
+        [moffsets=...,][noffsets=...,][weights=...,]
+        [mextend=...,][nextend=...,][name=...])
+
+Universal (Core) block operator composed from serial JOLI operators
+
+# Signature
 
     joCoreBlock(ops::joAbstractLinearOperator...;
         moffsets::LocalVector{Integer},noffsets::LocalVector{Integer},
         weights::LocalVector,mextend::Integer,nextend::Integer,name::String)
 
-# Example
-    a=rand(ComplexF64,4,5);
-    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
-    b=rand(ComplexF64,7,8);
-    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
-    c=rand(ComplexF64,6,8);
-    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
-    moff=[0;5;13]
-    noff=[0;6;15]
-    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff) # sparse blocks
-    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff,mextend=5,nextend=5) # sparse blocks with zero extansion of (mextend,nextend) size
-    BD=joCoreBlock(A,B,C) # basic diagonal-corners adjacent blocks
-    w=rand(ComplexF64,3)
-    BD=joCoreBlock(A,B,C;weights=w) # weighted basic diagonal-corners adjacent blocks
+# Arguments
+
+- `op#`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `moffsets`: vector of starting indecies in 1st dimansion
+    - `noffsets`: vector of starting indecies in 2nd dimansion
+    - `weights`: vector of waights for each operator
+    - `mextend`: size of zero extension in 1st dimension
+    - `nextend`: size of zero extension in 2nd dimension
+    - `name`: custom name
 
 # Notes
+
 - all given operators must have same domain/range types
 - the domain/range types of joCoreBlock are equal to domain/range types of the given operators
+
+# Example
+
+define operators
+
+    a=rand(ComplexF64,4,5);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+
+    b=rand(ComplexF64,7,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+
+    c=rand(ComplexF64,6,8);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
+
+define supporting vectors for more complex blocks
+
+    moff=[0;5;13]
+    noff=[0;6;15]
+    w=rand(ComplexF64,3)
+
+basic diagonal-corners adjacent blocks
+
+    BD=joCoreBlock(A,B,C)
+
+sparse blocks
+
+    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff)
+
+sparse blocks with zero extansion of (mextend,nextend) size
+
+    BD=joCoreBlock(A,B,C;moffsets=moff,noffsets=noff,mextend=5,nextend=5)
+
+weighted basic diagonal-corners adjacent blocks
+
+    BD=joCoreBlock(A,B,C;weights=w)
 
 """
 function joCoreBlock(ops::joAbstractLinearOperator...;
         moffsets::LocalVector{OT}=zeros(Int,0),noffsets::LocalVector{OT}=zeros(Int,0),
         weights::LocalVector{WT}=zeros(0),mextend::Integer=0,nextend::Integer=0,
         name::String="joCoreBlock") where {OT<:Integer,WT<:Number}
+
     isempty(ops) && throw(joCoreBlockException("empty argument list"))
     l=length(ops)
     for i=1:l

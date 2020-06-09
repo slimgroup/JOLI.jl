@@ -12,12 +12,35 @@ end
 ## outer constructors
 
 """
+    julia> op = joBlock(rows,op1[,op2][,...];[weights=...,][name=...])
+
 Block operator composed from different square JOLI operators
 
-    joBlock(rows::Tuple{Vararg{Int}},ops::joAbstractLinearOperator...;
-        weights::LocalVector,name::String)
+# Signature
+
+    joBlock(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
+        weights::LocalVector{WDT}=zeros(0),name::String="joBlock")
+            where {RVDT<:Integer,WDT<:Number}
+
+# Arguments
+
+- `rows`: # number of operator in a blocks' row
+- `op#`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `weights`: vector of waights for each operator
+    - `name`: custom name
+
+# Notes
+
+- operators are to be given in row-major order
+- all operators in a blocs' row must have the same # of rows (M)
+- sum of Ns for operators in each row must be the same
+- all given operators must have same domain/range types
+- the domain/range types of joBlock are equal to domain/range types of the given operators
 
 # Example
+
+define operators
 
     a=rand(ComplexF64,4,4);
     A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
@@ -27,24 +50,27 @@ Block operator composed from different square JOLI operators
     C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
     d=rand(ComplexF64,6,6);
     D=joMatrix(d;DDT=ComplexF32,RDT=ComplexF64,name="D")
-    # either
-        S=joBlock([2,2],A,B,C,D) # basic block in function syntax
-    # or
-        S=[A B; C D] # basic block in [] syntax
+
+define weights if needed
+
     w=rand(ComplexF64,4)
-    S=joBlock(A,B,C;weights=w) # weighted block
 
-# Notes
+basic blocks in function syntax
 
-- operators are to be given in row-major order
-- all operators in a row must have the same # of rows (M)
-- sum of Ns for operators in each row must be the same
-- all given operators must have same domain/range types
-- the domain/range types of joBlock are equal to domain/range types of the given operators
+    S=joBlock([2,2],A,B,C,D)
+
+basic blocks in [] syntax
+
+    S=[A B; C D]
+
+weighted blocks
+
+    S=joBlock([2,2],A,B,C,D;weights=w)
 
 """
 function joBlock(rows::Vector{RVDT},ops::joAbstractLinearOperator...;
            weights::LocalVector{WDT}=zeros(0),name::String="joBlock") where {RVDT<:Integer,WDT<:Number}
+
     isempty(ops) && throw(joBlockException("empty argument list"))
     l=length(ops)
     sum(rows)==l || throw(joBlockException("sum of operators in the rows does not match # of operators"))

@@ -12,22 +12,22 @@ end
 ## outer constructors
 
 """
+    julia> op = joBlockDiag(op1[,op2][,...];[weights=...,][name=...])
+
 Block-diagonal operator composed from different square JOLI operators
 
+# Signature
+
     joBlockDiag(ops::joAbstractLinearOperator...;
-        weights::LocalVector,name::String)
+        weights::LocalVector{WDT}=zeros(0),name::String="joBlockDiag")
+            where {WDT<:Number}
 
-# Example
+# Arguments
 
-    a=rand(ComplexF64,4,4);
-    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
-    b=rand(ComplexF64,8,8);
-    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
-    c=rand(ComplexF64,6,6);
-    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
-    BD=joBlockDiag(A,B,C) # basic block diagonal
-    w=rand(ComplexF64,3)
-    BD=joBlockDiag(A,B,C;weights=w) # weighted block diagonal
+- `op#`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `weights`: vector of waights for each operator
+    - `name`: custom name
 
 # Notes
 
@@ -35,9 +35,33 @@ Block-diagonal operator composed from different square JOLI operators
 - all given operators must have same domain/range types
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 
+# Example
+
+define operators
+
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+    b=rand(ComplexF64,8,8);
+    B=joMatrix(b;DDT=ComplexF32,RDT=ComplexF64,name="B")
+    c=rand(ComplexF64,6,6);
+    C=joMatrix(c;DDT=ComplexF32,RDT=ComplexF64,name="C")
+
+define weights if needed
+
+    w=rand(ComplexF64,3)
+
+basic block diagonal
+
+    BD=joBlockDiag(A,B,C)
+
+weighted block diagonal
+
+    BD=joBlockDiag(A,B,C;weights=w)
+
 """
 function joBlockDiag(ops::joAbstractLinearOperator...;
            weights::LocalVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
+
     isempty(ops) && throw(joBlockDiagException("empty argument list"))
     l=length(ops)
     for i=1:l
@@ -83,26 +107,52 @@ function joBlockDiag(ops::joAbstractLinearOperator...;
                       fops,fops_T,fops_A,fops_C,@joNF,@joNF,@joNF,@joNF)
 end
 """
+    julia> op = joBlockDiag(l,op;[weights=...,][name=...])
+
 Block-diagonal operator composed from l-times replicated square JOLI operator
 
-    joBlockDiag(l::Int,op::joAbstractLinearOperator;weights::LocalVector,name::String)
+# Signature
 
-# Example
+    joBlockDiag(l::Integer,op::joAbstractLinearOperator;
+        weights::LocalVector{WDT}=zeros(0),name::String="joBlockDiag")
+            where {WDT<:Number}
 
-    a=rand(ComplexF64,4,4);
-    w=rand(ComplexF64,3)
-    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
-    BD=joBlockDiag(3,A) # basic block diagonal
-    BD=joBlockDiag(3,A;weights=w) # weighted block diagonal
+# Arguments
+
+- `l`: # of replcated blocks
+- `op`: JOLI operators (subtypes of joAbstractLinearOperator)
+- keywords
+    - `weights`: vector of waights for each operator
+    - `name`: custom name
 
 # Notes
 
 - all given operators must have same domain/range types
 - the domain/range types of joBlockDiag are equal to domain/range types of the given operators
 
+# Example
+
+define operator
+
+    a=rand(ComplexF64,4,4);
+    A=joMatrix(a;DDT=ComplexF32,RDT=ComplexF64,name="A")
+
+define weights if needed
+
+    w=rand(ComplexF64,3)
+
+basic block diagonal
+
+    BD=joBlockDiag(3,A)
+
+weighted block diagonal
+
+    BD=joBlockDiag(3,A;weights=w)
+
 """
 function joBlockDiag(l::Integer,op::joAbstractLinearOperator;
            weights::LocalVector{WDT}=zeros(0),name::String="joBlockDiag") where {WDT<:Number}
+
     op.m==op.n || throw(joBlockDiagException("non-square operator"))
     (length(weights)==l || length(weights)==0) || throw(joBlockDiagException("lenght of weights vector does not match number of operators"))
     ws=Base.deepcopy(weights)
