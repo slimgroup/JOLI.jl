@@ -62,11 +62,11 @@ using .joGaussian_etc
 
 export joGaussian
 """
-Gausian matrix
-
     julia> op = joGaussian(M,[N];
                 [implicit=...,][normalized=...,][orthonormal=...,][RNG=...,]
                 [DDT=...,][RDT=...,][name=...])
+
+Gausian matrix
 
 # Signature
 

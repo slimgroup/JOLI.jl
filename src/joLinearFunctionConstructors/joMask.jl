@@ -2,7 +2,7 @@
 
 export joMask
 """
-    joMask(n,idx;[DDT=...,][RDT=...,][name=...])
+    julia> op = joMask(n,idx;[DDT=...,][RDT=...,][name=...])
 
 Mask operator with index array
 
@@ -49,7 +49,7 @@ function joMask(n::Integer,idx::Vector{VDT};
         )
 end
 """
-    joMask(mask;[makecopy=...,][DDT=...,][RDT=...,][name=...])
+    julia> op = joMask(mask;[makecopy=...,][DDT=...,][RDT=...,][name=...])
 
 Mask operator with BitArray mask
 

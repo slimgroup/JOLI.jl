@@ -40,7 +40,6 @@ joEye(m::Integer;DDT::DataType=joFloat,RDT::DataType=DDT,name::String="joEye") =
         v8->jo_convert(DDT,v8,false)
         )
 """
-
     julia> op = joEye(m,n;[DDT=...,][RDT=...,][name=...])
 
 Identity matrix - rectangular
