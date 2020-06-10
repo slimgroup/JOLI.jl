@@ -228,6 +228,7 @@ joLinearFunctionFwd_A(m::Integer,n::Integer,
 # exported in joAbstractOperator/constructors.jl
 
 # joAddSolver - outer constructor for adding solver to operator
+export joAddSolverAny
 """
 joAddSolver outer constructor
 
@@ -252,6 +253,7 @@ joAddSolverAny(A::joAbstractLinearOperator{DDT,RDT},slvr::Function) where {DDT,R
             v7->slvr(adjoint(A),v7),
             v8->slvr(conj(A),v8)
             )
+export joAddSolverAll
 """
 joAddSolver outer constructor
 

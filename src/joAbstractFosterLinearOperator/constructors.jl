@@ -2,6 +2,9 @@
 ## joAbstractFosterLinearOperator - outer constructors
 ############################################################
 
+# common exports
+export joLoosen
+
 ############################################################
 ## joLooseMatrix - outer constructors
 

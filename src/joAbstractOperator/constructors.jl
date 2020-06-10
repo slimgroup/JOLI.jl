@@ -2,8 +2,6 @@
 ## joAbstractOperator - outer constructors
 ############################################################
 
-# common constructor exports
+# this file is currently not included in joAbstractOperator.jl
+# common constructor exports are in respective */constructors.jl files
 
-# in ./joAbstractLinearOperator/constructors.jl
-# in ./joAbstractDAparallelLinearOperator/constructors.jl
-export joAddSolverAny, joAddSolverAll

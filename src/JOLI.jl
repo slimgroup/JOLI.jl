@@ -85,9 +85,8 @@ import IterativeSolvers.Adivtype
 # extra exported methods
 export deltype, reltype
 export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint, isequiv
-export joLoosen
 
-# array unions
+# local array unions for serial operators
 const LocalVector{T}=Union{Vector{T},SubArray{T,1,dA},
                            AbstractSparseVector{T}} where {T,dA<:Array{T}}
 const LocalMatrix{T}=Union{Matrix{T},SubArray{T,2,dA},Transpose{T,Matrix{T}},Adjoint{T,Matrix{T}},
@@ -100,17 +99,29 @@ const LocalArray{T}=Union{Array{T},SubArray{T,dA},
 export joTol
 global joTol = sqrt(eps())
 
+###############################
 # core operator implementations
+###############################
+
+# all type definitions
 include("joTypes.jl")
+
+# front matters other then types
 include("joMiscTypesMethods.jl")
 include("joUtils.jl")
 include("joExternalPackages.jl")
-include("joAbstractSAparallelToggleOperator.jl")
-include("joAbstractDAparallelToggleOperator.jl")
+
+# top abstract type
 include("joAbstractOperator.jl")
+
+# serial operators foundation
 include("joAbstractLinearOperator.jl")
 include("joAbstractFosterLinearOperator.jl")
 include("joAbstractLinearOperatorInplace.jl")
+
+# parallel operators foundation
+include("joAbstractSAparallelToggleOperator.jl")
+include("joAbstractDAparallelToggleOperator.jl")
 include("joAbstractSAparallelLinearOperator.jl")
 include("joAbstractDAparallelLinearOperator.jl")
 include("joPAmode.jl")
