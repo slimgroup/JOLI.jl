@@ -120,25 +120,25 @@ adjoint(A::joKron{DDT,RDT}) where {DDT,RDT} =
 function *(A::joKron{ADDT,ARDT},v::LocalVector{ADDT}) where {ADDT,ARDT}
     size(A,2) == size(v,1) || throw(joKronException("shape mismatch"))
     ksz=reverse(A.ns)
-    V=reshape(v,(ksz...))
+    V=reshape(v,Tuple(ksz))
     p=[x for x in 1:A.l]
     if A.flip
         p=circshift(p,1)
         for i=1:1:A.l
             ksz=circshift(ksz,1)
             V=permutedims(V,p)
-            V=reshape(V,(ksz[1],prod(ksz[2:length(ksz)])))
+            V=reshape(V,Tuple([ksz[1],prod(ksz[2:length(ksz)])]))
             V=A.fop[i]*V
             ksz[1]=A.fop[i].m
-            V=reshape(V,(ksz...))
+            V=reshape(V,Tuple(ksz))
         end
     else
         p=circshift(p,-1)
         for i=A.l:-1:1
-            V=reshape(V,(ksz[1],prod(ksz[2:length(ksz)])))
+            V=reshape(V,Tuple([ksz[1],prod(ksz[2:length(ksz)])]))
             V=A.fop[i]*V
             ksz[1]=A.fop[i].m
-            V=reshape(V,(ksz...))
+            V=reshape(V,Tuple(ksz))
             V=permutedims(V,p)
             ksz=circshift(ksz,-1)
         end
