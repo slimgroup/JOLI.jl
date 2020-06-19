@@ -1,6 +1,7 @@
 # JOLI - Julia Operators LIbrary
 
 [![Build Status](https://travis-ci.org/slimgroup/JOLI.jl.svg?branch=master)](https://travis-ci.org/slimgroup/JOLI.jl)
+[![Citation DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3883023.svg)](https://doi.org/10.5281/zenodo.3883023)
 [[REFERENCE guide](https://slimgroup.github.io/JOLI.jl)]
 
 **Julia framework for constructing matrix-free linear operators

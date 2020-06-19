@@ -1,7 +1,7 @@
 """
     julia> res = % method name and typeless arguments
 
-% Description including return type
+% Description
 
 # Signature
 
@@ -11,9 +11,10 @@
 
 - % argument list -> `arg`: meaning
 - optional
+    - `name`: custom name
+    - `DDT`: domain data type
+    - `RDT`: range data type
     - % argument list -> `arg`: meaning
-- keyword
-    - % argument list -> `arg`: meaning, defaults to ???
 
 # Notes
 
