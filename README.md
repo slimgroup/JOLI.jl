@@ -67,6 +67,8 @@ After switching to package manager prompt (using ']') type:
 
 - **CurveLab**: In order to use `joCurvelet2D` or `joCurvelet2DnoFFT` operators, you need to obtain *CurveLab-2.1.2-SLIM*, a SLIM extension to *CurveLab-2.1.2*. The tarball of this extension is available from [curvelet.org](http://www.curvelet.org) under [Software](http://www.curvelet.org/software.html) tab. The installation instructions are included in the tarball of *CurveLab-2.1.2-SLIM*. Note, that CurveLab is free only for academic use and requires registration.
 
+- **PyWavelets**: In order to use `joSWT` that implements 1D stationary/shift invariant wavelet transform, the [PyWavelets](https://github.com/PyWavelets/pywt) package needs to be installed within the python environement used by [PyCall.jl](https://github.com/JuliaPy/PyCall.jl). By default, it will use [Conda.jl](https://github.com/JuliaPy/Conda.jl) and you should follow its directiv to install a package within it. If you have configured `PyCall` with your own python environment you can install `PyWavelets` via `pip install --upgrade PyWavelets`.
+
 ## Documentation (more to come)
 
 For now it is just [REFERENCE guide](https://slimgroup.github.io/JOLI.jl).

@@ -14,6 +14,9 @@ include("joLinearFunctionConstructors/joNFFT.jl")
 # DWT operators: joDWT
 include("joLinearFunctionConstructors/joDWT.jl")
 
+# SWT operators: joSWT
+include("joLinearFunctionConstructors/joSWT.jl")
+
 # Romberg operator
 include("joLinearFunctionConstructors/joRomberg.jl")
 
