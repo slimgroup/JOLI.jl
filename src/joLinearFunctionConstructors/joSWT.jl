@@ -6,17 +6,17 @@ module joSWT_etc
     using PyCall
     # 1D
     function apply_swt(v::Vector{vdt}, wt::String, L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        swt = pyimport("pywt").swt
-        rv = swt(v, wt, level=L, start_level=0, norm=true, trim_approx=true)
+        pywt = pyimport("pywt")
+        rv = pywt.swt(v, wt, level=L, start_level=0, norm=true, trim_approx=true)
         rv = vcat(rv...)
         rv = jo_convert(rdt, rv, false)
         return rv
     end
     function apply_iswt(v::Vector{vdt},wt::String,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
-        iswt = pyimport("pywt").iswt
+        pywt = pyimport("pywt")
         v = reshape(v, :, L+1)
         v = [v[:, i] for i=1:L+1]
-        rv = iswt(v, wt, norm=true)
+        rv = pywt.iswt(v, wt, norm=true)
         rv = jo_convert(rdt, rv, false)
         return rv
     end
@@ -51,7 +51,8 @@ Choice of wavelet is fixed to "db20"
 
 # Notes
 
-- only square 1D arrays are supported for now due to limitations of author time.
+- only 1D arrays are supported for now due to limitations of author time.
+- only orthogonal wavelets should be used from ["haar", "db", "sym", "coif"] to have access to adjoint via inverse.
 
 # Examples
 

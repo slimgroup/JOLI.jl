@@ -62,8 +62,8 @@ function isadjoint(A::joAbstractLinearOperator{DDT,RDT},samples::Integer=3;tol::
             y= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
             y=A*y
         end
-        nfr=convert(RDT,normfactor)
-        nfd=convert(DDT,normfactor)
+        nfr=convert(RDT, normfactor)
+        nfd=convert(DDT, normfactor)
         Axy=dot((A*x)/nfr,y)
         xAty=dot(x,(adjoint(A)*y)*nfd)
         dif=abs(xAty-Axy); push!(DIF,dif)
