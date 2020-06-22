@@ -5,19 +5,21 @@ module joSWT_etc
     using JOLI: jo_convert
     using PyCall
     # 1D
-    function apply_swt(v::Vector{vdt}, wt::String, L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+    function apply_swt(v::Vector{vdt}, wt::String, L::Integer,rdt::DataType,pad::Integer) where vdt<:Union{AbstractFloat,Complex}
         pywt = pyimport("pywt")
+        v = [v;zeros(vdt, pad)]
         rv = pywt.swt(v, wt, level=L, start_level=0, norm=true, trim_approx=true)
         rv = vcat(rv...)
         rv = jo_convert(rdt, rv, false)
         return rv
     end
-    function apply_iswt(v::Vector{vdt},wt::String,L::Integer,rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
+    function apply_iswt(v::Vector{vdt},wt::String,L::Integer,rdt::DataType,pad::Integer) where vdt<:Union{AbstractFloat,Complex}
         pywt = pyimport("pywt")
         v = reshape(v, :, L+1)
         v = [v[:, i] for i=1:L+1]
         rv = pywt.iswt(v, wt, norm=true)
-        rv = jo_convert(rdt, rv, false)
+        # Convert and remove pad
+        rv = jo_convert(rdt, rv[1:end-pad], false)
         return rv
     end
 end
@@ -67,14 +69,18 @@ examples with DDT/RDT
 
 """
 function joSWT(m::Integer,wt::String="db20";
-    L::Integer=maxtransformlevels(m),
+    L::Integer=maxtransformlevels(m + m%2),
     DDT::DataType=joFloat,RDT::DataType=DDT,
     name::String="joSWT")
-    return joLinearFunction_A((L+1)*m,m,
-        v1->joSWT_etc.apply_swt(v1, wt, L, RDT),
-        v2->joSWT_etc.apply_iswt(v2, wt, L, DDT),
-        v3->joSWT_etc.apply_iswt(v3, wt, L, DDT),
-        v4->joSWT_etc.apply_swt(v4, wt, L, RDT),
+
+    # Only work with even number of points
+    pad = m%2
+    n = (L+1)*(m + pad)
+    return joLinearFunction_A(n,m,
+        v1->joSWT_etc.apply_swt(v1, wt, L, RDT, pad),
+        v2->joSWT_etc.apply_iswt(v2, wt, L, DDT, pad),
+        v3->joSWT_etc.apply_iswt(v3, wt, L, DDT, pad),
+        v4->joSWT_etc.apply_swt(v4, wt, L, RDT, pad),
         DDT,RDT;
         name=name)
 end
