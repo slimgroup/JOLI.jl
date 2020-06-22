@@ -5,6 +5,7 @@ using SparseArrays
 using InplaceOps
 using FFTW
 using Wavelets
+using PyCall
 using JOLI
 
 jo_type_mismatch_error_set(false)
@@ -37,6 +38,7 @@ include("test_joNFFT.jl")
 include("test_joDCT.jl")
 include("test_joDWT.jl")
 include("test_joRomberg.jl")
+include("test_joSWT.jl")
 include("test_joCurvelet2D.jl")
 include("test_joCurvelet2DnoFFT.jl")
 include("test_joExtend.jl")
