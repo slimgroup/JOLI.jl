@@ -54,6 +54,7 @@ using IterativeSolvers
 using FFTW
 using NFFT
 using Wavelets
+using PyCall
 
 # what's imported from Base
 import Base.eltype
