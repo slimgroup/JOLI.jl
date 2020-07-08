@@ -6,3 +6,4 @@ InplaceOps
 FFTW
 NFFT
 Wavelets
+PyCall
