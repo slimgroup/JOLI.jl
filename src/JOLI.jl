@@ -85,7 +85,8 @@ import IterativeSolvers.Adivtype
 
 # extra exported methods
 export deltype, reltype
-export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint, isequiv
+export elements, hasinverse, issquare, istall, iswide, iscomplex, islinear, isadjoint, isequiv,
+	   isposdef, normest
 
 # local array unions for serial operators
 const LocalVector{T}=Union{Vector{T},SubArray{T,1,dA},

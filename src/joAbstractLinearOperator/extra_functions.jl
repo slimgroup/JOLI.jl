@@ -20,6 +20,83 @@ iswide(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = (A.m < A.n)
 # iscomplex(jo)
 iscomplex(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !(DDT<:Real && RDT<:Real)
 
+# iscomplex(jo)
+iscomplex_b(A::joAbstractLinearOperator{DDT,RDT}) where {DDT,RDT} = !(DDT<:Real && RDT<:Real)
+
+
+"""
+    normest(jo;numiters, tol)
+Approximate spectral norm (largest singular value) through power iterations. For small matrices a single iteration 
+should be enough. 
+"""
+
+function normest(A::joAbstractLinearOperator{DDT,RDT};numiters::Integer=5,tol::Float64=0.,verbose::Bool=false) where {DDT,RDT}   
+
+    spec_norm_aprox = 0
+
+    u_hat = DDT<:Real ? jo_convert(DDT,randn(A.m)) : jo_convert(DDT,complex.(randn(A.m),randn(A.m)))
+    u_hat  = u_hat / norm(u_hat,2)
+    v_hat  = deepcopy(u_hat)
+    for i=1:numiters
+        result_u = A'*u_hat
+        v_hat    = result_u / norm(result_u,2)
+      
+        result_v = A*v_hat
+        u_hat    = result_v / norm(result_v,2)
+
+        spec_norm_aprox = u_hat'*(A*v_hat)
+    end
+    return spec_norm_aprox
+end
+
+"""
+    isposdef(jo; semi=false)
+
+approximate check that the operator is positive definite or positive semidefinite. 
+"""
+
+function isposdef(A::joAbstractLinearOperator{DDT,RDT},samples::Integer=3;tol::Float64=0.,semi::Bool=false,verbose::Bool=false) where {DDT,RDT}   
+    if !(issquare(A)) 
+        println("Matrix needs to be square for PD/PSD test")
+        return false
+    end
+
+    Test=true
+    TEST=Array{Bool,1}(undef,0)
+    for s=1:samples
+        x= DDT<:Real ? jo_convert(DDT,randn(A.n)) : jo_convert(DDT,complex.(randn(A.n),randn(A.n)))
+        Ax =A*x
+        xAx=x'*Ax #do I need to call dot()?
+
+        #Result must be real so 
+        #imaginary part must be negligible
+        ε = eps(real(DDT))
+        if imag(xAx) > sqrt(ε) * abs(xAx) 
+            test = false
+            push!(TEST,test); 
+            Test=Test&&test
+            result = test ? "PASSED" : "FAILED"
+            if verbose println("Positive definite test [$s] $result") end
+            continue
+        end
+
+        #make sure that real part is larger than (or equal to) zero
+        xAx_real = real(xAx)
+        if semi  
+            test=xAx_real ≥ 0; 
+        else
+            test=xAx_real > 0; 
+        end
+        
+        push!(TEST,test); 
+        Test=Test&&test
+
+        result = test ? "PASSED" : "FAILED"
+        if verbose println("Positive definite test [$s] $result") end
+    end
+    return Test,TEST
+end
+
 # islinear(jo)
 function islinear(A::joAbstractLinearOperator{DDT,RDT},samples::Integer=3;tol::Float64=0.,verbose::Bool=false) where {DDT,RDT}
     Test=true
