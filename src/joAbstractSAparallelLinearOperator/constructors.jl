@@ -7,6 +7,53 @@
 # outer constructors
 export joSAdistributedLinOp
 """
+    julia> joSAdistributedLinOp(A,psin; [,fclean] [,rclean])
+
+Create a linear operator working on 2D SharedArray in multi-vector (over 2nd dimension) mode.
+
+# Signature
+
+    function joSAdistributedLinOp(A::joAbstractLinearOperator{DDT,RDT},psin::joPAsetup,
+        fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
+
+# Arguments
+
+- `A`: joAbstractLinearOperator type
+- `psin`: parallel setup from jpPAsetup
+- `fclean`: close SharedArray after forward operation
+- `rclean`: close SharedArray after forward operation in transpose/adjoint mode
+
+# Examples
+
+- `ps=joPAsetup((12,30))`: define parallel setup for operator with 12 columns and multi-vector with 30 columns
+- `joSAdistributedLinOp(A,ps)`: operator that will apply A to distributed multi-vector with 30 columns
+
+# Notes
+
+- nvc of joPAsetup must be >= then # of workers in the WorkerPool
+- DT in joPAsetup will be overwritten by DDT of the operator
+
+"""
+function joSAdistributedLinOp(A::joAbstractLinearOperator{DDT,RDT},psin::joPAsetup,
+        fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
+
+    psin.chunks[1]==1 || throw(joSAdistributedLinearOperatorException("joSAdistributedLinearOperator: invalid joPAsetup - must not be distributed in 1st dimension"))
+    A.n==psin.dims[1]  || throw(joSAdistributedLinearOperatorException("joSAdistributedLinearOperator: invalid joPAsetup - 1st dimension off joPAsetup does not match size(A,2)"))
+
+    wpool=WorkerPool(psin.procs)
+    nvc=psin.dims[2]
+    parts=joPAsetup_etc.parts(psin,2)
+    idst=joPAsetup(wpool,(A.n,nvc),2,parts=parts,DT=DDT)
+    odst=joPAsetup(wpool,(A.m,nvc),2,parts=parts,DT=RDT)
+    return joSAdistributedLinearOperator{DDT,RDT,2}("joSAdistributedLinearOperator($(A.name))",A.m,A.n,nvc,
+               v1->A*v1,
+               v2->transpose(A)*v2,
+               v3->adjoint(A)*v3,
+               v4->conj(A)*v4,
+               @joNF, @joNF, @joNF, @joNF,
+               idst,odst,fclean,rclean)
+end
+"""
     julia> joSAdistributedLinOp(A,nvc; [parts] [,fclean] [,rclean])
 
 Create a linear operator working on 2D SharedArray in multi-vector (over 2nd dimension) mode.
@@ -25,8 +72,8 @@ Create a linear operator working on 2D SharedArray in multi-vector (over 2nd dim
 - `A`: joAbstractLinearOperator type
 - `nvc`: number of columns in multi-vector
 - `parts`: custom partitioning of 2nd diemnsion 
-- `fclean`: close SArray after forward operation
-- `rclean`: close SArray after forward operation in transpose/adjoint mode
+- `fclean`: close SharedArray after forward operation
+- `rclean`: close SharedArray after forward operation in transpose/adjoint mode
 
 # Examples
 
