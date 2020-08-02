@@ -7,6 +7,8 @@
 # helper module
 module joPAsetup_etc
     using Distributed
+    using JOLI: joPAsetup
+
     function balanced_partition(nlabs::Integer,dsize::Integer)
         part = Vector{Int}(undef,nlabs)
         r::Int = rem(dsize,nlabs)
@@ -79,6 +81,13 @@ module joPAsetup_etc
             idxs[cidx.I...] = ntuple(i -> (cuts[i][cidx[i]]:cuts[i][cidx[i] .+ 1] .- 1), n)
         end
         return (idxs, cuts)
+    end
+
+    function parts(ps::joPAsetup,d::Int)
+        l = length(ps.cuts[d])
+        c = ps.cuts[d]
+        p = [c[i]-c[i-1] for i=2:l]
+        return p
     end
 end
 using .joPAsetup_etc

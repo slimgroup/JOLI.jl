@@ -20,7 +20,7 @@ module joHelpers_etc
         n=length(r)
         eA=zeros(RDT,M,n)
         for i in r
-            eA[:,i-r.start+1] = JOLI.joHelpers_etc.elements_column_helper(A,i)
+            eA[:,i-r.start+1] = elements_column_helper(A,i)
         end
         return eA
     end
