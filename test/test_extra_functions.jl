@@ -44,7 +44,7 @@ using JOLI, Test, LinearAlgebra
 
     A = randn(5,5)
     jo_A = joMatrix(A);
-    @test isapprox(normest(jo_A), opnorm(A);atol=1e-2)
+    @test isapprox(normest(jo_A), opnorm(A);atol=1e-1)
    
 
 end
