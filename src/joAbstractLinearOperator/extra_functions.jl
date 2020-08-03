@@ -35,17 +35,16 @@ function normest(A::joAbstractLinearOperator{DDT,RDT};numiters::Integer=5,tol::F
     spec_norm_aprox = 0
 
     u_hat = DDT<:Real ? jo_convert(DDT,randn(A.m)) : jo_convert(DDT,complex.(randn(A.m),randn(A.m)))
-    u_hat  = u_hat / norm(u_hat,2)
-    v_hat  = deepcopy(u_hat)
+    mul!(u_hat,u_hat,1/norm(u_hat,2)) 
+    v_hat = deepcopy(u_hat)
     for i=1:numiters
-        result_u = A'*u_hat
-        v_hat    = result_u / norm(result_u,2)
+        v_hat = A'*u_hat
+        mul!(v_hat,v_hat,1/norm(v_hat,2)) 
       
-        result_v = A*v_hat
-        u_hat    = result_v / norm(result_v,2)
-
-        spec_norm_aprox = u_hat'*(A*v_hat)
+        u_hat = A*v_hat
+        mul!(u_hat,u_hat,1/norm(u_hat,2))      
     end
+    spec_norm_aprox = u_hat'*(A*v_hat)
     return spec_norm_aprox
 end
 
