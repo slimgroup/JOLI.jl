@@ -143,8 +143,8 @@ function joExtend(n::Integer,pad_type::Symbol;
     DDT::DataType=joFloat,RDT::DataType=DDT,
     name="joExtend")
 
-    (pad_upper>=0 && pad_upper<=n) || throw(joLinearFunctionException("joExtend: invalid pad_upper size; should be 0<= pad_upper <=n"))
-    (pad_lower>=0 && pad_lower<=n) || throw(joLinearFunctionException("joExtend: invalid pad_lower size; should be 0<= pad_lower <=n"))
+    (pad_upper>=0) || throw(joLinearFunctionException("joExtend: invalid pad_upper size; should be >=0"))
+    (pad_lower>=0) || throw(joLinearFunctionException("joExtend: invalid pad_lower size; should be >=0"))
     if pad_type==:zeros
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.zeros_fwd(v1,n,pad_upper,pad_lower,RDT),
@@ -162,6 +162,8 @@ function joExtend(n::Integer,pad_type::Symbol;
                                 DDT,RDT;fMVok=true,
                                 name=name*"_border")
     elseif pad_type==:mirror
+        (pad_upper<=n) || throw(joLinearFunctionException("joExtend: invalid pad_upper size; should be <=n"))
+        (pad_lower<=n) || throw(joLinearFunctionException("joExtend: invalid pad_lower size; should be <=n"))
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.mirror_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 v2->joExtend_etc.mirror_tran(v2,n,pad_upper,pad_lower,DDT),
@@ -170,6 +172,8 @@ function joExtend(n::Integer,pad_type::Symbol;
                                 DDT,RDT;fMVok=true,
                                 name=name*"_mirror")
     elseif pad_type==:periodic
+        (pad_upper<=n) || throw(joLinearFunctionException("joExtend: invalid pad_upper size; should be <=n"))
+        (pad_lower<=n) || throw(joLinearFunctionException("joExtend: invalid pad_lower size; should be <=n"))
         return joLinearFunctionFwd(n+pad_lower+pad_upper,n,
                                 v1->joExtend_etc.periodic_fwd(v1,n,pad_upper,pad_lower,RDT),
                                 v2->joExtend_etc.periodic_tran(v2,n,pad_upper,pad_lower,DDT),
