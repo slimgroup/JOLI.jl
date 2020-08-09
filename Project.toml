@@ -1,7 +1,7 @@
 name = "JOLI"
 uuid = "bb331ad6-a1cf-11e9-23da-9bcb53c69f6f"
 authors = ["Henryk Modzelewski <henryk_modzelewski@mac.com>"]
-version = "0.7.9"
+version = "0.7.10"
 
 [deps]
 Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
