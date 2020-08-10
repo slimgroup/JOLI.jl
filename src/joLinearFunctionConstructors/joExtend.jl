@@ -88,7 +88,7 @@ using .joExtend_etc
 
 export joExtend
 """
-    julia> op = joExtend(n,pad_type;[pad_lower=0,][pad_upper=0,][DDT=joFloat,][RDT=DDT])
+    julia> op = joExtend(n,pad_type;[pad_lower=...,][pad_upper=...,][DDT=...,][RDT=...,][name=...])
 
 1D extension operator
 
@@ -108,8 +108,8 @@ export joExtend
    - `:mirror` : mirror extension of the signal
    - `:periodic` : periodic extension of the signal
 - keywords
-    - `pad_lower` : number of points to pad on the lower index end (keyword arg, default=0)
-    - `pad_upper` : number of points to pad on the upper index end (keyword arg, default=0)
+    - `pad_lower` : number of points to pad on the lower index end
+    - `pad_upper` : number of points to pad on the upper index end
     - `DDT`: domain data type
     - `RDT`: range data type
     - `name`: custom name
