@@ -47,7 +47,7 @@ using .joCurvelet2DnoFFT_etc
 
 export joCurvelet2DnoFFT
 """
-    julia> op = joCurvelet2DnoFFT(n1,n2;[DDT=joComplex,][RDT=DDT,]
+    julia> op = joCurvelet2DnoFFT(n1,n2;[DDT=joFloat,][RDT=DDT,]
                     [nbscales=...,][nbangles_coarse=...,][all_crvlts=...,]
                     [real_crvlts=...,][zero_finest=...,][name=...])
 
@@ -72,13 +72,15 @@ export joCurvelet2DnoFFT
     - `all_crvlts`: curvelets at finnest scales (defaults to false)
     - `real_crvlts`: real transform (defaults to true) and requires real input
     - `zero_finest`: zero out finnest scales (defaults to false)
-    - `DDT`: domain data type
+    - `DDT`: domain data typeA (see note below)
     - `RDT`: range data type
     - `name`: custom name
 
 # Notes
 
-- real joCurvelet2DnoFFT passed adjoint test while either combined with joDFT, or with isadjont flag userange=true
+e DDT is always complex as required by NFFT. DDT keyword expects either complex type or element-subtype of complex type,
+
+- real joCurvelet2DnoFFT passed adjoint test while either combined with joDFT, or with isadjont flag userange=true,
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
 
 # Examples
