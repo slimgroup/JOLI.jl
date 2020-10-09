@@ -78,7 +78,7 @@ export joCurvelet2DnoFFT
 
 # Notes
 
-e DDT is always complex as required by NFFT. DDT keyword expects either complex type or element-subtype of complex type,
+- DDT is always complex as required by NFFT. DDT keyword expects either complex type or element-subtype of complex type,
 
 - real joCurvelet2DnoFFT passed adjoint test while either combined with joDFT, or with isadjont flag userange=true,
 - isadjoint test at larger sizes (above 128) might require reseting tollerance to bigger number.
