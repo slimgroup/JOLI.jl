@@ -72,7 +72,8 @@ After switching to package manager prompt (using ']') type:
 
 ## Documentation (more to come)
 
-For now it is just [REFERENCE guide](https://slimgroup.github.io/JOLI.jl).
+- [REFERENCE guide](https://slimgroup.github.io/JOLI.jl).
+- [Tutorials](tutorials/)
 
 ## Examples (more to come)
 
