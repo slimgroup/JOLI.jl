@@ -15,7 +15,9 @@ include("joLinearFunctionConstructors/joNFFT.jl")
 include("joLinearFunctionConstructors/joDWT.jl")
 
 # SWT operators: joSWT
-include("joLinearFunctionConstructors/joSWT.jl")
+function __init__()
+    @require PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0" include("joLinearFunctionConstructors/joSWT.jl")
+end
 
 # Romberg operator
 include("joLinearFunctionConstructors/joRomberg.jl")

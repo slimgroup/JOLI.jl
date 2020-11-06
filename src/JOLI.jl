@@ -41,6 +41,7 @@ module JOLI
 # what's being used
 using Nullables
 using Printf
+using Requires
 using Random
 using InteractiveUtils
 using Distributed
@@ -54,7 +55,6 @@ using IterativeSolvers
 using FFTW
 using NFFT
 using Wavelets
-using PyCall
 
 # what's imported from Base
 import Base.eltype
