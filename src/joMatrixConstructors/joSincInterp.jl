@@ -50,12 +50,8 @@ examples with DDT/RDT
 function joSincInterp(xin::AbstractArray{T,1},xout::AbstractArray{T,1};
     r::I=0,DDT::DataType=T,RDT::DataType=DDT,name::String="joSincInterp") where {T<:AbstractFloat,I<:Integer}
 
-    if length(xout)>1
-        dx = xout[2]-xout[1]
-        xin = xin./dx
-        xout = xout./dx
-    end    
-    S = [sinc(xout[i]-xin[j]) for i in 1:length(xout), j in 1:length(xin)]
+    length(xin)>1 ? dx = max(xin[2]-xin[1], xout[2]-xout[1]) : dx = 1
+    S = sinc.( (xout .- xin') ./ dx )
     if r > 0
         r_b =[1.24 2.94 4.53 6.31 7.91 9.42 10.95 12.53 14.09 14.18];
         window = [joSincInterp_etc.kaiser_window(xout[i]-xin[j],r,r_b[r]) for i in 1:length(xout), j in 1:length(xin)]
