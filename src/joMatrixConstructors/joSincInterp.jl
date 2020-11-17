@@ -2,6 +2,7 @@
 
 ## helper module
 module joSincInterp_etc
+    using SpecialFunctions
     function kaiser_window(x,r,b)
         return abs(x) <= r ? besseli(0,b*sqrt(1-(x/r)^2))/besseli(0,b) : 0.0
     end

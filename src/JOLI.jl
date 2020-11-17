@@ -55,6 +55,7 @@ using FFTW
 using NFFT
 using Wavelets
 using PyCall
+using SpecialFunctions
 
 # what's imported from Base
 import Base.eltype
