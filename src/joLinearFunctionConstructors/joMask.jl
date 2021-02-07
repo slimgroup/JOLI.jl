@@ -37,7 +37,7 @@ function joMask(n::Integer,idx::Vector{VDT};
     n>=l || throw(joLinearFunctionException("joMask length(idx) must be <= n"))
     n>=max(idx...) || throw(joLinearFunctionException("joMask max(idx) must be <= n"))
     mask=falses(n)
-    mask[idx]=true
+    mask[idx].=true
     return joLinearFunctionFwd(n,n,
         v1->jo_convert(RDT,mask.*v1,false),
         v2->jo_convert(DDT,mask.*v2,false),

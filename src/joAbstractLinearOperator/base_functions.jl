@@ -166,7 +166,7 @@ function *(A::joMatrix{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:
     return MV
 end
 function *(A::joLinearFunction{ADDT,ARDT},mv::LocalMatrix{mvDT}) where {ADDT,ARDT,mvDT<:Number}
-    A.n == size(mv,1) || throw(joLinearFunction("shape mismatch"))
+    A.n == size(mv,1) || throw(joLinearFunctionException("shape mismatch"))
     jo_check_type_match(ADDT,mvDT,join(["DDT for *(jo,mvec):",A.name,typeof(A),mvDT]," / "))
     if A.fMVok
         MV=A.fop(mv)
