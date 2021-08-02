@@ -83,8 +83,8 @@ function joNFFT(N::Integer,pos::Vector{joFloat},
     m=4,sigma=2.0,window=:kaiser_bessel,K=2000; centered::Bool=false,
     DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
 
-    M=length(pos)
-    p=NFFTPlan(pos,N,m,sigma,window,K)
+    M = length(pos)
+    p = try NFFTPlan(pos,N,m,sigma,window,K) catch; plan_nfft(pos,N,m,sigma,window,K) end
     if centered
         return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft_centered(p,N,v1,RDT),
