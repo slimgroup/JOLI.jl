@@ -25,8 +25,8 @@ Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
 julia = "1"
-DistributedArrays = "1 - 1.4.3"
-FFTW = "0.5 - 0.6.5"
+DistributedArrays = "0.5 - 0.6.5"
+FFTW = "1 - 1.4.3"
 InplaceOps = "0.3.0"
 IterativeSolvers = "0.8 - 0.9.1"
 NFFT = "0.4 - 0.6.1"
