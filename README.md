@@ -43,26 +43,10 @@ is convenient for implementation of Kronecker product.
 
 ## INSTALLATION
 
-### Using SLIM Registry (preferred method) ###
-
-First switch to package manager prompt (using ']') and add SLIM registry:
+JOLI is registered and can be added like any standard julia package with the command:
 
 ```
-	registry add https://github.com/slimgroup/SLIMregistryJL.git
-```
-
-Then still from package manager prompt add JOLI:
-
-```
-	add JOLI
-```
-
-### Adding without SLIM registry ###
-
-After switching to package manager prompt (using ']') type:
-
-```
-	add https://github.com/slimgroup/JOLI.jl.git
+] add JOLI
 ```
 
 ### 3-Rd Party Libraries ###
