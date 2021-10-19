@@ -2,7 +2,7 @@
 
 ## helper module
 module joCurvelet2D_etc
-    using JOLI: jo_convert
+    using JOLI: jo_convert, joLinearFunctionException
     function apply_fdct2Dwrap_real(v::Vector{vdt},n1::Integer,n2::Integer,m::Int128,rdt::DataType,nbs::Integer,nbac::Integer,actl::Integer,rctl::Integer,zfin::Integer) where vdt<:Union{AbstractFloat,Complex}
         C=Vector{Cdouble}(undef,m)
         eltype(v)<:Real || throw(joLinearFunctionException("joCurvelt2D: input vector must be real for real transform"))
