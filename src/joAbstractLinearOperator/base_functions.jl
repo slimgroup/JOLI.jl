@@ -206,7 +206,13 @@ function *(A::joLinearFunction{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,
     jo_check_type_match(ARDT,eltype(V),join(["RDT from *(jo,vec):",A.name,typeof(A),eltype(V)]," / "))
     return V
 end
+
+# *(jo, vec{abstractvec})
 function *(A::joLinearFunction{ADDT,ARDT},v::Vector{T}) where {ADDT,ARDT<:Number,T<:AbstractVector}
+    V=A.fop(v)
+    return V
+end
+function *(A::joLinearOperator{ADDT,ARDT},v::Vector{T}) where {ADDT,ARDT<:Number,T<:AbstractVector}
     V=A.fop(v)
     return V
 end
