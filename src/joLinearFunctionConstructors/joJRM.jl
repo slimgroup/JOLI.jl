@@ -3,16 +3,15 @@
 ## helper module
 module joJRM_etc
 
-    function apply_fwd(As, z)
-	    # Sum z_i according to the weighting matrix
-	    vec = As[end] * z
-	    # Apply diag(ops) to summed z_i
-	    return [As[i]*vec[i] for i=1:length(As)-1]
+    function apply_fwd(As, z; γ=1f0)
+        x = [1f0/γ*z[1]+z[i+1] for i = 1:length(As)]   # get original component
+	    b = [As[i]*x[i] for i=1:length(As)]
+        return b
     end 
 
-    function apply_adj(As, b)
-	    # Apply diag(adj(ops)) * b[i], then sum on common component
-        z = adjoint(As[end]) * [adjoint(As[i]) * b[i] for i=1:length(b)]
+    function apply_adj(As, b; γ=1f0)
+        x = [adjoint(As[i]) * b[i] for i=1:length(b)]  # get original adjoint
+        z = [1f0/γ*sum(x), x...]   # weighted sum on common component
         return z
     end
 
@@ -55,7 +54,7 @@ define JRM operator
 """
 function joJRM(ops::Vector{T}; γ::Number=1f0, name::String="joJRM") where {T<:joAbstractOperator}
 
-    isempty(ops) && throw(joKronException("empty argument list"))
+    isempty(ops) && throw(joLinearFunctionException("empty argument list"))
     L=length(ops)
     DDT = deltype(ops[1])
     RDT = reltype(ops[1])
@@ -63,17 +62,8 @@ function joJRM(ops::Vector{T}; γ::Number=1f0, name::String="joJRM") where {T<:j
         deltype(ops[i])==DDT || throw(joLinearFunctionException("domain type mismatch for $(i-1) and $i operators"))
         reltype(ops[i])==RDT || throw(joLinearFunctionException("range type mismatch for $(i-1) and $i operators"))
     end
-    Iz  = Array{Any}(undef, L, L+1)
-    for i=1:L
-        for j=1:L+1
-            Iz[i,j] = 0
-        end
-        Iz[i,1]  = 1f0/γ*joEye(size(ops[i],2); RDT=DDT, DDT=DDT)
-    end
-    collect(Iz[i,i+1] = joEye(size(ops[i],2); RDT=DDT, DDT=DDT) for i=1:L)
-    As = [ops..., Iz]
     return joLinearFunctionFwd_T(L, L+1,
-        z -> joJRM_etc.apply_fwd(As,z),
-        b -> joJRM_etc.apply_adj(As,b),
+        z -> joJRM_etc.apply_fwd(ops,z; γ=γ),
+        b -> joJRM_etc.apply_adj(ops,b; γ=γ),
         DDT, RDT, name=name)
 end
