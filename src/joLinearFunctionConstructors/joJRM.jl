@@ -60,8 +60,8 @@ function joJRM(ops::Vector{T}; γ::Number=1f0, name::String="joJRM") where {T<:j
     DDT = deltype(ops[1])
     RDT = reltype(ops[1])
     for i=2:L
-        deltype(ops[i])==DDT || throw(joKronException("domain type mismatch for $(i-1) and $i operators"))
-        reltype(ops[i])==RDT || throw(joKronException("range type mismatch for $(i-1) and $i operators"))
+        deltype(ops[i])==DDT || throw(joLinearFunctionException("domain type mismatch for $(i-1) and $i operators"))
+        reltype(ops[i])==RDT || throw(joLinearFunctionException("range type mismatch for $(i-1) and $i operators"))
     end
     Iz  = Array{Any}(undef, L, L+1)
     for i=1:L

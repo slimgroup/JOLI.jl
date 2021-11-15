@@ -1,6 +1,6 @@
 T=3
 tsname="joJRM"
-rtol = 1f-6
+rtol = 1f-4
 @testset "$tsname" begin
     for t=2:T # start test loop
     
