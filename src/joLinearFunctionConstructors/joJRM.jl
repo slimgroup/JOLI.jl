@@ -68,9 +68,9 @@ function joJRM(ops::Vector{T}; γ::Number=1f0, name::String="joJRM") where {T<:j
         for j=1:L+1
             Iz[i,j] = 0
         end
-        Iz[i,1]  = 1f0/γ*joEye(size(ops[i],2); RDT=RDT, DDT=DDT)
+        Iz[i,1]  = 1f0/γ*joEye(size(ops[i],2); RDT=DDT, DDT=DDT)
     end
-    collect(Iz[i,i+1] = joEye(size(ops[i],2); RDT=RDT, DDT=DDT) for i=1:L)
+    collect(Iz[i,i+1] = joEye(size(ops[i],2); RDT=DDT, DDT=DDT) for i=1:L)
     As = [ops..., Iz]
     return joLinearFunctionFwd_T(L, L+1,
         z -> joJRM_etc.apply_fwd(As,z),
