@@ -5,7 +5,7 @@ module joJRM_etc
 
     function apply_fwd(As, z; γ=1f0)
         x = [1f0/γ*z[1]+z[i+1] for i = 1:length(As)]   # get original component
-	    b = [As[i]*x[i] for i=1:length(As)]
+        b = [As[i]*x[i] for i=1:length(As)]
         return b
     end 
 
@@ -62,8 +62,10 @@ function joJRM(ops::Vector{T}; γ::Number=1f0, name::String="joJRM") where {T<:j
         deltype(ops[i])==DDT || throw(joLinearFunctionException("domain type mismatch for $(i-1) and $i operators"))
         reltype(ops[i])==RDT || throw(joLinearFunctionException("range type mismatch for $(i-1) and $i operators"))
     end
-    return joLinearFunctionFwd_T(L, L+1,
-        z -> joJRM_etc.apply_fwd(ops,z; γ=γ),
-        b -> joJRM_etc.apply_adj(ops,b; γ=γ),
-        DDT, RDT, name=name)
+    return joLinearFunctionFwd(L, L+1,
+        v1 -> joJRM_etc.apply_fwd(ops,v1; γ=γ),
+        v2 -> joJRM_etc.apply_adj(ops,v2; γ=γ),
+        v3 -> joJRM_etc.apply_adj(ops,v3; γ=γ),
+        v4 -> joJRM_etc.apply_fwd(ops,v4; γ=γ),
+        DDT, RDT; name=name)
 end
