@@ -39,3 +39,5 @@ include("joLinearFunctionConstructors/joPermutation.jl")
 # Outer product operator: joOuterProd
 include("joLinearFunctionConstructors/joOuterProd.jl")
 
+# JRM operator: joJRM
+include("joLinearFunctionConstructors/joJRM.jl")
