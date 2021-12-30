@@ -1,4 +1,4 @@
-# joRomberg operator
+# joJRM operator
 
 ## helper module
 module joJRM_etc
