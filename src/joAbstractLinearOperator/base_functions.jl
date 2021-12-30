@@ -207,16 +207,6 @@ function *(A::joLinearFunction{ADDT,ARDT},v::LocalVector{vDT}) where {ADDT,ARDT,
     return V
 end
 
-# *(jo, vec{abstractvec})
-function *(A::joLinearFunction{ADDT,ARDT},v::Vector{T}) where {ADDT,ARDT<:Number,T<:AbstractVector}
-    V=A.fop(v)
-    return V
-end
-function *(A::joLinearOperator{ADDT,ARDT},v::Vector{T}) where {ADDT,ARDT<:Number,T<:AbstractVector}
-    V=A.fop(v)
-    return V
-end
-
 # *(vec,jo)
 
 # *(num,jo)
