@@ -67,6 +67,4 @@ jobs:
       - name: Run examples
         working-directory: examples
         run: |
-          julia -e 'using Pkg; Pkg.add("JOLI")'
-          julia -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()))'
-          julia -e 'using JOLI; for f in readdir("."); include(f); end'
+          julia --project -e 'using JOLI; for f in readdir("."); include(f); end'
