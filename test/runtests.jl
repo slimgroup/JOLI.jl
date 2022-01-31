@@ -14,6 +14,7 @@ verbose=false
 
 # write your own tests here
 stime=time()
+include("test_type.jl")
 include("test_joMatrixSingle.jl")
 include("test_joMatrixProduct.jl")
 include("test_joMatrixSum.jl")
