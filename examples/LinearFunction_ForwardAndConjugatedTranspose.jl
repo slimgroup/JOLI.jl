@@ -23,7 +23,7 @@ a=rand(ComplexF32,3,3)
 # define JOLI operator with desired domain and range
 # using joLinearFunctionFwdCT constructor
 # note forced dropping imaginary part for transpose/adjoint operators
-A=joLinearFunctionFwdCT(3,3,
+A=joLinearFunctionFwd_A(3,3,
     v->fwd(a,v,ComplexF64),v->fwdCT(a,v,Float32),
     Float32,ComplexF64;name="my_A")
 show(A)
@@ -34,8 +34,8 @@ jo_convert_warn_set(false)
 # display elements of the operator
 println("forward: A")
 show(A); display(elements(A)); println()
-println("transpose: A.'")
-show(A.'); display(elements(A.')); println()
+println("transpose: transpose(A)")
+show(transpose(A)); display(elements(transpose(A))); println()
 println("adjoint: A'")
 show(A'); display(elements(A')); println()
 println("conjugate: conj(A)")
@@ -45,6 +45,5 @@ show(conj(A)); display(elements(conj(A))); println()
 x=rand(Float32,3)
 y=A*x
 println("y: ",y)
-xx=A.'*y
+xx=transpose(A)*y
 println("xx: ",xx)
-
