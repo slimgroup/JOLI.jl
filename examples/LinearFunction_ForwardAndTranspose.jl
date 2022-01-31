@@ -13,7 +13,7 @@ end
 
 # transpose function
 function fwdT(A::AbstractMatrix,vin::AbstractVector,RDT::DataType)
-    vout=A'*vin
+    vout=transpose(A)*vin
     return jo_convert(RDT,vout)
 end
 
