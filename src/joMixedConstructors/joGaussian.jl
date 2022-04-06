@@ -122,7 +122,7 @@ examples with DDT/RDT
 """
 function joGaussian(M::Integer,N::Integer=M;
          implicit::Bool=false,normalized::Bool=false,orthonormal::Bool=false,
-         RNG::AbstractRNG=Random.seed!(),
+         RNG::AbstractRNG=MersenneTwister(),
          DDT::DataType=joFloat,RDT::DataType=DDT,
          name::String="joGaussian")
 

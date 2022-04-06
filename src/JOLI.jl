@@ -40,6 +40,7 @@ module JOLI
 
 # what's being used
 using Nullables
+using Requires
 using Printf
 using Random
 using InteractiveUtils
@@ -133,5 +134,14 @@ include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
 include("joMixedConstructors.jl")
+
+
+# ChainRules if Flux/Zygote/ChainRules/... available
+function __init__()
+    @require Flux="587475ba-b771-5e3f-ad9e-33799f191a9c" begin
+        println("loading AD rules")
+        include("rrule.jl")
+    end
+end
 
 end # module
