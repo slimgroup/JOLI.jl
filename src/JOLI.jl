@@ -40,7 +40,6 @@ module JOLI
 
 # what's being used
 using Nullables
-using Requires
 using Printf
 using Random
 using InteractiveUtils
@@ -57,6 +56,7 @@ using NFFT
 using Wavelets
 using PyCall
 using SpecialFunctions
+using SpecialFunctions.ChainRulesCore
 
 # what's imported from Base
 import Base.eltype
@@ -84,6 +84,9 @@ import DistributedArrays.SPMD: scatter
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype
+
+# what's imported from ChainRulesCore
+import  SpecialFunctions.ChainRulesCore.rrule
 
 # extra exported methods
 export deltype, reltype
@@ -136,12 +139,7 @@ include("joLinearOperatorConstructors.jl")
 include("joMixedConstructors.jl")
 
 
-# ChainRules if Flux/Zygote/ChainRules/... available
-function __init__()
-    @require Flux="587475ba-b771-5e3f-ad9e-33799f191a9c" begin
-        println("loading AD rules")
-        include("rrule.jl")
-    end
-end
+# ChainRules
+include("rrule.jl")
 
 end # module
