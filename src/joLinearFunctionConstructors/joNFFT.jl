@@ -7,7 +7,7 @@ module joNFFT_etc
     using JOLI: jo_convert
     function apply_nfft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         iv=jo_convert(ComplexF64,v,false)
-        rv=nfft(pln,iv)/sqrt(n)
+        rv= (pln*iv)/sqrt(n)
         rv=fftshift(rv)
         rv=jo_convert(rdt,rv,false)
         return rv
@@ -15,19 +15,19 @@ module joNFFT_etc
     function apply_infft_centered(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         iv=jo_convert(ComplexF64,v,false)
         iv=ifftshift(iv)
-        rv=nfft_adjoint(pln,iv)/sqrt(n)
+        rv=(adjoint(pln)*iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_nfft(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         iv=jo_convert(ComplexF64,v,false)
-        rv=nfft(pln,iv)/sqrt(n)
+        rv= (pln*iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
     function apply_infft(pln,n,v::Vector{vdt},rdt::DataType) where vdt<:Union{AbstractFloat,Complex}
         iv=jo_convert(ComplexF64,v,false)
-        rv=nfft_adjoint(pln,iv)/sqrt(n)
+        rv=(adjoint(pln)*iv)/sqrt(n)
         rv=jo_convert(rdt,rv,false)
         return rv
     end
@@ -36,7 +36,7 @@ using .joNFFT_etc
 
 export joNFFT
 """
-    julia> op = joNFFT(N,nodes[,m=...][,sigma=...][,window=...][,K=...];
+    julia> op = joNFFT(N,pos[,m=...][,sigma=...][,window=...];
                 [centered=...,][DDT=...,][RDT=...,][name=...])
 
 1D NFFT transform over fast dimension (wrapper to https://github.com/tknopp/NFFT.jl)
@@ -44,13 +44,13 @@ export joNFFT
 # Signature
 
     function joNFFT(N::Integer,pos::Vector{joFloat},
-        m=4,sigma=2.0,window=:kaiser_bessel,K=2000; centered::Bool=false,
+        m=4,sigma=2.0,window=:kaiser_bessel; centered::Bool=false,
         DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
 
 # Arguments
 
 - `N`: size
-- `nodes`: nodes' positions
+- `pos`: nodes positions
 - optional
     - see https://github.com/tknopp/NFFT.jl for info about optional parameters to NFFTplan: `m`, `sigma`, `window`, and `K`
 - keywords
@@ -67,24 +67,24 @@ export joNFFT
 
 1D NFFT
 
-    joNFFT(N,nodes)
+    joNFFT(N,pos)
 
 centered coefficients
 
-    joNFFT(N,nodes; centered=true)
+    joNFFT(N,pos; centered=true)
 
 examples with DDT/RDT
 
-    % joNFFT(N,nodes; DDT=ComplexF32)
-    % joNFFT(N,nodes; DDT=ComplexF32,RDT=ComplexF64)
+    % joNFFT(N,pos; DDT=ComplexF32)
+    % joNFFT(N,pos; DDT=ComplexF32,RDT=ComplexF64)
 
 """
 function joNFFT(N::Integer,pos::Vector{joFloat},
-    m=4,sigma=2.0,window=:kaiser_bessel,K=2000; centered::Bool=false,
+    m=4,sigma=2.0,window=:kaiser_bessel; centered::Bool=false,
     DDT::DataType=joComplex,RDT::DataType=DDT,name::String="joNFFT")
 
     M = length(pos)
-    p = try NFFTPlan(pos,N,m,sigma,window,K) catch; plan_nfft(pos,N,m,sigma,window,K) end
+    p = plan_nfft(pos, N; m=m, σ=sigma, window=window)
     if centered
         return joLinearFunctionFwd_A(M,N,
             v1->joNFFT_etc.apply_nfft_centered(p,N,v1,RDT),

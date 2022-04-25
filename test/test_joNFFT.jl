@@ -4,7 +4,7 @@ tsname="joNFFT"
 for t=1:T # start test loop
     m=4^t
     n=3^t
-    nodes=sort(rand(joFloat,n))
+    nodes=sort(rand(joFloat,n)) .- joFloat(.5)
 
     verbose && println("$tsname ($m[,$m]) - not centered")
     @testset "$m [x $m]" begin

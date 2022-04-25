@@ -56,6 +56,7 @@ using NFFT
 using Wavelets
 using PyCall
 using SpecialFunctions
+using SpecialFunctions.ChainRulesCore
 
 # what's imported from Base
 import Base.eltype
@@ -83,6 +84,9 @@ import DistributedArrays.SPMD: scatter
 
 # what's imported from IterativeSolvers
 import IterativeSolvers.Adivtype
+
+# what's imported from ChainRulesCore
+import  SpecialFunctions.ChainRulesCore.rrule
 
 # extra exported methods
 export deltype, reltype
@@ -133,5 +137,9 @@ include("joMatrixConstructors.jl")
 include("joLinearFunctionConstructors.jl")
 include("joLinearOperatorConstructors.jl")
 include("joMixedConstructors.jl")
+
+
+# ChainRules
+include("rrule.jl")
 
 end # module
