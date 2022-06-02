@@ -54,4 +54,12 @@ x4 = transpose(A2) * y
 @test isadjoint(A1)[1]
 @test isadjoint(A2)[1]
 
+# test for mul!, x will drop the imaginary part because x is real
+mul!(y, A1, x)
+mul!(x, A1, x)
+@test x == jo_convert(Float32, y)
+mul!(x, A1', y)
+mul!(y, A1', y)
+@test x == y
+
 end
