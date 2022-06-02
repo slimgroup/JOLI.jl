@@ -542,8 +542,8 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(coll
 
 # mul!(...,jo,...)
 # relax JOLI type constraint for IterativeSolvers
-mul!(y::Union{LocalVector{RDT},LocalVector{DDT}},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT} = y[:] = jo_convert(DDT, A * x)
-mul!(y::Union{LocalMatrix{RDT},LocalMatrix{DDT}},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT} = y[:,:] = jo_convert(DDT, A * x)
+mul!(y::Union{LocalVector{RDT},LocalVector{DDT}},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT} = y[:] = jo_convert(eltype(y), A * x)
+mul!(y::Union{LocalMatrix{RDT},LocalMatrix{DDT}},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT} = y[:,:] = jo_convert(eltype(y), A * x)
 
 # ldiv!(...,jo,...)
 ldiv!(y::LocalVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{RDT}) where {DDT,RDT} = y[:] = A \ x
