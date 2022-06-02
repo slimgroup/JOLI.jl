@@ -541,11 +541,9 @@ hvcat(rows::Tuple{Vararg{Int}}, ops::joAbstractLinearOperator...) = joBlock(coll
 ## overloaded LinearAlgebra functions
 
 # mul!(...,jo,...)
-mul!(y::LocalVector{RDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT} = y[:] = A * x
-mul!(y::LocalMatrix{RDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT} = y[:,:] = A * x
-# relax JOLI constraint for IterativeSolvers
-mul!(y::LocalVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT} = y[:] = jo_convert(DDT, A * x)
-mul!(y::LocalMatrix{DDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT} = y[:,:] = jo_convert(DDT, A * x)
+# relax JOLI type constraint for IterativeSolvers
+mul!(y::Union{LocalVector{RDT},LocalVector{DDT}},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{DDT}) where {DDT,RDT} = y[:] = jo_convert(DDT, A * x)
+mul!(y::Union{LocalMatrix{RDT},LocalMatrix{DDT}},A::joAbstractLinearOperator{DDT,RDT},x::LocalMatrix{DDT}) where {DDT,RDT} = y[:,:] = jo_convert(DDT, A * x)
 
 # ldiv!(...,jo,...)
 ldiv!(y::LocalVector{DDT},A::joAbstractLinearOperator{DDT,RDT},x::LocalVector{RDT}) where {DDT,RDT} = y[:] = A \ x
