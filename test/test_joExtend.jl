@@ -13,14 +13,12 @@ for t=1:T # start test loop
 
     verbose && println("$tsname ($n,$l,$u)")
     @testset "$n x $m" begin
-        @test isadjoint(Az)[1]
-        @test isadjoint(Ab)[1]
-        @test isadjoint(Am)[1]
-        @test isadjoint(Ap)[1]
-        @test islinear(Az)[1]
-        @test islinear(Ab)[1]
-        @test islinear(Am)[1]
-        @test islinear(Ap)[1]
+        for A ∈ [Az, Ab, Am, Ap]
+            @test isadjoint(A)[1]
+            @test islinear(A)[1]
+            v = randn(size(A, 2))
+            @test A * v == vec(A * reshape(v, :, 1))
+        end
     end
     
 end # end test loop
