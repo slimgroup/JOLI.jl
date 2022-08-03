@@ -45,7 +45,7 @@ module joDFT_etc
         mp=prod(ms)
         rv=reshape(v,msc)
         pf=plan_ifft(rv,dims)
-        if centered rv=fftshift(rv,dims) end
+        if centered rv=ifftshift(rv,dims) end
         rv=(pf*rv)*sqrt(mp)
         rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)
@@ -92,7 +92,7 @@ module joDFT_etc
         mp=prod(ms)
         rv=reshape(v,msc)
         pf=plan_ifft(rv,dims)
-        if centered rv=fftshift(rv,dims) end
+        if centered rv=ifftshift(rv,dims) end
         rv=(pf*rv)*sqrt(mp)
         rv=reshape(rv,(prod(ms),nvc))
         rv=jo_convert(rdt,rv,false)

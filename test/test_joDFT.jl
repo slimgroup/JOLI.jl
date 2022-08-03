@@ -42,6 +42,11 @@ for t=1:T # start test loop
         @test norm((adjoint(A2)*A2)*vmv2-vmv2)<joTol
     end
 
+    ### test https://github.com/slimgroup/JOLI.jl/issues/39
+    A1=joDFT(m;DDT=ComplexF64,centered=true)
+    verbose && println("$tsname ($m[,$m]) - centered")
+    @test A1 * v1 == vec(A1 * reshape(v1, :, 1))
+
     A1=joDFT(m;planned=false,DDT=ComplexF64)
     A2=joDFT(m,m;planned=false,DDT=ComplexF64)
     verbose && println("$tsname ($m[,$m]) - not planned")
