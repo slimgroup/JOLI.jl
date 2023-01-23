@@ -47,7 +47,7 @@ module joExtend_etc
         return jo_convert(rdt,w,false)
     end
     function mirror_fwd(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
-        w = [flipdim(v[1:pad_lower,:],1); v; flipdim(v[end-pad_upper+1:end,:],1)]
+        w = [reverse(v[1:pad_lower,:],dims=1); v; reverse(v[end-pad_upper+1:end,:],dims=1)]
         return jo_convert(rdt,w,false)
     end
     function mirror_tran(v::LocalVector{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
@@ -58,8 +58,8 @@ module joExtend_etc
     end
     function mirror_tran(v::LocalMatrix{VT},n::Integer,pad_upper::Integer,pad_lower::Integer,rdt=DataType) where {VT<:Number}
         w = v[pad_lower+1:end-pad_upper,:]
-        w[1:pad_lower,:] += flipdim(v[1:pad_lower,:],1)
-        w[end-pad_upper+1:end,:] += flipdim(v[end-pad_upper+1:end,:],1)
+        w[1:pad_lower,:] += reverse(v[1:pad_lower,:],dims=1)
+        w[end-pad_upper+1:end,:] += reverse(v[end-pad_upper+1:end,:],dims=1)
         return jo_convert(rdt,w,false)
     end
     ### periodic
@@ -186,4 +186,3 @@ function joExtend(n::Integer,pad_type::Symbol;
     end
     return nothing
 end
-
