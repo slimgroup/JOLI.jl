@@ -74,7 +74,7 @@ import Base.getindex
 
 
 # what's imported from LinearAlgebra
-import LinearAlgebra.norm
+import LinearAlgebra.norm, LinearAlgebra.AbstractQ
 import LinearAlgebra.issymmetric, LinearAlgebra.ishermitian
 import LinearAlgebra.mul!, LinearAlgebra.ldiv!
 
