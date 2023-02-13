@@ -146,8 +146,7 @@ Creates joPAsetup type - basic 1D distribution
 """
 function joPAsetup(wpool::WorkerPool,n::Integer;
         DT::DataType=joFloat,
-        name::String="joPAsetup",
-        ) where INT<:Integer
+        name::String="joPAsetup")
     n>0 || throw(joPAsetupException("joPAsetup: invalid lenght of the vector: $n"))
     dims=(n,)
     chunks=joPAsetup_etc.default_chunks(dims,sort(workers(wpool)))

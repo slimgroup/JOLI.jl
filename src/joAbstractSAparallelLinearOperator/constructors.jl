@@ -35,7 +35,7 @@ Create a linear operator working on 2D SharedArray in multi-vector (over 2nd dim
 
 """
 function joSAdistributedLinOp(A::joAbstractLinearOperator{DDT,RDT},psin::joPAsetup,
-        fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number,INT<:Integer}
+        fclean::Bool=false,rclean::Bool=false) where {DDT<:Number,RDT<:Number}
 
     psin.chunks[1]==1 || throw(joSAdistributedLinearOperatorException("joSAdistributedLinearOperator: invalid joPAsetup - must not be distributed in 1st dimension"))
     A.n==psin.dims[1]  || throw(joSAdistributedLinearOperatorException("joSAdistributedLinearOperator: invalid joPAsetup - 1st dimension off joPAsetup does not match size(A,2)"))

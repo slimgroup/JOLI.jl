@@ -8,7 +8,7 @@
 """
 joMatrix outer constructor
 
-    joMatrix(array::AbstractMatrix;
+    joMatrix(array::Union{AbstractMatrix,AbstractQ};
              DDT::DataType=eltype(array),
              RDT::DataType=promote_type(eltype(array),DDT),
              name::String="joMatrix")
@@ -26,7 +26,7 @@ Look up argument names in help to joMatrix type.
 - if RDT:<Real for complex matrix then imaginary part will be neglected for forward/conjugate operator
 
 """
-function joMatrix(array::AbstractMatrix{EDT};
+function joMatrix(array::Union{AbstractMatrix{EDT},AbstractQ{EDT}};
     DDT::DataType=EDT,RDT::DataType=promote_type(EDT,DDT),name::String="joMatrix") where {EDT}
 
         (typeof(array)<:DArray || typeof(array)<:SharedArray) && @warn "Creating joMatrix from non-local array like $(typeof(array)) is likely going to have adverse impact on JOLI's health. Please, avoid it."
