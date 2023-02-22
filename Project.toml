@@ -1,9 +1,10 @@
 name = "JOLI"
 uuid = "bb331ad6-a1cf-11e9-23da-9bcb53c69f6f"
 authors = ["Henryk Modzelewski <henryk_modzelewski@mac.com>"]
-version = "0.8.3"
+version = "0.8.4"
 
 [deps]
+ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
 Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 DistributedArrays = "aaf54ef3-cdf8-58ed-94cc-d582ad619b94"
 FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
@@ -23,6 +24,7 @@ SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
 Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
+ChainRulesCore = "1"
 DistributedArrays = "0.5, 0.6"
 FFTW = "1"
 Flux = "0.12"
