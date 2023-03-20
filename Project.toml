@@ -1,7 +1,7 @@
 name = "JOLI"
 uuid = "bb331ad6-a1cf-11e9-23da-9bcb53c69f6f"
 authors = ["Henryk Modzelewski <henryk_modzelewski@mac.com>"]
-version = "0.8.4"
+version = "0.8.5"
 
 [deps]
 ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
