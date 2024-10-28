@@ -3,25 +3,32 @@
 ## helper module
 module joSWT_etc
     using JOLI: jo_convert
-    using PyCall
+    using PythonCall
+
+    const pywt = PythonCall.pynew()
+
+    function __init__()
+        PythonCall.pycopy!(pywt, pyimport("pywt"))
+    end
+
     # 1D
     function apply_swt(v::Vector{vdt}, wt::String, L::Integer,rdt::DataType,pad::Integer) where vdt<:Union{AbstractFloat,Complex}
-        pywt = pyimport("pywt")
         v = [v;zeros(vdt, pad)]
         rv = pywt.swt(v, wt, level=L, start_level=0, norm=true, trim_approx=true)
-        rv = vcat(rv...)
+        rv = vcat([PyArray(r) for r in rv]...)
         rv = jo_convert(rdt, rv, false)
         return rv
     end
+
     function apply_iswt(v::Vector{vdt},wt::String,L::Integer,rdt::DataType,pad::Integer) where vdt<:Union{AbstractFloat,Complex}
-        pywt = pyimport("pywt")
         v = reshape(v, :, L+1)
         v = [v[:, i] for i=1:L+1]
-        rv = pywt.iswt(v, wt, norm=true)
+        rv = PyArray(pywt.iswt(v, wt, norm=true))
         # Convert and remove pad
         rv = jo_convert(rdt, rv[1:end-pad], false)
         return rv
     end
+
 end
 using .joSWT_etc
 
@@ -68,7 +75,7 @@ examples with DDT/RDT
     joDWT(m,"sym5"; DDT=Float32,RDT=Float64)
 
 """
-function joSWT(m::Integer,wt::String="db20";
+function joSWT(m::Integer, wt::String="db20";
     L::Integer=maxtransformlevels(m + m%2),
     DDT::DataType=joFloat,RDT::DataType=DDT,
     name::String="joSWT")
@@ -84,3 +91,5 @@ function joSWT(m::Integer,wt::String="db20";
         DDT,RDT;
         name=name)
 end
+
+joSWT(m::Integer, wt::Py; kwargs...) = joSWT(m, string(wt); kwargs...)

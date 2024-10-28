@@ -5,7 +5,7 @@ using SparseArrays
 using InplaceOps
 using FFTW
 using Wavelets
-using PyCall
+using PythonCall
 using JOLI
 
 jo_type_mismatch_error_set(false)

@@ -4,11 +4,11 @@ try
     global swt = pywt.swt
     global pywavelet = true
 catch
-    @warn "Skipping joSWTtests - PyCall clouldn't import PyWavelets"
+    @warn "Skipping joSWTtests - PythonCall clouldn't import PyWavelets"
 end
 
 families = ("haar", "db", "sym", "coif")
-pywavelet ? wavelets = vcat([pywt.wavelist(name) for name in families]...) : wavelets = []
+pywavelet ? wavelets = vcat([pyconvert(Vector{String}, pywt.wavelist(name)) for name in families]...) : wavelets = []
 
 tsname="joSWT"
 @testset "$tsname" begin
