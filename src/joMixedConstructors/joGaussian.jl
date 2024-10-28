@@ -5,7 +5,10 @@ module joGaussian_etc
     using JOLI: jo_convert, LocalVector
     using Random
     using LinearAlgebra
-    function fI(v::LocalVector{vdt},m::Integer,n::Integer,rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
+
+    const rngT = Union{Vector{UInt32}, UInt128}
+
+    function fI(v::LocalVector{vdt},m::Integer,n::Integer,rng::AbstractRNG,rns::rngT,rdt::DataType) where vdt<:Number
         rv = zeros(rdt,m)
         lrng=Random.seed!(rng,rns)
         for i=1:n
@@ -15,7 +18,7 @@ module joGaussian_etc
         rv = jo_convert(rdt,rv,false)
         return rv
     end
-    function aI(v::LocalVector{vdt},m::Integer,n::Integer,rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
+    function aI(v::LocalVector{vdt},m::Integer,n::Integer,rng::AbstractRNG,rns::rngT,rdt::DataType) where vdt<:Number
         rv = Vector{rdt}(undef,n)
         lrng=Random.seed!(rng,rns)
         for i=1:n
@@ -25,7 +28,7 @@ module joGaussian_etc
         rv = jo_convert(rdt,rv,false)
         return rv
     end
-    function scale(m::Integer,n::Integer,rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType)
+    function scale(m::Integer,n::Integer,rng::AbstractRNG,rns::rngT,rdt::DataType)
         rv = Vector{rdt}(undef,n)
         lrng=Random.seed!(rng,rns)
         for i=1:n
@@ -37,7 +40,7 @@ module joGaussian_etc
         rv = jo_convert(rdt,rv,false)
         return rv
     end
-    function fIN(v::LocalVector{vdt},m::Integer,n::Integer,scale::LocalVector{<:Number},rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
+    function fIN(v::LocalVector{vdt},m::Integer,n::Integer,scale::LocalVector{<:Number},rng::AbstractRNG,rns::rngT,rdt::DataType) where vdt<:Number
         rv = zeros(rdt,m)
         lrng=Random.seed!(rng,rns)
         for i=1:n
@@ -47,7 +50,7 @@ module joGaussian_etc
         rv = jo_convert(rdt,rv,false)
         return rv
     end
-    function aIN(v::LocalVector{vdt},m::Integer,n::Integer,scale::LocalVector{<:Number},rng::AbstractRNG,rns::Array{UInt32,1},rdt::DataType) where vdt<:Number
+    function aIN(v::LocalVector{vdt},m::Integer,n::Integer,scale::LocalVector{<:Number},rng::AbstractRNG,rns::rngT,rdt::DataType) where vdt<:Number
         rv = Vector{rdt}(undef,n)
         lrng=Random.seed!(rng,rns)
         for i=1:n
@@ -134,7 +137,7 @@ function joGaussian(M::Integer,N::Integer=M;
         return joMatrix(a;DDT=DDT,RDT=RDT,name=name*"_o")
     else
         if implicit
-            rngs=copy(RNG.seed)
+            rngs = copy(RNG.seed)
             if normalized
                 fscale = joGaussian_etc.scale(M,N,RNG,rngs,DDT)
                 ascale = joGaussian_etc.scale(M,N,RNG,rngs,RDT)

@@ -51,10 +51,10 @@ using DistributedArrays.SPMD
 using LinearAlgebra
 using InplaceOps
 using IterativeSolvers
+using PythonCall
 using FFTW
 using NFFT
 using Wavelets
-using PyCall
 using SpecialFunctions
 using ChainRulesCore
 
